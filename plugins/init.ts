@@ -5,6 +5,8 @@ import { CreateTestForm } from '~/types/shim'
 
 const init: Plugin = function ({ app, store, $axios, $user }, inject) {
   if (process.client) {
+    window.history.scrollRestoration = 'auto'
+
     // add html id
     document.documentElement.id = 'unbug-qa'
 

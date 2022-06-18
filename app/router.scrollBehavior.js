@@ -4,14 +4,6 @@ import { sleep } from '~/utils'
 let uid = 0
 
 export default function(to, from, saved) {
-    const validHash = /^#\w+/.test(to.hash) && !!document.getElementById(to.hash)
-
-    if (to.hash && validHash) {
-        return {
-            selector: to.hash,
-        }
-    }
-
     if (to.path === from.path) {
         return {}
     }

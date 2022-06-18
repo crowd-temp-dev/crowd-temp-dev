@@ -34,43 +34,23 @@ import Feedback from '~/components/LandingPage/Feedback/index.vue'
 import Pricing from '~/components/LandingPage/Pricing/index.vue'
 import CTA from '~/components/LandingPage/CTA/index.vue'
 import Footer from '~/components/LandingPage/Footer/index.vue'
+import { scrollToLandingPageHash } from '~/utils'
 
 export default defineComponent({
   name: 'LandingPageLayoutMarkup',
   components: { Hero, Features, ExtraFeatures, Feedback, Pricing, CTA, Footer },
   setup(_, { root }) {
-    const validHash = ['features', 'pricing', 'contact']
+    const hash = computed(() => root.$route.hash)
 
-    const fullPath = computed(() => root.$route.fullPath)
-
-    const scrollToHash = () => {
-      const hashValue = root.$route.hash.replace(/^#/, '').trim()
-
-      if (validHash.includes(hashValue)) {
-        const hashEl = document.getElementById(hashValue) as HTMLElement
-
-        if (hashEl) {
-          const header = document.getElementById(
-            'landing-page-header'
-          ) as HTMLElement
-
-          const top =
-            hashEl.offsetTop +
-            (32 + (header ? header.offsetTop : 0)) -
-            innerHeight
-
-          document.documentElement.scrollTo({
-            top,
-            behavior: 'smooth',
-          })
-        }
+    watch(
+      () => hash.value,
+      (nv) => {
+        scrollToLandingPageHash(nv, true)
       }
-    }
-
-    watch(() => fullPath.value, scrollToHash)
+    )
 
     onMounted(() => {
-      scrollToHash()
+      scrollToLandingPageHash(hash.value)
     })
   },
 })

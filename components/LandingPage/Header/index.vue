@@ -2,29 +2,38 @@
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import Button from '~/components/Base/Button/index.vue'
 import HeaderLogo from '~/components/Base/HeaderLogo/index.vue'
+import { scrollToLandingPageHash } from '~/utils'
 
 interface Link {
   title: 'Features' | 'Pricing' | 'Contact' | 'Get started for free'
   button?: boolean
   to: string
+  onClick?: () => void
 }
 
 export default defineComponent({
   name: 'LandingPageHeader',
   components: { Button, HeaderLogo },
   setup(_, { root }) {
+    const featuresTo = '#features'
+    const pricingTo = '#pricing'
+    const contactTo = '#contact'
+
     const links = ref<Link[]>([
       {
         title: 'Features',
-        to: '#features',
+        to: featuresTo,
+        onClick: () => scrollToLandingPageHash(featuresTo, true),
       },
       {
         title: 'Pricing',
-        to: '#pricing',
+        to: pricingTo,
+        onClick: () => scrollToLandingPageHash(pricingTo, true),
       },
       {
         title: 'Contact',
-        to: '#contact',
+        to: contactTo,
+        onClick: () => scrollToLandingPageHash(contactTo, true),
       },
       {
         title: 'Get started for free',
@@ -82,7 +91,9 @@ export default defineComponent({
               {{ link.title }}
             </Button>
 
-            <NuxtLink v-else :to="link.to"> {{ link.title }} </NuxtLink>
+            <NuxtLink v-else :to="link.to" @click.native="link.onClick">
+              {{ link.title }}
+            </NuxtLink>
           </li>
         </ul>
       </nav>

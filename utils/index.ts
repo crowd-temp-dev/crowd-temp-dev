@@ -659,3 +659,28 @@ export const pingAddNewBlockBtn = async () => {
 export const answerTestLoadingId = 'answer-test-fullscreen-loading'
 
 export const otherChoicePrefix = '***OTHER***'
+
+export const scrollToLandingPageHash = (routeHash: string, smooth?: boolean) => {
+  const validHash = ['features', 'pricing', 'contact']
+
+  const hashValue = routeHash.replace(/^#/, '').trim()
+
+  if (validHash.includes(hashValue)) {
+    const hashEl = document.getElementById(hashValue) as HTMLElement
+
+    if (hashEl) {
+      const header = document.getElementById(
+        'landing-page-header'
+      ) as HTMLElement
+
+      const top = hashEl.offsetTop - (32 + (header ? header.clientHeight : 0))
+
+      sleep(oneFrame).then(() => {
+        window.scrollTo({
+          top,
+          behavior: smooth ? 'smooth' : 'auto',
+        })
+      })
+    }
+  }
+}

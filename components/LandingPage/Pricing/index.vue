@@ -1,6 +1,104 @@
+<script lang="ts">
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import Button from '~/components/Base/Button/index.vue'
+import UiSwitch from '~/components/Base/UiSwitch/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+
+export type PriceTier = 'Free' | 'Pro' | 'Advanced'
+
+interface Pricing {
+  tier: PriceTier
+  price: 0 | 49 | 99
+  description: string
+  features: string[]
+  popular?: boolean
+}
+
+export default defineComponent({
+  name: 'LandingPagePricing',
+  components: { Button, UiSwitch, FadeTransition },
+  props: {
+    settingsPage: Boolean,
+    priceTier: {
+      type: String as () => PriceTier,
+      default: 'Pro',
+    },
+    billedAnnually: Boolean,
+  },
+  setup() {
+    const billAnnually = ref(false)
+
+    const prices = computed(() => {
+      const extraSeat = [
+        '2 teams members ($',
+        billAnnually.value ? 144 : 12,
+        'per extra seat',
+      ]
+
+      return [
+        {
+          tier: 'Free',
+          price: 0,
+          description: 'For small teams and individual users',
+          features: [
+            'Create unlimited tests',
+            'Up to 50 participants per test',
+            '3 test blocks available: Preference test, Simple Survey, Prototype evaluation',
+            'Up to 5 notes per test',
+            'Email support',
+          ],
+        },
+        {
+          tier: 'Pro',
+          price: billAnnually.value ? 441 : 49,
+          description: 'For growing teams and invididual power users',
+          features: [
+            'All test blocks are available',
+            'Custom branding',
+            'Export reports',
+            extraSeat,
+            'Redirect after tests',
+            'Invite up to 250  participants',
+            'Create unlimited tests',
+            'Up to 25 notes per test',
+            'Live chat and email support',
+          ],
+          popular: true,
+        },
+        {
+          tier: 'Advanced',
+          price: billAnnually.value ? 891 : 99,
+          description: 'Great for growing startups and corporates',
+          features: [
+            'Session recordings',
+            'Survey demographics',
+            'Unlimited notes',
+            'Invite unlimited participants',
+            'All test blocks are available',
+            extraSeat,
+            'Create unlimited tests',
+            'Custom branding',
+            'Redirect after tests',
+            'Priority support',
+          ],
+        },
+      ] as Pricing[]
+    })
+    return {
+      prices,
+      billAnnually,
+    }
+  },
+})
+</script>
+
 <template>
   <section :class="{ 'mb-80 md:mb-100': !settingsPage }">
-    <h2 v-if="!settingsPage" id="pricing" class="landing-page-title mb-8 md:mb-24">
+    <h2
+      v-if="!settingsPage"
+      id="pricing"
+      class="landing-page-title mb-8 md:mb-24"
+    >
       Affordable pricing
     </h2>
 
@@ -82,7 +180,7 @@
         </p>
 
         <div class="h-32 mb-16">
-          <FadeTransition :mode="''" duration="500">
+          <FadeTransition>
             <p
               :key="price.price"
               class="absolute text-display-large font-semibold"
@@ -151,17 +249,23 @@
               class="text-[#BABFC3] text-[16px] shrink-0 fill-icon"
             />
 
-            <FadeTransition :duration="{ leave: 100 }">
-              <div
-                :key="feature"
-                class="text-[18px] leading-[26.66px]"
-                :style="{
-                  '--fade-transition-duration': '150ms',
-                }"
+            <div
+              v-if="Array.isArray(feature)"
+              class="text-[18px] leading-[26.66px]"
+            >
+              <FadeTransition
+                v-for="(dynamicFeature, dynamicFeatureIndex) in feature"
+                :key="dynamicFeatureIndex"
               >
-                {{ feature }}
-              </div>
-            </FadeTransition>
+                <span :key="dynamicFeature" class="inline-block">
+                  {{ dynamicFeature }}
+                </span>
+              </FadeTransition>
+            </div>
+
+            <div v-else class="text-[18px] leading-[26.66px]">
+              {{ feature }}
+            </div>
           </li>
         </ul>
 
@@ -178,97 +282,3 @@
     </ul>
   </section>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
-import Button from '~/components/Base/Button/index.vue'
-import UiSwitch from '~/components/Base/UiSwitch/index.vue'
-import FadeTransition from '~/components/Base/FadeTransition/index.vue'
-
-export type PriceTier = 'Free' | 'Pro' | 'Advanced'
-
-interface Pricing {
-  tier: PriceTier
-  price: 0 | 49 | 99
-  description: string
-  features: string[]
-  popular?: boolean
-}
-
-export default defineComponent({
-  name: 'LandingPagePricing',
-  components: { Button, UiSwitch, FadeTransition },
-  props: {
-    settingsPage: Boolean,
-    priceTier: {
-      type: String as () => PriceTier,
-      default: 'Pro',
-    },
-    billedAnnually: Boolean,
-  },
-  setup() {
-    const billAnnually = ref(false)
-
-    const prices = computed(() => {
-      const extraSeat = `2 teams members ($${
-        billAnnually.value ? 144 : 12
-      } per extra seat`
-
-      return [
-        {
-          tier: 'Free',
-          price: 0,
-          description: 'For small teams and individual users',
-          features: [
-            'Create unlimited tests',
-            'Up to 50 participants per test',
-            '3 test blocks available: Preference test, Simple Survey, Prototype evaluation',
-            'Up to 5 notes per test',
-            'Email support',
-          ],
-        },
-        {
-          tier: 'Pro',
-          price: billAnnually.value ? 441 : 49,
-          description: 'For growing teams and invididual power users',
-          features: [
-            'All test blocks are available',
-            'Custom branding',
-            'Export reports',
-            extraSeat,
-            'Redirect after tests',
-            'Invite up to 250  participants',
-            'Create unlimited tests',
-            'Up to 25 notes per test',
-            'Live chat and email support',
-          ],
-          popular: true,
-        },
-        {
-          tier: 'Advanced',
-          price: billAnnually.value ? 891 : 99,
-          description: 'Great for growing startups and corporates',
-          features: [
-            'Session recordings',
-            'Survey demographics',
-            'Unlimited notes',
-            'Invite unlimited participants',
-            'All test blocks are available',
-            extraSeat,
-            'Create unlimited tests',
-            'Custom branding',
-            'Redirect after tests',
-            'Priority support',
-          ],
-        },
-      ] as Pricing[]
-    })
-    return {
-      prices,
-      billAnnually,
-    }
-  },
-})
-</script>
-
-<style scoped></style>
