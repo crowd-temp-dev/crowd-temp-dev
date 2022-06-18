@@ -1,6 +1,6 @@
 <template>
   <section class="mt-100 grid justify-items-center">
-    <h2 class="mx-auto max-w-[750px] landing-page-title mb-24">
+    <h2 id="features" class="mx-auto max-w-[750px] landing-page-title mb-24">
       All you need to test your product
     </h2>
 

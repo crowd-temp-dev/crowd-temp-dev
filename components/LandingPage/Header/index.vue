@@ -1,5 +1,6 @@
 <template>
   <header
+    id="landing-page-header"
     class="md:shadow-2 md:sticky md:top-0 z-10 bg-surface-default md:not-supports-backdrop-filter:bg-surface-default md:supports-backdrop-filter:bg-surface-default/70 md:supports-backdrop-filter:backdrop-blur-xl px-8 md:px-20"
     :class="{
       // make header sticky for auth pages
@@ -58,15 +59,15 @@ export default defineComponent({
     const links = ref<Link[]>([
       {
         title: 'Features',
-        to: '#',
+        to: '#features',
       },
       {
         title: 'Pricing',
-        to: '#',
+        to: '#pricing',
       },
       {
         title: 'Contact',
-        to: '#',
+        to: '#contact',
       },
       {
         title: 'Get started for free',
