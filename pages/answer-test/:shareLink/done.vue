@@ -35,7 +35,7 @@ export default defineComponent({
   <div
     class="w-screen h-full bg-surface-default grid justify-center items-center content-center justify-items-center"
   >
-    <h2 class="font-semibold font-sf-pro-display text-display-small">Thanks for thanking the test!</h2>
+    <h2 class="font-semibold font-sf-pro-display text-display-small">Thanks for taking the test!</h2>
 
     <p class="max-w-[720px] text-center mb-16 mt-8">
       We're constantly improving Crowd as a platform. Please click the button
