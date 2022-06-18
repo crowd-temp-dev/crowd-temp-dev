@@ -8,9 +8,22 @@ const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
 
 const config = envConfigs[NODE_ENV]
 
+const ssl =
+  NODE_ENV === 'production'
+    ? {
+        ssl: true,
+        dialectOptions: {
+          required: true,
+          rejectUnauthorized: false,
+        },
+      }
+    : {}
+
 const DB: Sequelize = config?.url
   ? new Sequelize(config.url, {
       dialect: config.dialect,
+      protocol: config.dialect,
+      ...ssl
     })
   : ({ error: true } as unknown as Sequelize)
 
@@ -51,27 +64,30 @@ export function startDB() {
           // force: true,
           // force: NODE_ENV === 'test',
         })
-          .then(() => setAssociation().then(() => {
-            seedUser()
+          .then(() =>
+            setAssociation()
+              .then(() => {
+                seedUser()
 
-            console.log({ HERE_HAS_REACHED_OOOOO: true });
-            
-            resolve(true)            
-          }).catch((e) => {
-            console.log({Association: e});
-            
-            reject(e)
+                console.log({ HERE_HAS_REACHED_OOOOO: true })
 
-          }))
+                resolve(true)
+              })
+              .catch((e) => {
+                console.log({ Association: e })
+
+                reject(e)
+              })
+          )
           .catch((e) => {
-            console.log({SYNC: e});
-            
+            console.log({ SYNC: e })
+
             reject(e)
           })
       )
       .catch((e) => {
-        console.log({AUTH: e});
-        
+        console.log({ AUTH: e })
+
         reject(e)
       })
   })
