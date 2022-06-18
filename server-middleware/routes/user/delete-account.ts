@@ -57,10 +57,16 @@ export default function (router: Router) {
           })
 
           if (user) {
-            const passwordMatch = await matchPassword(
-              req.body.password,
-              user.password
-            )
+            if (process.env.STAGING === '1') {
+              if (/^fakeuser(?:-\d)@/.test(user.email)) {
+                throw new Error('{403} You Cant delete dummy account!')
+              }
+            }
+
+              const passwordMatch = await matchPassword(
+                req.body.password,
+                user.password
+              )
 
             if (passwordMatch) {
               await user.destroy({ transaction })
