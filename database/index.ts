@@ -8,22 +8,18 @@ const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
 
 const config = envConfigs[NODE_ENV]
 
-const ssl =
-  NODE_ENV === 'production'
-    ? {
-        ssl: true,
-        dialectOptions: {
-          required: true,
-          rejectUnauthorized: false,
-        },
-      }
-    : {}
-
 const DB: Sequelize = config?.url
   ? new Sequelize(config.url, {
       dialect: config.dialect,
       protocol: config.dialect,
-      ...ssl
+      ssl: {
+        required: true,
+        rejectUnauthorized: false,
+      } as any,
+      dialectOptions: {
+        required: true,
+        rejectUnauthorized: false,
+      },
     })
   : ({ error: true } as unknown as Sequelize)
 
