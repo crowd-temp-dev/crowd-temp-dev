@@ -137,13 +137,10 @@ export default {
     color: '#267DFF',
   },
 
-  server:
-    process.env.NODE_ENV === 'production'
-      ? {}
-      : {
-          port: 2222,
-          host: '0.0.0.0',
-        },
+  server: {
+    ...(process.env.NODE_ENV === 'production' ? {} : { port: 2222 }),
+    host: '0.0.0.0',
+  },
 
   serverMiddleware: [{ path: 'api/v1', handler: './server-middleware/index' }],
 
