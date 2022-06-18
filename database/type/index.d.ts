@@ -1,5 +1,4 @@
 export type UserSession = Record<string, {
-  ip: string,
   userAgent: string,
   expires: number
 }>

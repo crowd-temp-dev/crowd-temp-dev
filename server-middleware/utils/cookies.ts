@@ -3,7 +3,7 @@ import { Response, Request } from 'express'
 import { oneHour } from '../../utils'
 import DB from '../../database'
 import { User } from '../../database/models/User/User'
-import { getIp, removeSensitiveFields } from '.'
+import { removeSensitiveFields } from '.'
 
 export function clearAuthCookies(res: Response) {
   if (res.headersSent) {
@@ -69,7 +69,6 @@ export async function setAuthCookies(
           ...user.session,
           [session]: {
             expires: expires.getTime(),
-            ip: getIp(req),
             userAgent: req.headers['user-agent'] || 'null',
           },
         },

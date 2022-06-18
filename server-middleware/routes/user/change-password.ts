@@ -8,7 +8,6 @@ import { User } from '../../../database/models/User/User'
 import DB from '../../../database'
 import { hashPassword, matchPassword } from '../../../database/utils'
 import { inOneHour } from '../../../utils'
-import { getIp } from '../../utils'
 
 export interface ChangePasswordForm {
   currentPassword: string
@@ -82,7 +81,6 @@ export default function (router: Router) {
                   session: {
                     [session]: {
                       expires: inOneHour(),
-                      ip: getIp(req),
                       userAgent: req.headers['user-agent'] || 'null'
                     },
                   },

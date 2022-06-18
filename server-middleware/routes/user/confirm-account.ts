@@ -6,7 +6,6 @@ import { ConfirmAccount } from '../../../database/models/User/ConfirmAccount'
 import { User } from '../../../database/models/User/User'
 import { uuidv4, inOneHour } from '../../../utils'
 import { setAuthCookies } from '../../utils/cookies'
-import { getIp } from '../../utils'
 
 export interface ConfirmAccountForm {
   token: string
@@ -87,7 +86,6 @@ export default function (router: Router) {
               ...findUser.session,
               [session]: {
                 expires: inOneHour(),
-                ip: getIp(req),
                 userAgent: req.headers['user-agent'] || 'null',
               },
             },

@@ -6,7 +6,6 @@ import { ForgotPassword } from '../../../database/models/User/ForgotPassword'
 import { User } from '../../../database/models/User/User'
 import { uuidv4, inOneHour } from '../../../utils'
 import { setAuthCookies } from '../../utils/cookies'
-import { getIp } from '../../utils'
 
 export interface ForgotPasswordForm {
   token: string
@@ -82,7 +81,6 @@ export default function (router: Router) {
               ...findUser.session,
               [session]: {
                 expires: inOneHour(),
-                ip: getIp(req),
                 userAgent: req.headers['user-agent'] || 'null',
               },
             },

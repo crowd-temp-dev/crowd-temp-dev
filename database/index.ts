@@ -62,7 +62,7 @@ export function startDB() {
       .then(() =>
         DB.sync({
           // force: true,
-          // force: NODE_ENV === 'test',
+          force: !!process.env.FORCE_SYNC,
         })
           .then(() =>
             setAssociation()

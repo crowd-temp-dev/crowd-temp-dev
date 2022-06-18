@@ -16,7 +16,6 @@ export class AnswerTestUser extends Model<
 > {
   declare id: CreationOptional<string>
   declare testId: string
-  declare ip: CreationOptional<string | null>
   declare userAgent: CreationOptional<string | null>
   declare currentIndex: Record<
     string,
@@ -37,15 +36,6 @@ export default function initPrototypeEvaluation(DB: Sequelize) {
       testId: {
         ...Uuidv4,
         allowNull: false,
-      },
-      ip: {
-        type: DataTypes.STRING(),
-        allowNull: true,
-        validate: {
-          isIP: {
-            msg: 'Invalid IP',
-          },
-        },
       },
       userAgent: {
         type: DataTypes.STRING(),

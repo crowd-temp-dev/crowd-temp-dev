@@ -7,7 +7,6 @@ import { oneDay } from '../../utils'
 import { getFullTest } from '../../database/models/CreateTests/utils'
 import { setAuthCookies } from './cookies'
 import { sendError, sendFormattedError, sendSuccess } from './sendRes'
-import { getIp } from '.'
 
 // check to see that the user exist with an active session. Sign session if true,
 // clear cookies if false;
@@ -36,7 +35,6 @@ export const authMiddleware: RequestHandler = async function (req, res, next) {
 
       if (currentSession && currentSession.expires > Date.now()) {
         if (
-          currentSession.ip !== getIp(req) ||
           currentSession.userAgent !== req.headers['user-agent']
         ) {
           errorRes('Did you hack your way here? 🤔')
@@ -118,7 +116,6 @@ export const verifyAnsUser: RequestHandler = async function (req, res, next) {
         const { ansUserId } = await req.signedCookies
 
         const userDetails = {
-          ip: getIp(req),
           userAgent: req.headers['user-agent'] || 'null',
         }
 
