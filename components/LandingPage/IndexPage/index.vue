@@ -41,10 +41,10 @@ export default defineComponent({
   setup(_, { root }) {
     const validHash = ['features', 'pricing', 'contact']
 
-    const hash = computed(() => root.$route.hash)
+    const fullPath = computed(() => root.$route.fullPath)
 
-    const scrollToHash = (routeHash: string) => {
-      const hashValue = routeHash.replace(/^#/, '').trim()
+    const scrollToHash = () => {
+      const hashValue = root.$route.hash.replace(/^#/, '').trim()
 
       if (validHash.includes(hashValue)) {
         const hashEl = document.getElementById(hashValue) as HTMLElement
@@ -67,10 +67,10 @@ export default defineComponent({
       }
     }
 
-    watch(() => hash.value, scrollToHash)
+    watch(() => fullPath.value, scrollToHash)
 
     onMounted(() => {
-      scrollToHash(hash.value)
+      scrollToHash()
     })
   },
 })
