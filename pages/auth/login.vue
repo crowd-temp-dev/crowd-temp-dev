@@ -148,7 +148,7 @@ export default defineComponent({
           v-bind="fieldIdAndError('email')"
           required
           :autofocus="!$breakpoint.isMobile"
-          value="fakeuser@gmail.com"
+          value="fakeuser@unbug.crowd"
         />
 
         <PasswordField
