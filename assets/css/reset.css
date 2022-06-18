@@ -1,0 +1,105 @@
+hr {
+  pointer-events: none;
+  @apply border-divider;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  user-select: none;
+}
+
+input,
+select,
+textarea,
+button,
+[role='button'] {
+  font-size: 16px;
+}
+
+#unbug-qa body,
+#unbug-qa button,
+#unbug-qa {
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, San Francisco,
+    Segoe UI, Roboto, Helvetica Neue, sans-serif;
+}
+
+/* To size icons with font-size */
+#unbug-qa .size-icon .Polaris-Icon__Img,
+#unbug-qa .size-icon .Polaris-Icon__Svg {
+  width: 1em;
+  max-width: 1em;
+  max-height: 1em;
+  height: 1em;
+}
+
+/* To size icons with font-size */
+#unbug-qa .size-icon.Polaris-Icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* to fill icons with currentColor */
+#unbug-qa .fill-icon .Polaris-Button svg,
+#unbug-qa .fill-icon .Polaris-Icon__Svg {
+  fill: currentColor;
+}
+
+.Polaris-Choice__Label {
+  cursor: pointer;
+}
+
+/* set to 1ms incase any element requires to listen for an animationend or transitionend event */
+@media (prefers-reduced-motion) {
+  #unbug-qa *,
+  #unbug-qa *::before,
+  #unbug-qa *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
+
+/* reset Polaris divider */
+
+#unbug-qa .Polaris-HorizontalDivider {
+  background-color: #f7f7f7;
+}
+
+*::selection {
+  background-color: #267dff;
+  color: #fff;
+}
+
+.plain-upload .Polaris-DropZone--sizeLarge,
+.plain-upload .Polaris-DropZone--sizeExtraLarge {
+  min-height: 11rem;
+}
+
+#unbug-qa
+  .plain-upload
+  .Polaris-DropZone-FileUpload
+  .Polaris-Stack__Item:first-of-type {
+  display: none;
+}
+
+#unbug-qa[data-lock-html-scroll] {
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+}
+
+#unbug-qa .plain-upload .Polaris-Stack__Item {
+  margin-top: 0;
+}
+
+.plain-upload .Polaris-DropZone-FileUpload__Button {
+  border: none;
+  box-shadow: none;
+  min-height: auto;
+  padding: 0;
+  background: inherit;
+  @apply text-interactive-default text-body mb-10;
+}

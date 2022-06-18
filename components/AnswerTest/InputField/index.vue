@@ -1,0 +1,265 @@
+<script lang="ts">
+import { computed, defineComponent, ref, watch } from '@vue/composition-api'
+import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
+import { AnswerTestState } from '~/store/answer-test'
+import { OnSubmit } from '~/types'
+import { getAlphabetIndex, otherChoicePrefix } from '~/utils'
+import Id from '~/components/Base/Id/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import Checkbox from '~/components/Base/Checkbox/index.vue'
+
+export default defineComponent({
+  name: 'AnswerTestInputField',
+  components: { Id, FadeTransition, Checkbox },
+
+  setup(_, { root }) {
+    const showOther = ref(false)
+
+    const currentQuestion = computed<QuestionModelValue>(() => {
+      const questionForm = (root.$store.state['answer-test'] as AnswerTestState)
+        .form
+      if (questionForm.empty) {
+        return {} as QuestionModelValue
+      }
+      const questionId = root.$route.params.question as string
+      const qIndex = Number(questionId.replace(/[a-z]$/, ''))
+      const qIndexLetter = questionId.replace(/\d/g, '')
+      const followUps = questionForm[`question-${qIndex}`].followUpQuestions
+      return (followUps?.[getAlphabetIndex(qIndexLetter)] ||
+        {}) as QuestionModelValue
+    })
+
+    // const isLastQuestion = computed(()=>  (root.$store.state['answer-test'] as AnswerTestState)
+    //     .form)
+
+    const isTextField = computed(() =>
+      ['short-text', 'long-text'].includes(currentQuestion.value.type)
+    )
+
+    const isOptionsType = computed(() => {
+      return ['multi-choice', 'checkbox'].includes(currentQuestion.value.type)
+    })
+
+    const isLinearScale = computed(() => {
+      return currentQuestion.value.type === 'linear-scale'
+    })
+
+    const linearScaleValue = ref<number>()
+
+    const linearScaleOptions = computed(() => {
+      if (!isLinearScale) {
+        return []
+      }
+
+      const linearScale = currentQuestion.value.linearScale
+
+      const startValue = Number(linearScale.start.value)
+
+      return Array.from(
+        {
+          length: Number(linearScale.end.value) + 1 - startValue,
+        },
+        (_, i) => ({
+          value: i + startValue,
+          onClick: () => {
+            linearScaleValue.value = i
+          },
+        })
+      )
+    })
+
+    const setFreshChoices = () =>
+      currentQuestion.value.type === 'checkbox'
+        ? Array.from(
+            {
+              length: currentQuestion.value.choices.options.length,
+            },
+            () => false
+          )
+        : []
+
+    const choicesModel = ref<boolean[]>(setFreshChoices())
+
+    watch(
+      () => currentQuestion.value.id,
+      (nv) => {
+        if (nv) {
+          choicesModel.value = setFreshChoices()
+        }
+      }
+    )
+
+    const submitForm: OnSubmit<Record<string, string>> = async ({
+      formValues,
+      toggleLoading,
+      formElement,
+    }) => {
+      toggleLoading(true)
+      let values = Object.values(formValues) as any[]
+
+      // if (currentQuestion.value.required) {
+      if (['checkbox', 'multi-choice'].includes(currentQuestion.value.type)) {
+        const { options, addOtherAsChoice } = currentQuestion.value.choices
+
+        values = (values as boolean[])
+          .map((val, index) => (val ? options[index] : null))
+          .filter((x) => x !== null)
+
+        if (addOtherAsChoice && showOther.value) {
+          const otherValue = `${otherChoicePrefix}${formValues['other-value']}`
+
+          if (currentQuestion.value.type === 'checkbox') {
+            values.push(otherValue)
+          } else {
+            values = [otherValue]
+          }
+        }
+      }
+      // }
+
+      if (currentQuestion.value.type === 'linear-scale') {
+        values = [linearScaleValue.value?.toString()].filter(Boolean)
+      }
+
+      if (!values.length) {
+        root.$pToast.open({
+          message: 'Enter a value',
+          error: true,
+        })
+        ;(formElement.elements[0] as HTMLElement).focus()
+      } else {
+        await root.$store.dispatch(
+          'answer-test/answerQuestion',
+          values.filter((val) => val !== null && val !== undefined)
+        )
+      }
+
+      toggleLoading(false)
+    }
+    return {
+      submitForm,
+      currentQuestion,
+      isTextField,
+      showOther,
+      isOptionsType,
+      choicesModel,
+      isLinearScale,
+      linearScaleOptions,
+      linearScaleValue,
+    }
+  },
+})
+</script>
+
+<template>
+  <div class="px-[1rem]">
+    <h2 class="font-semibold mb-[0.5rem]">
+      Question {{ $route.params.question }}
+    </h2>
+
+    <p v-if="isOptionsType || isLinearScale" class="mb-8">
+      {{ currentQuestion.title }}
+    </p>
+
+    <FormLayout
+      v-slot="{ fieldIdAndError, loading }"
+      :name="$route.fullPath"
+      @on-submit="submitForm"
+    >
+      <TextField
+        v-if="isTextField"
+        :label="currentQuestion.title"
+        required
+        autofocus
+        class="min-w-[28rem] lg:min-w-[438px] max-w-full"
+        v-bind="fieldIdAndError('text-field')"
+        pattern="^.{1,255}$"
+        :multiline="currentQuestion.type === 'long-text'"
+        :min-height="72"
+      />
+
+      <template v-if="isOptionsType">
+        <RadioGroup
+          v-if="currentQuestion.type === 'multi-choice'"
+          class="grid gap-y-2"
+        >
+          <Id
+            v-for="(choice, i) in currentQuestion.choices.options"
+            :key="i"
+            v-slot="{ id }"
+          >
+            <Radio
+              :label="choice"
+              v-bind="fieldIdAndError(id)"
+              :disabled="showOther"
+            />
+          </Id>
+        </RadioGroup>
+
+        <div v-else class="grid gap-y-8">
+          <Checkbox
+            v-for="(choice, i) in currentQuestion.choices.options"
+            :key="i + choicesModel.length"
+            v-model="choicesModel[i]"
+            :label="choice"
+            v-bind="fieldIdAndError(`${choice}-${i}`)"
+          />
+        </div>
+
+        <div v-if="currentQuestion.choices.addOtherAsChoice">
+          <Id v-slot="{ id }">
+            <label :for="id" class="flex cursor-pointer items-center">
+              <Checkbox v-model="showOther" v-bind="fieldIdAndError(id)" />
+
+              <strong class="uppercase text-text-subdued"> Other </strong>
+            </label>
+          </Id>
+
+          <FadeTransition>
+            <TextField
+              v-if="showOther"
+              v-bind="fieldIdAndError('other-value')"
+              required
+              autofocus
+              pattern="^.{1,255}$"
+              class="min-w-[28rem] lg:min-w-[438px] max-w-full"
+            />
+          </FadeTransition>
+        </div>
+      </template>
+
+      <div v-if="isLinearScale">
+        <div class="flex text-text-subdued justify-between items-center">
+          <p>
+            {{ currentQuestion.linearScale.start.label }}
+          </p>
+
+          <p>
+            {{ currentQuestion.linearScale.end.label }}
+          </p>
+        </div>
+        <ul class="flex items-center space-x-6 mt-12">
+          <li
+            v-for="(option, i) in linearScaleOptions"
+            :key="`linear-${option.value}`"
+          >
+            <Button
+              class="p-0"
+              :class="{
+                'ring-2 ring-action-primary-default ring-offset-1':
+                  linearScaleValue === i,
+              }"
+              @click="option.onClick"
+            >
+              {{ option.value }}
+            </Button>
+          </li>
+        </ul>
+      </div>
+
+      <Button type="submit" primary class="w-fit" :loading="loading">
+        Continue
+      </Button>
+    </FormLayout>
+  </div>
+</template>

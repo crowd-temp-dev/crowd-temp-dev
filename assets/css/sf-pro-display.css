@@ -1,0 +1,31 @@
+/* Regular */
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/assets/sf-pro-display/SFPRODISPLAYREGULAR.OTF);
+}
+
+
+/* Medium */
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(/assets/sf-pro-display/SFPRODISPLAYMEDIUM.OTF);
+}
+
+
+/* Bold */
+
+@font-face {
+    font-family: 'SF Pro Display';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(/assets/sf-pro-display/SFPRODISPLAYBOLD.OTF);
+}
