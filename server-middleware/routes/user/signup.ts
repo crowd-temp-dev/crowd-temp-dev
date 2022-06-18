@@ -130,15 +130,26 @@ export default function (router: Router) {
           transaction,
         })
 
+        const hashedPassword = await hashPassword(password)
+
         if (findUser) {
           if (findUser.confirmed) {
             throw new Error('{403} Email taken!')
           } else {
+            await findUser.update({
+              password: hashedPassword,
+              name,
+              role: 'tester',
+              newsUpdate,
+            })
+
+            await findUser.save({ transaction })
+
+            await findUser.reload({ transaction })
+
             await sendRes(findUser)
           }
         } else {
-          const hashedPassword = await hashPassword(password)
-
           await User.create(
             {
               email,

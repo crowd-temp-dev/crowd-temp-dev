@@ -73,7 +73,7 @@ export default function (router: Router) {
 
           // check that user isn't confirmed
           if (findUser.confirmed) {
-            throw new Error('{403} Account is already confirmed!')
+            throw new Error('{400} Account is already confirmed!')
           }
 
           // All set. Confirm user, add a new user session, and delete token
