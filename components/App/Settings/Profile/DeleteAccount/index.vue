@@ -35,6 +35,8 @@ export default defineComponent({
 
       await $user.delete(formValues)
 
+      formFields.password.value = ''
+
       enableFormFields(formFields)
 
       loading.value = false
