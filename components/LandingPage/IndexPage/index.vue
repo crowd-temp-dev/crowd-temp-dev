@@ -54,7 +54,10 @@ export default defineComponent({
             'landing-page-header'
           ) as HTMLElement
 
-          const top = hashEl.offsetTop + (32 + (header ? header.offsetTop : 0))
+          const top =
+            hashEl.offsetTop +
+            (32 + (header ? header.offsetTop : 0)) -
+            innerHeight
 
           document.documentElement.scrollTo({
             top,
