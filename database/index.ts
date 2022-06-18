@@ -16,9 +16,6 @@ const DB: Sequelize = config?.url
 
 export const dbCreated = DB instanceof Sequelize
 
-console.log({ dbCreated })
-
-
 if (dbCreated) {
   getModules({
     directory: [__dirname, '.', 'models'],
@@ -51,13 +48,16 @@ export function startDB() {
     DB.authenticate()
       .then(() =>
         DB.sync({
-          force: true,
+          // force: true,
           // force: NODE_ENV === 'test',
         })
           .then(() => setAssociation().then(() => {
             resolve(true)
 
             seedUser()
+
+            console.log({HERE_HAS_REACHED_OOOOO: true});
+            
           }).catch(reject))
           .catch(reject)
       )
