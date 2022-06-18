@@ -57,18 +57,14 @@ export default function (router: Router) {
           })
 
           if (user) {
-            console.log(process.env.IS_STAGING)
-            
-            if (String(process.env.IS_STAGING) === '1') {
-              if (/^fakeuser(?:-[0-5])?@/.test(user.email)) {
-                throw new Error('{403} You Cant delete a dummy account!')
-              }
+            if (/^fakeuser(?:-[0-5])?@unbug.crowd/.test(user.email)) {
+              throw new Error('{403} You Cant delete a dummy account!')
             }
 
-              const passwordMatch = await matchPassword(
-                req.body.password,
-                user.password
-              )
+            const passwordMatch = await matchPassword(
+              req.body.password,
+              user.password
+            )
 
             if (passwordMatch) {
               await user.destroy({ transaction })
@@ -91,8 +87,8 @@ export default function (router: Router) {
                 message: {
                   content: 'Account deleted!',
                   type: 'success',
-                  duration: 5000
-                }
+                  duration: 5000,
+                },
               })
             } else {
               throw new Error('{403} Password is incorrect!')
