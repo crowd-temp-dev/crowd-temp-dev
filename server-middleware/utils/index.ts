@@ -115,10 +115,20 @@ export const apiActionQuery = (query: ActionQuery) =>
     ...query,
   }).toString()
 
-export const getIp = (req: Request) =>
-  req.ip ||
-  ((req.headers['x-forwarded-for'] ||
-    req.socket.remoteAddress ||
-    req.session.id) as string)
+export const getIp = (req: Request) => {
+  console.log({
+    IP_ADDRESS:
+      req.ip ||
+      ((req.headers['x-forwarded-for'] ||
+        req.socket.remoteAddress ||
+        req.session.id) as string),
+  })
+  return (
+    req.ip ||
+    ((req.headers['x-forwarded-for'] ||
+      req.socket.remoteAddress ||
+      req.session.id) as string)
+  )
+}
 
 export const isAnswering = (req: Request) => req.path.startsWith('/answer-test')
