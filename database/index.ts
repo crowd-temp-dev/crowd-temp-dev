@@ -57,9 +57,22 @@ export function startDB() {
             console.log({ HERE_HAS_REACHED_OOOOO: true });
             
             resolve(true)            
-          }).catch(reject))
-          .catch(reject)
+          }).catch((e) => {
+            console.log({Association: e});
+            
+            reject(e)
+
+          }))
+          .catch((e) => {
+            console.log({SYNC: e});
+            
+            reject(e)
+          })
       )
-      .catch(reject)
+      .catch((e) => {
+        console.log({AUTH: e});
+        
+        reject(e)
+      })
   })
 }
