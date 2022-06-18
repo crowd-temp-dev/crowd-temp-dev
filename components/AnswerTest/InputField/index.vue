@@ -54,18 +54,24 @@ export default defineComponent({
       const linearScale = currentQuestion.value.linearScale
 
       const startValue = Number(linearScale.start.value)
+      const endValue = Number(linearScale.end.value)
 
-      return Array.from(
+      const values = Array.from(
         {
-          length: Number(linearScale.end.value) + 1 - startValue,
+          length: endValue + 1 - startValue,
         },
-        (_, i) => ({
-          value: i + startValue,
-          onClick: () => {
-            linearScaleValue.value = i
-          },
-        })
+        (_, i) => i + startValue
       )
+
+      return values.map((value) => ({
+        value,
+        onClick: () => {
+          linearScaleValue.value = value
+
+          console.log(value);
+          
+        },
+      }))
     })
 
     const setFreshChoices = () =>
@@ -231,23 +237,23 @@ export default defineComponent({
       <div v-if="isLinearScale">
         <div class="flex text-text-subdued justify-between items-center">
           <p>
-            {{ currentQuestion.linearScale.start.label }}
+            {{ currentQuestion.linearScale.start.label || 'Start' }}
           </p>
 
           <p>
-            {{ currentQuestion.linearScale.end.label }}
+            {{ currentQuestion.linearScale.end.label || 'End' }}
           </p>
         </div>
         <ul class="flex items-center space-x-6 mt-12">
           <li
-            v-for="(option, i) in linearScaleOptions"
+            v-for="(option) in linearScaleOptions"
             :key="`linear-${option.value}`"
           >
             <Button
               class="p-0"
               :class="{
                 'ring-2 ring-action-primary-default ring-offset-1':
-                  linearScaleValue === i,
+                  linearScaleValue === option.value,
               }"
               @click="option.onClick"
             >

@@ -30,8 +30,12 @@ const followUpQuestions = Joi.array()
       required: Joi.boolean().required(),
 
       conditionals: Joi.object({
-        action: Joi.string().pattern(/^(?:goto|show)$/).required(),
-        question: Joi.string().pattern(/^\d[a-zA-Z]/).required(),
+        action: Joi.string()
+          .pattern(/^(?:goto|show)$/)
+          .required(),
+        question: Joi.string()
+          .pattern(/^\d[a-zA-Z]/)
+          .required(),
         questionAnswer: Joi.string().required(),
       } as Record<keyof QuestionModelValue['conditionals'], any>),
 
@@ -49,12 +53,12 @@ const followUpQuestions = Joi.array()
           .required(),
 
         start: Joi.object({
-          label: Joi.string(),
+          label: Joi.string().allow(''),
           value: likeNumber.required(),
         } as Record<keyof QuestionModelValue['linearScale']['start'], any>).required(),
 
         end: Joi.object({
-          label: Joi.string(),
+          label: Joi.string().allow(''),
           value: likeNumber.required(),
         } as Record<keyof QuestionModelValue['linearScale']['end'], any>).required(),
       } as Record<keyof QuestionModelValue['linearScale'], any>),
