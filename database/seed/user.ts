@@ -11,7 +11,7 @@ export default async function seedUser() {
     if (!userLength) {
       await User.bulkCreate(
         Array.from(
-          { length: 5 },
+          { length: 6 },
           (_, i) =>
             ({
               email: `fakeuser${i ? `-${i + 1}` : ''}@unbug.crowd`,
