@@ -9,7 +9,7 @@
         <PAvatar
           :initials="$user.initials"
           size="large"
-          class="text-decorative-text-one bg-decorative-surface-one mr-10 shrink-0"
+          class="text-decorative-text-one bg-decorative-surface-one mr-10 shrink-0 uppercase"
         />
 
         <div>
