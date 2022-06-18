@@ -21,7 +21,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  watch,
+} from '@vue/composition-api'
 import Hero from '~/components/LandingPage/Hero/index.vue'
 import Features from '~/components/LandingPage/Features/index.vue'
 import ExtraFeatures from '~/components/LandingPage/ExtraFeatures/index.vue'
@@ -33,7 +38,38 @@ import Footer from '~/components/LandingPage/Footer/index.vue'
 export default defineComponent({
   name: 'LandingPageLayoutMarkup',
   components: { Hero, Features, ExtraFeatures, Feedback, Pricing, CTA, Footer },
-  setup() {},
+  setup(_, { root }) {
+    const validHash = ['features', 'pricing', 'contact']
+
+    const hash = computed(() => root.$route.hash)
+
+    const scrollToHash = (routeHash: string) => {
+      const hashValue = routeHash.replace(/^#/, '').trim()
+
+      if (validHash.includes(hashValue)) {
+        const hashEl = document.getElementById(hashValue) as HTMLElement
+
+        if (hashEl) {
+          const header = document.getElementById(
+            'landing-page-header'
+          ) as HTMLElement
+
+          const top = hashEl.offsetTop + (32 + (header ? header.offsetTop : 0))
+
+          document.documentElement.scrollTo({
+            top,
+            behavior: 'smooth',
+          })
+        }
+      }
+    }
+
+    watch(() => hash.value, scrollToHash)
+
+    onMounted(() => {
+      scrollToHash(hash.value)
+    })
+  },
 })
 </script>
 
