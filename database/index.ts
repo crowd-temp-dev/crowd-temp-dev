@@ -12,13 +12,11 @@ const DB: Sequelize = config?.url
   ? new Sequelize(config.url, {
       dialect: config.dialect,
       protocol: config.dialect,
-      ssl: {
-        required: true,
-        rejectUnauthorized: false,
-      } as any,
       dialectOptions: {
-        required: true,
-        rejectUnauthorized: false,
+        ssl: {
+          required: true,
+          rejectUnauthorized: false,
+        },
       },
     })
   : ({ error: true } as unknown as Sequelize)
