@@ -11,7 +11,10 @@ const config = envConfigs[NODE_ENV]
 const ssl =
   NODE_ENV === 'production'
     ? {
-        ssl: true,
+        ssl: {
+          required: true,
+          rejectUnauthorized: false,
+        },
         dialectOptions: {
           required: true,
           rejectUnauthorized: false,
