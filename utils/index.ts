@@ -312,7 +312,7 @@ export const removeUndefinedValues = (
 }
 
 export const passwordRegExpString =
-  '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{2,32}$'
+  '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?#)(-_^~&]{2,32}$'
 
 export const emailRegExpString =
   '^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{1,})?$'
