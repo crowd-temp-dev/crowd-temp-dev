@@ -57,8 +57,10 @@ export default function (router: Router) {
           })
 
           if (user) {
-            if (process.env.IS_STAGING === '1') {
-              if (/^fakeuser(?:-\d)?@/.test(user.email)) {
+            console.log(process.env.IS_STAGING)
+            
+            if (String(process.env.IS_STAGING) === '1') {
+              if (/^fakeuser(?:-[0-5])?@/.test(user.email)) {
                 throw new Error('{403} You Cant delete a dummy account!')
               }
             }
