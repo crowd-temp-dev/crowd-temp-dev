@@ -52,12 +52,11 @@ export function startDB() {
           // force: NODE_ENV === 'test',
         })
           .then(() => setAssociation().then(() => {
-            resolve(true)
-
             seedUser()
 
-            console.log({HERE_HAS_REACHED_OOOOO: true});
+            console.log({ HERE_HAS_REACHED_OOOOO: true });
             
+            resolve(true)            
           }).catch(reject))
           .catch(reject)
       )
