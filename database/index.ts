@@ -8,16 +8,22 @@ const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
 
 const config = envConfigs[NODE_ENV]
 
-const DB: Sequelize = config?.url
-  ? new Sequelize(config.url, {
-      dialect: config.dialect,
-      protocol: config.dialect,
+const ssl = NODE_ENV === 'production'
+  ? {
       dialectOptions: {
         ssl: {
           required: true,
           rejectUnauthorized: false,
         },
       },
+    }
+  : {}
+
+const DB: Sequelize = config?.url
+  ? new Sequelize(config.url, {
+      dialect: config.dialect,
+      protocol: config.dialect,
+      ...ssl,
     })
   : ({ error: true } as unknown as Sequelize)
 
@@ -50,7 +56,7 @@ export function startDB() {
       return reject(new Error('Error creating Database'))
     }
 
-    dbStarted = true
+    dbStarted = true    
 
     DB.authenticate()
       .then(() =>

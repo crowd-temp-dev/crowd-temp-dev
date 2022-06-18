@@ -116,8 +116,9 @@ export const apiActionQuery = (query: ActionQuery) =>
   }).toString()
 
 export const getIp = (req: Request) =>
-  (req.headers['x-forwarded-for'] ||
+  req.ip ||
+  ((req.headers['x-forwarded-for'] ||
     req.socket.remoteAddress ||
-    'no-ip') as string
+    req.session.id) as string)
 
 export const isAnswering = (req: Request) => req.path.startsWith('/answer-test')

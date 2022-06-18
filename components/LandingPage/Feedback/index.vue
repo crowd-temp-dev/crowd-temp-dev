@@ -10,7 +10,7 @@
       class="relative before:absolute before:left-0 before:w-14 md:before:w-219 before:h-full before:bg-surface-default/70 before:z-1 w-full md:w-fit mx-auto after:absolute after:right-0 after:w-14 md:after:w-219 after:h-full after:bg-surface-default/70 after:z-1 pointer-events-none before:top-0 after:top-0"
     >
       <ul
-        class="h-fit grid grid-flow-col overflow-x-auto space-x-14 md:space-x-20 py-26 w-[min(100%,600px)] md:w-[933px] mx-auto snap-x snap-mandatory hide-scrollbar px-20 pointer-events-auto"
+        class="h-fit flex overflow-x-auto space-x-14 md:space-x-20 py-26 w-[min(100%,600px)] md:w-[933px] mx-auto snap-x snap-mandatory hide-scrollbar px-20 pointer-events-auto"
       >
         <li aria-hidden="true" class="min-w-full md:min-w-[493px] h-full" />
 

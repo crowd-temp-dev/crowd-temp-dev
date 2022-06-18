@@ -222,7 +222,7 @@ const getters: GetterTree<UserState, RootState> = {
 
     const splitName = state.info.name?.split(' ') || []
 
-    return `${splitName[0][0]}${splitName[1][0] || ''}`
+    return `${splitName[0][0]}${(splitName[1] || [])[0] || ''}`
   },
 }
 
