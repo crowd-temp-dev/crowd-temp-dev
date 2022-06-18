@@ -177,8 +177,7 @@ export const verifyAnsUser: RequestHandler = async function (req, res, next) {
           const user = await AnswerTestUser.findByPk(ansUserId, { transaction })
 
           // check that it's the same user
-          const sameUser = user
-            ? user.ip === userDetails.ip &&
+          const sameUser = user ?
               user.userAgent === userDetails.userAgent
             : false
 
