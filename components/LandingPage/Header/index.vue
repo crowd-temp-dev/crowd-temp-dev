@@ -19,21 +19,25 @@ export default defineComponent({
     const pricingTo = '#pricing'
     const contactTo = '#contact'
 
+    const scrollToHash = (hash: string) => {
+      root.$route.path === '/' && scrollToLandingPageHash(hash, true)
+    }
+
     const links = ref<Link[]>([
       {
         title: 'Features',
         to: featuresTo,
-        onClick: () => scrollToLandingPageHash(featuresTo, true),
+        onClick: () => scrollToHash(featuresTo),
       },
       {
         title: 'Pricing',
         to: pricingTo,
-        onClick: () => scrollToLandingPageHash(pricingTo, true),
+        onClick: () => scrollToHash(pricingTo),
       },
       {
         title: 'Contact',
         to: contactTo,
-        onClick: () => scrollToLandingPageHash(contactTo, true),
+        onClick: () => scrollToHash(contactTo),
       },
       {
         title: 'Get started for free',
