@@ -14,7 +14,7 @@
           <PAvatar customer size="large" class="mr-10 shrink-0" />
 
           <div>
-            <strong class="mb-4"> Edit your photo </strong>
+            <strong class="mb-4"> Edit your logo </strong>
 
             <div class="flex space-x-10 items-center">
               <Button
@@ -59,7 +59,7 @@
           </div>
 
           <Select
-            value="English"
+            value="eng"
             label="Default language"
             :options="[
               {
