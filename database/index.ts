@@ -8,9 +8,6 @@ const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
 
 const config = envConfigs[NODE_ENV]
 
-console.log(config)
-
-
 const DB: Sequelize = config?.url
   ? new Sequelize(config.url, {
       dialect: config.dialect,
@@ -18,6 +15,9 @@ const DB: Sequelize = config?.url
   : ({ error: true } as unknown as Sequelize)
 
 export const dbCreated = DB instanceof Sequelize
+
+console.log({ dbCreated })
+
 
 if (dbCreated) {
   getModules({
