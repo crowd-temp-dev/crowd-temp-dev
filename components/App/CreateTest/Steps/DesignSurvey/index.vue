@@ -36,6 +36,11 @@ export default defineComponent({
 
     return { fileTypes, frameTypes }
   },
+  watch: {
+    'state.fileType'() {
+      this.state.file = []
+    }
+  }
 })
 </script>
 

@@ -75,16 +75,16 @@ export default function (router: Router) {
           })
 
           // add new token
-          await ConfirmAccount.create(
+          ConfirmAccount.create(
             {
               userId: user.id,
             },
             { transaction }
           )
-            .then(async (token) => {
+            .then((token) => {
               const getToken = token.get().id as string
 
-              await mailer
+              mailer
                 .sendMail({
                   from: 'UnbugQA',
                   to: email,
@@ -150,7 +150,7 @@ export default function (router: Router) {
             await sendRes(findUser)
           }
         } else {
-          await User.create(
+          User.create(
             {
               email,
               name,

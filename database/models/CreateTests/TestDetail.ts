@@ -30,7 +30,7 @@ export class TestDetail extends Model<
   declare progress: CreateTestProgress
 
   declare WelcomeScreen?: WelcomeScreen
-  declare TestAnswer?: TestAnswer[]
+  declare TestAnswers?: TestAnswer[]
 }
 
 export default function initTestDetail(DB: Sequelize) {

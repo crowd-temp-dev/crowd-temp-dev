@@ -5,6 +5,7 @@ import { Express, Request } from 'express'
 import { ActionQuery, MessageObject } from '../types'
 import { sendError } from './sendRes'
 import { User } from '~/database/models/User/User'
+
 /**
  * @name catchAllRoute
  * @description
@@ -15,7 +16,6 @@ export const catchAllRoute = (
   router: Express,
   message: string = 'Invalid endpoint!'
 ) => {
-  // handle 404 routes
   router.all('*', (_, res) =>
     sendError(res, {
       status: 404,
@@ -26,6 +26,7 @@ export const catchAllRoute = (
     })
   )
 }
+
 export const formatEnvNumber = (arg?: string) =>
   Number(arg?.replace(/,/g, '')) || 0
 
@@ -54,7 +55,7 @@ export const getModules = (arg: {
     .filter(
       (file) =>
         !exempt.find((exemptedFile) =>
-          new RegExp(`${exemptedFile}\\.(?:js|ts)`).test(file)
+          new RegExp(`${exemptedFile}(?:\\.(?:js|ts))?`).test(file)
         )
     )
     .forEach((file) => {

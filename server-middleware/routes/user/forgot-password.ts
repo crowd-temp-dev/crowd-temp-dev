@@ -84,7 +84,7 @@ export default function (router: Router) {
             { transaction }
           )
 
-          await mailer
+          mailer
             .sendMail({
               to: email,
               from: 'UnbugQA',

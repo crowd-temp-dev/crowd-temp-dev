@@ -28,7 +28,7 @@ const mutations: MutationTree<AnswerTestState> = {
 
 const actions: ActionTree<AnswerTestState, RootState> = {
   async getAllTests({ commit }) {
-    commit('setLoading', true)    
+    commit('setLoading', true)
 
     const { app } = this.$router
 
@@ -37,7 +37,21 @@ const actions: ActionTree<AnswerTestState, RootState> = {
     if (error) {
       showToasts(app.$pToast, message)
     } else {
-      commit('setItems', data)
+      commit(
+        'setItems',
+        Object.values(data).map((val) => ({
+          ...val,
+          shareLink: `${location.origin}/answer-test/${val.shareLink}/`,
+          responses: val.TestAnswers.filter((x) => x.done).length,
+          to: `create-test/${
+            val.progress === 'Draft: Create'
+              ? ''
+              : val.progress === 'Draft: Recruit'
+              ? 'recruit'
+              : 'view-result'
+          }/${val.id}`,
+        }))
+      )
     }
   },
 }

@@ -58,7 +58,7 @@ export default function (router: Router) {
             await testDetail.update({
               published: true,
               shareLink: uid('cid-'),
-              progress: 'Draft: Recruit',
+              progress: 'Collecting response',
             })
 
             await testDetail.save({

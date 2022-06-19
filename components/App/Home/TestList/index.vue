@@ -1,5 +1,10 @@
 <script lang="ts">
-import { defineComponent, computed, ref } from '@vue/composition-api'
+import {
+  defineComponent,
+  computed,
+  ref,
+  onBeforeMount,
+} from '@vue/composition-api'
 import TestItem from './TestItem/index.vue'
 import { TestListItem } from './type'
 import SearchField from '~/components/Base/SearchField/index.vue'
@@ -21,8 +26,6 @@ export default defineComponent({
   name: 'AppHomeTestList',
   components: { SearchField, Button, TestItem, FadeTransition },
   setup(_, { root }) {
-    root.$store.dispatch('list-test/getAllTests')
-
     const filter = ref('')
 
     const testId = ref(uuidv4())
@@ -57,6 +60,10 @@ export default defineComponent({
     const toggleShowFavourite = () => {
       root.$store.commit('testList/SHOW_FAVOURITE', !showFavourite.value)
     }
+
+    onBeforeMount(() => {
+      root.$store.dispatch('list-test/getAllTests')
+    })
 
     return {
       testList,

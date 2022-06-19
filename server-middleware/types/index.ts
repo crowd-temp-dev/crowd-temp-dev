@@ -1,4 +1,4 @@
-import { ApiAction } from "~/types"
+import { ApiAction } from '~/types'
 
 export interface MessageObject {
   type: 'error' | 'success' | 'warning'
@@ -28,15 +28,18 @@ export interface UserData {
   email: string
   newsUpdate: boolean
   role: UserRole
-  showDashboardGuide:boolean
+  showDashboardGuide: boolean
   notification: UserNotification[]
 }
 
-export type CreateTestProgress = 'Daft: Create' | 'Draft: Recruit' | 'Completed'
+export type CreateTestProgress =
+  | 'Draft: Create'
+  | 'Draft: Recruit'
+  | 'Collecting response'
+  | 'Completed'
 
 export interface ActionQuery {
   key: ApiAction
   token: string
   id: string
 }
-

@@ -4,10 +4,11 @@ import type { TestItemStatus } from '../type'
 import Button from '~/components/Base/Button/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { LikeNumber } from '~/types'
+import CopyText from '~/components/Base/CopyText/index.vue'
 
 export default defineComponent({
   name: 'AppHomeTestListTestItem',
-  components: { Button, Tooltip },
+  components: { Button, Tooltip, CopyText },
   props: {
     favourite: Boolean,
     id: {
@@ -35,14 +36,29 @@ export default defineComponent({
       type: String as () => TestItemStatus,
       required: true,
     },
+    shareLink: {
+      type: String,
+      default: undefined,
+    },
+    stopAcceptingResponse: Boolean,
+    to: {
+      type: String,
+      default: undefined
+    }
   },
   emits: [],
 
   setup(_props, { root }) {
+    const responseDisabled = computed(() => {
+      return _props.progress === 'Completed' || _props.stopAcceptingResponse
+    })
+
     const statusIcon = computed(() => {
+      if (responseDisabled.value) {
+        return 'MarkFulfilledMinor'
+      }
+
       switch (_props.progress) {
-        case 'Completed':
-          return 'MarkFulfilledMinor'
         case 'Collecting response':
           return 'custom-loading'
         default:
@@ -50,7 +66,7 @@ export default defineComponent({
       }
     })
 
-    const isDraft = computed(() => _props.progress.startsWith('Draft: '))
+    const isDraft = computed(() => _props.progress.startsWith('Draft:'))
 
     const toggleFavourite = () => {
       const favourite = !_props.favourite
@@ -75,17 +91,26 @@ export default defineComponent({
     const formatDate = (val: string) => {
       const date = new Date(val)
 
-      return date.toLocaleDateString('us', {
-        hour12: true,
-        hour: '2-digit',
-        minute: '2-digit',
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric'
-      }).replace(',', '').toUpperCase()
+      return date
+        .toLocaleDateString('us', {
+          hour12: true,
+          hour: '2-digit',
+          minute: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+        })
+        .replace(',', '')
+        .toUpperCase()
     }
 
-    return { statusIcon, isDraft, toggleFavourite, formatDate }
+    return {
+      statusIcon,
+      isDraft,
+      toggleFavourite,
+      formatDate,
+      responseDisabled,
+    }
   },
 })
 </script>
@@ -123,7 +148,7 @@ export default defineComponent({
       <div class="w-[42%]">
         <strong> {{ name }} </strong>
 
-        <p class="caption"> Created {{ formatDate(createdAt) }}</p>
+        <p class="caption">Created {{ formatDate(createdAt) }}</p>
       </div>
 
       <div class="w-[18%]">
@@ -142,8 +167,8 @@ export default defineComponent({
         <div
           class="flex items-center text-left space-x-10"
           :class="{
-            'text-base-success  fill-base-success': progress === 'Completed',
-            'fill-icon-default': progress !== 'Completed',
+            'text-base-success  fill-base-success': responseDisabled,
+            'fill-icon-default': !responseDisabled,
           }"
         >
           <PIcon
@@ -190,17 +215,24 @@ export default defineComponent({
         <div class="caption ml-30">
           <span v-if="progress !== 'Collecting response'">
             {{
-              progress === 'Completed' ? 'Link disabled' : 'No link created yet'
+              responseDisabled ? 'Link disabled' : 'No link created yet'
             }}
           </span>
 
-          <Button v-else plain> Copy share link </Button>
+          <CopyText
+            v-else-if="shareLink"
+            v-slot="{ copy }"
+            :text="shareLink"
+            success-message="Link copied"
+          >
+            <Button plain @click="copy"> Copy share link </Button>
+          </CopyText>
         </div>
       </div>
     </div>
 
     <div class="mr-12 shrink-0 w-142">
-      <Button full-width>
+      <Button full-width :to="to">
         {{ isDraft ? 'Continue' : 'View responses' }}
       </Button>
     </div>

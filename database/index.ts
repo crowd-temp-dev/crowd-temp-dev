@@ -61,32 +61,32 @@ export function startDB() {
     DB.authenticate()
       .then(() =>
         DB.sync({
-          force: true,
-          // force: process.env.FORCE_SYNC === '1',
+          // force: true,
+          force: process.env.FORCE_SYNC === '1',
         })
           .then(() =>
             setAssociation()
               .then(() => {
                 seedUser()
 
-                console.log({ HERE_HAS_REACHED_OOOOO: true })
-
+                console.log('DB Started!')
+                
                 resolve(true)
               })
               .catch((e) => {
-                console.log({ Association: e })
+                console.log({ AssociationError: e })
 
                 reject(e)
               })
           )
           .catch((e) => {
-            console.log({ SYNC: e })
+            console.log({ SyncError: e })
 
             reject(e)
           })
       )
       .catch((e) => {
-        console.log({ AUTH: e })
+        console.log({ AuthenticationError: e })
 
         reject(e)
       })

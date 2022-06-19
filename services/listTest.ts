@@ -6,5 +6,8 @@ export const GetAllTests: ServiceHandler<GetAllTestsForm, GetAllTestsRes> = asyn
   axios,
   // payload
 ) => {
-  return await axios.$get('get-test/getAll', validateStatus)
+  return await axios.$get('get-test/getAll', {
+    ...validateStatus,
+    progress: false,
+  })
 }

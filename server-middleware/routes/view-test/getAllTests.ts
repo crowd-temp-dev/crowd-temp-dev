@@ -4,8 +4,8 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
-import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { CreateTestProgress } from '~/server-middleware/types'
+import { TestAnswer } from '~/database/models/AnswerTest/Answers'
 
 export interface GetAllTestsForm {
   favourite?: boolean
@@ -14,20 +14,17 @@ export interface GetAllTestsForm {
   // sort?:
 }
 
-export type GetAllTestsRes = Record<
-  `${number}`,
-  {
-    createdAt: string
-    description: string
-    favourite: boolean
-    id: string
-    name: string
-    progress: CreateTestProgress
-    published: boolean
-    responseCount: string
-    shareLink: string
-  }
->[]
+export type GetAllTestsRes = {
+  createdAt: string
+  description: string
+  favourite: boolean
+  id: string
+  name: string
+  progress: CreateTestProgress
+  published: boolean
+  shareLink: string
+  TestAnswers: TestAnswer[]
+}[]
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.query
@@ -69,12 +66,9 @@ export default function (router: Router) {
               createdBy: userId,
             },
             include: {
-              model: TestAnswer,
-              attributes: [],
+              association: 'TestAnswers',
             },
-            transaction,
             attributes: [
-              [DB.fn('COUNT', 'TestAnswers.done'), 'responses'],
               'id',
               'favourite',
               'name',
@@ -82,13 +76,14 @@ export default function (router: Router) {
               'description',
               'shareLink',
               'createdAt',
-              'progress'
+              'progress',
             ],
             group: ['TestDetail.id', 'TestAnswers.id'],
+            transaction,
           })
 
           sendSuccess(res, {
-            data: testDetail
+            data: testDetail,
           })
         })
       } catch (err) {

@@ -103,3 +103,9 @@ button,
   background: inherit;
   @apply text-interactive-default text-body mb-10;
 }
+
+.Polaris-Frame-ToastManager.Polaris-Frame-Toast--Position-bottom,
+.Polaris-Frame-ToastManager.Polaris-Frame-Toast--Position-top {
+  animation-timing-function: var(--ease-back-out) !important;
+  animation-duration: 250ms !important;
+}

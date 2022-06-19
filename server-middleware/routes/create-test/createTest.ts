@@ -130,7 +130,7 @@ export default function (router: Router) {
               createdBy: user.id,
               name,
               description,
-              progress: 'Daft: Create',
+              progress: 'Draft: Recruit',
             },
             { transaction }
           )
