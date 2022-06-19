@@ -8,7 +8,7 @@ import { CreateTest, GetCreateTest, GetRecruit, PublishTest, UpdateTestDetail } 
 import { showToasts } from '~/utils/showToast'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 import { CreateTestFormQuestion } from '~/types/form'
-import { UpdateTestDetailForm } from '~/server-middleware/routes/create-tests/updateTestDetail'
+import { UpdateTestDetailForm } from '~/server-middleware/routes/create-test/updateTestDetail'
 
 const createTestAlertTitle = 'You have a test in progress!'
 

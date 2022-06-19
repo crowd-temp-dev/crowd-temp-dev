@@ -3,6 +3,7 @@ import { computed, defineComponent, nextTick } from '@vue/composition-api'
 import type { TestItemStatus } from '../type'
 import Button from '~/components/Base/Button/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
+import { LikeNumber } from '~/types'
 
 export default defineComponent({
   name: 'AppHomeTestListTestItem',
@@ -13,23 +14,24 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    title: {
+    name: {
       type: String,
       required: true,
     },
-    date: {
+    createdAt: {
       type: String,
       required: true,
     },
     responses: {
-      type: Number,
+      type: [Number, String] as unknown as () => LikeNumber,
       required: true,
     },
     notes: {
       type: Number,
-      required: true,
+      // required: true,
+      default: 0,
     },
-    status: {
+    progress: {
       type: String as () => TestItemStatus,
       required: true,
     },
@@ -38,7 +40,7 @@ export default defineComponent({
 
   setup(_props, { root }) {
     const statusIcon = computed(() => {
-      switch (_props.status) {
+      switch (_props.progress) {
         case 'Completed':
           return 'MarkFulfilledMinor'
         case 'Collecting response':
@@ -48,7 +50,7 @@ export default defineComponent({
       }
     })
 
-    const isDraft = computed(() => _props.status.startsWith('Draft: '))
+    const isDraft = computed(() => _props.progress.startsWith('Draft: '))
 
     const toggleFavourite = () => {
       const favourite = !_props.favourite
@@ -70,7 +72,20 @@ export default defineComponent({
       })
     }
 
-    return { statusIcon, isDraft, toggleFavourite }
+    const formatDate = (val: string) => {
+      const date = new Date(val)
+
+      return date.toLocaleDateString('us', {
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric'
+      }).replace(',', '').toUpperCase()
+    }
+
+    return { statusIcon, isDraft, toggleFavourite, formatDate }
   },
 })
 </script>
@@ -81,7 +96,12 @@ export default defineComponent({
     class="bg-surface-default border border-divider rounded-lg p-20 flex items-center"
   >
     <span class="mr-18">
-      <Tooltip v-slot="{ events }" label="Toggle favourite" placement="left" open-delay="500">
+      <Tooltip
+        v-slot="{ events }"
+        label="Toggle favourite"
+        placement="left"
+        open-delay="500"
+      >
         <Button
           plain
           aria-label="Toggle favourite"
@@ -101,15 +121,15 @@ export default defineComponent({
 
     <div class="flex items-center w-full mr-32">
       <div class="w-[42%]">
-        <strong> {{ title }} </strong>
+        <strong> {{ name }} </strong>
 
-        <p class="caption">{{ date }}</p>
+        <p class="caption"> Created {{ formatDate(createdAt) }}</p>
       </div>
 
       <div class="w-[18%]">
         <strong> {{ responses }} </strong>
 
-        <p class="caption">Responses</p>
+        <p class="caption">Response{{ responses > 1 ? 's' : '' }}</p>
       </div>
 
       <div class="w-[18%]">
@@ -122,8 +142,8 @@ export default defineComponent({
         <div
           class="flex items-center text-left space-x-10"
           :class="{
-            'text-base-success  fill-base-success': status === 'Completed',
-            'fill-icon-default': status !== 'Completed',
+            'text-base-success  fill-base-success': progress === 'Completed',
+            'fill-icon-default': progress !== 'Completed',
           }"
         >
           <PIcon
@@ -155,22 +175,22 @@ export default defineComponent({
 
           <strong class="shrink-0">
             <span v-if="!isDraft">
-              {{ status }}
+              {{ progress }}
             </span>
 
             <span v-else>
               Draft:
               <span class="text-text-subdued">
-                {{ status.replace('Draft: ', '') }}
+                {{ progress.replace('Draft: ', '') }}
               </span>
             </span>
           </strong>
         </div>
 
         <div class="caption ml-30">
-          <span v-if="status !== 'Collecting response'">
+          <span v-if="progress !== 'Collecting response'">
             {{
-              status === 'Completed' ? 'Link disabled' : 'No link created yet'
+              progress === 'Completed' ? 'Link disabled' : 'No link created yet'
             }}
           </span>
 

@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import Joi from 'joi'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import { clearAuthCookies } from '../../utils/cookies'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { user } from '../../utils/validation'
@@ -41,7 +41,7 @@ export default function (router: Router) {
   return router.delete(
     '/auth/user',
     formValidation,
-    authMiddleware,
+    authenticate,
     async (req, res) => {
       const { userId } = req.signedCookies
 

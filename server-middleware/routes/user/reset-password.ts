@@ -6,7 +6,7 @@ import {
   sendFormattedError,
   sendSuccess,
 } from '../../utils/sendRes'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
 import { hashPassword } from '../../../database/utils'
@@ -47,7 +47,7 @@ export default function (router: Router) {
   return router.post(
     '/auth/resetPassword',
     formValidation,
-    authMiddleware,
+    authenticate,
     async (req, res) => {
       const { password: _password } = req.body as ResetPasswordForm
 

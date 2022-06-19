@@ -16,7 +16,7 @@ import { PrototypeEvaluation } from './CreateTests/PrototypeEvaluation'
 import { FollowUpQuestion } from './CreateTests/FollowUpQuestions'
 import { TemporaryEmail } from './User/TemporaryEmail'
 import { File } from './File/File'
-import { TestAnswers } from './AnswerTest/Answers'
+import { TestAnswer } from './AnswerTest/Answers'
 
 type Table = ModelStatic<Model>
 
@@ -53,7 +53,7 @@ export default function () {
     })
 
     // a test detail has multiple answers
-    TestDetail.hasMany(TestAnswers, {
+    TestDetail.hasMany(TestAnswer, {
       foreignKey: 'testId',
       onDelete: 'CASCADE',
     })

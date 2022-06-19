@@ -61,8 +61,8 @@ export function startDB() {
     DB.authenticate()
       .then(() =>
         DB.sync({
-          // force: true,
-          force: process.env.FORCE_SYNC === '1',
+          force: true,
+          // force: process.env.FORCE_SYNC === '1',
         })
           .then(() =>
             setAssociation()

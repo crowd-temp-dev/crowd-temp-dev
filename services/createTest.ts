@@ -1,9 +1,9 @@
 import { ServiceHandler } from './type'
 import { validateStatus } from './utils'
-import { CreateTestRes } from '~/server-middleware/routes/create-tests/createTest'
+import { CreateTestRes } from '~/server-middleware/routes/create-test/createTest'
 import { CreateTestForm } from '~/types/form'
 import { CreateTestState } from '~/store/create-test'
-import { UpdateTestDetailForm } from '~/server-middleware/routes/create-tests/updateTestDetail'
+import { UpdateTestDetailForm } from '~/server-middleware/routes/create-test/updateTestDetail'
 
 export const CreateTest: ServiceHandler<
   Record<string, any>,

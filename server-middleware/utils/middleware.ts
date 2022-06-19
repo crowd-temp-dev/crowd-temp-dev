@@ -10,7 +10,7 @@ import { sendError, sendFormattedError, sendSuccess } from './sendRes'
 
 // check to see that the user exist with an active session. Sign session if true,
 // clear cookies if false;
-export const authMiddleware: RequestHandler = async function (req, res, next) {
+export const authenticate: RequestHandler = async function (req, res, next) {
   const { userId, session } = req.signedCookies
 
   const errorRes = (message = 'You must be logged in!') => {

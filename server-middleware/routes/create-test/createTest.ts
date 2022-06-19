@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
 import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
@@ -85,7 +85,7 @@ export default function (router: Router) {
   return router.post(
     '/createTest/create',
     formValidation,
-    authMiddleware,
+    authenticate,
     async (req, res) => {
       const { userId } = req.signedCookies
 
@@ -130,7 +130,7 @@ export default function (router: Router) {
               createdBy: user.id,
               name,
               description,
-              progress: 'create',
+              progress: 'Daft: Create',
             },
             { transaction }
           )

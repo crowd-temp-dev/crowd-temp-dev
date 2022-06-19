@@ -3,15 +3,23 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { uuidv4 } from '../../utils/validation'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
-import { uid } from '../../../utils'
+import { removeUndefinedValues } from '../../../utils'
+
+export interface UpdateTestDetailForm {
+  id: string
+  unlimitedInvites?: boolean
+  stopAcceptingResponse?: boolean
+}
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
     id: uuidv4.required(),
+    unlimitedInvites: Joi.boolean(),
+    stopAcceptingResponse: Joi.boolean(),
   })
 
   const validate = schema.validate(body)
@@ -30,12 +38,13 @@ const formValidation: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.post(
-    '/create-test/publish',
+  return router.patch(
+    '/create-test/updateDetail',
     formValidation,
-    authMiddleware,
+    authenticate,
     async (req, res) => {
-      const id = req.body.id as string
+      const { id, stopAcceptingResponse, unlimitedInvites } =
+        req.body as UpdateTestDetailForm
 
       const { userId } = req.signedCookies
 
@@ -51,34 +60,33 @@ export default function (router: Router) {
               throw new Error('{403} You cannot access this test!')
             }
 
-            if (testDetail.progress === 'view') {
-              throw new Error('{403} Too late to publish!')
+            if (testDetail.published) {
+              const updateValues = removeUndefinedValues({
+                stopAcceptingResponse,
+                unlimitedInvites,
+              })
+
+              await testDetail.update(updateValues)
+
+              await testDetail.save({ transaction })
+
+              await testDetail.reload({ transaction })
+
+              sendSuccess(res, {
+                data: {
+                  published: true,
+                  shareLink: testDetail.shareLink,
+                  stopAcceptingResponse: testDetail.stopAcceptingResponse,
+                  unlimitedInvites: testDetail.unlimitedInvites,
+                },
+                message: {
+                  content: 'Updated!',
+                  type:'success'
+                }
+              })
+            } else {
+              throw new Error('{403} Only published test can be updated!')
             }
-
-            await testDetail.update({
-              published: true,
-              shareLink: uid('cid-'),
-              progress: 'recruit',
-            })
-
-            await testDetail.save({
-              transaction,
-            })
-
-            await testDetail.reload({ transaction })
-
-            sendSuccess(res, {
-              data: {
-                published: testDetail.published,
-                shareLink: testDetail.shareLink,
-                stopAcceptingResponse: testDetail.stopAcceptingResponse,
-                unlimitedInvites: testDetail.unlimitedInvites,
-              },
-              message: {
-                content: 'Shareable link created',
-                type: 'success',
-              },
-            })
           } else {
             throw new Error('{404} Test not found!')
           }

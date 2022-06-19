@@ -10,19 +10,20 @@ import {
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
 
-export class TestAnswers extends Model<
-  InferAttributes<TestAnswers>,
-  InferCreationAttributes<TestAnswers>
+export class TestAnswer extends Model<
+  InferAttributes<TestAnswer>,
+  InferCreationAttributes<TestAnswer>
 > {
   declare id: CreationOptional<string>
   declare userId: string
   declare username: string
   declare testId: string
   declare answers: CreationOptional<Record<`${number}${string}`, any>[]>
+  declare done: CreationOptional<boolean>
 }
 
 export default function initPrototypeEvaluation(DB: Sequelize) {
-  TestAnswers.init(
+  TestAnswer.init(
     {
       id: {
         ...Uuidv4,
@@ -50,6 +51,11 @@ export default function initPrototypeEvaluation(DB: Sequelize) {
         defaultValue: () => [],
         allowNull: false,
       },
+      done: {
+        type: DataTypes.BOOLEAN(),
+        allowNull: false,
+        defaultValue: false
+      }
     },
     {
       sequelize: DB,
@@ -57,5 +63,5 @@ export default function initPrototypeEvaluation(DB: Sequelize) {
     }
   )
 
-  return TestAnswers
+  return TestAnswer
 }

@@ -5,6 +5,7 @@ import { TestListItem } from './type'
 import SearchField from '~/components/Base/SearchField/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { uuidv4 } from '~/utils'
 
 // const tableHead = [
 //   'Favourite',
@@ -20,14 +21,18 @@ export default defineComponent({
   name: 'AppHomeTestList',
   components: { SearchField, Button, TestItem, FadeTransition },
   setup(_, { root }) {
+    root.$store.dispatch('list-test/getAllTests')
+
     const filter = ref('')
+
+    const testId = ref(uuidv4())
 
     const showFavourite = computed(
       () => root.$store.state.testList.showFavourite as boolean
     )
 
     const testList = computed(
-      () => root.$store.state.testList.items as TestListItem[]
+      () => root.$store.state['list-test'].items as TestListItem[]
     )
 
     const favouriteTests = computed(
@@ -60,6 +65,7 @@ export default defineComponent({
       filteredTestList,
       showFavourite,
       toggleShowFavourite,
+      testId,
     }
   },
 })
@@ -129,7 +135,7 @@ export default defineComponent({
         You can create a new product or import your product inventory.
       </h5>
 
-      <Button primary to="/create-test/"> Create new test </Button>
+      <Button primary :to="`/create-test/${testId}`"> Create new test </Button>
     </div>
 
     <FadeTransition>
@@ -151,7 +157,7 @@ export default defineComponent({
       </TransitionGroup>
 
       <p
-        v-else
+        v-else-if="testList.length"
         class="font-semibold text-center text-text-subdued text-heading"
       >
         No result!

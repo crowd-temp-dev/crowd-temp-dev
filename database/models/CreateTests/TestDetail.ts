@@ -8,8 +8,9 @@ import {
   DataTypes,
   Sequelize,
 } from 'sequelize'
-import { creatTestProgressRegExpString } from '../../../utils'
+// import { creatTestProgressRegExpString } from '../../../utils'
 import { Uuidv4 } from '../../utils/model'
+import { TestAnswer } from '../AnswerTest/Answers'
 import { WelcomeScreen } from './WelcomeScreen'
 import type { CreateTestProgress } from '~/server-middleware/types'
 
@@ -29,6 +30,7 @@ export class TestDetail extends Model<
   declare progress: CreateTestProgress
 
   declare WelcomeScreen?: WelcomeScreen
+  declare TestAnswer?: TestAnswer[]
 }
 
 export default function initTestDetail(DB: Sequelize) {
@@ -79,9 +81,9 @@ export default function initTestDetail(DB: Sequelize) {
       progress: {
         type: DataTypes.STRING(),
         allowNull: false,
-        validate: {
-          is: new RegExp(creatTestProgressRegExpString),
-        },
+        // validate: {
+        //   is: new RegExp(creatTestProgressRegExpString),
+        // },
       },
     },
     {

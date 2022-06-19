@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
-import { TestAnswers } from '../../../database/models/AnswerTest/Answers'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
 import { getAlphabetIndex, otherChoicePrefix } from '../../../utils'
@@ -94,7 +94,7 @@ export default function (router: Router) {
                 throw new Error('{404} Test not found!')
               } else {
                 // find the answer table
-                const answer = await TestAnswers.findOne({
+                const answer = await TestAnswer.findOne({
                   where: {
                     userId: ansUserId,
                     testId,
@@ -141,6 +141,7 @@ export default function (router: Router) {
                         ...answer.answers,
                         [currentIndex]: ans,
                       },
+                      done: nextIndexValue === 'done'
                     })
 
                     await answer.save({ transaction })

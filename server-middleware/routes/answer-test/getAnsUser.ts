@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
-import { TestAnswers } from '../../../database/models/AnswerTest/Answers'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getCurrentTestIndex } from '../../utils/answerTest'
@@ -54,7 +54,7 @@ export default function (router: Router) {
             throw new Error('{404} User not found!!')
           }
 
-          const testAnswers = await TestAnswers.findOne({
+          const testAnswers = await TestAnswer.findOne({
             where: DB.and([{ userId: ansUserId }, { testId }]),
             transaction,
           })

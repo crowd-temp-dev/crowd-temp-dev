@@ -32,7 +32,7 @@ export interface UserData {
   notification: UserNotification[]
 }
 
-export type CreateTestProgress = 'create' | 'recruit' | 'view'
+export type CreateTestProgress = 'Daft: Create' | 'Draft: Recruit' | 'Completed'
 
 export interface ActionQuery {
   key: ApiAction

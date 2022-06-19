@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import Joi from 'joi'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import { setAuthCookies } from '../../utils/cookies'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { user } from '../../utils/validation'
@@ -48,7 +48,7 @@ export default function (router: Router) {
   return router.patch(
     '/auth/changePassword',
     formValidation,
-    authMiddleware,
+    authenticate,
     async (req, res) => {
       const { userId, session } = req.signedCookies
 

@@ -1,15 +1,3 @@
-<template>
-  <div class="h-full isolate max-w-app mx-auto">
-    <div class="pt-32 pb-112 isolate">
-      <FadeTransition>
-        <Onboard v-if="$user.showDashboardGuide" />
-      </FadeTransition>
-
-      <TestList />
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import Onboard from './Onboard/index.vue'
@@ -23,4 +11,14 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<template>
+  <div class="h-full isolate max-w-app mx-auto">
+    <div class="pt-32 pb-112 isolate">
+      <FadeTransition>
+        <Onboard v-if="$user.showDashboardGuide" />
+      </FadeTransition>
+
+      <TestList />
+    </div>
+  </div>
+</template>

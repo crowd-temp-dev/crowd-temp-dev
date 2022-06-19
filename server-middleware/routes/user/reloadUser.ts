@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import Joi from 'joi'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import { loggedInMessage } from '../../utils'
 import { clearAuthCookies } from '../../utils/cookies'
 import { sendError, sendSuccess } from '../../utils/sendRes'
@@ -30,7 +30,7 @@ export default function (router: Router) {
   return router.get(
     '/auth/reload',
     formValidation,
-    authMiddleware,
+    authenticate,
      (_, res) => {
       // at this point, a user exists in the res.
       // Sha check if it doesnt and send error;

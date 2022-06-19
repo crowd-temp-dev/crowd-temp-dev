@@ -317,7 +317,7 @@ export const passwordRegExpString =
 export const emailRegExpString =
   '^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{1,})?$'
 
-export const creatTestProgressRegExpString = '^(?:create|recruit|view)$'
+export const creatTestProgressRegExpString = '^(?:Draft: Create|Draft: Recruit|Completed)$'
 
 export const roleRegExpString = '^(?:user|tester)$'
 

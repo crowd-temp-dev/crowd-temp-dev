@@ -107,7 +107,7 @@ export const formSchema = {
 
   FiveSecondsTest: Joi.object({
     id: uuidv4.required(),
-    duration: Joi.number().min(5000).max(60000).required(),
+    duration: Joi.number().integer().min(5000).max(60000).required(),
     file: Joi.array().max(1).items(Joi.any()).required(),
     followUpQuestions,
   } as Record<keyof CreateTestForm['FiveSecondsTest']['0'], any>),

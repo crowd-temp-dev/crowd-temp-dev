@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { uuidv4 } from '../../utils/validation'
-import { authMiddleware } from '../../utils/middleware'
+import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
 
@@ -33,7 +33,7 @@ export default function (router: Router) {
   return router.get(
     '/create-test/:id',
     formValidation,
-    authMiddleware,
+    authenticate,
     async (req, res) => {
       const id = req.params.id as string
 

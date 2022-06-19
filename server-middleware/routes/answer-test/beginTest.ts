@@ -5,7 +5,7 @@ import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { user } from '../../utils/validation'
-import { TestAnswers } from '../../../database/models/AnswerTest/Answers'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getCurrentTestIndex } from '../../utils/answerTest'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
@@ -67,12 +67,12 @@ export default function (router: Router) {
           }
 
           // create a new test if user isn't in progress
-          let answerTest: TestAnswers | null = null
+          let answerTest: TestAnswer | null = null
 
           const userCurrentIndex = user.currentIndex[testDetail.id]
 
           if (userCurrentIndex === '0a') {
-            answerTest = await TestAnswers.create(
+            answerTest = await TestAnswer.create(
               {
                 testId: testDetail.id,
                 userId: user.id,
