@@ -4,6 +4,7 @@ import {
   computed,
   ref,
   onBeforeMount,
+  nextTick,
 } from '@vue/composition-api'
 import TestItem from './TestItem/index.vue'
 import { TestListItem } from './type'
@@ -30,8 +31,10 @@ export default defineComponent({
 
     const testId = ref(uuidv4())
 
-    const showFavourite = computed(
-      () => root.$store.state.testList.showFavourite as boolean
+    const showFavouriteQuery = computed(() => root.$route.query.showFavourite)
+
+    const showFavourite = computed(() =>
+      Boolean(Number(showFavouriteQuery.value || '0'))
     )
 
     const testList = computed(
@@ -39,7 +42,7 @@ export default defineComponent({
     )
 
     const favouriteTests = computed(
-      () => root.$store.getters['testList/favourite'] as TestListItem[]
+      () => root.$store.getters['list-test/favourites'] as TestListItem[]
     )
 
     const filteredTestList = computed(() => {
@@ -57,13 +60,24 @@ export default defineComponent({
       return storeItems
     })
 
+    const getAllTests = async () =>
+      await root.$store.dispatch('list-test/getAllTests')
+
     const toggleShowFavourite = () => {
-      root.$store.commit('testList/SHOW_FAVOURITE', !showFavourite.value)
+      const nextQuery = String(Number(!showFavourite.value))
+
+      if (showFavouriteQuery.value !== nextQuery) {
+        root.$router.replace({
+          query: {
+            showFavourite: nextQuery,
+          },
+        })
+
+        nextTick(getAllTests)
+      }
     }
 
-    onBeforeMount(() => {
-      root.$store.dispatch('list-test/getAllTests')
-    })
+    onBeforeMount(getAllTests)
 
     return {
       testList,

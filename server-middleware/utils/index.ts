@@ -111,9 +111,11 @@ export function removeSensitiveFields(
   return rawData
 }
 
-export const apiActionQuery = (query: ActionQuery) =>
+export const routeQuery = (query: Record<string, any>) =>
   new URLSearchParams({
     ...query,
   }).toString()
+
+export const apiActionQuery = (query: ActionQuery) => routeQuery(query)
 
 export const isAnswering = (req: Request) => req.path.startsWith('/answer-test')

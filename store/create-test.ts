@@ -42,6 +42,7 @@ export interface CreateTestState {
     unlimitedInvites?: boolean
     stopAcceptingResponse?: boolean
     responses?: number
+    favourite?: boolean
   }
   form: CreateTestForm
   loading: boolean

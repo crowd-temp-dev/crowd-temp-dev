@@ -4,8 +4,9 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
+import { removeUndefinedValues } from '../../../utils'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { CreateTestProgress } from '~/server-middleware/types'
-import { TestAnswer } from '~/database/models/AnswerTest/Answers'
 
 export interface GetAllTestsForm {
   favourite?: boolean
@@ -14,7 +15,7 @@ export interface GetAllTestsForm {
   // sort?:
 }
 
-export type GetAllTestsRes = {
+export interface GetAllTestsResItem {
   createdAt: string
   description: string
   favourite: boolean
@@ -24,7 +25,9 @@ export type GetAllTestsRes = {
   published: boolean
   shareLink: string
   TestAnswers: TestAnswer[]
-}[]
+}
+
+export type GetAllTestsRes = GetAllTestsResItem[]
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.query
@@ -60,10 +63,17 @@ export default function (router: Router) {
 
       try {
         await DB.transaction(async (transaction) => {
+          const { favourite } = req.body as GetAllTestsForm
+
+          const filter = removeUndefinedValues({
+            favourite,
+          } as TestDetail)
+
           // find the test and match the creator's id;
           const testDetail = await TestDetail.findAll({
             where: {
               createdBy: userId,
+              ...filter,
             },
             include: {
               association: 'TestAnswers',

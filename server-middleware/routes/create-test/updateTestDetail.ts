@@ -11,6 +11,7 @@ export interface UpdateTestDetailForm {
   id: string
   unlimitedInvites?: boolean
   stopAcceptingResponse?: boolean
+  favourite: boolean
 }
 
 const formValidation: RequestHandler = (req, res, next) => {
@@ -20,6 +21,7 @@ const formValidation: RequestHandler = (req, res, next) => {
     id: uuidv4.required(),
     unlimitedInvites: Joi.boolean(),
     stopAcceptingResponse: Joi.boolean(),
+    favourite: Joi.boolean(),
   })
 
   const validate = schema.validate(body)
@@ -43,7 +45,7 @@ export default function (router: Router) {
     formValidation,
     authenticate,
     async (req, res) => {
-      const { id, stopAcceptingResponse, unlimitedInvites } =
+      const { id, stopAcceptingResponse, unlimitedInvites, favourite } =
         req.body as UpdateTestDetailForm
 
       const { userId } = req.signedCookies
@@ -60,33 +62,39 @@ export default function (router: Router) {
               throw new Error('{403} You cannot access this test!')
             }
 
-            if (testDetail.published) {
-              const updateValues = removeUndefinedValues({
-                stopAcceptingResponse,
-                unlimitedInvites,
-              })
+            const updateValues = removeUndefinedValues({
+              stopAcceptingResponse,
+              unlimitedInvites,
+              favourite,
+            })
+            // get values that don't require test to be published
+            const updatePublishedTests =
+              'stopAcceptingResponse' in updateValues ||
+              'unlimitedInvites' in updateValues
 
-              await testDetail.update(updateValues)
-
-              await testDetail.save({ transaction })
-
-              await testDetail.reload({ transaction })
-
-              sendSuccess(res, {
-                data: {
-                  published: true,
-                  shareLink: testDetail.shareLink,
-                  stopAcceptingResponse: testDetail.stopAcceptingResponse,
-                  unlimitedInvites: testDetail.unlimitedInvites,
-                },
-                message: {
-                  content: 'Updated!',
-                  type:'success'
-                }
-              })
-            } else {
+            if (updatePublishedTests && !testDetail.published) {
               throw new Error('{403} Only published test can be updated!')
             }
+
+            await testDetail.update(updateValues)
+
+            await testDetail.save({ transaction })
+
+            await testDetail.reload({ transaction })
+
+            sendSuccess(res, {
+              data: {
+                published: true,
+                shareLink: testDetail.shareLink,
+                stopAcceptingResponse: testDetail.stopAcceptingResponse,
+                unlimitedInvites: testDetail.unlimitedInvites,
+                favourite: testDetail.favourite
+              },
+              message: {
+                content: 'Updated!',
+                type: 'success',
+              },
+            })
           } else {
             throw new Error('{404} Test not found!')
           }

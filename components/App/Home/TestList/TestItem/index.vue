@@ -1,14 +1,16 @@
 <script lang="ts">
-import { computed, defineComponent, nextTick } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import type { TestItemStatus } from '../type'
 import Button from '~/components/Base/Button/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { LikeNumber } from '~/types'
 import CopyText from '~/components/Base/CopyText/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import Spinner from '~/components/Base/Spinner/index.vue'
 
 export default defineComponent({
   name: 'AppHomeTestListTestItem',
-  components: { Button, Tooltip, CopyText },
+  components: { Button, Tooltip, CopyText, FadeTransition, Spinner },
   props: {
     favourite: Boolean,
     id: {
@@ -43,12 +45,17 @@ export default defineComponent({
     stopAcceptingResponse: Boolean,
     to: {
       type: String,
-      default: undefined
-    }
+      default: undefined,
+    },
+    toggleFavourite: {
+      type: Function,
+      required: true,
+    },
+    loading: Boolean,
   },
   emits: [],
 
-  setup(_props, { root }) {
+  setup(_props) {
     const responseDisabled = computed(() => {
       return _props.progress === 'Completed' || _props.stopAcceptingResponse
     })
@@ -67,26 +74,6 @@ export default defineComponent({
     })
 
     const isDraft = computed(() => _props.progress.startsWith('Draft:'))
-
-    const toggleFavourite = () => {
-      const favourite = !_props.favourite
-
-      root.$store.commit('testList/UPDATE_ITEM', {
-        id: _props.id,
-        value: {
-          ..._props,
-          favourite,
-        },
-      })
-
-      nextTick(() => {
-        const favouriteTests = root.$store.getters['testList/favourite']
-
-        if (!favouriteTests.length) {
-          root.$store.commit('testList/SHOW_FAVOURITE', false)
-        }
-      })
-    }
 
     const formatDate = (val: string) => {
       const date = new Date(val)
@@ -107,7 +94,6 @@ export default defineComponent({
     return {
       statusIcon,
       isDraft,
-      toggleFavourite,
       formatDate,
       responseDisabled,
     }
@@ -129,9 +115,8 @@ export default defineComponent({
       >
         <Button
           plain
+          class="text-icon-default hover:text-icon-hovered focus:text-icon-pressed"
           aria-label="Toggle favourite"
-          :icon="favourite ? 'StarFilledMinor' : 'StarOutlineMinor'"
-          class="fill-icon-default"
           @click="
             () => {
               toggleFavourite()
@@ -140,7 +125,19 @@ export default defineComponent({
             }
           "
           v-on="events"
-        />
+        >
+          <div class="w-20 h-20 flex-centered">
+            <FadeTransition>
+              <PIcon
+                v-if="!loading"
+                :source="favourite ? 'StarFilledMinor' : 'StarOutlineMinor'"
+                class="fill-icon"
+              />
+
+              <Spinner v-else />
+            </FadeTransition>
+          </div>
+        </Button>
       </Tooltip>
     </span>
 
@@ -214,9 +211,7 @@ export default defineComponent({
 
         <div class="caption ml-30">
           <span v-if="progress !== 'Collecting response'">
-            {{
-              responseDisabled ? 'Link disabled' : 'No link created yet'
-            }}
+            {{ responseDisabled ? 'Link disabled' : 'No link created yet' }}
           </span>
 
           <CopyText
