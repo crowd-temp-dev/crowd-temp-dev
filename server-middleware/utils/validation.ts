@@ -42,13 +42,13 @@ export const user = {
     .rule({
       message: 'Password missing number',
     })
-    .pattern(/[\\d@$!%*?#)(-_^~&]+/)
+    .pattern(/(?:[~!@#$%^&*()_=+-,.}{/\\])/)
     .rule({
       message: 'Password missing special character',
     })
     .pattern(new RegExp(passwordRegExpString))
     .rule({
-      message: 'Invalid special character',
+      message: 'Invalid character(s)',
     }),
 
   email: Joi.string().min(3).max(150).pattern(new RegExp(emailRegExpString)),
