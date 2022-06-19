@@ -30,7 +30,26 @@ export const user = {
   password: Joi.string()
     .min(8)
     .max(32)
-    .pattern(new RegExp(passwordRegExpString)),
+    .pattern(/[a-z]+/)
+    .rule({
+      message: 'Password missing lowercase',
+    })
+    .pattern(/[A-Z]+/)
+    .rule({
+      message: 'Password missing uppercase',
+    })
+    .pattern(/[0-9]+/)
+    .rule({
+      message: 'Password missing number',
+    })
+    .pattern(/[\\d@$!%*?#)(-_^~&]+/)
+    .rule({
+      message: 'Password missing special character',
+    })
+    .pattern(new RegExp(passwordRegExpString))
+    .rule({
+      message: 'Invalid special character',
+    }),
 
   email: Joi.string().min(3).max(150).pattern(new RegExp(emailRegExpString)),
 
