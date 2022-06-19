@@ -8,7 +8,7 @@ const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
 
 const config = envConfigs[NODE_ENV]
 
-const ssl = NODE_ENV === 'production'
+const ssl = process.env.SSL === '1'
   ? {
       dialectOptions: {
         ssl: {

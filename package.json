@@ -11,6 +11,11 @@
     "lint": "eslint --ext .ts,.js,.vue .",
     "test": "export NODE_ENV=test && jest"
   },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "dependencies": {
     "@hulkapps/polaris-vue": "^3.0.9",
     "@nuxtjs/axios": "^5.13.6",
