@@ -89,7 +89,7 @@ export default defineComponent({
               >
                 <img
                   :src="imgSrc"
-                  class="mx-auto object-contain w-fit rounded border border-divider"
+                  class="mx-auto object-contain min-w-full max-w-[fit-content] rounded border border-divider"
                 />
               </div>
             </div>

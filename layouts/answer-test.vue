@@ -11,7 +11,7 @@ export default defineComponent({
   components: { HeaderLogo },
   mixins: [layouts],
   middleware: answerTestMiddleware,
-  transition: 'answer-page-transition',
+  // transition: 'answer-page-transition',
   setup(_, { root }) {
     const answerForm = computed(() => {
       return (root.$store.state['answer-test'] as AnswerTestState).form

@@ -20,13 +20,6 @@ export default defineComponent({
       type: String as () => 'out-in' | 'in-out' | undefined,
       default: 'out-in',
     },
-    duration: {
-      type: [String, Number, Object] as unknown as () =>
-        | number
-        | `${number}`
-        | { enter: `${number}` | number; leave: `${number}` | number },
-      default: undefined,
-    },
   },
 })
 </script>
