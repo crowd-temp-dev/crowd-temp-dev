@@ -91,3 +91,6 @@ sw.*
 
 # unwanted dev files, markups and scribbles.
 .dev/
+
+# server uploads
+uploads/
