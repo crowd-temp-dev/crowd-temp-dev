@@ -9,21 +9,18 @@ import {
   Sequelize,
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
-import { fileTypeRegExpString } from '../../../utils/regexp'
 import { convertToByte } from '../../../utils'
-import { DesignSurveyFileType } from '../../type'
 
-export class File extends Model<
-  InferAttributes<File>,
-  InferCreationAttributes<File>
-> {
+export class File extends Model<InferAttributes<File>, InferCreationAttributes<File>> {
   declare id: CreationOptional<string>
   declare createdBy: string
   declare createdFor: string
-  declare type: DesignSurveyFileType
   declare name: string
   declare size: number
-  declare data: string
+  declare encoding: string
+  declare mimetype: string
+  declare path: string
+  declare fullPath: string
 }
 
 export default function initDesignSurvey(DB: Sequelize) {
@@ -43,13 +40,7 @@ export default function initDesignSurvey(DB: Sequelize) {
         ...Uuidv4,
         allowNull: true,
       },
-      type: {
-        type: DataTypes.STRING(),
-        allowNull: false,
-        validate: {
-          is: new RegExp(fileTypeRegExpString),
-        },
-      },
+
       name: {
         type: DataTypes.STRING(255),
         allowNull: false,
@@ -68,9 +59,27 @@ export default function initDesignSurvey(DB: Sequelize) {
           },
         },
       },
-      data: {
-        type: DataTypes.BLOB('long'),
+      encoding: {
+        type: DataTypes.STRING(),
         allowNull: false,
+      },
+      mimetype: {
+        type: DataTypes.STRING(),
+        allowNull: false,
+      },
+      path: {
+        type: DataTypes.STRING(),
+        allowNull: false,
+        validate: {
+          is: /^\/.+\/$/,
+        },
+      },
+      fullPath: {
+        type: DataTypes.STRING(),
+        allowNull: false,
+        validate: {
+          is: /^\/.+\/$/,
+        },
       },
     },
     {

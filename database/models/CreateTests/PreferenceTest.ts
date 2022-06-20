@@ -18,7 +18,6 @@ export class PreferenceTest extends Model<
   declare testId: string
   declare createdBy: string
   declare index: number
-  declare questionIds: string[]
   declare fileURLs: string[]
 }
 
@@ -47,17 +46,9 @@ export default function initFiveSecondsTest(DB: Sequelize) {
           max: 49,
         },
       },
-      questionIds: {
-        type: DataTypes.ARRAY(DataTypes.UUID()),
-        allowNull: false,
-      },
       fileURLs: {
         type: DataTypes.ARRAY(DataTypes.UUID()),
         allowNull: false,
-        validate: {
-          min: 2,
-          max: 4,
-        },
       },
     },
     {

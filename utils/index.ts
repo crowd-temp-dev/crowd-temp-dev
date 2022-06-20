@@ -317,7 +317,8 @@ export const passwordRegExpString =
 export const emailRegExpString =
   '^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{1,})?$'
 
-export const creatTestProgressRegExpString = '^(?:Draft: Create|Draft: Recruit|Completed)$'
+export const creatTestProgressRegExpString =
+  '^(?:Draft: Create|Draft: Recruit|Completed)$'
 
 export const roleRegExpString = '^(?:user|tester)$'
 
@@ -660,7 +661,10 @@ export const answerTestLoadingId = 'answer-test-fullscreen-loading'
 
 export const otherChoicePrefix = '***OTHER***'
 
-export const scrollToLandingPageHash = (routeHash: string, smooth?: boolean) => {
+export const scrollToLandingPageHash = (
+  routeHash: string,
+  smooth?: boolean
+) => {
   const validHash = ['features', 'pricing', 'contact']
 
   const hashValue = routeHash.replace(/^#/, '').trim()
@@ -683,4 +687,26 @@ export const scrollToLandingPageHash = (routeHash: string, smooth?: boolean) => 
       })
     }
   }
+}
+
+export const formBody = (arg?: Record<string, any>) => {
+  if (process.client) {
+    const formEl = document.createElement('form')
+
+    formEl.enctype = 'multipart/form-data'
+
+    const formData = new FormData(formEl)
+
+    if (typeof arg === 'object') {
+      for (const key in arg) {
+        if (/string|number/.test(typeof arg[key])) {
+          formData.set(key, arg[key])
+        }
+      }
+    }
+
+    return formData
+  }
+
+  return null
 }

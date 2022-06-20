@@ -46,7 +46,7 @@ export default defineComponent({
         ref="main"
         class="h-full w-full max-h-full overflow-y-auto overflow-x-hidden bg-surface-default isolate overscroll-contain"
       >
-        <NuxtChild :key="$route.fullPath" />
+        <NuxtChild />
       </main>
     </div>
   </div>

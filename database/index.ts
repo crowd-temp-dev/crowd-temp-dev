@@ -8,16 +8,17 @@ const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
 
 const config = envConfigs[NODE_ENV]
 
-const ssl = process.env.SSL === '1'
-  ? {
-      dialectOptions: {
-        ssl: {
-          required: true,
-          rejectUnauthorized: false,
+const ssl =
+  process.env.SSL === '1'
+    ? {
+        dialectOptions: {
+          ssl: {
+            required: true,
+            rejectUnauthorized: false,
+          },
         },
-      },
-    }
-  : {}
+      }
+    : {}
 
 const DB: Sequelize = config?.url
   ? new Sequelize(config.url, {
@@ -51,18 +52,18 @@ export function startDB() {
     return Promise.resolve()
   }
 
+  dbStarted = true
+
   return new Promise((resolve, reject) => {
     if (!dbCreated) {
       return reject(new Error('Error creating Database'))
     }
 
-    dbStarted = true    
-
     DB.authenticate()
       .then(() =>
         DB.sync({
           // force: true,
-          force: process.env.FORCE_SYNC === '1',
+          // force: process.env.FORCE_SYNC === '1',
         })
           .then(() =>
             setAssociation()
@@ -70,7 +71,7 @@ export function startDB() {
                 seedUser()
 
                 console.log('DB Started!')
-                
+
                 resolve(true)
               })
               .catch((e) => {

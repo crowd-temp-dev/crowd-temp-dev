@@ -11,6 +11,11 @@ const details = {
     subtitle:
       "For this section you'd be shown you'd be asked a couple of questions, answer as honest as you can",
   },
+  DesignSurvey: {
+    title: '🎨Design Survey',
+    subtitle:
+      "For this section you'd be asked a couple of questions, some of this questions might have media files (image, video or audio) attached which will show on the left section of your view. To get started click on <strong>“continue”</strong>.",
+  },
 } as Record<
   CreateTestComponent,
   {
@@ -25,7 +30,7 @@ export default defineComponent({
   mixins: [answerTest],
   layout: 'answer-test' as Layout,
   transition: 'answer-page-transition',
-  
+
   setup(_, { root }) {
     const confirming = ref(false)
 
@@ -63,9 +68,8 @@ export default defineComponent({
           <strong> {{ confirmDetails.title }} </strong>
         </h2>
 
-        <p class="mb-24">
-          {{ confirmDetails.subtitle }}
-        </p>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p class="mb-24" v-html="confirmDetails.subtitle" />
 
         <div class="flex items-center space-x-12">
           <Button primary :loading="confirming" @click="confirm">

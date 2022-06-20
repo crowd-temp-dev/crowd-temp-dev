@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import {
   Model,
   InferAttributes,
@@ -12,7 +14,10 @@ import { Uuidv4 } from '../../utils/model'
 import type { UserRole } from '~/types'
 
 // eslint-disable-next-line no-use-before-define
-export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
   declare id: CreationOptional<string>
   declare email: string
   declare name: string
@@ -119,12 +124,30 @@ export default function initUser(dbInstance: Sequelize) {
         },
 
         beforeUpdate: clearInactiveSessions,
+        beforeDestroy(user) {
+          const allUsers = path.join(
+            __dirname,
+            '..',
+            '..',
+            '..',
+            'server-middleware',
+            'uploads',
+            'user'
+          )
+
+          if (fs.readdirSync(allUsers).includes(user.id)) {
+            fs.rmSync(path.join(allUsers, user.id), {
+              recursive: true,
+              force: true,
+            })
+          }
+        },
       },
 
       sequelize: dbInstance,
       timestamps: true,
     }
-  )  
+  )
 
   return User
 }

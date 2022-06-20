@@ -87,6 +87,7 @@ export default function (router: Router) {
               'shareLink',
               'createdAt',
               'progress',
+              'stopAcceptingResponse',
             ],
             group: ['TestDetail.id', 'TestAnswers.id'],
             transaction,

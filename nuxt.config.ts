@@ -142,7 +142,10 @@ export default {
     host: '0.0.0.0',
   },
 
-  serverMiddleware: [{ path: 'api/v1', handler: './server-middleware/index' }],
+  serverMiddleware: [
+    { path: 'api/v1', handler: './server-middleware/index' },
+    { path: '/', handler: './server-middleware/baseEndpoint' },
+  ],
 
   env: {},
 

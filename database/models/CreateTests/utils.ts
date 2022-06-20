@@ -1,15 +1,32 @@
-import { Transaction } from 'sequelize'
+import { Model, ModelStatic, Transaction } from 'sequelize'
 import { getAlphabets, removeUndefinedValues } from '../../../utils'
 import { FollowUpQuestion } from './FollowUpQuestions'
 import { SimpleSurvey } from './SimpleSurvey'
+import { CardSorting } from './CardSorting'
+import { CustomMessage } from './CustomMessage'
+import { FiveSecondsTest } from './FiveSecondsTest'
+import { PreferenceTest } from './PreferenceTest'
+import { PrototypeEvaluation } from './PrototypeEvaluation'
+import { WebsiteEvaluation } from './WebsiteEvaluation'
+import { DesignSurvey } from './DesignSurvey'
+
 import { TestDetail } from './TestDetail'
 import { ThankYouScreen } from './ThankYouScreen'
 import { WelcomeScreen } from './WelcomeScreen'
 import { CreateTestForm } from '~/store/create-test'
-import { CreateTestComponent } from '~/types'
+import { CreateTestTypes } from '~/types'
 import { CreateTestFormQuestion } from '~/types/form'
 
-type TestModel = null | SimpleSurvey
+type TestModel =
+  | null
+  | SimpleSurvey
+  | DesignSurvey
+  | CardSorting
+  | CustomMessage
+  | FiveSecondsTest
+  | PreferenceTest
+  | PrototypeEvaluation
+  | WebsiteEvaluation
 
 type QuestionKey = `question-${number}`
 
@@ -73,45 +90,112 @@ export async function getFullTest(
       return []
     }
 
-    const simpleSurvey = async () => {
-      // get simple survey
-      const getSimpleSurvey = await SimpleSurvey.findAll({
-        where: {
-          testId: id,
-        },
-        attributes: ['index', 'id'],
-        transaction,
-      })
-
-      if (getSimpleSurvey.length) {
-        const output = {} as Record<QuestionKey, any>
-
-        for (const value of getSimpleSurvey) {
-          const questionKey = `question-${value.index + 1}` as QuestionKey
-
-          output[questionKey] = {
-            type: 'SimpleSurvey' as CreateTestComponent,
-            ...value.get(),
-            followUpQuestions: await getFollowUpQuestions(
-              value,
-              'SimpleSurveyId'
+    const getSection = async (
+      model: ModelStatic<Model>,
+      type: CreateTestTypes,
+      _attributes: (string | Record<string, string>)[] = []
+    ) => {
+      if (model) {
+        const attributes = Array.from(
+          new Set([
+            'index',
+            'id',
+            ...Object.values(
+              _attributes
+                .map((x) => (typeof x === 'string' ? x : Object.keys(x)))
+                .flat()
             ),
+          ])
+        )
+
+        const section = await model.findAll({
+          where: {
+            testId: id,
+          },
+          attributes,
+          transaction,
+        })
+
+        if (section.length) {
+          const output = {} as Record<QuestionKey, any>
+
+          for (const value of section) {
+            //  @ts-ignore
+            const questionKey = `question-${value.index + 1}` as QuestionKey
+
+            output[questionKey] = {
+              type,
+              ...value.get(),
+              followUpQuestions: await getFollowUpQuestions(
+                value as any,
+                `${type}Id` as keyof FollowUpQuestion
+              ),
+            }
+
+            // add attributes
+            const entries = Object.fromEntries(
+              _attributes.map((value) => {
+                if (typeof value === 'string') {
+                  return [value, value]
+                }                
+
+                return Object.entries(value).flat()
+              })
+            )            
+
+            for (const key in entries) {
+              const value = entries[key]
+
+              output[questionKey][value] = output[questionKey][key]
+
+              if (key !== value) {
+                delete output[questionKey][key]
+              }
+            }
+
+            delete output[questionKey].index
           }
 
-          delete output[questionKey].index
+          return output
         }
-
-        return output
       }
 
       return {}
     }
 
+    const simpleSurvey = await getSection(SimpleSurvey, 'SimpleSurvey')
+    const designSurvey = await getSection(DesignSurvey, 'DesignSurvey', [
+      'fileType',
+      'frameType',
+      {
+        fileURL: 'file',
+      },
+    ])
+    const cardSorting = await getSection(CardSorting, 'CardSorting')
+    const customMessage = await getSection(CustomMessage, 'CustomMessage')
+    const fiveSecondsTest = await getSection(FiveSecondsTest, 'FiveSecondsTest')
+    const preferenceTest = await getSection(PreferenceTest, 'PreferenceTest')
+    const prototypeEvaluation = await getSection(
+      PrototypeEvaluation,
+      'PrototypeEvaluation'
+    )
+    const websiteEvaluation = await getSection(
+      WebsiteEvaluation,
+      'WebsiteEvaluation'
+    )
+
     const data = {
       testDetails: testDetails.get(),
       welcomeScreen,
       thankYouScreen,
-      ...(await simpleSurvey()),
+      ...simpleSurvey,
+      ...designSurvey,
+      ...cardSorting,
+      ...customMessage,
+      ...fiveSecondsTest,
+      ...preferenceTest,
+      ...prototypeEvaluation,
+      ...websiteEvaluation,
       empty: false,
     } as unknown as CreateTestForm
 

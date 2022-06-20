@@ -14,9 +14,10 @@ import { User } from '~/database/models/User/User'
  * **/
 export const catchAllRoute = (
   router: Express,
-  message: string = 'Invalid endpoint!'
+  message: string = 'Invalid endpoint!',
+  matcher: string = '*'
 ) => {
-  router.all('*', (_, res) =>
+  router.all(matcher, (_, res) =>
     sendError(res, {
       status: 404,
       message: {

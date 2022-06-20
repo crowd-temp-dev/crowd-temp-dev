@@ -2,11 +2,12 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import { CreateTestComponent, Layout } from '~/types'
 import SimpleSurvey from '~/components/AnswerTest/Template/SimpleSurvey/index.vue'
+import DesignSurvey from '~/components/AnswerTest/Template/DesignSurvey/index.vue'
 import { features } from '~/utils'
 
 export default defineComponent({
   name: 'AnswerTestQuestionPage',
-  components: { SimpleSurvey },
+  components: { SimpleSurvey, DesignSurvey },
 
   layout: 'answer-test' as Layout,
   validate(ctx) {

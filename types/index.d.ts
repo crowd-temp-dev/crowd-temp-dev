@@ -56,9 +56,7 @@ export type FeatureTitle =
   | 'Preference test'
   | 'Custom message'
 
-export type CreateTestComponent =
-  | 'TestDetails'
-  | 'WelcomeScreen'
+export type CreateTestTypes =
   | 'DesignSurvey'
   | 'PreferenceTest'
   | 'FiveSecondsTest'
@@ -68,6 +66,11 @@ export type CreateTestComponent =
   | 'ClickTest'
   | 'CardSorting'
   | 'CustomMessage'
+
+export type CreateTestComponent =
+  | 'TestDetails'
+  | 'WelcomeScreen'
+  | CreateTestTypes
 
 export interface FeatureContent {
   color: string

@@ -218,7 +218,8 @@ const actions: ActionTree<AnswerTestState, RootState> = {
   },
 }
 
-const getters: GetterTree<AnswerTestState, RootState> = {}
+const getters: GetterTree<AnswerTestState, RootState> = {
+}
 
 export default {
   state,

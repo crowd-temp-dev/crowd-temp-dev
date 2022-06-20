@@ -57,8 +57,10 @@ export default function (router: Router) {
           })
 
           if (user) {
-            if (/^fakeuser(?:-[1-5])?@unbug.crowd/.test(user.email)) {
-              throw new Error("{403} You can't delete a dummy account!")
+            if (process.env.STAGING === '1') {
+              if (/^fakeuser(?:-[1-5])?@unbug.crowd/.test(user.email)) {
+                throw new Error("{403} You can't delete a dummy account!")
+              }
             }
 
             const passwordMatch = await matchPassword(

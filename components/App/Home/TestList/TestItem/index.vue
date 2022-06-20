@@ -78,6 +78,7 @@ export default defineComponent({
     const formatDate = (val: string) => {
       const date = new Date(val)
 
+      // date error: 00:10pm instead of 00:10am
       return date
         .toLocaleDateString('us', {
           hour12: true,
@@ -157,7 +158,7 @@ export default defineComponent({
       <div class="w-[18%]">
         <strong> {{ notes }}</strong>
 
-        <p class="caption">Notes</p>
+        <p class="caption">Note{{ notes > 1 ? 's' : '' }}</p>
       </div>
 
       <div class="w-22%">
@@ -197,7 +198,7 @@ export default defineComponent({
 
           <strong class="shrink-0">
             <span v-if="!isDraft">
-              {{ progress }}
+              {{ responseDisabled ? 'Completed' : progress }}
             </span>
 
             <span v-else>
@@ -220,7 +221,21 @@ export default defineComponent({
             :text="shareLink"
             success-message="Link copied"
           >
-            <Button plain @click="copy"> Copy share link </Button>
+            <Button
+              plain
+              :class="{
+                'text-text-subdued pointer-events-none': responseDisabled,
+              }"
+              v-on="
+                responseDisabled
+                  ? {}
+                  : {
+                      click: copy,
+                    }
+              "
+            >
+              {{ `${responseDisabled ? 'Link disabled' : 'Copy share link'}` }}
+            </Button>
           </CopyText>
         </div>
       </div>

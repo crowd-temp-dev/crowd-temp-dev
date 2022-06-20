@@ -101,14 +101,14 @@ export const formSchema = {
     frameType: Joi.string()
       .pattern(new RegExp(frameTypeRegExpString))
       .required(),
-    file: Joi.array().max(1).items(Joi.any()).required(),
+    file: Joi.number().integer().min(1).max(1).required(),
     followUpQuestions,
   } as Record<keyof CreateTestForm['DesignSurvey']['0'], any>),
 
   FiveSecondsTest: Joi.object({
     id: uuidv4.required(),
     duration: Joi.number().integer().min(5000).max(60000).required(),
-    file: Joi.array().max(1).items(Joi.any()).required(),
+    file: Joi.number().integer().min(1).max(1).required(),
     followUpQuestions,
   } as Record<keyof CreateTestForm['FiveSecondsTest']['0'], any>),
 
@@ -128,7 +128,7 @@ export const formSchema = {
 
   PreferenceTest: Joi.object({
     id: uuidv4.required(),
-    files: Joi.array().min(2).max(4).items(Joi.any()).required(),
+    files: Joi.number().integer().min(1).required(),
     followUpQuestions,
   } as Record<keyof CreateTestForm['PreferenceTest']['0'], any>),
 

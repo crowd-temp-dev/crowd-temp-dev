@@ -9,7 +9,6 @@ import {
   Sequelize,
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
-import { fiveSecondsTestDurations } from '../../../utils'
 import { FiveSecondsTestDurations } from '~/types'
 
 export class FiveSecondsTest extends Model<
@@ -20,7 +19,6 @@ export class FiveSecondsTest extends Model<
   declare testId: string
   declare createdBy: string
   declare index: number
-  declare questionIds: string[]
   declare duration: FiveSecondsTestDurations
   declare fileURL: string
 }
@@ -50,19 +48,9 @@ export default function initFiveSecondsTest(DB: Sequelize) {
           max: 49,
         },
       },
-      questionIds: {
-        type: DataTypes.ARRAY(DataTypes.UUID()),
-        allowNull: false,
-      },
       duration: {
         type: DataTypes.REAL(),
-        allowNull: false,
-        validate: {
-          is: {
-            args: new RegExp(`^(?:${fiveSecondsTestDurations.join('|')})$`),
-            msg: 'Invalid duration',
-          },
-        },
+        allowNull: false
       },
       fileURL: {
         ...Uuidv4,

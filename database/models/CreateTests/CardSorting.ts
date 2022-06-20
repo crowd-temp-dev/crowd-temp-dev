@@ -18,7 +18,6 @@ export class CardSorting extends Model<
   declare createdBy: string
   declare testId: string
   declare index: number
-  declare questionIds: string[]
   declare task: string
   declare cards: string[]
   declare categories: string[]
@@ -48,10 +47,6 @@ export default function initCardSorting(DB: Sequelize) {
           min: 0,
           max: 49,
         },
-      },
-      questionIds: {
-        type: DataTypes.ARRAY(DataTypes.UUID()),
-        allowNull: false,
       },
       task: {
         type: DataTypes.STRING(),

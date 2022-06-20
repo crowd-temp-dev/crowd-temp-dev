@@ -20,8 +20,16 @@ import { TestAnswer } from './AnswerTest/Answers'
 
 type Table = ModelStatic<Model>
 
+let called =false
+
 export default function () {
   try {
+    if (called) {
+      return Promise.resolve()
+    }
+
+    called = true
+
     // a user has 1 slot in ConfirmAccount
     User.hasOne(ConfirmAccount, {
       foreignKey: 'userId',
@@ -70,7 +78,7 @@ export default function () {
       onDelete: 'CASCADE',
     })
 
-    const featureWith1File = [DesignSurvey, FiveSecondsTest]
+    const featureWith1File = [FiveSecondsTest, DesignSurvey]
 
     const featuresWithMultipleFiles = [PreferenceTest]
 
@@ -93,21 +101,31 @@ export default function () {
       })
     })
 
-    // featureWith1File has 1 file
-    featureWith1File.forEach((Feature: Table) => {
-      Feature.hasOne(File, {
-        foreignKey: 'createdFor',
-        onDelete: 'CASCADE',
-      })
+    TestDetail.hasMany(File, {
+      foreignKey:"createdFor"
     })
 
+    // featureWith1File has 1 file
+    // featureWith1File.forEach((Feature: Table) => {      
+    //   Feature.hasOne(File, {
+    //     foreignKey: 'createdFor',
+    //     onDelete: 'CASCADE',
+    //   })
+    // })
+
     // featuresWithMultipleFiles has multiple files
-    featuresWithMultipleFiles.forEach((Feature: Table) => {
-      Feature.hasMany(File, {
-        foreignKey: 'createdFor',
-        onDelete: 'CASCADE',
-      })
-    })
+    // featuresWithMultipleFiles.forEach((Feature: Table) => {
+      // Feature.hasMany(File, {
+      //   foreignKey: 'createdFor',
+      //   onDelete: 'CASCADE',
+      //   as: Feature.tableName
+      // })
+
+      // File.hasMany(Feature, {
+      //   foreignKey: 'id',
+      //   onDelete: 'CASCADE',
+      // })
+    // })
 
     // each test Feature here has many FollowUpQuestion
     featuresWithQuestions.forEach((Feature: Table) => {

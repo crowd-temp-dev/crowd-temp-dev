@@ -18,7 +18,6 @@ export class PrototypeEvaluation extends Model<
   declare testId: string
   declare createdBy: string
   declare index: number
-  declare questionIds: string[]
   declare websiteLink: string
   declare task: CreationOptional<string>
 }
@@ -47,10 +46,6 @@ export default function initPrototypeEvaluation(DB: Sequelize) {
           min: 0,
           max: 49,
         },
-      },
-      questionIds: {
-        type: DataTypes.ARRAY(DataTypes.UUID()),
-        allowNull: false,
       },
       websiteLink: {
         type: DataTypes.STRING(),

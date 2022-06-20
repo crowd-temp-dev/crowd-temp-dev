@@ -5,6 +5,8 @@ import { DesignSurveyFileType, DesignSurveyFrameType } from '~/database/type'
 type Question<T> = Record<`${number}`, T>
 
 export interface CreateTestForm {
+  id?: string
+
   TestDetails: {
     name: string
     description: string
@@ -27,6 +29,7 @@ export interface CreateTestForm {
   }>
 
   CardSorting: Question<{
+    id: string
     task: string
     cards: string[]
     categories: string[]
@@ -34,6 +37,7 @@ export interface CreateTestForm {
   }>
 
   DesignSurvey: Question<{
+    id: string
     fileType: DesignSurveyFileType
     frameType: DesignSurveyFrameType
     file: [File]
@@ -41,29 +45,34 @@ export interface CreateTestForm {
   }>
 
   FiveSecondsTest: Question<{
+    id: string
     duration: FiveSecondsTestDurations | `${FiveSecondsTestDurations}`
     file: [File]
     followUpQuestions: QuestionModelValue[]
   }>
 
   WebsiteEvaluation: Question<{
+    id: string
     websiteLink: string
     task?: string
     followUpQuestions: QuestionModelValue[]
   }>
 
   PrototypeEvaluation: Question<{
+    id: string
     websiteLink: string
     task?: string
     followUpQuestions: QuestionModelValue[]
   }>
 
   PreferenceTest: Question<{
-    files: [File] | [File, File] | [File, File, File] | [File, File, File, File]
+    id: string
+    files: number
     followUpQuestions: QuestionModelValue[]
   }>
 
   CustomMessage: Question<{
+    id: string
     message: string
   }>
 }

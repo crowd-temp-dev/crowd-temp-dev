@@ -20,7 +20,6 @@ export class DesignSurvey extends Model<
   declare createdBy: string
   declare testId: string
   declare index: number
-  declare questionIds: string[]
   declare fileType: DesignSurveyFileType
   declare frameType: DesignSurveyFrameType
   declare fileURL: string
@@ -50,10 +49,6 @@ export default function initDesignSurvey(DB: Sequelize) {
           min: 0,
           max: 49,
         },
-      },
-      questionIds: {
-        type: DataTypes.ARRAY(DataTypes.UUID()),
-        allowNull: false,
       },
       fileType: {
         type: DataTypes.STRING(),

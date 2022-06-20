@@ -3,8 +3,19 @@ import Vue from 'vue'
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { nextTick } from '@vue/composition-api'
 import { RootState } from '.'
-import { getObjectPathValue, pingAddNewBlockBtn, sleep } from '~/utils'
-import { CreateTest, GetCreateTest, GetRecruit, PublishTest, UpdateTestDetail } from '~/services/createTest'
+import {
+  formBody,
+  getObjectPathValue,
+  pingAddNewBlockBtn,
+  sleep,
+} from '~/utils'
+import {
+  CreateTest,
+  GetCreateTest,
+  GetRecruit,
+  PublishTest,
+  UpdateTestDetail,
+} from '~/services/createTest'
 import { showToasts } from '~/utils/showToast'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 import { CreateTestFormQuestion } from '~/types/form'
@@ -77,9 +88,9 @@ const state = (): CreateTestState => ({
   submitting: false,
   details: {
     id: null,
-    published: false
+    published: false,
   },
-  publishing: false
+  publishing: false,
 })
 
 const mutations: MutationTree<CreateTestState> = {
@@ -289,40 +300,78 @@ const actions: ActionTree<CreateTestState, RootState> = {
     // format form to group questions by type
     const rawForm = { ...state.form }
 
-    const formatForm = {
-      id: state.details.id,
-      TestDetails: rawForm.testDetails,
-      WelcomeScreen: rawForm.welcomeScreen,
-      ThankYouScreen: rawForm.thankYouScreen,
-    } as Record<string, any>
-
-    questions.forEach((question, index) => {
-      if (!formatForm[question.type]) {
-        formatForm[question.type] = {} as Record<`${number}`, any>
-      }
-
-      formatForm[question.type][`${index}`] = Object.fromEntries(
-        Object.entries(question).filter((entry) => entry[0] !== 'type')
-      )
+    const formatForm = formBody({
+      fields: JSON.stringify({
+        id: state.details.id,
+        TestDetails: rawForm.testDetails,
+        WelcomeScreen: rawForm.welcomeScreen,
+        ThankYouScreen: rawForm.thankYouScreen,
+      }),
     })
 
-    if (Object.keys(formatForm).length < 4) {
-      await pingAddNewBlockBtn()
+    if (formatForm) {
+      questions.forEach((question, index) => {
+        const formFields = JSON.parse(formatForm.get('fields') as string)
 
-      return {}
+        if (!formFields[question.type]) {
+          formFields[question.type] = {} as Record<`${number}`, any>
+        }
+
+        formFields[question.type][`${index}`] = Object.fromEntries(
+          Object.entries(question)
+            .filter(([key]) => key !== 'type')
+            .map(([key, value]) => {
+              if (/^files?$/.test(key)) {
+                const id = question.id
+
+                const getFiles = (value as File[]).flat()
+
+                getFiles.forEach((file) => {
+                  formatForm.append(id, file, file.name)
+                })
+
+                return [key, getFiles.length]
+              }
+
+              return [key, value]
+            })
+        )
+
+        console.log(formFields[question.type][`${index}`])
+        
+
+        formatForm.set('fields', JSON.stringify(formFields))
+      })
+
+      if (
+        Object.keys(JSON.parse(formatForm.get('fields') as string)).length < 4
+      ) {
+        await pingAddNewBlockBtn()
+
+        app.$pToast.open({
+          message: 'You must submit a question',
+          error: true,
+        })
+
+        commit('setSubmitting', false)
+
+        return {}
+      }
+
+      const { data, error, message } = await CreateTest(app.$axios, formatForm)
+
+      if (!error) {
+        this.$router.push(`/create-test/recruit/${state.details.id}`)
+      }
+
+      showToasts(app.$pToast, message)
+
+      commit('setSubmitting', false)
+
+      return { data, error, message }
+    } else {
+      return { error: { message: { content: 'Client only!' } } }
     }
-
-    const { data, error, message } = await CreateTest(app.$axios, formatForm)
-
-    if (!error) {
-      this.$router.push(`/create-test/recruit/${state.details.id}`)
-    }
-
-    showToasts(app.$pToast, message)
-
-    commit('setSubmitting', false)
-
-    return { data, error, message }
   },
 
   async getCreateTest({ dispatch, state }) {
@@ -336,11 +385,11 @@ const actions: ActionTree<CreateTestState, RootState> = {
           message: 'Cannot create test. Try again',
           statusCode: 500,
         })
-      } else {        
+      } else {
         dispatch('updateForm', {
           path: '',
           value: data,
-          override: !!Object.keys(data || {}).length
+          override: !!Object.keys(data || {}).length,
         })
       }
     }
@@ -385,7 +434,10 @@ const actions: ActionTree<CreateTestState, RootState> = {
   },
 
   // updates published test switches basically
-  async updateTestDetails({ dispatch, commit, state }, payload: UpdateTestDetailForm) {
+  async updateTestDetails(
+    { dispatch, commit, state },
+    payload: UpdateTestDetailForm
+  ) {
     if (state.details.id) {
       commit('setLoading', true)
 
@@ -393,7 +445,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
 
       const { data, message } = await UpdateTestDetail(app.$axios, {
         ...payload,
-        id: state.details.id
+        id: state.details.id,
       })
 
       showToasts(app.$pToast, message)
