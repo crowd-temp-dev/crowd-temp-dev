@@ -99,23 +99,21 @@ export default defineComponent({
             </div>
 
             <div class="h-full grid py-10">
-              <div class="w-fit">
-                <div
-                  class="my-auto lg:transition-all"
+              <div
+                class="my-auto lg:transition-all"
+                :class="{
+                  'aspect-w-16 aspect-h-9': !expanded,
+                  'aspect-w-16 aspect-h-6': expanded,
+                }"
+              >
+                <img
+                  :src="imgSrc"
+                  class="mx-auto rounded object-contain"
                   :class="{
-                    'aspect-w-16 aspect-h-9': !expanded,
-                    'aspect-w-16 aspect-h-6': expanded,
+                    'w-full border-divider': !expanded,
+                    'w-fit': expanded,
                   }"
-                >
-                  <img
-                    :src="imgSrc"
-                    class="mx-auto rounded"
-                    :class="{
-                      'w-full border-divider': !expanded,
-                      'object-contain w-fit': expanded,
-                    }"
-                  />
-                </div>
+                />
               </div>
             </div>
           </div>
