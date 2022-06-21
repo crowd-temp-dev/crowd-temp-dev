@@ -26,6 +26,8 @@ export default defineComponent({
 
     const countdownTime = ref('')
 
+    const pseudoImageLoaded = ref(false)
+
     const countdownDone = computed(() => countdownTime.value === '0:00')
 
     const notConfirmed = computed(() => {
@@ -112,6 +114,7 @@ export default defineComponent({
       questionIndexAndLetter,
       formatDuration,
       countdownTime,
+      pseudoImageLoaded,
       countdownDone,
       startCountdown,
       showImage,
@@ -149,7 +152,16 @@ export default defineComponent({
 
             <p class="mb-16">Pay attention and answer the follow-up question</p>
 
-            <Button primary @click="showImage"> View image </Button>
+            <Button primary @click="showImage">
+              View image
+              <img
+                v-if="!pseudoImageLoaded"
+                :src="imgSrc"
+                class="sr-only"
+                decoding="async"
+                @load="pseudoImageLoaded = true"
+              />
+            </Button>
           </div>
         </PEmptyState>
       </div>
@@ -174,7 +186,7 @@ export default defineComponent({
                   <img
                     :src="imgSrc"
                     class="object-contain"
-                    onload="startCountdown"
+                    @load="startCountdown"
                   />
                 </div>
               </div>
