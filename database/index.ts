@@ -68,8 +68,8 @@ export function startDB() {
         })
           .then(() =>
             setAssociation()
-              .then(() => {
-                seedUser()
+              .then(async () => {
+                await seedUser()
 
                 console.log('DB Started!')
 
