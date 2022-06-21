@@ -16,6 +16,11 @@ const details = {
     subtitle:
       "For this section you'd be asked a couple of questions, some of this questions might have media files (image, video or audio) attached which will show on the left section of your view. To get started click on <strong>“continue”</strong>.",
   },
+  FiveSecondsTest: {
+    title: '⏳Five Second Test',
+    subtitle:
+      "For this section you'd be shown an image for a specified duration in seconds, kindly pay attention to the image and answer the follow-up questions.",
+  },
 } as Record<
   CreateTestComponent,
   {
@@ -64,7 +69,9 @@ export default defineComponent({
       right-pane-class="fade-appear pl-48 xl:pl-64 pt-144 xl:pt-198 pr-32 xl:pr-64"
     >
       <template #right>
-        <h2 class="font-semibold text-[28px] leading-[24px] mb-20">
+        <h2
+          class="font-semibold text-[28px] leading-[24px] mb-20 font-sf-pro-display"
+        >
           <strong> {{ confirmDetails.title }} </strong>
         </h2>
 

@@ -19,7 +19,10 @@ export class AnswerTestUser extends Model<
   declare userAgent: CreationOptional<string | null>
   declare currentIndex: Record<
     string,
-    `${number}${string}` | `confirm-${number}${string}` | 'done'
+    | `${number}${string}`
+    | `confirm-${number}${string}`
+    | `${number}${string}-instruction`
+    | 'done'
   >
 }
 

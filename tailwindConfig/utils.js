@@ -1,16 +1,16 @@
 module.exports = {
-        /***
-         * Returns new entries with the given prefix
-         * @param {string} prefix color prefix eg: 'base'
-         * @param {object} entries entries of colors eg: {surface: "#FFF"}
-         * @returns {{prefixedName: value}}
-         * * */
-        colorPrefix(prefix, entries) {
-            const output = {}
+  /***
+   * Returns new entries with the given prefix
+   * @param {string} prefix color prefix eg: 'base'
+   * @param {object} entries entries of colors eg: {surface: "#FFF"}
+   * @returns {{prefixedName: value}}
+   * * */
+  colorPrefix(prefix, entries) {
+    const output = {}
 
-            for (const key in entries) {
-                const entryKey = prefix ?
-                    `${prefix}${key ? `-${key}` : ''}`
+    for (const key in entries) {
+      const entryKey = prefix
+        ? `${prefix}${key ? `-${key}` : ''}`
         : key || prefix
 
       output[entryKey] = entries[key]

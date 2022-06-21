@@ -266,7 +266,7 @@ export default defineComponent({
           </div>
         </div>
 
-        <FadeTransition :duration="{ leave: 1, enter: 250 }">
+        <FadeTransition :duration="{ leave: 1, enter: 150 }">
           <div v-if="expanded">
             <slot />
           </div>

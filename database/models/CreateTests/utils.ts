@@ -9,7 +9,6 @@ import { PreferenceTest } from './PreferenceTest'
 import { PrototypeEvaluation } from './PrototypeEvaluation'
 import { WebsiteEvaluation } from './WebsiteEvaluation'
 import { DesignSurvey } from './DesignSurvey'
-
 import { TestDetail } from './TestDetail'
 import { ThankYouScreen } from './ThankYouScreen'
 import { WelcomeScreen } from './WelcomeScreen'
@@ -51,16 +50,18 @@ export async function getFullTest(
         },
         attributes: ['buttonText', 'message', 'title'],
         transaction,
-      })) || {}
+      }))?.get() || {}
 
     const thankYouScreen =
-      (await ThankYouScreen.findOne({
-        where: {
-          testId: id,
-        },
-        attributes: ['message', 'title'],
-        transaction,
-      })) || {}
+      (
+        await ThankYouScreen.findOne({
+          where: {
+            testId: id,
+          },
+          attributes: ['message', 'title'],
+          transaction,
+        })
+      )?.get() || {}
 
     const getFollowUpQuestions = async (
       model: TestModel,
@@ -137,11 +138,11 @@ export async function getFullTest(
               _attributes.map((value) => {
                 if (typeof value === 'string') {
                   return [value, value]
-                }                
+                }
 
                 return Object.entries(value).flat()
               })
-            )            
+            )
 
             for (const key in entries) {
               const value = entries[key]
@@ -164,6 +165,7 @@ export async function getFullTest(
     }
 
     const simpleSurvey = await getSection(SimpleSurvey, 'SimpleSurvey')
+
     const designSurvey = await getSection(DesignSurvey, 'DesignSurvey', [
       'fileType',
       'frameType',
@@ -171,9 +173,20 @@ export async function getFullTest(
         fileURL: 'file',
       },
     ])
+
+    const fiveSecondsTest = await getSection(
+      FiveSecondsTest,
+      'FiveSecondsTest',
+      [
+        'duration',
+        {
+          fileURL: 'file',
+        },
+      ]
+    )
+
     const cardSorting = await getSection(CardSorting, 'CardSorting')
     const customMessage = await getSection(CustomMessage, 'CustomMessage')
-    const fiveSecondsTest = await getSection(FiveSecondsTest, 'FiveSecondsTest')
     const preferenceTest = await getSection(PreferenceTest, 'PreferenceTest')
     const prototypeEvaluation = await getSection(
       PrototypeEvaluation,
@@ -201,11 +214,12 @@ export async function getFullTest(
 
     const indexes: (
       | `confirm-${number}${string}`
+      | `${number}${string}-instruction`
       | `${number}${string}`
       | 'done'
     )[] = ['0a']
 
-    let key: keyof typeof data
+    let key: keyof typeof data    
 
     for (key in data) {
       if (/^question-\d+$/.test(key)) {
@@ -219,7 +233,11 @@ export async function getFullTest(
 
           indexes.push(`confirm-${qIndexLetters[0]}`)
 
-          indexes.push(...qIndexLetters)
+          if ((data[key] as CreateTestFormQuestion).type === 'FiveSecondsTest') {
+            indexes.push(`${qIndexLetters[0]}-instruction`)
+          }
+
+            indexes.push(...qIndexLetters)
         }
       }
     }

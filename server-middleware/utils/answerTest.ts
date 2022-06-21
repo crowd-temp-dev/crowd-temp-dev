@@ -3,7 +3,11 @@ import { getFullTest } from '~/database/models/CreateTests/utils'
 // Returns current test type, and test index. Eg .../SimpleSurvey/1a
 export const getCurrentTestIndex = (
   data: Awaited<ReturnType<typeof getFullTest>>['data'],
-  index: `confirm-${number}${string}` | `${number}${string}` | 'done'
+  index:
+    | `confirm-${number}${string}`
+    | `${number}${string}-instruction`
+    | `${number}${string}`
+    | 'done'
 ) => {
   if (index === 'done') {
     return 'done'
@@ -14,10 +18,9 @@ export const getCurrentTestIndex = (
 
     const qIndex = Number((index.match(/\d+/g) || [])[0])
 
-    const qIndexLetter = ((index.match(/\d[a-z]$/g) || [])[0] || '').replace(
-      /\d/g,
-      ''
-    )    
+    const qIndexLetter = (
+      (index.replace(/-instruction$/, '').match(/\d[a-z]$/g) || [])[0] || ''
+    ).replace(/\d/g, '')
 
     if (qIndex && qIndexLetter) {
       const qType = data[`question-${qIndex}`].type

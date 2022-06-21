@@ -105,7 +105,7 @@ export default defineComponent({
       right-pane-class="fade-appear pl-48 xl:pl-64 pt-144 xl:pt-198 pr-32 xl:pr-64"
     >
       <template #right>
-        <h2 class="font-semibold text-[28px] leading-[24px] mb-20">
+        <h2 class="font-semibold text-[28px] leading-[24px] mb-20 font-sf-pro-display">
           {{ state.title }}
         </h2>
 

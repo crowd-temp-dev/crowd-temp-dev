@@ -1,22 +1,25 @@
+import { MutationTree } from 'vuex'
 import { AppState } from './state'
 
-export default {
-  addToDialogs(state: AppState, id: string) {
+const mutation: MutationTree<AppState> = {
+  addToDialogs(state, id: string) {
     state.dialogs = [...state.dialogs, id]
   },
 
-  removeFromDialogs(state: AppState, id: string) {
+  removeFromDialogs(state, id: string) {
     state.dialogs = state.dialogs.filter((x) => x !== id)
   },
 
-  fullscreenLoadingMessage(state: AppState, message: string) {
+  fullscreenLoadingMessage(state, message: string) {
     state.fullscreenLoadingMessage = message
   },
 
-  updateAlertDialog(state: AppState, payload: AppState['alertDialog']) {
+  updateAlertDialog(state, payload: AppState['alertDialog']) {
     state.alertDialog = {
       ...state.alertDialog,
-      ...payload
+      ...payload,
     }
   }
 }
+
+export default mutation

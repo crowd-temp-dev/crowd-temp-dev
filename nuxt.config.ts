@@ -144,7 +144,7 @@ export default {
 
   serverMiddleware: [
     { path: 'api/v1', handler: './server-middleware/index' },
-    { path: '/', handler: './server-middleware/baseEndpoint' },
+    './server-middleware/baseEndpoint',
   ],
 
   env: {},

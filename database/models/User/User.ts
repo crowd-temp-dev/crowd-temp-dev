@@ -130,7 +130,6 @@ export default function initUser(dbInstance: Sequelize) {
             '..',
             '..',
             '..',
-            'server-middleware',
             'uploads',
             'user'
           )

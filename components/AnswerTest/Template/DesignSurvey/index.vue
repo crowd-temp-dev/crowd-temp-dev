@@ -2,11 +2,12 @@
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import InputField from '../../InputField/index.vue'
 import TwoToneBg from '../../TwoToneBg/index.vue'
-import PageTransition from '../../PageTransition/index.vue'
+import eventKey from '~/utils/eventKey'
+import AnswerTestPageTransition from '~/components/Base/AnswerTestPageTransition/index.vue'
 
 export default defineComponent({
   name: 'AnswerTestTemplateDesignSurvey',
-  components: { InputField, TwoToneBg, PageTransition },
+  components: { InputField, TwoToneBg, AnswerTestPageTransition },
   setup(_, { root }) {
     const expanded = ref(false)
 
@@ -22,7 +23,24 @@ export default defineComponent({
       currentSection.value.file ? `/file/${currentSection.value.file}` : ''
     )
 
-    return { expanded, currentSection, imgSrc }
+    const expandedKeyboardEvent = computed(() => {
+      if (expanded.value) {
+        return {
+          keydown: (evt: KeyboardEvent) => {
+            const key = eventKey(evt)
+
+            if (key === 'tab') {
+              evt.preventDefault()
+            } else if (key === 'esc') {
+              expanded.value = false
+            }
+          },
+        }
+      }
+      return {}
+    })
+
+    return { expanded, currentSection, imgSrc, expandedKeyboardEvent }
   },
 })
 </script>
@@ -74,6 +92,7 @@ export default defineComponent({
                 class="shrink-0"
                 :autofocus="expanded"
                 @click="expanded = !expanded"
+                v-on="expandedKeyboardEvent"
               >
                 {{ expanded ? 'Minimize' : 'Expand' }}
               </Button>
@@ -89,7 +108,11 @@ export default defineComponent({
               >
                 <img
                   :src="imgSrc"
-                  class="mx-auto object-contain min-w-full max-w-[fit-content] rounded border border-divider"
+                  class="mx-auto rounded"
+                  :class="{
+                    'w-full border-divider': !expanded,
+                    'object-contain w-fit': expanded,
+                  }"
                 />
               </div>
             </div>
@@ -99,14 +122,15 @@ export default defineComponent({
     </template>
 
     <template #right>
-      <PageTransition>
+      <AnswerTestPageTransition>
         <div
           :key="$route.fullPath"
-          class="flex justify-center mt-198 h-full w-full"
+          class="flex justify-center mt-198 h-full w-full transition-[opacity,transform]"
+          :class="{ 'opacity-0 scale-[0.99]': expanded }"
         >
           <InputField />
         </div>
-      </PageTransition>
+      </AnswerTestPageTransition>
     </template>
   </TwoToneBg>
 </template>

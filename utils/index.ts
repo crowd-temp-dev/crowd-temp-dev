@@ -153,20 +153,12 @@ export const splitPath = (path: string) => path.split('/').filter(Boolean)
 export const suffixSlash = (str?: string) =>
   !str ? '' : `${str}/`.replace(/\/{2,}$/, '/')
 
-export const oneFrame = 1000 / 60
-
 /**
- * @name stepper
+ * @name pseudoFocus
  * @description
- * Interporlates from, to, and ratio values to form a progress moving from the 'from' value to the 'to' value in respect to the ratio.
- * @param { number } from - Value to interpolate from
- * @param { number } to - Value to interpolate to
- * @param { number } ratio - Progress of interpolation. This should ultimately be a value between 0 and 1
- * @returns `number` Between 0 and 1
- * **/
-export const stepper = (from: number, to: number, ratio: number): number =>
-  (from - to) * ratio + to
-
+ * pseudo focus for comboboxes, dropdowns, menus or any element that requires its activator to be focused, and still show a focus state on its children
+ * @param { HTMLElement } el
+ **/
 export const pseudoFocus = (el: HTMLElement) => {
   if (el && el.classList.contains('pseudo-focus') && !el.dataset.disabled) {
     const combobox = el.closest('.combobox')
@@ -204,6 +196,20 @@ export const layoutSizing = {
     return this.appHeader + this.layoutHeader + this.layoutPadding
   },
 }
+
+export const oneFrame = 1000 / 60
+
+/**
+ * @name stepper
+ * @description
+ * Interporlates from, to, and ratio values to form a progress moving from the 'from' value to the 'to' value in respect to the ratio.
+ * @param { number } from - Value to interpolate from
+ * @param { number } to - Value to interpolate to
+ * @param { number } ratio - Progress of interpolation. This should ultimately be a value between 0 and 1
+ * @returns `number` Between 0 and 1
+ * **/
+export const stepper = (from: number, to: number, ratio: number): number =>
+  (from - to) * ratio + to
 
 function easeOutCirc(x: number): number {
   return Math.sqrt(1 - Math.pow(x - 1, 2))
@@ -262,41 +268,39 @@ export function formatTime(time: number) {
   const formatValue = (value: number, verb: 'A' | 'An') =>
     value === 1 ? verb : value
 
+  const pluralize = (value: number) => (value > 1 ? 's' : '')
+
   if (timeInMin <= 59) {
-    return `${formatValue(timeInMin, 'A')} min${timeInMin > 1 ? 's' : ''} ago`
+    return `${formatValue(timeInMin, 'A')} min${pluralize(timeInMin)} ago`
   }
 
   const timeInHr = Math.floor(timeInMin / 60)
 
   if (timeInHr <= 23) {
-    return `${formatValue(timeInHr, 'An')} hr${timeInHr > 1 ? 's' : ''} ago`
+    return `${formatValue(timeInHr, 'An')} hour${pluralize(timeInHr)} ago`
   }
 
   const timeInDay = Math.floor(timeInHr / 24)
 
   if (timeInDay <= 30) {
-    return `${formatValue(timeInDay, 'A')} day${timeInDay > 1 ? 's' : ''} ago`
+    return `${formatValue(timeInDay, 'A')} day${pluralize(timeInDay)} ago`
   }
 
   const timeInMonth = Math.floor(timeInDay / 31)
 
   if (timeInMonth <= 11) {
-    return `${formatValue(timeInMonth, 'A')} month${
-      timeInMonth > 1 ? 's' : ''
-    } ago`
+    return `${formatValue(timeInMonth, 'A')} month${pluralize(timeInMonth)} ago`
   }
 
   const timeInYear = Math.floor(timeInMonth / 12)
 
-  return `${formatValue(timeInYear, 'A')} year${timeInYear > 1 ? 's' : ''} ago`
+  return `${formatValue(timeInYear, 'A')} year${pluralize(timeInYear)} ago`
 }
 
 export const removeUndefinedValues = (
   arg: Record<string, any>,
   removeNull: boolean = false
 ): Record<string, any> => {
-  // remove undefined values from updateValue
-
   const output = { ...arg }
 
   for (const key in output) {
@@ -343,7 +347,7 @@ export const removeTransitioningDataAttr = () => {
  * @param {string} path String path E.g `pathA.pathB.pathC`
  * @param {Record<string, any>} object The object to search on
  * @param {number} [index] Used to start the search from a specific path's index. Mostly used internally.
- * @returns {any} Found value
+ * @returns `any` Found value
  * **/
 export const getObjectPathValue = (
   path: string,
@@ -356,6 +360,7 @@ export const getObjectPathValue = (
 
   const splitPath = path.split('.').filter(Boolean)
 
+  // path has been found
   if (splitPath.length === 1) {
     return object[splitPath[0]]
   }
@@ -426,59 +431,50 @@ export const fiveSecondsTestDurations: FiveSecondsTestDurations[] = [
 export const newTestConstructor = (
   type: CreateTestComponent
 ): CreateTestFormQuestion => {
+  const addPaths = (
+    condition: boolean,
+    paths: Record<string, any>
+  ): Record<string, any> => (condition ? paths : {})
+
   return {
     type,
     id: uuidv4(),
     followUpQuestions: type !== 'CustomMessage' ? [freshQuestion()] : undefined,
 
-    ...(type === 'CardSorting'
-      ? {
-          categories: ['', ''],
-          cards: ['', ''],
-          task: '',
-        }
-      : {}),
+    ...addPaths(type === 'CardSorting', {
+      categories: ['', ''],
+      cards: ['', ''],
+      task: '',
+    }),
 
-    ...(type === 'DesignSurvey'
-      ? {
-          fileType: 'image',
-          frameType: 'no-frame',
-          file: [],
-        }
-      : {}),
+    ...addPaths(type === 'DesignSurvey', {
+      fileType: 'image',
+      frameType: 'no-frame',
+      file: [],
+    }),
 
-    ...(type === 'FiveSecondsTest'
-      ? {
-          duration: String(Number(fiveSecondsTestDurations[0])),
-          file: [],
-        }
-      : {}),
+    ...addPaths(type === 'FiveSecondsTest', {
+      duration: String(Number(fiveSecondsTestDurations[0])),
+      file: [],
+    }),
 
-    ...(type === 'WebsiteEvaluation'
-      ? {
-          task: '',
-          websiteLink: '',
-        }
-      : {}),
+    ...addPaths(type === 'WebsiteEvaluation', {
+      task: '',
+      websiteLink: '',
+    }),
 
-    ...(type === 'PrototypeEvaluation'
-      ? {
-          task: '',
-          websiteLink: '',
-        }
-      : {}),
+    ...addPaths(type === 'PrototypeEvaluation', {
+      task: '',
+      websiteLink: '',
+    }),
 
-    ...(type === 'CustomMessage'
-      ? {
-          message: '',
-        }
-      : {}),
+    ...addPaths(type === 'CustomMessage', {
+      message: '',
+    }),
 
-    ...(type === 'PreferenceTest'
-      ? {
-          files: [[], [], [], []],
-        }
-      : {}),
+    ...addPaths(type === 'PreferenceTest', {
+      files: [[], [], [], []],
+    }),
   } as unknown as CreateTestFormQuestion
 }
 
@@ -709,4 +705,43 @@ export const formBody = (arg?: Record<string, any>) => {
   }
 
   return null
+}
+
+/**
+ * @name convertToMilliSeconds
+ * @description
+ * Converts seconds from '1000ms' to '1000' and from '1s' to 1000
+ * @param {string|number} rawDuration - Formatted duration
+ * @param {number} [fallback] - Fallback if rawDuration is invalid
+ * @returns {number}
+ * **/
+export function convertToMilliSecond(
+  rawDuration: string | number,
+  fallback?: number
+): number {
+  const parsed = parseFloat(`${rawDuration}`)
+
+  if (isNaN(parsed) || parsed === Infinity) {
+    return fallback || 0
+  }
+
+  if (typeof rawDuration === 'number') {
+    return rawDuration >= 0 ? rawDuration : 0
+  }
+
+  if (typeof rawDuration === 'string') {
+    const isSeconds = /^\d+(?:\.\d+)?s$/.test(rawDuration)
+    if (isSeconds) {
+      const parsedOutput = parsed * 1000
+
+      return parsedOutput >= 0 ? parsedOutput : 0
+    }
+
+    const isMilliSeconds = /^\d+(?:\.\d+)?(?:ms)?$/.test(rawDuration)
+    if (isMilliSeconds) {
+      return parsed >= 0 ? parsed : 0
+    }
+  }
+
+  return 0
 }

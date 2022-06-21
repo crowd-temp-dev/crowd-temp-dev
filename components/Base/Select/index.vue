@@ -304,14 +304,14 @@ export default defineComponent({
       getId,
       dropdownOptions,
       getLabel,
-      pseudoFocusOnMouseEnter,
-      onInput,
-      labelOnKeydown,
       searchField,
-      focusOnInput,
       contentRef,
       triggerRefSelector,
+      onInput,
+      focusOnInput,
+      labelOnKeydown,
       scrollToSelected,
+      pseudoFocusOnMouseEnter,
     }
   },
 })

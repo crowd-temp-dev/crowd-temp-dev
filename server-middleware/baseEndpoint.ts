@@ -7,7 +7,7 @@ const app = express()
 
 startDB()
   .then(() => {
-    app.get('/file/:id', ...getFileHandler())
+    app.get('/file/:id', getFileHandler())
   })
   .catch(() => {
     catchAllRoute(app, 'Error starting database!')

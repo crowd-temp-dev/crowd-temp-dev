@@ -260,17 +260,17 @@ export default defineComponent({
           contentRef.value.querySelectorAll('.pseudo-focus')
 
         if (_pseudoFocusChildren.length) {
-          // get all pseudo-focusable kids
+          // get all pseudo-focusable children
           const pseudoFocusChildren = Array.from(
             _pseudoFocusChildren as NodeListOf<HTMLElement>
           ).filter((node) => !node.dataset.disabled)
 
-          // get current focused kid
+          // get current focused child
           const currentPseudoFocus = pseudoFocusChildren.find(
             (node) => node.dataset.pseudoFocus
           )
 
-          // get current focused kid's index
+          // get current focused child's index
           const currentPseudoFocusIndex = currentPseudoFocus
             ? pseudoFocusChildren.indexOf(currentPseudoFocus)
             : -1
@@ -392,9 +392,6 @@ export default defineComponent({
           type: 'keydown',
           code: 'ArrowDown',
           keyCode: 40,
-          preventDefault: () => {},
-          stopPropagation: () => {},
-          target: null,
         } as KeyboardEvent)
       }
 

@@ -113,6 +113,7 @@ export default defineComponent({
         label="Toggle favourite"
         placement="left"
         open-delay="500"
+        :disabled="loading"
       >
         <Button
           plain
