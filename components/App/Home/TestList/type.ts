@@ -5,7 +5,7 @@ export type TestItemStatus =
   | 'Draft: Recruit'
 
 export interface TestListItem {
-  title: string
+  name: string
   date: string
   responses: Number
   notes: Number

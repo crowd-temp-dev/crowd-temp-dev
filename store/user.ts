@@ -66,7 +66,7 @@ const mutations: MutationTree<UserState> = {
 let lastReload = 0
 
 const actions: ActionTree<UserState, RootState> = {
-  async login({ commit, state, }, payload: LoginPayload) {
+  async login({ commit, state }, payload: LoginPayload) {
     if (state.info) {
       return {}
     }
@@ -149,11 +149,12 @@ const actions: ActionTree<UserState, RootState> = {
       }
 
       if (/^(?:404|401)$/.test(String(status))) {
-        this.$router.app.$pToast.open({
-          error: true,
-          message: 'Session expired!',
-          duration: 5000,
-        })
+        this.$router.app &&
+          this.$router.app.$pToast.open({
+            error: true,
+            message: 'Session expired!',
+            duration: 5000,
+          })
 
         await dispatch('logout')
       }

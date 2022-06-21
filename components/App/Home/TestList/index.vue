@@ -54,7 +54,7 @@ export default defineComponent({
       if (filter.value) {
         const filteredRegExp = new RegExp(filter.value, 'i')
 
-        return storeItems.filter((item) => filteredRegExp.test(item.title))
+        return storeItems.filter((item) => filteredRegExp.test(item.name))
       }
 
       return storeItems

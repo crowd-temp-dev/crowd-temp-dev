@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize'
+import setEnv from '../server-middleware/utils/setEnv'
 import { getModules } from '../server-middleware/utils'
 import envConfigs from './config'
 import setAssociation from './models/setAssociation'
@@ -71,6 +72,8 @@ export function startDB() {
                 seedUser()
 
                 console.log('DB Started!')
+
+                setEnv()
 
                 resolve(true)
               })
