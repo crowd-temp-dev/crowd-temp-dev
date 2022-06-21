@@ -8,7 +8,12 @@ import { oneFrame, sleep } from '~/utils'
 
 export default defineComponent({
   name: 'AnswerTestTemplatePreferenceTest',
-  components: { BlankPage, InputField, AnswerTestPageTransition, Item },
+  components: {
+    BlankPage,
+    InputField,
+    AnswerTestPageTransition,
+    Item,
+  },
   setup(_, { root }) {
     const selected = ref<number>()
 
@@ -74,7 +79,7 @@ export default defineComponent({
 
 <template>
   <AnswerTestPageTransition>
-    <BlankPage :key="$route.fullPath" class="!mt-[4rem]">
+    <BlankPage class="!mt-[4rem]">
       <div class="grid grid-cols-2 gap-x-38 w-full max-w-[1400px] px-[1rem]">
         <div class="my-auto pb-16">
           <h2
@@ -96,22 +101,25 @@ export default defineComponent({
           </div>
         </div>
 
-        <div
-          class="mt-198 w-fit h-fit"
-          v-on="
-            noneSelected
-              ? {
-                  click: shakeTitle,
-                }
-              : {}
-          "
-        >
-          <InputField
-            :readonly="noneSelected"
-            :class="{ 'pointer-events-none': noneSelected }"
-            :append-values="selectedFile"
-          />
-        </div>
+        <AnswerTestPageTransition>
+          <div
+            :key="$route.fullPath"
+            class="mt-198 w-fit h-fit"
+            v-on="
+              noneSelected
+                ? {
+                    click: shakeTitle,
+                  }
+                : {}
+            "
+          >
+            <InputField
+              :readonly="noneSelected"
+              :class="{ 'pointer-events-none': noneSelected }"
+              :append-values="selectedFile"
+            />
+          </div>
+        </AnswerTestPageTransition>
       </div>
     </BlankPage>
   </AnswerTestPageTransition>
