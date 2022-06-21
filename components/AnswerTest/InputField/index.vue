@@ -22,6 +22,8 @@ export default defineComponent({
   setup(_props, { root }) {
     const showOther = ref(false)
 
+    const skipping = ref(false)
+
     const currentQuestion = computed<QuestionModelValue>(() => {
       const questionForm = (root.$store.state['answer-test'] as AnswerTestState)
         .form
@@ -160,10 +162,14 @@ export default defineComponent({
     }
 
     const skipQuestion = async () => {
+      skipping.value = true
+
       await root.$store.dispatch(
         'answer-test/answerQuestion',
         getAppendedValue([root.$nuxt.$config.skipQuestion])
       )
+
+      skipping.value = false
     }
 
     return {
@@ -304,6 +310,7 @@ export default defineComponent({
         <Button
           v-if="!currentQuestion.required"
           class="pointer-events-auto"
+          :loading="skipping"
           @click="skipQuestion"
         >
           Skip
