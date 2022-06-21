@@ -99,14 +99,14 @@ export default defineComponent({
             </div>
 
             <div class="h-full grid py-10">
-              <div
-                class="my-auto lg:transition-all"
-                :class="{
-                  'aspect-w-16 aspect-h-9': !expanded,
-                  'aspect-w-16 aspect-h-6': expanded,
-                }"
-              >
-                <div class="w-fit rounded">
+              <div class="w-fit">
+                <div
+                  class="my-auto lg:transition-all"
+                  :class="{
+                    'aspect-w-16 aspect-h-9': !expanded,
+                    'aspect-w-16 aspect-h-6': expanded,
+                  }"
+                >
                   <img
                     :src="imgSrc"
                     class="mx-auto rounded"
