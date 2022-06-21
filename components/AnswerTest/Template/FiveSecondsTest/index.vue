@@ -159,7 +159,6 @@ export default defineComponent({
           <div v-if="!countdownDone" class="absolute w-full h-full inset-0">
             <div
               class="image-header flex-centered h-76 w-full absolute top-0 z-10 bg-surface-default shadow-divide-header"
-              @animationend="startCountdown"
             >
               <strong class="font-sf-pro-display countdown-time">
                 The image below will disappear in {{ countdownTime }} seconds
@@ -172,7 +171,11 @@ export default defineComponent({
             >
               <div class="h-full mt-[2%]">
                 <div class="aspect-w-16 aspect-h-6 drop-shadow-sm">
-                  <img :src="imgSrc" class="object-contain" />
+                  <img
+                    :src="imgSrc"
+                    class="object-contain"
+                    onload="startCountdown"
+                  />
                 </div>
               </div>
             </div>
