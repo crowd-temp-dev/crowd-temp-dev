@@ -1,5 +1,5 @@
 import { Model, ModelStatic, Transaction } from 'sequelize'
-import { getAlphabets, removeUndefinedValues } from '../../../utils'
+import { getAlphabets, removeUndefinedValues, sortObject } from '../../../utils'
 import { FollowUpQuestion } from './FollowUpQuestions'
 import { SimpleSurvey } from './SimpleSurvey'
 import { CardSorting } from './CardSorting'
@@ -197,7 +197,7 @@ export async function getFullTest(
       'WebsiteEvaluation'
     )
 
-    const data = {
+    const data = sortObject({
       testDetails: testDetails.get(),
       welcomeScreen,
       thankYouScreen,
@@ -210,7 +210,7 @@ export async function getFullTest(
       ...prototypeEvaluation,
       ...websiteEvaluation,
       empty: false,
-    } as unknown as CreateTestForm
+    }) as unknown as CreateTestForm
 
     const indexes: (
       | `confirm-${number}${string}`

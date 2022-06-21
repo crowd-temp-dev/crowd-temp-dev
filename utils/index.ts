@@ -745,3 +745,18 @@ export function convertToMilliSecond(
 
   return 0
 }
+
+export const sortObject = (
+  object: Record<string, any>,
+  cb?: (firstKey: string, nextKey: string) => number
+): Record<string, any> => {
+  return Object.fromEntries(
+    Object.entries(object).sort(([firstKey], [nextKey]) => {
+      if (typeof cb === 'function') {
+        return cb(firstKey, nextKey)
+      }
+
+      return firstKey > nextKey ? 1 : -1
+    })
+  )
+}
