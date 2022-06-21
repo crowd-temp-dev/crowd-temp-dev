@@ -106,14 +106,16 @@ export default defineComponent({
                   'aspect-w-16 aspect-h-6': expanded,
                 }"
               >
-                <img
-                  :src="imgSrc"
-                  class="mx-auto rounded"
-                  :class="{
-                    'w-full border-divider': !expanded,
-                    'object-contain w-fit': expanded,
-                  }"
-                />
+                <div class="w-fit rounded">
+                  <img
+                    :src="imgSrc"
+                    class="mx-auto rounded"
+                    :class="{
+                      'w-full border-divider': !expanded,
+                      'object-contain w-fit': expanded,
+                    }"
+                  />
+                </div>
               </div>
             </div>
           </div>
