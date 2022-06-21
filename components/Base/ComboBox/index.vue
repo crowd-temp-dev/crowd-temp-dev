@@ -392,6 +392,9 @@ export default defineComponent({
           type: 'keydown',
           code: 'ArrowDown',
           keyCode: 40,
+          preventDefault: () => {},
+          stopPropagation: () => {},
+          target: null,
         } as KeyboardEvent)
       }
 

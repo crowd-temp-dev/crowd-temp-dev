@@ -21,6 +21,11 @@ const details = {
     subtitle:
       "For this section you'd be shown an image for a specified duration in seconds, kindly pay attention to the image and answer the follow-up questions.",
   },
+  PreferenceTest: {
+    title: '🌟Preference Test',
+    subtitle:
+      "For this section you'd be asked to select your preferred version of a particular media file, kindly pay attention to the details, select your preferred version and answer the follow-up questions.",
+  },
 } as Record<
   CreateTestComponent,
   {

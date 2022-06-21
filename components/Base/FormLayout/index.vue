@@ -23,7 +23,7 @@ export default defineComponent({
     watchChanges: Boolean,
   },
   emits: ['change', 'form-changed', 'form-revert', 'submit', 'on-submit'],
-  setup(_props, { emit, root: { $breakpoint } }) {
+  setup(_props, { emit, root }) {
     const rootKey = ref(0)
 
     const props = computed(() => _props)
@@ -38,7 +38,7 @@ export default defineComponent({
 
     const initialValues = ref<Form | null>(props.value.watchChanges ? {} : null)
 
-    const root = ref(null)
+    const rootRef = ref(null)
 
     const formValues = ref<Form>({})
 
@@ -154,7 +154,7 @@ export default defineComponent({
       firstInputError.value = {}
 
       nextTick(() => {
-        const form = root.value as unknown as HTMLFormElement
+        const form = rootRef.value as unknown as HTMLFormElement
 
         if (form) {
           setFormData(form, true)
@@ -184,13 +184,17 @@ export default defineComponent({
     }
 
     const onSubmit = async (evt: Event) => {
+      if (!root.$breakpoint) {
+        return
+      }
+
       emit('submit', evt)
 
       if (loading.value) {
         return
       }
 
-      const form = root.value || (evt.currentTarget as HTMLFormElement)
+      const form = rootRef.value || (evt.currentTarget as HTMLFormElement)
 
       if (form) {
         setFormData(form)
@@ -206,18 +210,18 @@ export default defineComponent({
           requestAnimationFrame(() => {
             invalidField.scrollIntoView({
               block: 'center',
-              behavior: $breakpoint.isMobile ? 'auto' : 'smooth',
+              behavior: root.$breakpoint.isMobile ? 'auto' : 'smooth',
             })
           })
         } else {
           await nextTick()
 
-          const formValues = getFormValues(root.value || form)
+          const formValues = getFormValues(rootRef.value || form)
 
           emit('on-submit', {
             formValues: formValues.output,
             formFields: formValues.formFields,
-            formElement: root.value || form,
+            formElement: rootRef.value || form,
             toggleLoading,
             refreshForm: () => {
               rootKey.value += 0.1
@@ -239,7 +243,7 @@ export default defineComponent({
       rootKey,
       isValid,
       onChange,
-      root,
+      rootRef,
       onSubmit,
       inputErrors,
       firstInputError,
@@ -257,7 +261,7 @@ export default defineComponent({
     <form
       :id="name || $attrs.id"
       :key="rootKey"
-      ref="root"
+      ref="rootRef"
       :name="name"
       action="."
       novalidate

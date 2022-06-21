@@ -72,6 +72,8 @@ export default defineComponent({
 
         input.readOnly = props.value.readonly
 
+        input.tabIndex = input.readOnly ? -1 : undefined
+
         if (
           props.value.pattern &&
           input instanceof HTMLInputElement &&
@@ -115,6 +117,8 @@ export default defineComponent({
     watch(() => props.value.required, setInputAttrs)
 
     watch(() => props.value.pattern, setInputAttrs)
+
+    watch(() => props.value.autofocus, setInputAttrs)
 
     return { root }
   },

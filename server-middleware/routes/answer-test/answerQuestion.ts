@@ -6,7 +6,7 @@ import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
-import { getAlphabetIndex, otherChoicePrefix } from '../../../utils'
+import { getAlphabetIndex } from '../../../utils'
 import { getCurrentTestIndex } from '../../utils/answerTest'
 
 export interface GetUserRes {
@@ -26,7 +26,7 @@ const formValidation: RequestHandler = (req, res, next) => {
     shareLink: Joi.string()
       .pattern(/^cid-(?:[0-9a-zA-Z-]+)$/)
       .required(),
-    values: Joi.array().items(Joi.string()).required(),
+    values: Joi.array().items(Joi.string(), Joi.array().items(Joi.any())).required(),
     config: Joi.object({
       addOtherAsChoice: Joi.boolean(),
     }),
@@ -79,6 +79,9 @@ export default function (router: Router) {
           }
 
           if (/^\d+[a-z]$/.test(currentIndex)) {
+            const otherChoicePrefix = process.env.OTHER_CHOICE_PREFIX
+            const skipQuestion = process.env.SKIP_QUESTION_VALUE
+
             const qIndex = Number((currentIndex.match(/^\d+/g) || [])[0])
 
             const qIndexLetter = (
@@ -106,9 +109,18 @@ export default function (router: Router) {
                   throw new Error('{404} Answers not found! Report!')
                 }
 
-                const values = req.body.values as string[]
-
                 const currentQuestion = data[`question-${qIndex}`]
+
+                const reqValues = req.body.values as (string | any[])[]
+
+                const values = reqValues.filter(
+                  (x, i) => typeof x === 'string' || i < reqValues.length - 2
+                ) as string[]
+
+                const appendedValues =
+                  currentQuestion.type === 'PreferenceTest'
+                    ? values.slice(-1)[0]
+                    : []
 
                 // only check types for question with followups
                 if (currentQuestion.followUpQuestions) {
@@ -135,16 +147,25 @@ export default function (router: Router) {
                       parseIndexes.indexOf(user.currentIndex[testId]) + 1
                     ] || 'done'
 
-                  const saveProgressAndSendRes = async (ans: any) => {
-                    await answer.update({
-                      answers: {
-                        ...answer.answers,
-                        [currentIndex]: ans,
-                      },
-                      done: nextIndexValue === 'done'
-                    })
+                  const saveProgressAndSendRes = async (_ans: any) => {
+                    const ans = [_ans].flat()
 
-                    await answer.save({ transaction })
+                    if (ans[0] !== skipQuestion) {
+                      await answer.update({
+                        answers: {
+                          ...answer.answers,
+                          [currentIndex]: ans,
+                          ...(currentQuestion.type === 'PreferenceTest'
+                            ? {
+                                [`${currentIndex}-file`]: appendedValues[0],
+                              }
+                            : {}),
+                        },
+                        done: nextIndexValue === 'done',
+                      })
+
+                      await answer.save({ transaction })
+                    }
 
                     await user.update({
                       currentIndex: {
@@ -212,7 +233,13 @@ export default function (router: Router) {
                     }
 
                     const validValues = values
-                      .filter((val) => !val.startsWith(otherChoicePrefix))
+                      .filter(
+                        (val) =>
+                          !val.startsWith(otherChoicePrefix) &&
+                          (followUpQuestion.required
+                            ? true
+                            : val !== skipQuestion)
+                      )
                       .every((val) => options.includes(val))
 
                     if (!validValues) {

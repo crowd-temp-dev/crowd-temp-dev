@@ -44,13 +44,15 @@ export async function getFullTest(
 
   if (testDetails) {
     const welcomeScreen =
-      (await WelcomeScreen.findOne({
-        where: {
-          testId: id,
-        },
-        attributes: ['buttonText', 'message', 'title'],
-        transaction,
-      }))?.get() || {}
+      (
+        await WelcomeScreen.findOne({
+          where: {
+            testId: id,
+          },
+          attributes: ['buttonText', 'message', 'title'],
+          transaction,
+        })
+      )?.get() || {}
 
     const thankYouScreen =
       (
@@ -185,9 +187,12 @@ export async function getFullTest(
       ]
     )
 
+    const preferenceTest = await getSection(PreferenceTest, 'PreferenceTest', [
+      { fileURLs: 'files' },
+    ])
+
     const cardSorting = await getSection(CardSorting, 'CardSorting')
     const customMessage = await getSection(CustomMessage, 'CustomMessage')
-    const preferenceTest = await getSection(PreferenceTest, 'PreferenceTest')
     const prototypeEvaluation = await getSection(
       PrototypeEvaluation,
       'PrototypeEvaluation'
@@ -219,7 +224,7 @@ export async function getFullTest(
       | 'done'
     )[] = ['0a']
 
-    let key: keyof typeof data    
+    let key: keyof typeof data
 
     for (key in data) {
       if (/^question-\d+$/.test(key)) {
@@ -233,11 +238,13 @@ export async function getFullTest(
 
           indexes.push(`confirm-${qIndexLetters[0]}`)
 
-          if ((data[key] as CreateTestFormQuestion).type === 'FiveSecondsTest') {
+          if (
+            (data[key] as CreateTestFormQuestion).type === 'FiveSecondsTest'
+          ) {
             indexes.push(`${qIndexLetters[0]}-instruction`)
           }
 
-            indexes.push(...qIndexLetters)
+          indexes.push(...qIndexLetters)
         }
       }
     }

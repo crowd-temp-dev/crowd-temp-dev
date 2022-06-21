@@ -111,6 +111,8 @@ export default {
         },
       },
     },
+    otherPrefix: process.env.OTHER_CHOICE_PREFIX,
+    skipQuestion: process.env.SKIP_QUESTION_VALUE,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -11,11 +11,14 @@ import { startDB } from '../database'
 import { uuidv4 } from '../utils'
 import routes from './routes'
 import { catchAllRoute } from './utils'
+import setEnv from './utils/setEnv'
 
 const app = express()
 
 startDB()
   .then(() => {
+    setEnv()
+
     app.set('trust proxy', true)
 
     const MemCachedStore = MemCache(session)

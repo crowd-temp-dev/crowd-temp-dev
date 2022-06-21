@@ -3,7 +3,7 @@ import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 import { AnswerTestState } from '~/store/answer-test'
 import { OnSubmit } from '~/types'
-import { getAlphabetIndex, otherChoicePrefix } from '~/utils'
+import { getAlphabetIndex } from '~/utils'
 import Id from '~/components/Base/Id/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Checkbox from '~/components/Base/Checkbox/index.vue'
@@ -11,8 +11,15 @@ import Checkbox from '~/components/Base/Checkbox/index.vue'
 export default defineComponent({
   name: 'AnswerTestInputField',
   components: { Id, FadeTransition, Checkbox },
+  props: {
+    readonly: Boolean,
+    appendValues: {
+      type: Array,
+      default: undefined,
+    },
+  },
 
-  setup(_, { root }) {
+  setup(_props, { root }) {
     const showOther = ref(false)
 
     const currentQuestion = computed<QuestionModelValue>(() => {
@@ -68,8 +75,7 @@ export default defineComponent({
         onClick: () => {
           linearScaleValue.value = value
 
-          console.log(value);
-          
+          console.log(value)
         },
       }))
     })
@@ -95,6 +101,14 @@ export default defineComponent({
       }
     )
 
+    const getAppendedValue = (val: string[]) => {
+      if (!_props.appendValues) {
+        return val
+      }
+
+      return [...val, _props.appendValues]
+    }
+
     const submitForm: OnSubmit<Record<string, string>> = async ({
       formValues,
       toggleLoading,
@@ -112,7 +126,7 @@ export default defineComponent({
           .filter((x) => x !== null)
 
         if (addOtherAsChoice && showOther.value) {
-          const otherValue = `${otherChoicePrefix}${formValues['other-value']}`
+          const otherValue = `${root.$nuxt.$config.otherPrefix}${formValues['other-value']}`
 
           if (currentQuestion.value.type === 'checkbox') {
             values.push(otherValue)
@@ -136,14 +150,23 @@ export default defineComponent({
       } else {
         await root.$store.dispatch(
           'answer-test/answerQuestion',
-          values.filter((val) => val !== null && val !== undefined)
+          getAppendedValue(
+            values.filter((val) => val !== null && val !== undefined)
+          )
         )
       }
 
       toggleLoading(false)
     }
+
+    const skipQuestion = async () => {
+      await root.$store.dispatch(
+        'answer-test/answerQuestion',
+        getAppendedValue([root.$nuxt.$config.skipQuestion])
+      )
+    }
+
     return {
-      submitForm,
       currentQuestion,
       isTextField,
       showOther,
@@ -152,6 +175,8 @@ export default defineComponent({
       isLinearScale,
       linearScaleOptions,
       linearScaleValue,
+      submitForm,
+      skipQuestion,
     }
   },
 })
@@ -176,12 +201,13 @@ export default defineComponent({
         v-if="isTextField"
         :label="currentQuestion.title"
         required
-        autofocus
+        :autofocus="!readonly"
         class="min-w-[28rem] lg:min-w-[438px] max-w-full"
         v-bind="fieldIdAndError('text-field')"
         pattern="^.{1,255}$"
         :multiline="currentQuestion.type === 'long-text'"
         :min-height="72"
+        :readonly="loading || readonly"
       />
 
       <template v-if="isOptionsType">
@@ -226,7 +252,8 @@ export default defineComponent({
               v-if="showOther"
               v-bind="fieldIdAndError('other-value')"
               required
-              autofocus
+              :autofocus="!readonly"
+              :readonly="loading || readonly"
               pattern="^.{1,255}$"
               class="min-w-[28rem] lg:min-w-[438px] max-w-full"
             />
@@ -246,7 +273,7 @@ export default defineComponent({
         </div>
         <ul class="flex items-center space-x-6 mt-12">
           <li
-            v-for="(option) in linearScaleOptions"
+            v-for="option in linearScaleOptions"
             :key="`linear-${option.value}`"
           >
             <Button
@@ -263,9 +290,25 @@ export default defineComponent({
         </ul>
       </div>
 
-      <Button type="submit" primary class="w-fit" :loading="loading">
-        Continue
-      </Button>
+      <div class="flex space-x-16">
+        <Button
+          type="submit"
+          primary
+          class="w-fit"
+          :tabindex="readonly || loading ? '-1' : undefined"
+          :loading="loading"
+        >
+          Continue
+        </Button>
+
+        <Button
+          v-if="!currentQuestion.required"
+          class="pointer-events-auto"
+          @click="skipQuestion"
+        >
+          Skip
+        </Button>
+      </div>
     </FormLayout>
   </div>
 </template>

@@ -37,6 +37,7 @@ export default defineComponent({
       class="grid grid-rows-[56px,1fr] min-h-screen min-w-screen h-screen w-screen"
     >
       <header
+        id="app-header"
         class="h-56 sticky top-0 bg-surface-default z-10 shadow-2 flex items-center px-16 w-full"
       >
         <HeaderLogo />

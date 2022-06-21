@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Plugin } from '@nuxt/types'
 import { CreateTestState } from '~/store/create-test'
 import { CreateTestForm } from '~/types/shim'
+import { oneFrame, sleep } from '~/utils'
 
 const init: Plugin = function ({ app, store, $axios, $user }, inject) {
   if (process.client) {
@@ -10,32 +11,34 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
     // add html id
     document.documentElement.id = 'unbug-qa'
 
-    // add overlay element
+    sleep(oneFrame).then(() => {
+      // add overlay element
 
-    const overlay = document.createElement('div')
+      const overlay = document.createElement('div')
 
-    const id = 'app-overlay'
+      const id = 'app-overlay'
 
-    overlay.id = id
+      overlay.id = id
 
-    document.body.append(overlay)
+      document.body.append(overlay)
 
-    const OverlayComponent = Vue.extend({
-      name: 'OverlayTargetComponent',
-      extends: app,
-      render(h) {
-        return h('TeleportTarget', {
-          props: {
-            name: 'overlay',
-            multiple: true,
-          },
-        })
-      },
+      const OverlayComponent = Vue.extend({
+        name: 'OverlayTargetComponent',
+        extends: app,
+        render(h) {
+          return h('TeleportTarget', {
+            props: {
+              name: 'overlay',
+              multiple: true,
+            },
+          })
+        },
+      })
+
+      const overlayEl = new OverlayComponent()
+
+      overlayEl.$mount(`#${id}`)
     })
-
-    const overlayEl = new OverlayComponent()
-
-    overlayEl.$mount(`#${id}`)
 
     const createTestFormProxy = new Proxy(
       {},
