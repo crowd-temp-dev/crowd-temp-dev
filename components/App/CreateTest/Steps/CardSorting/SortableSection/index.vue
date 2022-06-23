@@ -3,10 +3,11 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 import Button from '@/components/Base/Button/index.vue'
 import SmoothDrag from '~/components/Base/SmoothDrag/index.vue'
 import { uid } from '~/utils'
+import Tooltip from '~/components/Base/Tooltip/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestStepsCardSortingSortableSection',
-  components: { Button, SmoothDrag },
+  components: { Button, SmoothDrag, Tooltip },
   model: {
     prop: 'modelValue',
     event: 'update:modelValue',
@@ -22,6 +23,10 @@ export default defineComponent({
     },
     modelValue: {
       type: Array as () => string[],
+      required: true,
+    },
+    tooltipContent: {
+      type: String,
       required: true,
     },
   },
@@ -73,7 +78,26 @@ export default defineComponent({
   <div>
     <PHorizontalDivider class="w-[88%] mb-20" />
 
-    <p class="font-semibold text-[16px] leading-[20px] mb-20">{{ title }}</p>
+    <p class="text-[16px] leading-[20px] mb-20 flex items-center space-x-8">
+      <strong>
+        {{ title }}
+      </strong>
+
+      <Tooltip>
+        <template #default="{ events }">
+          <span v-on="events">
+            <PIcon source="InfoMinor" class="fill-icon-default" />
+          </span>
+        </template>
+
+        <template #content>
+          <div class="max-w-[240px] text-body">
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-html="tooltipContent" />
+          </div>
+        </template>
+      </Tooltip>
+    </p>
 
     <p
       v-if="!modelSync.length"

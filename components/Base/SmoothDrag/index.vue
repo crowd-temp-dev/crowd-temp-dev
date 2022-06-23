@@ -27,6 +27,10 @@ export default defineComponent({
       type: Array as () => any[],
       default: () => [],
     },
+    list: {
+      type: Array as () => any[],
+      default: undefined
+    },
     transitionName: {
       type: String,
       default: undefined,

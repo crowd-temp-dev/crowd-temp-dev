@@ -5,9 +5,9 @@ import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
-import { getFullTest } from '../../../database/models/CreateTests/utils'
 import { getAlphabetIndex } from '../../../utils'
 import { getCurrentTestIndex } from '../../utils/answerTest'
+import getFullTestFromSession from './utils'
 
 export interface GetUserRes {
   sendTo?: string
@@ -91,7 +91,13 @@ export default function (router: Router) {
             if (!qIndex || !qIndexLetter) {
               throw new Error('{403} Invalid question!')
             } else {
-              const { data } = await getFullTest(testId, transaction)
+              const { data } = await getFullTestFromSession({
+                res,
+                req,
+                testId,
+                transaction,
+                includeId: true,
+              })
 
               if (!data) {
                 throw new Error('{404} Test not found!')
@@ -155,6 +161,7 @@ export default function (router: Router) {
                         answers: {
                           ...answer.answers,
                           [currentIndex]: ans,
+                          // preference test answer preference could change on any question
                           ...(currentQuestion.type === 'PreferenceTest'
                             ? {
                                 [`${currentIndex}-file`]: appendedValues[0],

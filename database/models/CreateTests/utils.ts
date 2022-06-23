@@ -191,7 +191,10 @@ export async function getFullTest(
       { fileURLs: 'files' },
     ])
 
-    const cardSorting = await getSection(CardSorting, 'CardSorting')
+    const cardSorting = await getSection(CardSorting, 'CardSorting', [
+      'cards', 'categories'
+    ])
+
     const customMessage = await getSection(CustomMessage, 'CustomMessage')
     const prototypeEvaluation = await getSection(
       PrototypeEvaluation,
@@ -239,7 +242,9 @@ export async function getFullTest(
           indexes.push(`confirm-${qIndexLetters[0]}`)
 
           if (
-            (data[key] as CreateTestFormQuestion).type === 'FiveSecondsTest'
+            /FiveSecondsTest|CardSorting/.test(
+              (data[key] as CreateTestFormQuestion).type
+            )
           ) {
             indexes.push(`${qIndexLetters[0]}-instruction`)
           }

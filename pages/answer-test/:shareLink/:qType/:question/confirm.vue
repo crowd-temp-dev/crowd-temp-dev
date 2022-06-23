@@ -26,6 +26,11 @@ const details = {
     subtitle:
       "For this section you'd be asked to select your preferred version of a particular media file, kindly pay attention to the details, select your preferred version and answer the follow-up questions.",
   },
+  CardSorting: {
+    title: 'Card Sorting',
+    subtitle:
+      "For this section you'd be shown you'd be asked categorize cards based on what comes naturally to you.",
+  },
 } as Record<
   CreateTestComponent,
   {

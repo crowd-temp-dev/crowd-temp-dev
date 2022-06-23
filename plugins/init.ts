@@ -65,6 +65,34 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
       $user.logout()
     }
   })
+
+  Vue.directive('autofocus', {
+    inserted(el, binding) {
+      const { value } = binding
+
+      if (value === false) {
+        return
+      }
+
+      const getDelay = () => {
+        const frame = (1 / 60) * 1000
+
+        if (typeof value === 'boolean') {
+          return 0
+        }
+
+        if (typeof value === 'object' && value?.delay) {
+          return value.delay
+        }
+
+        return Math.max(Number(value || 0) || frame, frame)
+      }
+
+      sleep(Number(getDelay())).then(() => {
+        el.focus()
+      })
+    },
+  })
 }
 
 export default init

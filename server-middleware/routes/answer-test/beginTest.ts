@@ -8,7 +8,7 @@ import { user } from '../../utils/validation'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getCurrentTestIndex } from '../../utils/answerTest'
-import { getFullTest } from '../../../database/models/CreateTests/utils'
+import getFullTestFromSession from './utils'
 
 export interface GetUserRes {
   sendTo?: string
@@ -110,7 +110,13 @@ export default function (router: Router) {
               throw new Error('{403} You have completed this test!')
             }
 
-            const { data } = await getFullTest(testDetail.id, transaction)            
+            const { data } = await getFullTestFromSession({
+              res,
+              req,
+              testId: testDetail.id,
+              transaction,
+              includeId: true,
+            })           
 
             sendSuccess(res, {
               data: {

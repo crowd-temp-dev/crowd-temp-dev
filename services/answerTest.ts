@@ -24,7 +24,7 @@ export const BeginTest: ServiceHandler<
 
 export const ConfirmSection: ServiceHandler<
   {
-    shareLink: string
+    value: any[]
   },
   {
     nextIndex: `${number}${string}` | 'done'

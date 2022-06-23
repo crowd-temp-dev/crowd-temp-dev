@@ -30,8 +30,8 @@ export default defineComponent({
 
     const prices = computed(() => {
       const extraSeat = [
-        '2 teams members ($',
-        billAnnually.value ? 144 : 12,
+        '2 teams members (',
+        billAnnually.value ? '$144' : '$12',
         'per extra seat',
       ]
 

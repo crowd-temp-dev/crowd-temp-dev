@@ -58,6 +58,7 @@ export default defineComponent({
     const beginTest: OnSubmit<{ name: string }> = async ({
       toggleLoading,
       formValues,
+      refreshForm
     }) => {
       toggleLoading(true)
 
@@ -68,6 +69,8 @@ export default defineComponent({
 
       if (!error) {
         showAlert.value = false
+      } else {
+        refreshForm()
       }
 
       toggleLoading(false)

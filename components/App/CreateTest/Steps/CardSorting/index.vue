@@ -35,12 +35,14 @@ export default defineComponent({
       v-model="state.cards"
       action-text="Add new card"
       title="Cards"
+      tooltip-content="Add cards of different topics to be organized into their supposed category.<br>Eg Phone, Shoes, Salad, etc"
     />
 
     <SortableSection
       v-model="state.categories"
       action-text="Add new category"
       title="Categories"
+      tooltip-content="Add different categories to hold where each card belongs.<br>Eg Gadget, Clothing, Food, etc"
     />
 
     <FollowUpQuestion

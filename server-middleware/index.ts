@@ -1,4 +1,3 @@
-import path from 'path'
 import express from 'express'
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
@@ -20,12 +19,16 @@ startDB()
 
     const MemCachedStore = MemCache(session)
 
-    // eslint-disable-next-line import/no-named-as-default-member
-    app.use('/files', express.static(path.join(__dirname, 'uploads')))
-
     app.use([
+      cookieParser(process.env.COOKIE_SECRET),
+      bodyParser.json(),
+      cors({
+        credentials: true,
+        origin: ['*'],
+      }),
+      morgan('combined'),
       session({
-        secret: 'CatOnKeyboard',
+        secret: process.env.COOKIE_SECRET,
         proxy: true,
         resave: false,
         saveUninitialized: false,
@@ -34,14 +37,11 @@ startDB()
           secret: process.env.COOKIE_SECRET,
         }),
         genid: (_) => uuidv4(),
+        cookie: {
+          httpOnly: true,
+          signed: true,
+        },
       }),
-      cookieParser(process.env.COOKIE_SECRET),
-      bodyParser.json(),
-      cors({
-        credentials: true,
-        origin: ['*'],
-      }),
-      morgan('combined'),
       fileUpload({
         tempFileDir: '/tmp/',
         useTempFiles: true,

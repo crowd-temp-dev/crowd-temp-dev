@@ -31,7 +31,7 @@ export default defineComponent({
         return {} as QuestionModelValue
       }
       const questionId = root.$route.params.question as string
-      const qIndex = Number(questionId.replace(/[a-z]$/, ''))
+      const qIndex = Number(questionId.replace(/[a-z]+$/, ''))
       const qIndexLetter = questionId.replace(/\d/g, '')
       const followUps = questionForm[`question-${qIndex}`].followUpQuestions
       return (followUps?.[getAlphabetIndex(qIndexLetter)] ||
@@ -181,6 +181,7 @@ export default defineComponent({
       isLinearScale,
       linearScaleOptions,
       linearScaleValue,
+      skipping,
       submitForm,
       skipQuestion,
     }

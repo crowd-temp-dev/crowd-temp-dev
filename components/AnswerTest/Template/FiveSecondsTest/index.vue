@@ -203,7 +203,7 @@ export default defineComponent({
       </template>
     </div>
 
-    <BlankPage :key="$route.fullPath">
+    <BlankPage v-else :key="$route.fullPath">
       <InputField />
     </BlankPage>
   </AnswerTestPageTransition>

@@ -56,12 +56,14 @@ export const getModules = (arg: {
     .filter(
       (file) =>
         !exempt.find((exemptedFile) =>
-          new RegExp(`${exemptedFile}(?:\\.(?:js|ts))?`).test(file)
+          new RegExp(`${exemptedFile}\\.(?:js|ts)?$`).test(file)
         )
     )
     .forEach((file) => {
       if (!/\..+$/.test(file)) {
-        output.push(...getModules({ directory: path.join(dirPath, file) }))
+        output.push(
+          ...getModules({ directory: path.join(dirPath, file), exempt })
+        )
       } else {
         output.push(require(path.join(dirPath, file)))
       }

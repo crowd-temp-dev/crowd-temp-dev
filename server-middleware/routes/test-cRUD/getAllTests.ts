@@ -90,6 +90,9 @@ export default function (router: Router) {
               'stopAcceptingResponse',
             ],
             group: ['TestDetail.id', 'TestAnswers.id'],
+            order: [
+              ['createdAt', 'DESC']
+            ],
             transaction,
           })
 

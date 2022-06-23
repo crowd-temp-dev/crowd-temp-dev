@@ -3,9 +3,10 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getCurrentTestIndex } from '../../utils/answerTest'
-import { getFullTest } from '../../../database/models/CreateTests/utils'
+import getFullTestFromSession from './utils'
 
 export interface GetUserRes {
   nextIndex: string
@@ -13,9 +14,10 @@ export interface GetUserRes {
 
 const formValidation: RequestHandler = (req, res, next) => {
   const validate = Joi.object({
-    shareLink: Joi.string()
-      .pattern(/^cid-(?:[0-9a-zA-Z-]+)$/)
-      .required(),
+    // shareLink: Joi.string()
+    //   .pattern(/^cid-(?:[0-9a-zA-Z-]+)$/)
+    //   .required(),
+    value: Joi.array().items(Joi.any()),
   }).validate(req.body)
 
   if (validate.error) {
@@ -72,6 +74,36 @@ export default function (router: Router) {
             'done'
 
           if (nextIndexValue !== 'done') {
+            // if (req.body.value) {
+            //   const answer = await TestAnswer.findOne({
+            //     where: {
+            //       userId: ansUserId,
+            //       testId,
+            //     },
+            //     transaction,
+            //   })
+
+            //   if (!answer) {
+            //     throw new Error('{404} Question not found!')
+            //   }
+
+            //   const currentIndex = user.currentIndex[testId]
+
+            //   const { value } = req.body
+
+            //   // check that the values are valid
+            //   // if()
+
+            //   await answer.update({
+            //     answers: {
+            //       ...answer.answers,
+            //       [currentIndex]: req.body.value,
+            //     },
+            //   })
+
+            //   await answer.save({ transaction })
+            // }
+
             await user.update({
               currentIndex: {
                 ...user.currentIndex,
@@ -84,7 +116,13 @@ export default function (router: Router) {
             throw new Error('{403} You have completed this test!')
           }
 
-          const { data } = await getFullTest(testId, transaction)
+          const { data } = await getFullTestFromSession({
+            res,
+            req,
+            testId,
+            transaction,
+            includeId: true,
+          })
 
           sendSuccess(res, {
             data: {

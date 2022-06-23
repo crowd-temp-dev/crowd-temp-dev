@@ -5,11 +5,18 @@ import SimpleSurvey from '~/components/AnswerTest/Template/SimpleSurvey/index.vu
 import DesignSurvey from '~/components/AnswerTest/Template/DesignSurvey/index.vue'
 import FiveSecondsTest from '~/components/AnswerTest/Template/FiveSecondsTest/index.vue'
 import PreferenceTest from '~/components/AnswerTest/Template/PreferenceTest/index.vue'
+import CardSorting from '~/components/AnswerTest/Template/CardSorting/index.vue'
 import { features } from '~/utils'
 
 export default defineComponent({
   name: 'AnswerTestQuestionPage',
-  components: { SimpleSurvey, DesignSurvey, FiveSecondsTest, PreferenceTest },
+  components: {
+    SimpleSurvey,
+    DesignSurvey,
+    FiveSecondsTest,
+    PreferenceTest,
+    CardSorting,
+  },
 
   layout: 'answer-test' as Layout,
   validate(ctx) {

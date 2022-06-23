@@ -164,7 +164,7 @@ const actions: ActionTree<AnswerTestState, RootState> = {
     }
   },
 
-  async confirmSection({ commit, state }) {
+  async confirmSection({ commit, state }, payload: any[]) {
     commit('setLoading', true)
 
     const { app } = this.$router
@@ -172,7 +172,7 @@ const actions: ActionTree<AnswerTestState, RootState> = {
     const shareLink = state.shareLink
 
     const { data, error, message, status } = await ConfirmSection(app.$axios, {
-      shareLink,
+      value: payload,
     })
 
     if (error) {
@@ -218,8 +218,7 @@ const actions: ActionTree<AnswerTestState, RootState> = {
   },
 }
 
-const getters: GetterTree<AnswerTestState, RootState> = {
-}
+const getters: GetterTree<AnswerTestState, RootState> = {}
 
 export default {
   state,

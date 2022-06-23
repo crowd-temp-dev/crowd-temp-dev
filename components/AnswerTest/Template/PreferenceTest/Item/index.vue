@@ -87,7 +87,7 @@ export default defineComponent({
 
         overlayStyles.value = {
           ...fromStyle,
-          transition: '0s',
+          transitionDuration: '0s',
         }
 
         await nextTick()
@@ -102,7 +102,7 @@ export default defineComponent({
           borderRadius: '0px',
           transform: `scale3d(1,1,1) translate3d(0,0,0)`,
           transformOrigin: fromStyle.transformOrigin,
-          transition: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+          transitionDuration: '250ms',
         }
 
         await sleep(250)
@@ -121,7 +121,9 @@ export default defineComponent({
           expanded.value = false
 
           if (expandBtnRef.value) {
-            ;(expandBtnRef.value.$el as HTMLElement).focus()
+            ; (expandBtnRef.value.$el as HTMLElement).focus({
+              preventScroll: true
+            })
           }
         })
 
@@ -201,7 +203,7 @@ export default defineComponent({
         v-if="expanded"
         ref="overlayRef"
         tabindex="0"
-        class="w-full fixed inset-0 outline-none bg-sky-light"
+        class="w-full fixed inset-0 outline-none bg-sky-light spring-ease"
         :style="overlayStyles"
         @keydown="trapFocus"
         @keydown.esc="closeOverlay"

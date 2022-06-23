@@ -119,15 +119,20 @@ export default defineComponent({
       pingBtn.value = !pingBtn.value
     }
 
+    const focusOnFeatures = (evt: MouseEvent) => {
+      ;(evt.currentTarget as HTMLButtonElement).focus({ preventScroll: true })
+    }
+
     return {
       showHelper,
       features,
       showHelperDirtied,
+      pingBtn,
+      helper,
       arrowFocus,
       createTest,
-      pingBtn,
       togglePingBtn,
-      helper,
+      focusOnFeatures,
     }
   },
 })
@@ -157,10 +162,11 @@ export default defineComponent({
       <ul class="grid gap-20 grid-cols-2" @keydown="arrowFocus">
         <li v-for="(feature, key, index) in features" :key="key">
           <button
+            v-autofocus="index === 0"
             type="button"
-            class="flex p-10 outline-none focus:ring-2 ring-action-primary-default ring-offset-2 rounded select-none isolate fill-before before:bg-current before:-z-1 before:opacity-0 before:transition-opacity hover:before:opacity-5 active:before:opacity-10 relative text-left transition-transform active:scale-[0.9975] transform-gpu"
-            :autofocus="!showOptions && index === 0"
+            class="flex p-10 outline-none focus:ring-2 ring-action-primary-default ring-offset-2 rounded select-none isolate fill-before before:bg-current before:-z-1 before:opacity-0 before:transition-opacity hover:before:opacity-5 active:before:opacity-10 relative text-left focus:before:opacity-5 before:!transition-none transition-transform active:scale-[0.9975] transform-gpu"
             @click="createTest({ ...feature })"
+            @mouseenter="focusOnFeatures"
           >
             <div
               class="w-28 h-28 rounded-full feature-item-bg shrink-0"

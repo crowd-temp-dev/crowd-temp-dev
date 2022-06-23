@@ -110,6 +110,12 @@
   }
 }
 
+@supports not (transition-timing-function: spring(1 200 10 5)) {
+  .spring-ease {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
 .slide-y-transition-enter {
   @apply opacity-0 will-change-[opacity];
   transform: translate3d(0, var(--y-enter, 20px), 0);

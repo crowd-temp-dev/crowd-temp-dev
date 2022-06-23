@@ -4,9 +4,9 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
-import { getFullTest } from '../../../database/models/CreateTests/utils'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getCurrentTestIndex } from '../../utils/answerTest'
+import getFullTestFromSession from './utils'
 import { CreateTestForm } from '~/types/form'
 
 export interface GetUserRes {
@@ -59,7 +59,13 @@ export default function (router: Router) {
             transaction,
           })
 
-          const { data } = await getFullTest(testId, transaction, true)
+          const { data } = await getFullTestFromSession({
+            res,
+            req,
+            testId,
+            transaction,
+            includeId: true,
+          })
 
           const userCurrentIndex = user.currentIndex[testId]
 
@@ -73,7 +79,7 @@ export default function (router: Router) {
               } as unknown as GetUserRes,
             })
           } else {
-            // send user to the current index they're on            
+            // send user to the current index they're on
             sendSuccess(res, {
               data: {
                 sendTo: `${shareLink}/${getCurrentTestIndex(
