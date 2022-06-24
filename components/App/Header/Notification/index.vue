@@ -154,7 +154,7 @@ export default defineComponent({
           ></Notification>
 
           <div
-            class="h-44 flex-centered bg-surface-default sticky bottom-0 border-t border-background-default z-1"
+            class="h-44 flex-centered not-supports-backdrop-filter:bg-surface-default supports-backdrop-filter:bg-surface-default/80 supports-backdrop-filter:backdrop-blur-[80px] sticky bottom-0 border-t border-background-default z-1"
           >
             <NuxtLink
               to="/notification"
