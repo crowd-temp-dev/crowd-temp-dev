@@ -184,6 +184,10 @@ const mutations: MutationTree<CreateTestState> = {
   resetForm(state: CreateTestState) {
     state.form = freshForm()
     state.details.published = false
+    state.details = {
+      id: null,
+      published: false
+    }    
   },
 
   setLoading(state: CreateTestState, val?: boolean) {
@@ -335,10 +339,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
 
               return [key, value]
             })
-        )
-
-        console.log(formFields[question.type][`${index}`])
-        
+        )        
 
         formatForm.set('fields', JSON.stringify(formFields))
       })
@@ -360,15 +361,17 @@ const actions: ActionTree<CreateTestState, RootState> = {
 
       const { data, error, message } = await CreateTest(app.$axios, formatForm)
 
-      if (!error) {
-        this.$router.push(`/create-test/recruit/${state.details.id}`)
-      } else if(data) {
-        commit('resetForm')
-      }
-
-      showToasts(app.$pToast, message)
-
       commit('setSubmitting', false)
+
+      app.$nextTick(() => {        
+        if (!error) {
+          this.$router.push(`/create-test/recruit/${state.details.id}`)
+
+          commit('resetForm')
+        }
+
+        showToasts(app.$pToast, message)
+      })
 
       return { data, error, message }
     } else {

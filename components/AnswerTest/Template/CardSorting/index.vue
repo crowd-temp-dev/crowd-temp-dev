@@ -113,35 +113,36 @@ export default defineComponent({
 <template>
   <AnswerTestPageTransition>
     <div v-if="notConfirmed" class="h-full">
-      <div
-        class="sticky top-0 z-1 px-[1rem] h-76 bg-surface-default shadow-divide-header"
-      >
-        <div class="flex-centered relative h-full max-w-[1312px] mx-auto">
-          <h2 class="font-semibold">
-            {{ currentSection.task }}
-          </h2>
+      <div>
+        <div
+          class="sticky top-0 z-1 px-[1rem] h-76 bg-surface-default shadow-divide-header"
+        >
+          <div class="flex-centered relative h-full max-w-[1312px] mx-auto">
+            <h2 class="font-semibold">
+              {{ currentSection.task }}
+            </h2>
 
-          <Tooltip
-            v-slot="{ events }"
-            :disabled="!disableCardSortingSubmit"
-            label="Arrange all cards!"
-            class="absolute right-0"
-          >
-            <span v-on="events">
-              <Button
-                primary
-                :disabled="disableCardSortingSubmit"
-                class="cursor-pointer"
-                :loading="submittingCardSorting"
-                @click="answerCardSorting"
-              >
-                Continue
-              </Button>
-            </span>
-          </Tooltip>
+            <Tooltip
+              v-slot="{ events }"
+              :disabled="!disableCardSortingSubmit"
+              label="Arrange all cards!"
+              class="absolute right-0"
+            >
+              <span v-on="events">
+                <Button
+                  primary
+                  :disabled="disableCardSortingSubmit"
+                  class="cursor-pointer"
+                  :loading="submittingCardSorting"
+                  @click="answerCardSorting"
+                >
+                  Continue
+                </Button>
+              </span>
+            </Tooltip>
+          </div>
         </div>
       </div>
-
       <!-- content -->
       <FadeTransition>
         <div
@@ -157,7 +158,7 @@ export default defineComponent({
                 <div class="float-right w-full max-w-[335px]">
                   <h3 class="mb-8">Cards</h3>
                   <div
-                    class="rounded-lg bg-surface-default shadow-2 py-20 pl-16 pr-16"
+                    class="rounded-lg bg-surface-default shadow-2 py-20 pl-16 pr-16 max-h-[calc(100vh-248px)]"
                   >
                     <SmoothDrag
                       v-model="cards"
