@@ -158,7 +158,7 @@ export default defineComponent({
                 <div class="float-right w-full max-w-[335px]">
                   <h3 class="mb-8">Cards</h3>
                   <div
-                    class="rounded-lg bg-surface-default shadow-2 py-20 pl-16 pr-16 max-h-[calc(100vh-248px)]"
+                    class="rounded-lg bg-surface-default shadow-2 py-20 pl-16 pr-16 max-h-[calc(100vh-248px)] overflow-y-auto"
                   >
                     <SmoothDrag
                       v-model="cards"
