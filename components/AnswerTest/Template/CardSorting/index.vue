@@ -112,10 +112,10 @@ export default defineComponent({
 
 <template>
   <AnswerTestPageTransition>
-    <div v-if="notConfirmed" class="h-full">
-      <div>
+    <div v-if="notConfirmed" class="h-max">
+      <div class="sticky top-0 z-1">
         <div
-          class="sticky top-0 z-1 px-[1rem] h-76 bg-surface-default shadow-divide-header"
+          class="px-[1rem] h-76 bg-surface-default shadow-divide-header"
         >
           <div class="flex-centered relative h-full max-w-[1312px] mx-auto">
             <h2 class="font-semibold">
