@@ -1,7 +1,7 @@
 <template>
   <div class="pb-88">
     <div class="app-page-header !h-52 !relative !z-1 !justify-center mb-32">
-      <div class="min-w-full">
+      <div class="min-w-full xl:min-w-[initial]">
         <div
           class="w-full max-w-[860px] grid h-full grid-rows-[1fr,auto] -mb-1"
         >
