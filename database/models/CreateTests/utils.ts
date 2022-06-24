@@ -192,7 +192,7 @@ export async function getFullTest(
     ])
 
     const cardSorting = await getSection(CardSorting, 'CardSorting', [
-      'cards', 'categories'
+      'cards', 'categories', 'task'
     ])
 
     const customMessage = await getSection(CustomMessage, 'CustomMessage')
