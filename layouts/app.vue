@@ -120,7 +120,7 @@ export default defineComponent({
       <div
         v-else
         role="document"
-        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen transform-gpu"
+        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen transform-gpu overflow-hidden"
       >
         <Header />
 
