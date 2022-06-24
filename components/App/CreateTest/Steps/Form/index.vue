@@ -95,6 +95,6 @@ export default defineComponent({
       }"
     />
 
-    <input v-if="!hideSubmit" type="submit" value="Submit" class="sr-only" />
+    <input v-if="!hideSubmit" type="submit" value="Submit" tabindex="-1" class="sr-only" />
   </FormLayout>
 </template>

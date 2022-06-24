@@ -118,7 +118,7 @@ export default defineComponent({
       >
         <div class="flex-centered relative h-full max-w-[1312px] mx-auto">
           <h2 class="font-semibold">
-            {{currentSection.task}}
+            {{ currentSection.task }}
           </h2>
 
           <Tooltip

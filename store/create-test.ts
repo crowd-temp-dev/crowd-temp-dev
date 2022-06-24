@@ -362,6 +362,8 @@ const actions: ActionTree<CreateTestState, RootState> = {
 
       if (!error) {
         this.$router.push(`/create-test/recruit/${state.details.id}`)
+      } else if(data) {
+        commit('resetForm')
       }
 
       showToasts(app.$pToast, message)
