@@ -1,10 +1,10 @@
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, watch } from '@vue/composition-api'
 import HeaderLogo from '~/components/Base/HeaderLogo/index.vue'
 import { answerTestMiddleware } from '~/utils/layout'
 import layouts from '~/mixins/layouts'
 import { AnswerTestState } from '~/store/answer-test'
-import { answerTestLoadingId } from '~/utils'
+import { answerTestLoadingId, scrollMain } from '~/utils'
 
 export default defineComponent({
   name: 'AnswerTestLayout',
@@ -25,6 +25,10 @@ export default defineComponent({
         fadeAppear: false,
       })
     }
+
+    watch(() => root.$route.fullPath, () => {
+      scrollMain(0)
+    })
   },
 })
 </script>
