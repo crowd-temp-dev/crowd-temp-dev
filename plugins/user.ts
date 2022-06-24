@@ -26,11 +26,13 @@ const userPlugin: Plugin = function ({ store }, inject) {
       }
 
       if (path === 'logout') {
-        return async () => await store.dispatch('user/logout')
+        return async (alert: boolean = true) =>
+          await store.dispatch('user/logout', alert)
       }
 
       if (path === 'delete') {
-        return async (arg: DeleteAccountForm) => await store.dispatch('user/delete', arg)
+        return async (arg: DeleteAccountForm) =>
+          await store.dispatch('user/delete', arg)
       }
 
       if (path === 'changePassword') {

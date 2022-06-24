@@ -26,7 +26,9 @@ const formValidation: RequestHandler = (req, res, next) => {
     shareLink: Joi.string()
       .pattern(/^cid-(?:[0-9a-zA-Z-]+)$/)
       .required(),
-    values: Joi.array().items(Joi.string(), Joi.array().items(Joi.any())).required(),
+    values: Joi.array()
+      .items(Joi.string(), Joi.array().items(Joi.any()))
+      .required(),
     config: Joi.object({
       addOtherAsChoice: Joi.boolean(),
     }),
@@ -156,23 +158,29 @@ export default function (router: Router) {
                   const saveProgressAndSendRes = async (_ans: any) => {
                     const ans = [_ans].flat()
 
-                    if (ans[0] !== skipQuestion) {
-                      await answer.update({
-                        answers: {
-                          ...answer.answers,
-                          [currentIndex]: ans,
-                          // preference test answer preference could change on any question
-                          ...(currentQuestion.type === 'PreferenceTest'
-                            ? {
-                                [`${currentIndex}-file`]: appendedValues[0],
-                              }
-                            : {}),
-                        },
-                        done: nextIndexValue === 'done',
-                      })
+                    const skip = ans[0] === skipQuestion
 
-                      await answer.save({ transaction })
-                    }
+                    const answers = skip
+                      ? {}
+                      : {
+                          answers: {
+                            ...answer.answers,
+                            [currentIndex]: ans,
+                            // preference test answer preference could change on any question
+                            ...(currentQuestion.type === 'PreferenceTest'
+                              ? {
+                                  [`${currentIndex}-file`]: appendedValues[0],
+                                }
+                              : {}),
+                          },
+                        }
+
+                    await answer.update({
+                      ...answers,
+                      done: nextIndexValue === 'done',
+                    })
+
+                    await answer.save({ transaction })
 
                     await user.update({
                       currentIndex: {

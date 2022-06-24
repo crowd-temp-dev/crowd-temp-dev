@@ -62,7 +62,7 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
 
   $axios.onResponseError(({ response }) => {
     if (response?.status === 401 && $user.loggedIn) {
-      $user.logout()
+      $user.logout(false)
     }
   })
 

@@ -104,7 +104,7 @@ const actions: ActionTree<UserState, RootState> = {
     return { data, error }
   },
 
-  async logout({ commit, state }) {
+  async logout({ commit, state }, alert: boolean = true) {
     if (!state.info || state.loading) {
       return {}
     }
@@ -127,7 +127,7 @@ const actions: ActionTree<UserState, RootState> = {
 
         await sleep()
 
-        showToasts($pToast, message)
+        alert && showToasts($pToast, message)
       })
     }
 

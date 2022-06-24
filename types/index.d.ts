@@ -17,7 +17,7 @@ export interface User extends UserInfo {
   loggedIn: boolean
   initials: string
   login: (arg: LoginPayload) => Promise<ApiResponse<UserInfo>>
-  logout: () => Promise<[]>
+  logout: (alert?: boolean) => Promise<[]>
   update: (arg: UserData) => Promise<ApiResponse<UserInfo>>
   reload: () => Promise<ApiResponse<UserInfo>>
   delete: (arg: DeleteAccountForm) => Promise<ApiResponse<[]>>
