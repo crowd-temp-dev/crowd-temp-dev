@@ -1,5 +1,5 @@
 <template>
-  <div class="px-32 lg:px-0">
+  <div>
     <!-- <header> -->
     <div class="app-page-header !h-56 !relative !z-1 !justify-center">
       <div>
@@ -66,7 +66,7 @@
     <!-- </banner -->
 
     <FadeTransition>
-      <div :key="$store.state['create-test'].details.id" class="isolate max-w-app mx-auto">
+      <div :key="$store.state['create-test'].details.id" class="isolate max-w-app mx-auto px-32 lg:px-0">
         <NuxtChild />
       </div>
     </FadeTransition>

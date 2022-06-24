@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-w-[933px] px-32 xl:px-64 xxl:px-0 pb-112 min-w-[min(100%,933px)]"
+    class="max-w-app mx-auto px-32 xl:px-40 xxl:px-0 pb-112"
   >
     <div class="grid gap-y-32 max-w-[805px]">
       <UpgradeBanner />

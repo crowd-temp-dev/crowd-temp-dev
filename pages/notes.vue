@@ -1,6 +1,6 @@
 <template>
-  <div class="mx-auto w-full py-32 xxl:max-w-app">
-    <div class="max-w-[800px] mx-32 lg:mx-56 xxl:mx-0">
+  <div class="xxl:mx-auto w-full py-32 max-w-app xxl:px-0">
+    <div class="max-w-[800px] mx-32 lg:mx-auto xxl:mx-0">
       <SearchField
         placeholder="Search tests"
         class="bg-surface-default mb-16 max-w-[270px] h-36"

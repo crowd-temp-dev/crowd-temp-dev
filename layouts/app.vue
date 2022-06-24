@@ -25,6 +25,28 @@ export default defineComponent({
       () => root.$store.getters['app/tooltips'] as string[]
     )
 
+    const transitionClasses = computed(() => {
+      const activeClass = 'transition-[transform,opacity] duration-[200ms] ease-spring'
+
+      const genericClass = {
+        enterActiveClass: activeClass,
+        leaveActiveClass: activeClass,
+        leaveToClass: 'opacity-0',
+      }
+
+      if (root.$breakpoint.isMobile) {
+        return {
+          enterClass: 'opacity-0 translate-y-[-20px]',
+          ...genericClass,
+        }
+      } else {
+        return {
+          enterClass: 'opacity-0 translate-y-[20px]',
+          ...genericClass,
+        }
+      }
+    })
+
     // scroll main element to top
     watch(
       () => root.$route.fullPath,
@@ -58,7 +80,7 @@ export default defineComponent({
       }
     }
 
-    return { main, dialogs, tooltips, closeAllTooltips }
+    return { main, dialogs, tooltips, closeAllTooltips, transitionClasses }
   },
 
   head() {
@@ -91,14 +113,14 @@ export default defineComponent({
         : {}
     "
   >
-    <Transition name="fade-transition" mode="out-in">
+    <Transition mode="out-in" v-bind="transitionClasses">
       <!-- Layout for clients signed in -->
       <SmallDevice v-if="$breakpoint.isMobile" />
 
       <div
         v-else
         role="document"
-        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen"
+        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen transform-gpu"
       >
         <Header />
 
@@ -124,7 +146,7 @@ export default defineComponent({
       :title="$alert.title"
       :subtitle="$alert.subtitle"
       :actions="$alert.actions"
-      @update:modelValue="val => $alert.active = val"
+      @update:modelValue="(val) => ($alert.active = val)"
     />
   </div>
 </template>

@@ -1,5 +1,16 @@
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import Button from '@/components/Base/Button/index.vue'
+
+export default defineComponent({
+  name: 'AppMobileDevice',
+  components: { Button },
+  setup() {},
+})
+</script>
+
 <template>
-  <div class="min-h-screen bg-sky-light">
+  <div class="min-h-screen bg-sky-light transform-gpu">
     <header class="pt-24 pl-10 mb-36">
       <h1 class="text-[20.07px] leading-[20.57px] font-medium font-epilogue">
         <NuxtLink to="/" class="flex items-center">
@@ -42,16 +53,3 @@
     </main>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import Button from '@/components/Base/Button/index.vue'
-
-export default defineComponent({
-  name: 'AppMobileDevice',
-  components: { Button },
-  setup() {},
-})
-</script>
-
-<style scoped></style>

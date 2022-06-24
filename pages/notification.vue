@@ -94,7 +94,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="mt-32 mb-96 mx-32 lg:mx-56 w-full">
+  <div class="mt-32 mb-96 mx-32 lg:mx-32 w-full">
     <div class="max-w-[734px] xxl:mx-auto">
       <Notification
         v-for="(item, i) in list"
