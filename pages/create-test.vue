@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-32">
     <!-- <header> -->
     <div class="app-page-header !h-56 !relative !z-1 !justify-center">
       <div>

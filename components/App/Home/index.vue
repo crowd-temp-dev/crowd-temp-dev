@@ -12,7 +12,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="h-full isolate max-w-app mx-auto">
+  <div class="h-full isolate max-w-app mx-auto px-32">
     <div class="pt-32 pb-112 isolate">
       <FadeTransition>
         <Onboard v-if="$user.showDashboardGuide" />
