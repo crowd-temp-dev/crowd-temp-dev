@@ -200,7 +200,7 @@ export default defineComponent({
           <div :key="$route.fullPath" class="mt-20" @mousedown.stop>
             <InputField
               class="!px-0"
-              content-class="px-20 w-fit"
+              content-class="px-20"
               title-class="font-semibold mb-[0.5rem] px-20"
               question-title-class="px-20"
             >
