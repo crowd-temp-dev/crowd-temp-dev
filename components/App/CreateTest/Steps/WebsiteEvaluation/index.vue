@@ -1,16 +1,42 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import Section from '../Section/index.vue'
 import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import createTest from '~/mixins/createTest'
 import { urlRegExpString } from '~/utils'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
 import IFrame from '~/components/Base/IFrame/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestStepsWebsiteEvaluation',
-  components: { Section, FollowUpQuestion, DialogButton, IFrame },
+  components: {
+    Section,
+    FollowUpQuestion,
+    DialogButton,
+    IFrame,
+    FadeTransition,
+  },
   mixins: [createTest],
+  setup() {
+    const iframeErrorReason = ref('')
+
+    const iframeKey = ref(0)
+
+    const acceptUrlShareTerms = ref(false)
+
+    const reloadIframe = () => {
+      iframeErrorReason.value = ''
+
+      iframeKey.value += 1
+    }
+
+    return {
+      iframeErrorReason,
+      acceptUrlShareTerms,
+      reloadIframe,
+    }
+  },
   computed: {
     disablePreview() {
       return !new RegExp(urlRegExpString, 'g').test(this.state.websiteLink)
@@ -20,6 +46,9 @@ export default defineComponent({
         /^https?:\/\//,
         ''
       )}`
+    },
+    hideIframe() {
+      return /^(?:sameorigin|deny)$/.test(this.iframeErrorReason)
     },
   },
 })
@@ -49,8 +78,10 @@ export default defineComponent({
           <Tooltip
             v-slot="{ events }"
             class="shrink-0"
-            :disabled="!disablePreview"
-            label="Enter a valid url"
+            :disabled="!disablePreview && acceptUrlShareTerms"
+            :label="
+              disablePreview ? 'Enter a valid url' : 'Accept checkbox below'
+            "
           >
             <span v-on="events">
               <DialogButton
@@ -60,6 +91,12 @@ export default defineComponent({
                   transition: 'slide-y',
                   noBodyPadding: true,
                 }"
+                :dialog-events="{
+                  beforeEnter: () => (iframeErrorReason = ''),
+                  afterLeave: () => (iframeErrorReason = ''),
+                }"
+                :class="{ 'pointer-events-none': !acceptUrlShareTerms }"
+                :tabindex="!acceptUrlShareTerms ? '-1' : undefined"
               >
                 Preview URL
 
@@ -72,10 +109,62 @@ export default defineComponent({
                     class="min-w-[min(92vw,1500px)] min-h-[min(calc(95vh-72px),1200px)] h-full w-full"
                   >
                     <div class="relative w-full h-full overflow-hidden">
-                      <IFrame
-                        :src="previewSrc"
-                        :frame-name="`preview-url-${id}`"
-                      />
+                      <FadeTransition>
+                        <IFrame
+                          v-if="!hideIframe"
+                          :src="previewSrc"
+                          :frame-name="`preview-url-${id}`"
+                          @error-reason="(evt) => (iframeErrorReason = evt)"
+                        />
+
+                        <div
+                          v-else
+                          key="error-bg"
+                          class="w-full h-full bg-base-critical/5 text-center content-start grid justify-center grid-rows-[auto,auto,auto,1fr,auto]"
+                        >
+                          <h2
+                            class="text-display-large uppercase text-text-critical font-semibold font-sf-pro-display mt-64 mb-32"
+                          >
+                            Cannot load URL
+                          </h2>
+
+                          <p class="text-heading text-text-default/80 mb-32">
+                            An error occured trying to load
+                            <a
+                              :href="previewSrc"
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              class="text-action-primary-default pointer-events-auto"
+                              >{{ state.websiteLink }}</a
+                            >
+                          </p>
+
+                          <div
+                            class="font-mono text-text-subdued text-text-default/70 text-heading"
+                          >
+                            <p v-if="hideIframe">
+                              x-frame-options in headers is set to
+                              <code class="bg-black/5 p-4 rounded">{{
+                                iframeErrorReason
+                              }}</code
+                              >.
+                            </p>
+
+                            <p v-else>An unknown error occured</p>
+                          </div>
+
+                          <div class="min-h-full w-full" />
+
+                          <Button
+                            primary
+                            class="pointer-events-auto mb-32"
+                            size="large"
+                            @click="reloadIframe"
+                          >
+                            Retry
+                          </Button>
+                        </div>
+                      </FadeTransition>
                     </div>
                   </div>
                 </template>
@@ -98,6 +187,7 @@ export default defineComponent({
 
       <Checkbox
         :id="`${id}-agree`"
+        v-model="acceptUrlShareTerms"
         required
         label="Click check box to confirm you have permission from the website company to use this website URL in a test"
       />

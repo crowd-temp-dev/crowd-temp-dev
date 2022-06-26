@@ -131,11 +131,14 @@ export default defineComponent({
       emit('keydown', evt)
     }
 
-    const beforeEnter = () => {
+    const beforeEnter = (el: HTMLElement) => {
+      emit('beforeEnter', el)
       previousActive.value = document.activeElement as HTMLElement
     }
 
     const enter = (el: HTMLElement) => {
+      emit('enter', el)
+
       nextTick(() => {
         if (el) {
           // check to see that the active element isn't inside current dialog
@@ -154,7 +157,9 @@ export default defineComponent({
       })
     }
 
-    const afterLeave = () => {
+    const afterLeave = (el: HTMLElement) => {
+      emit('afterLeave', el)
+
       const validPreviousActive =
         previousActive.value instanceof HTMLElement &&
         document.contains(previousActive.value)

@@ -112,7 +112,7 @@ export default defineComponent({
 
             emit('load-success')
           } else {
-            iframeErrorReason.value = checkErrorReason
+            iframeErrorReason.value = checkErrorReason            
 
             emit('error-reason', checkErrorReason)
           }
