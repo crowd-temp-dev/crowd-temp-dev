@@ -119,6 +119,13 @@ export async function getFullTest(
           transaction,
         })
 
+        const isCustomMessage = /^(?:CustomMessage)$/.test(
+          Object.getOwnPropertyDescriptor(
+            model as unknown as CustomMessage,
+            'name'
+          ).value
+        )
+
         if (section.length) {
           const output = {} as Record<QuestionKey, any>
 
@@ -126,13 +133,19 @@ export async function getFullTest(
             //  @ts-ignore
             const questionKey = `question-${value.index + 1}` as QuestionKey
 
+            const followUpQuestions = isCustomMessage
+              ? {}
+              : {
+                  followUpQuestions: await getFollowUpQuestions(
+                    value as any,
+                    `${type}Id` as keyof FollowUpQuestion
+                  ),
+                }
+
             output[questionKey] = {
               type,
               ...value.get(),
-              followUpQuestions: await getFollowUpQuestions(
-                value as any,
-                `${type}Id` as keyof FollowUpQuestion
-              ),
+              ...followUpQuestions,
             }
 
             // add attributes
@@ -247,13 +260,15 @@ export async function getFullTest(
               (_, i) => `${qIndex}${getAlphabets(i)}` as `${number}${string}`
             ) || []
 
-          indexes.push(`confirm-${qIndexLetters[0]}`)
+          const questionType = (data[key] as CreateTestFormQuestion).type
 
-          if (
-            /FiveSecondsTest|CardSorting/.test(
-              (data[key] as CreateTestFormQuestion).type
-            )
-          ) {
+          if (questionType === 'CustomMessage') {
+            indexes.push(`${Number(qIndex)}a`)
+          } else {
+            indexes.push(`confirm-${qIndexLetters[0]}`)
+          }
+
+          if (/FiveSecondsTest|CardSorting/.test(questionType)) {
             indexes.push(`${qIndexLetters[0]}-instruction`)
           }
 
@@ -263,6 +278,9 @@ export async function getFullTest(
     }
 
     indexes.push('done')
+
+    console.log({indexes});
+    
 
     return {
       data,

@@ -8,6 +8,7 @@ import PreferenceTest from '~/components/AnswerTest/Template/PreferenceTest/inde
 import CardSorting from '~/components/AnswerTest/Template/CardSorting/index.vue'
 import WebsiteEvaluation from '~/components/AnswerTest/Template/WebsiteEvaluation/index.vue'
 import PrototypeEvaluation from '~/components/AnswerTest/Template/PrototypeEvaluation/index.vue'
+import CustomMessage from '~/components/AnswerTest/Template/CustomMessage/index.vue'
 import { features } from '~/utils'
 
 export default defineComponent({
@@ -19,7 +20,8 @@ export default defineComponent({
     PreferenceTest,
     CardSorting,
     WebsiteEvaluation,
-    PrototypeEvaluation
+    PrototypeEvaluation,
+    CustomMessage
   },
 
   layout: 'answer-test' as Layout,

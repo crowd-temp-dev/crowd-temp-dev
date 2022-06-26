@@ -2,7 +2,7 @@
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import Button from '~/components/Base/Button/index.vue'
 import HeaderLogo from '~/components/Base/HeaderLogo/index.vue'
-import { scrollToLandingPageHash } from '~/utils'
+import { scrollToLandingPageHash, sleep } from '~/utils'
 
 interface Link {
   title: 'Features' | 'Pricing' | 'Contact' | 'Get started for free'
@@ -20,7 +20,9 @@ export default defineComponent({
     const contactTo = '#contact'
 
     const scrollToHash = (hash: string) => {
-      root.$route.path === '/' && scrollToLandingPageHash(hash, true)
+      sleep().then(() => {
+        root.$route.path === '/' && scrollToLandingPageHash(hash, true)
+      })
     }
 
     const links = ref<Link[]>([

@@ -121,6 +121,8 @@ export default function (router: Router) {
 
                 const reqValues = req.body.values as (string | any[])[]
 
+                const indexes = res.get('qIndexes')
+
                 const values = reqValues.filter(
                   (x, i) => typeof x === 'string' || i < reqValues.length - 2
                 ) as string[]
@@ -130,6 +132,61 @@ export default function (router: Router) {
                     ? values.slice(-1)[0]
                     : []
 
+                // update user's currentIndex
+                const parseIndexes = indexes as unknown as (
+                  | `confirm-${number}${string}`
+                  | `${number}${string}`
+                  | 'done'
+                )[]
+
+                const nextIndexValue =
+                  parseIndexes[
+                    parseIndexes.indexOf(user.currentIndex[testId]) + 1
+                  ] || 'done'
+
+                const saveProgressAndSendRes = async (_ans: any) => {
+                  const ans = [_ans].flat()
+
+                  const skip = ans[0] === skipQuestion
+
+                  const answers = skip
+                    ? {}
+                    : {
+                        answers: {
+                          ...answer.answers,
+                          [currentIndex]: ans,
+                          // preference test answer preference could change on any question
+                          ...(currentQuestion.type === 'PreferenceTest'
+                            ? {
+                                [`${currentIndex}-file`]: appendedValues[0],
+                              }
+                            : {}),
+                        },
+                      }
+
+                  await answer.update({
+                    ...answers,
+                    done: nextIndexValue === 'done',
+                  })
+
+                  await answer.save({ transaction })
+
+                  await user.update({
+                    currentIndex: {
+                      ...user.currentIndex,
+                      [testId]: nextIndexValue,
+                    },
+                  })
+
+                  await user.save({ transaction })
+
+                  sendSuccess(res, {
+                    data: {
+                      sendTo: getCurrentTestIndex(data, nextIndexValue),
+                    },
+                  })
+                }
+
                 // only check types for question with followups
                 if (currentQuestion.followUpQuestions) {
                   const followUpQuestion =
@@ -137,66 +194,11 @@ export default function (router: Router) {
                       getAlphabetIndex(qIndexLetter)
                     ]
 
-                  const indexes = res.get('qIndexes')
-
                   if (!indexes) {
                     throw new Error('{404} Indexes not found! Report issue!')
                   }
 
-                  // update user's currentIndex
-                  const parseIndexes = indexes as unknown as (
-                    | `confirm-${number}${string}`
-                    | `${number}${string}`
-                    | 'done'
-                  )[]
-
-                  const nextIndexValue =
-                    parseIndexes[
-                      parseIndexes.indexOf(user.currentIndex[testId]) + 1
-                    ] || 'done'
-
-                  const saveProgressAndSendRes = async (_ans: any) => {
-                    const ans = [_ans].flat()
-
-                    const skip = ans[0] === skipQuestion
-
-                    const answers = skip
-                      ? {}
-                      : {
-                          answers: {
-                            ...answer.answers,
-                            [currentIndex]: ans,
-                            // preference test answer preference could change on any question
-                            ...(currentQuestion.type === 'PreferenceTest'
-                              ? {
-                                  [`${currentIndex}-file`]: appendedValues[0],
-                                }
-                              : {}),
-                          },
-                        }
-
-                    await answer.update({
-                      ...answers,
-                      done: nextIndexValue === 'done',
-                    })
-
-                    await answer.save({ transaction })
-
-                    await user.update({
-                      currentIndex: {
-                        ...user.currentIndex,
-                        [testId]: nextIndexValue,
-                      },
-                    })
-
-                    await user.save({ transaction })
-
-                    sendSuccess(res, {
-                      data: {
-                        sendTo: getCurrentTestIndex(data, nextIndexValue),
-                      },
-                    })
-                  }
+                  // check custom message
 
                   // check short text or long text
                   if (
@@ -290,6 +292,17 @@ export default function (router: Router) {
                   }
 
                   throw new Error('{400} Feature not implemented!')
+                } else if (currentQuestion.type === 'CustomMessage') {
+                  // value must be true
+                  const value = Boolean(Number(values[0]))
+
+                  if (!value) {
+                    throw new Error(
+                      '{400} Please agree to continue, or report issue'
+                    )
+                  }
+
+                  await saveProgressAndSendRes(value)
                 } else {
                   sendSuccess(res, { data: 1 })
                 }

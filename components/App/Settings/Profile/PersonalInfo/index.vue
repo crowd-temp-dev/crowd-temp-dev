@@ -103,7 +103,6 @@ export default defineComponent({
         type="submit"
         form="personal-info"
         :loading="loading"
-        :disabled="!formChanged"
       >
         Save changes
       </Button>

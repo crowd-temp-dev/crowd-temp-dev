@@ -105,7 +105,6 @@ export default defineComponent({
         primary
         type="submit"
         form="email-preference"
-        :disabled="!changed"
         :loading="loading"
       >
         Save changes

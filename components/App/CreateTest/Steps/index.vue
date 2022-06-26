@@ -92,7 +92,7 @@ export default defineComponent({
 
                   ;(element as HTMLFormInput).disabled = disabled
 
-                  disabled && element.removeAttribute('disabled')                
+                  disabled && element.removeAttribute('disabled')
 
                   delete element.dataset.previousDisabled
                 })
@@ -131,6 +131,8 @@ export default defineComponent({
 
     <ThankYouScreen />
 
-    <Form name="trigger-submit-form" class="sr-only" @on-submit="onSubmit" />
+    <section>
+      <Form name="trigger-submit-form" class="sr-only" @on-submit="onSubmit" />
+    </section>
   </div>
 </template>

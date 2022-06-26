@@ -92,7 +92,6 @@ export default defineComponent({
         type="submit"
         primary
         :loading="loading"
-        :disabled="!changed"
         form="change-password"
       >
         Save changes
