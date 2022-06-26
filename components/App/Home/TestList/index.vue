@@ -12,6 +12,7 @@ import SearchField from '~/components/Base/SearchField/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { uuidv4 } from '~/utils'
+import Spinner from '~/components/Base/Spinner/index.vue'
 
 // const tableHead = [
 //   'Favourite',
@@ -25,7 +26,7 @@ import { uuidv4 } from '~/utils'
 
 export default defineComponent({
   name: 'AppHomeTestList',
-  components: { SearchField, Button, TestItem, FadeTransition },
+  components: { SearchField, Button, TestItem, FadeTransition, Spinner },
   setup(_, { root }) {
     const filter = ref('')
 
@@ -36,6 +37,8 @@ export default defineComponent({
     const showFavourite = computed(() =>
       Boolean(Number(showFavouriteQuery.value || '0'))
     )
+
+    const listLoading = computed(() => root.$store.state['list-test'].loading)
 
     const testList = computed(
       () => root.$store.state['list-test'].items as TestListItem[]
@@ -102,8 +105,9 @@ export default defineComponent({
       filter,
       filteredTestList,
       showFavourite,
-      toggleShowFavourite,
       testId,
+      listLoading,
+      toggleShowFavourite,
     }
   },
 })
@@ -155,52 +159,66 @@ export default defineComponent({
       </Button>
     </div>
 
-    <!-- empty state -->
-    <div v-if="!testList.length" class="text-center grid justify-items-center">
-      <PImage
-        source="/png/app/home/test-list/empty-state.png"
-        alt="Vector illustration of an empty state"
-        :width="100"
-        :height="100"
-        class="w-100 h-100 mb-8"
-      />
-
-      <h4 class="text-display-small font-bold mb-8">
-        This is where your tests will show
-      </h4>
-
-      <h5 class="text-text-subdued mb-16">
-        You can create a new product or import your product inventory.
-      </h5>
-
-      <Button primary :to="`/create-test/${testId}`"> Create new test </Button>
+    <div
+      v-if="listLoading"
+      class="text-icon-default text-display-medium flex-centered h-full w-full min-h-[140px]"
+    >
+      <Spinner />
     </div>
 
-    <FadeTransition>
-      <TransitionGroup
-        v-if="filteredTestList.length"
-        class="relative w-full grid gap-y-10"
-        tag="ul"
-        enter-class="opacity-0"
-        move-class="transition-[transform,opacity]"
-        enter-active-class="transition-[transform,opacity]"
-        leave-active-class="transition-[transform,opacity]"
-        leave-to-class="opacity-0"
+    <template v-else>
+      <!-- empty state -->
+      <div
+        v-if="!testList.length"
+        class="text-center grid justify-items-center"
       >
-        <TestItem
-          v-for="(item, i) in filteredTestList"
-          :key="i"
-          v-bind="item"
+        <PImage
+          source="/png/app/home/test-list/empty-state.png"
+          alt="Vector illustration of an empty state"
+          :width="100"
+          :height="100"
+          class="w-100 h-100 mb-8"
         />
-      </TransitionGroup>
 
-      <p
-        v-else-if="testList.length"
-        class="font-semibold text-center text-text-subdued text-heading"
-      >
-        No result!
-      </p>
-    </FadeTransition>
+        <h4 class="text-display-small font-bold mb-8">
+          This is where your tests will show
+        </h4>
+
+        <h5 class="text-text-subdued mb-16">
+          You can create a new product or import your product inventory.
+        </h5>
+
+        <Button primary :to="`/create-test/${testId}`">
+          Create new test
+        </Button>
+      </div>
+
+      <FadeTransition>
+        <TransitionGroup
+          v-if="filteredTestList.length"
+          class="relative w-full grid gap-y-10"
+          tag="ul"
+          enter-class="opacity-0"
+          move-class="transition-[transform,opacity]"
+          enter-active-class="transition-[transform,opacity]"
+          leave-active-class="transition-[transform,opacity]"
+          leave-to-class="opacity-0"
+        >
+          <TestItem
+            v-for="(item, i) in filteredTestList"
+            :key="i"
+            v-bind="item"
+          />
+        </TransitionGroup>
+
+        <p
+          v-else-if="testList.length"
+          class="font-semibold text-center text-text-subdued text-heading"
+        >
+          No result!
+        </p>
+      </FadeTransition>
+    </template>
   </section>
 </template>
 

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import { hash, compare } from 'bcrypt'
 
 /**
  * @name hashPassword
@@ -8,9 +8,9 @@ import bcrypt from 'bcrypt'
  * @returns `Promise<string>`
  * **/
 export async function hashPassword(password: string): Promise<string> {
-  const hash = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS))
+  const getHash = await hash(password, Number(process.env.SALT_ROUNDS))
 
-  return hash
+  return getHash
 }
 
 /**
@@ -24,7 +24,7 @@ export async function matchPassword(
   password: string,
   hash: string
 ): Promise<boolean> {
-  const match = await bcrypt.compare(password, hash)
+  const match = await compare(password, hash)
 
   return match
 }

@@ -1,45 +1,3 @@
-<template>
-  <Button
-    v-bind="{ ...$attrs, ...syncAttrs.trigger }"
-    :disabled="disableButton"
-    v-on="$listeners"
-    @click="attemptOpen"
-  >
-    <slot v-bind="payload" />
-
-    <UiDialog
-      v-model="modelSync"
-      v-bind="{ ...syncAttrs.dialog, ...dialogAttrs }"
-      :style="dialogStyle"
-      :class="dialogClass"
-      :content-class="dialogContentClass"
-      :content-style="dialogContentStyle"
-      :hide-backdrop="hideBackdrop"
-      v-on="{ ...dialogEvents }"
-    >
-      <template #prefix>
-        <h2
-          v-if="label && modelSync"
-          class="sr-only"
-          v-bind="syncAttrs.describedby"
-        >
-          {{ label }}
-        </h2>
-      </template>
-
-      <template #header>
-        <slot name="dialog-header" v-bind="payload" />
-      </template>
-
-      <slot name="dialog" v-bind="payload" />
-
-      <template #footer>
-        <slot name="dialog-footer" v-bind="payload" />
-      </template>
-    </UiDialog>
-  </Button>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import UiDialog from '../UiDialog/index.vue'
@@ -143,4 +101,44 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<template>
+  <Button
+    v-bind="{ ...$attrs, ...syncAttrs.trigger }"
+    :disabled="disableButton"
+    v-on="$listeners"
+    @click="attemptOpen"
+  >
+    <slot v-bind="payload" />
+
+    <UiDialog
+      v-model="modelSync"
+      v-bind="{ ...syncAttrs.dialog, ...dialogAttrs }"
+      :style="dialogStyle"
+      :class="dialogClass"
+      :content-class="dialogContentClass"
+      :content-style="dialogContentStyle"
+      :hide-backdrop="hideBackdrop"
+      v-on="{ ...dialogEvents }"
+    >
+      <template #prefix>
+        <h2
+          v-if="label && modelSync"
+          class="sr-only"
+          v-bind="syncAttrs.describedby"
+        >
+          {{ label }}
+        </h2>
+      </template>
+
+      <template #header>
+        <slot name="dialog-header" v-bind="payload" />
+      </template>
+
+      <slot name="dialog" v-bind="payload" />
+
+      <template #footer>
+        <slot name="dialog-footer" v-bind="payload" />
+      </template>
+    </UiDialog>
+  </Button>
+</template>

@@ -23,6 +23,7 @@ export default defineComponent({
     event: 'update:modelValue',
   },
   props: {
+    noBodyPadding: Boolean,
     plain: Boolean,
     to: {
       type: String,
@@ -64,6 +65,10 @@ export default defineComponent({
     modelValue: Boolean,
     hideBackdrop: Boolean,
     isAlert: Boolean,
+    transition: {
+      type: String as () => 'scale' | 'slide-y',
+      default: 'scale',
+    },
   },
 
   setup(_props, { emit, slots, root }) {
@@ -96,9 +101,12 @@ export default defineComponent({
       root.$store.commit('app/removeFromDialogs', id.value)
     }
 
-    watch(() => root.$route.fullPath, () => {
-      modelSync.value = false
-    })
+    watch(
+      () => root.$route.fullPath,
+      () => {
+        modelSync.value = false
+      }
+    )
 
     watch(
       () => modelSync.value,
@@ -222,6 +230,7 @@ export default defineComponent({
               :tabindex="modelSync ? '0' : undefined"
               class="content"
               :class="[
+                transition,
                 contentClass,
                 {
                   'grid-rows-[68px,calc(100%-68px)]':
@@ -279,6 +288,7 @@ export default defineComponent({
                 :class="{
                   'show-header': showHeader,
                   'show-footer': canShowFooter,
+                  'p-20': !noBodyPadding,
                 }"
               >
                 <slot />
@@ -315,17 +325,31 @@ export default defineComponent({
   transition-timing-function: var(--ease-back-out);
 }
 
-.fade-transition-enter .content {
+.fade-transition-enter .content.scale {
   @apply scale-[1.05];
 }
 
-.fade-transition-enter .content,
-.fade-transition-leave-to .content {
+.fade-transition-enter .content.content.scale,
+.fade-transition-leave-to .content.content.scale {
   @apply scale-[0.95];
 }
 
+.fade-transition-enter-active .content.content.slide-y {
+  transition-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+  transition-duration: 350ms;
+}
+
+.fade-transition-enter .content.slide-y {
+  @apply translate-y-[-4rem];
+}
+
+.fade-transition-enter .content.slide-y,
+.fade-transition-leave-to .content.slide-y {
+  @apply translate-y-[-4rem];
+}
+
 .content {
-  @apply rounded-lg bg-surface-default shadow-5 z-1 relative outline-none  max-h-full grid touch-auto;
+  @apply rounded-lg bg-surface-default shadow-5 z-1 relative outline-none max-h-full grid touch-auto overflow-hidden;
 }
 
 .header {
@@ -333,7 +357,7 @@ export default defineComponent({
 }
 
 .body {
-  @apply p-20 overflow-y-auto max-h-full overscroll-contain;
+  @apply overflow-y-auto max-h-full overscroll-contain;
 }
 
 .footer {

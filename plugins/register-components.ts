@@ -10,6 +10,7 @@ import DropZone from '../components/Base/DropZone/index.vue'
 import Id from '../components/Base/Id/index.vue'
 import Radio from '~/components/Base/Radio/index.vue'
 import RadioGroup from '~/components/Base/RadioGroup/index.vue'
+import Tooltip from '~/components/Base/Tooltip/index.vue'
 
 Vue.component('TextField', TextField)
 Vue.component('Checkbox', Checkbox)
@@ -20,3 +21,4 @@ Vue.component('DropZone', DropZone)
 Vue.component('Id', Id)
 Vue.component('Radio', Radio)
 Vue.component('RadioGroup', RadioGroup)
+Vue.component('Tooltip', Tooltip)

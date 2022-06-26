@@ -279,9 +279,6 @@ export async function getFullTest(
 
     indexes.push('done')
 
-    console.log({indexes});
-    
-
     return {
       data,
       indexes,
