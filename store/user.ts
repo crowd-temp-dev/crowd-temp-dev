@@ -111,7 +111,16 @@ const actions: ActionTree<UserState, RootState> = {
 
     commit('setLoading')
 
-    const { $axios, $pToast, $nuxt } = this.$router.app
+    const { app } = this.$router
+
+    const { $axios, $pToast, $nuxt, $fullscreenLoading } = app
+
+    const alertId = 'loggingout'
+
+    $fullscreenLoading.show({
+      message: 'Logging out...',
+      id: alertId,
+    })
 
     const { message, error, status } = await Logout($axios, null)
 
@@ -126,6 +135,10 @@ const actions: ActionTree<UserState, RootState> = {
         this.$router.replace('/auth/login')
 
         await sleep()
+
+        $fullscreenLoading.hide({
+          id: alertId,
+        })
 
         alert && showToasts($pToast, message)
       })

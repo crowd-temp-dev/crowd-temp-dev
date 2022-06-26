@@ -316,7 +316,7 @@ export default function (router: Router) {
                     duration: Number(
                       section.duration
                     ) as FiveSecondsTest['duration'],
-                    fileURL: fileNames[0]
+                    fileURL: fileNames[0],
                   },
                   { transaction }
                 )
@@ -369,8 +369,26 @@ export default function (router: Router) {
               let newRecord: WebsiteEvaluation | PrototypeEvaluation
 
               for (key in fields) {
-                const section = websiteEvaluation[key]
+                const section = fields[key]
 
+                const otherFields =
+                  fields instanceof WebsiteEvaluation
+                    ? {
+                        websiteLink: (
+                          section as CreateTestForm['WebsiteEvaluation']['0']
+                        ).websiteLink,
+                      }
+                    : {
+                        prototypeLink: (
+                          section as CreateTestForm['PrototypeEvaluation']['0']
+                        ).prototypeLink,
+                        prototypeProvider: 'figma',
+                    }
+                
+                console.log(otherFields)
+                
+
+                // @ts-expect-error
                 newRecord = await model.create(
                   {
                     createdBy: user.id,
@@ -378,7 +396,7 @@ export default function (router: Router) {
                     testId: createTest.id,
                     task: section.task,
                     id: section.id,
-                    websiteLink: section.websiteLink,
+                    ...otherFields,
                   },
                   { transaction }
                 )
@@ -420,7 +438,7 @@ export default function (router: Router) {
                     index: Number(key),
                     testId: createTest.id,
                     id: section.id,
-                    fileURLs: fileNames
+                    fileURLs: fileNames,
                   },
                   { transaction }
                 )

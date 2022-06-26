@@ -42,7 +42,7 @@ export default defineComponent({
 
         const topPosition = Math.min(
           Math.max(el.offsetTop - pos2.value, 4),
-          viewBox.value.height - 8
+          viewBox.value.height - 4
         )
 
         const rightPosition =
@@ -145,6 +145,16 @@ export default defineComponent({
 
             if (!isCollapsed.value) {
               collapseStyles.value = {}
+
+              const contentHeight = contentRef.value.clientHeight
+
+              const viewBoxHeight =
+                viewboxRef.value.clientHeight - contentHeight - 4
+
+              contentRef.value.style.top = `${Math.min(
+                parseFloat(contentRef.value.style.top),
+                viewBoxHeight
+              )}px`
             }
           })
         }

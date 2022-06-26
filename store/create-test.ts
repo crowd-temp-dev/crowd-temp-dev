@@ -359,6 +359,8 @@ const actions: ActionTree<CreateTestState, RootState> = {
         return {}
       }
 
+      console.log(formatForm)
+      
       const { data, error, message } = await CreateTest(app.$axios, formatForm)
 
       commit('setSubmitting', false)

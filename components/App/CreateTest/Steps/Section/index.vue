@@ -107,7 +107,7 @@ export default defineComponent({
           })
           .map((entry) => entry[1])
 
-        const newIndex = (_props.storeIndex || 0)
+        const newIndex = _props.storeIndex || 0
 
         const newQuestionsEntries = [
           ...questionsValues.slice(0, newIndex),
@@ -162,6 +162,7 @@ export default defineComponent({
       :style="{ '--fade-leave-duration': '150ms' }"
     >
       <Form
+        v-slot="formProps"
         :name="`test-form-${storeIndex || id}`"
         class="!space-y-0 w-full max-w-[800px] bg-surface-default rounded-lg p-20 shadow-2"
       >
@@ -268,7 +269,7 @@ export default defineComponent({
 
         <FadeTransition :duration="{ leave: 1, enter: 150 }">
           <div v-if="expanded">
-            <slot />
+            <slot v-bind="formProps" />
           </div>
         </FadeTransition>
       </Form>

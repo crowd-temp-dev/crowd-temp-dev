@@ -121,8 +121,11 @@ export const formSchema = {
 
   PrototypeEvaluation: Joi.object({
     id: uuidv4.required(),
-    websiteLink: Joi.string().uri().required(),
-    task: Joi.string(),
+    prototypeLink: Joi.string().uri().required(),
+    prototypeProvider: Joi.string()
+      .pattern(/^(?:figma)$/)
+      .required(),
+    task: Joi.string().allow(''),
     followUpQuestions,
   } as Record<keyof CreateTestForm['PrototypeEvaluation']['0'], any>),
 

@@ -18,7 +18,8 @@ export class PrototypeEvaluation extends Model<
   declare testId: string
   declare createdBy: string
   declare index: number
-  declare websiteLink: string
+  declare prototypeLink: string
+  declare prototypeProvider: 'figma'
   declare task: CreationOptional<string>
 }
 
@@ -47,13 +48,18 @@ export default function initPrototypeEvaluation(DB: Sequelize) {
           max: 49,
         },
       },
-      websiteLink: {
+      prototypeLink: {
         type: DataTypes.STRING(),
         allowNull: false,
         validate: {
-          isUrl: {
-            msg: 'Please enter a valid website link!',
-          },
+          is: /^(?:https:\/\/([\w.-]+\.)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*))?$/,
+        },
+      },
+      prototypeProvider: {
+        type: DataTypes.STRING(),
+        allowNull: false,
+        validate: {
+          is: /^(?:figma)$/,
         },
       },
       task: {

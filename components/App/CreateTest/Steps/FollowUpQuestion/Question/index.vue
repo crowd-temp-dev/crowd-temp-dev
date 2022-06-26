@@ -223,6 +223,7 @@ export default defineComponent({
             v-model="modelSync.conditionalLogic"
             label="Add conditional Logic"
             :disabled="disableConditionalLogic"
+            :tooltip="disableConditionalLogic ? 'Add another question' : undefined"
           />
 
           <div class="flex items-center space-x-26">

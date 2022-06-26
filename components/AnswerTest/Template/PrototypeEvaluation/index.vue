@@ -4,6 +4,7 @@ import EvaluationDialog from '../EvaluationDialog/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import IFrame from '~/components/Base/IFrame/index.vue'
+import { routeQuery } from '~/server-middleware/utils'
 
 type IframeErrorReason = 'deny' | 'sameorigin' | 'allow' | 'unknown' | '500'
 
@@ -100,11 +101,19 @@ export default defineComponent({
       )
     })
 
-    const websiteLink = computed(() => {
-      return `https://${(currentSection.value.websiteLink || '').replace(
-        /^https?:\/\//,
-        ''
-      )}`
+    const prototypeLink = computed(() => {
+      switch (currentSection.value.prototypeProvider) {
+        case 'figma':
+          return `https://www.figma.com/embed?${routeQuery({
+            embed_host: 'share',
+            url: `https://${(currentSection.value.prototypeLink || '').replace(
+              /^https?:\/\//,
+              ''
+            )}`,
+          })}`
+        default:
+          return ''
+      }
     })
 
     const reloadIframe = () => {
@@ -123,7 +132,7 @@ export default defineComponent({
       removeIFrame,
       iframeErrorReason,
       currentSection,
-      websiteLink,
+      prototypeLink,
       iframeKey,
       dialogEntered,
       draggingDialog,
@@ -141,18 +150,19 @@ export default defineComponent({
     >
       {{
         currentSection.task ||
-        'Explore the website below and answer the follow-up questions'
+        `Explore the ${currentSection.prototypeProvider} prototype below and answer the follow-up questions`
       }}
     </div>
 
     <div class="max-h-full overflow-auto h-[calc(100%-76px)]">
       <div class="w-full h-full pointer-events-none relative pt-8">
         <IFrame
-          :src="websiteLink"
+          :src="prototypeLink"
           :allow-pointer="dialogEntered && !draggingDialog"
-          frame-name="website-evaluation"
+          :iframe-attrs="{ allowfullscreen: '' }"
+          frame-name="prototype-evaluation"
           @load-success="iframeLoadSuccess = true"
-          @error-reason="evt = iframeErrorReason = evt"
+          @error-reason="(evt) => (iframeErrorReason = evt)"
           @on-fetch="iframeFetched = true"
         />
 
@@ -179,11 +189,11 @@ export default defineComponent({
             <p class="text-display-small text-text-default/80 mb-32">
               An error occured trying to load
               <a
-                :href="websiteLink"
+                :href="prototypeLink"
                 target="_blank"
                 rel="noreferrer noopener"
                 class="text-action-primary-default pointer-events-auto"
-                >{{ currentSection.websiteLink }}</a
+                >{{ currentSection.prototypeLink }}</a
               >
             </p>
 

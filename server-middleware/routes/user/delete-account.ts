@@ -8,6 +8,7 @@ import { User } from '../../../database/models/User/User'
 import DB from '../../../database'
 import { matchPassword } from '../../../database/utils'
 import mailer from '../../email'
+import { Recover } from '../../../database/models/User/Recover'
 
 export interface DeleteAccountForm {
   confirm: string
@@ -69,7 +70,21 @@ export default function (router: Router) {
             )
 
             if (passwordMatch) {
-              await user.destroy({ transaction })
+              // store old data
+              try {
+                await Recover.destroy({
+                  where: {
+                    id: userId,
+                  },
+                  transaction,
+                })
+
+                await Recover.create(user.get(), { transaction })
+
+                await user.destroy({ transaction })
+              } catch (err) {
+                throw new Error('{409} Error deleting account!')
+              }
 
               clearAuthCookies(res)
 

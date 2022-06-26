@@ -39,6 +39,10 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    validate: {
+      type: Function,
+      default:undefined
+    }
   },
   setup(_props) {
     const root = ref(null)
@@ -122,4 +126,19 @@ export default defineComponent({
 
     return { root }
   },
+  watch: {
+    'modelValue'(val) {      
+      if (typeof this.validate === 'function') {
+        const validateValue = this.validate(val)
+
+        const errorMessage = typeof validateValue === 'string' ? validateValue : ''
+
+        const input = (this.root as unknown as ComponentInstance).$el.querySelector('input');
+
+        if (input) {
+          input.setCustomValidity(errorMessage)
+        }
+      }
+    }
+  }
 })

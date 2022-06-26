@@ -36,6 +36,11 @@ const details = {
     subtitle:
       "For this section you'd be shown you'd be asked explore the live website that will be shown to you and answer the follow-up questions.",
   },
+  PrototypeEvaluation: {
+    title: '▶️ Prototype Evaluation',
+    subtitle:
+      "For this section you'd be shown you'd be asked explore the figma prototype that will be shown to you and answer the follow-up questions.",
+  },
 } as Record<
   CreateTestComponent,
   {

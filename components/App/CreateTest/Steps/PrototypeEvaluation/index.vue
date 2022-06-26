@@ -3,6 +3,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 import Section from '../Section/index.vue'
 import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import createTest from '~/mixins/createTest'
+import { PrototypeEvaluation } from '~/database/models/CreateTests/PrototypeEvaluation'
 
 export default defineComponent({
   name: 'AppCreateTestStepsPrototypeEvaluation',
@@ -17,11 +18,32 @@ export default defineComponent({
 
     const frameTypes = [{ label: 'No frame', value: 'no-frame' }]
 
+    const prototypeProviders = [{ label: 'Figma', value: 'figma' }] as {
+      label: String
+      value: PrototypeEvaluation['prototypeProvider']
+    }[]
+
+    const validateLink = (
+      link: string,
+      prototypeProvider: PrototypeEvaluation['prototypeProvider']
+    ) => {
+      if (prototypeProvider === 'figma') {
+        return (
+          /^https:\/\/([\w.-]+\.)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/.test(
+            link
+          ) || 'Invalid link'
+        )
+      }
+      return true
+    }
+
     return {
       delayOptions,
       selectedFileType,
       selectedFrameType,
       frameTypes,
+      prototypeProviders,
+      validateLink,
     }
   },
 })
@@ -30,34 +52,48 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Prototype evaluation`"
     :store-index="rootNumber"
   >
     <p class="mb-20">
-      Input your figma prototype, set tasks for participants to complete and add
+      Input your prototype link, set tasks for participants to complete and add
       questions
     </p>
 
-    <PFormLayout class="my-0">
-      <div>
-        <TextField v-model="state.websiteLink" label="Website link" required />
+    <div>
+      <div class="flex items-end space-x-8">
+        <Select
+          v-model="state.prototypeProvider"
+          :options="prototypeProviders"
+          label="Prototype link"
+          class="shrink-0 min-w-[105px]"
+          required
+        />
 
-        <p class="text-text-subdued mt-4">
-          Copy the share link from your Figma file, be sure to enable “Anyone
-          can view with link”. We recommend duplicating the flow you're testing
-          in a separate Figma file.
-          <NuxtLink class="text-action-primary-default hover:underline" to="#"
-            >Learn more</NuxtLink
-          >
-        </p>
+        <TextField
+          v-model="state.prototypeLink"
+          required
+          v-bind="fieldIdAndError(`${state.id}-link`)"
+          class="grow"
+          :validate="(e) => validateLink(e, state.prototypeProvider)"
+        />
       </div>
 
-      <TextField
-        v-model="state.task"
-        label="Task (Optional)"
-        help-text="What task would you like people to complete on this prototype"
-      />
-    </PFormLayout>
+      <p class="text-text-subdued mt-4 mb-20">
+        Copy the share a directly prototype link from your design file, be sure
+        to enable “Anyone can view with link”.
+        <NuxtLink class="text-action-primary-default hover:underline" to="#"
+          >Learn more</NuxtLink
+        >
+      </p>
+    </div>
+
+    <TextField
+      v-model="state.task"
+      label="Task (Optional)"
+      help-text="What task would you like people to complete on this prototype"
+    />
 
     <FollowUpQuestion
       v-model="state.followUpQuestions"

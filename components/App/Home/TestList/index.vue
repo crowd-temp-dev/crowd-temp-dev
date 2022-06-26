@@ -56,7 +56,11 @@ export default defineComponent({
 
         return storeItems
           .filter((item) => filteredRegExp.test(item.name))
-          .map((x) => {
+          .map((x, _, arr) => {
+            if (arr.length < 2) {
+              return x
+            }
+
             const searchValueRegExp = new RegExp(filter.value, 'i')
             const html = `<span class="text-text-subdued/80">${x.name.replace(
               searchValueRegExp,

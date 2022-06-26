@@ -60,7 +60,8 @@ export interface CreateTestForm {
 
   PrototypeEvaluation: Question<{
     id: string
-    websiteLink: string
+    prototypeLink: string
+    prototypeProvider: 'figma'
     task?: string
     followUpQuestions: QuestionModelValue[]
   }>
@@ -101,6 +102,7 @@ export interface CreateTestFormQuestion {
 
   // for prototype evaluation
   prototypeLink: string
+  prototypeProvider: string
 
   // for custom message
   message?: string

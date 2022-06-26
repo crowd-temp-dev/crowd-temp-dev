@@ -206,7 +206,7 @@ export async function getFullTest(
     const prototypeEvaluation = await getSection(
       PrototypeEvaluation,
       'PrototypeEvaluation',
-      ['websiteLink', 'task']
+      ['prototypeLink', 'prototypeProvider', 'task']
     )
 
     const customMessage = await getSection(CustomMessage, 'CustomMessage', [

@@ -465,7 +465,8 @@ export const newTestConstructor = (
 
     ...addPaths(type === 'PrototypeEvaluation', {
       task: '',
-      websiteLink: '',
+      prototypeLink: '',
+      prototypeProvider: 'figma',
     }),
 
     ...addPaths(type === 'CustomMessage', {
