@@ -283,8 +283,8 @@ export default defineComponent({
           </div>
         </template>
 
-        <div v-if="isLinearScale">
-          <div class="flex text-text-subdued justify-between items-center w-fit">
+        <div v-if="isLinearScale" class="w-fit">
+          <div class="flex text-text-subdued justify-between items-center">
             <p>
               {{ currentQuestion.linearScale.start.label || 'Start' }}
             </p>
