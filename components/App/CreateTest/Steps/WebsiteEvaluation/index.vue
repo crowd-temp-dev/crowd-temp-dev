@@ -95,7 +95,7 @@ export default defineComponent({
                   beforeEnter: () => (iframeErrorReason = ''),
                   afterLeave: () => (iframeErrorReason = ''),
                 }"
-                :readonly="acceptUrlShareTerms"
+                :readonly="!acceptUrlShareTerms"
               >
                 Preview URL
 
@@ -143,7 +143,7 @@ export default defineComponent({
                           >
                             <p v-if="hideIframe">
                               x-frame-options in headers is set to
-                              <code class="bg-black/5 p-4 rounded">{{
+                              <code class="bg-black/5 p-4 rounded font-medium">{{
                                 iframeErrorReason
                               }}</code
                               >.
