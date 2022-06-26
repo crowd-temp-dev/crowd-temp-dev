@@ -76,14 +76,14 @@ export default defineComponent({
           />
 
           <Tooltip
-            v-slot="{ events }"
+            v-slot="{ events, open }"
             class="shrink-0"
             :disabled="!disablePreview && acceptUrlShareTerms"
             :label="
               disablePreview ? 'Enter a valid url' : 'Accept checkbox below'
             "
           >
-            <span v-on="events">
+            <span v-on="events" @click="open">
               <DialogButton
                 label="Preview URL"
                 :disable-button="disablePreview"
@@ -95,8 +95,7 @@ export default defineComponent({
                   beforeEnter: () => (iframeErrorReason = ''),
                   afterLeave: () => (iframeErrorReason = ''),
                 }"
-                :class="{ 'pointer-events-none': !acceptUrlShareTerms }"
-                :tabindex="!acceptUrlShareTerms ? '-1' : undefined"
+                :readonly="acceptUrlShareTerms"
               >
                 Preview URL
 

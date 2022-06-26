@@ -19,6 +19,7 @@ export default defineComponent({
     autofocus: Boolean,
     destructive: Boolean,
     loading: Boolean,
+    readonly: Boolean,
   },
 
   setup(_props) {
@@ -49,14 +50,16 @@ export default defineComponent({
   <PButton
     ref="rootRef"
     v-bind="$attrs"
-    :tabindex="`${disabled || loading ? -1 : $attrs.tabindex || 0}`"
+    :type="readonly ? 'button' : $attrs.type || 'button'"
+    :aria-readonly="readonly || undefined"
+    :tabindex="`${disabled || loading || readonly ? -1 : $attrs.tabindex || 0}`"
     :disabled="disabled"
     :primary="false"
     class="BaseButton"
     :class="{
       Primary: primary,
       Destructive: destructive,
-      'pointer-events-none': loading,
+      'pointer-events-none': loading || readonly,
       'grayscale !opacity-50': disabled,
     }"
     :destructive="destructive"
