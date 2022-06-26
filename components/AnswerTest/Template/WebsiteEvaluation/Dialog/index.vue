@@ -204,14 +204,18 @@ export default defineComponent({
               title-class="font-semibold mb-[0.5rem] px-20"
               question-title-class="px-20"
             >
-              <template #action="{ skipQuestion }">
+              <template #action="{ skipQuestion, loading, skipping }">
                 <div
                   class="flex items-center justify-end space-x-16 w-full border-t border-divider h-68 px-20"
                   @mousedown.stop
                 >
-                  <Button primary type="submit"> Continue </Button>
+                  <Button primary type="submit" :loading="loading">
+                    Continue
+                  </Button>
 
-                  <Button @click="skipQuestion"> Skip </Button>
+                  <Button :loading="skipping" @click="skipQuestion">
+                    Skip
+                  </Button>
                 </div>
               </template>
             </InputField>

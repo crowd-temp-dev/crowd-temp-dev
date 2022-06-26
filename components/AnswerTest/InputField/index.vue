@@ -313,7 +313,7 @@ export default defineComponent({
         </div>
       </div>
 
-      <slot name="action" v-bind="{ skipQuestion }">
+      <slot name="action" v-bind="{ skipQuestion, loading, skipping }">
         <div class="flex space-x-16">
           <Button
             type="submit"
