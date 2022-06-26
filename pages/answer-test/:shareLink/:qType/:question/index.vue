@@ -6,6 +6,7 @@ import DesignSurvey from '~/components/AnswerTest/Template/DesignSurvey/index.vu
 import FiveSecondsTest from '~/components/AnswerTest/Template/FiveSecondsTest/index.vue'
 import PreferenceTest from '~/components/AnswerTest/Template/PreferenceTest/index.vue'
 import CardSorting from '~/components/AnswerTest/Template/CardSorting/index.vue'
+import WebsiteEvaluation from '~/components/AnswerTest/Template/WebsiteEvaluation/index.vue'
 import { features } from '~/utils'
 
 export default defineComponent({
@@ -16,6 +17,7 @@ export default defineComponent({
     FiveSecondsTest,
     PreferenceTest,
     CardSorting,
+    WebsiteEvaluation,
   },
 
   layout: 'answer-test' as Layout,

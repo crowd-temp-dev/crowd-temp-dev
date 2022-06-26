@@ -26,7 +26,7 @@ export default defineComponent({
     )
 
     const transitionClasses = computed(() => {
-      const activeClass = 'transition-[transform,opacity] duration-[200ms] ease-spring'
+      const activeClass = 'transform-gpu transition-[transform,opacity] duration-[200ms] ease-spring'
 
       const genericClass = {
         enterActiveClass: activeClass,
@@ -36,12 +36,12 @@ export default defineComponent({
 
       if (root.$breakpoint.isMobile) {
         return {
-          enterClass: 'opacity-0 translate-y-[-20px]',
+          enterClass: 'opacity-0 translate-y-[-20px] transform-gpu',
           ...genericClass,
         }
       } else {
         return {
-          enterClass: 'opacity-0 translate-y-[20px]',
+          enterClass: 'opacity-0 translate-y-[20px] transform-gpu',
           ...genericClass,
         }
       }
@@ -120,7 +120,7 @@ export default defineComponent({
       <div
         v-else
         role="document"
-        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen transform-gpu overflow-hidden max-h-screen"
+        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen overflow-hidden max-h-screen"
       >
         <Header />
 

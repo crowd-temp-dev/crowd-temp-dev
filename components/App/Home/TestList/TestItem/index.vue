@@ -145,7 +145,9 @@ export default defineComponent({
 
     <div class="flex items-center w-full mr-32">
       <div class="w-[42%]">
-        <strong> {{ name }} </strong>
+        <!-- TODO: make search component with render fn to avoid hack below -->
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <strong v-html="name" />
 
         <p class="caption">Created {{ formatDate(createdAt) }}</p>
       </div>

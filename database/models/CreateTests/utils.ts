@@ -192,18 +192,26 @@ export async function getFullTest(
     ])
 
     const cardSorting = await getSection(CardSorting, 'CardSorting', [
-      'cards', 'categories', 'task'
+      'cards',
+      'categories',
+      'task',
     ])
 
-    const customMessage = await getSection(CustomMessage, 'CustomMessage')
-    const prototypeEvaluation = await getSection(
-      PrototypeEvaluation,
-      'PrototypeEvaluation'
-    )
     const websiteEvaluation = await getSection(
       WebsiteEvaluation,
-      'WebsiteEvaluation'
+      'WebsiteEvaluation',
+      ['websiteLink', 'task']
     )
+
+    const prototypeEvaluation = await getSection(
+      PrototypeEvaluation,
+      'PrototypeEvaluation',
+      ['websiteLink', 'task']
+    )
+
+    const customMessage = await getSection(CustomMessage, 'CustomMessage', [
+      'message',
+    ])
 
     const data = sortObject({
       testDetails: testDetails.get(),

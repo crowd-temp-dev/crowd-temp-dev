@@ -31,6 +31,11 @@ const details = {
     subtitle:
       "For this section you'd be shown you'd be asked categorize cards based on what comes naturally to you.",
   },
+  WebsiteEvaluation: {
+    title: '▶️ Website Evaluation',
+    subtitle:
+      "For this section you'd be shown you'd be asked explore the live website that will be shown to you and answer the follow-up questions.",
+  },
 } as Record<
   CreateTestComponent,
   {

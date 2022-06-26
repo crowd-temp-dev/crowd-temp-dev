@@ -114,8 +114,8 @@ export const formSchema = {
 
   WebsiteEvaluation: Joi.object({
     id: uuidv4.required(),
-    websiteLink: Joi.string().uri().required(),
-    task: Joi.string(),
+    websiteLink: Joi.string().uri({ allowRelative: true }).required(),
+    task: Joi.string().allow(''),
     followUpQuestions,
   } as Record<keyof CreateTestForm['WebsiteEvaluation']['0'], any>),
 

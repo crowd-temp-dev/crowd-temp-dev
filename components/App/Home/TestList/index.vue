@@ -54,7 +54,20 @@ export default defineComponent({
       if (filter.value) {
         const filteredRegExp = new RegExp(filter.value, 'i')
 
-        return storeItems.filter((item) => filteredRegExp.test(item.name))
+        return storeItems
+          .filter((item) => filteredRegExp.test(item.name))
+          .map((x) => {
+            const searchValueRegExp = new RegExp(filter.value, 'i')
+            const html = `<span class="text-text-subdued/80">${x.name.replace(
+              searchValueRegExp,
+              `<mark class="bg-transparent text-text-default">${filter.value}</mark>`
+            )}</span>`
+
+            return {
+              ...x,
+              name: html,
+            }
+          })
       }
 
       return storeItems
