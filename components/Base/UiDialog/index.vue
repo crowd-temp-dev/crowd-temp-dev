@@ -318,7 +318,7 @@ export default defineComponent({
 
 .fade-transition-enter-active .content,
 .fade-transition-leave-active .content {
-  @apply transition-transform duration-[inherit];
+  @apply transition-[transform,opacity] duration-[inherit];
 }
 
 .fade-transition-enter-active .content {
@@ -336,7 +336,6 @@ export default defineComponent({
 
 .fade-transition-enter-active .content.content.slide-y {
   transition-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
-  transition-duration: 350ms;
 }
 
 .fade-transition-enter .content.slide-y {
