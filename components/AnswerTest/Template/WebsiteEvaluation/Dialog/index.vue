@@ -7,10 +7,11 @@ import {
 } from '@vue/composition-api'
 import { sleep } from '~/utils'
 import InputField from '~/components/AnswerTest/InputField/index.vue'
+import AnswerTestPageTransition from '~/components/Base/AnswerTestPageTransition/index.vue'
 
 export default defineComponent({
   name: 'WebsiteEvaluationDialog',
-  components: { InputField },
+  components: { InputField, AnswerTestPageTransition },
   emits: ['drag-start', 'drag-end'],
   setup(_, { emit }) {
     const viewboxRef = ref<HTMLElement>(null)
@@ -195,25 +196,27 @@ export default defineComponent({
         class="transition-[height,opacity,transform]"
         :style="collapseStyles"
       >
-        <div class="mt-20" @mousedown.stop>
-          <InputField
-            class="!px-0"
-            content-class="px-20"
-            title-class="font-semibold mb-[0.5rem] px-20"
-            question-title-class="px-20"
-          >
-            <template #action="{ skipQuestion }">
-              <div
-                class="flex items-center justify-end space-x-16 w-full border-t border-divider h-68 px-20"
-                @mousedown.stop
-              >
-                <Button primary type="submit"> Continue </Button>
+        <AnswerTestPageTransition>
+          <div :key="$route.fullPath" class="mt-20" @mousedown.stop>
+            <InputField
+              class="!px-0"
+              content-class="px-20 w-fit"
+              title-class="font-semibold mb-[0.5rem] px-20"
+              question-title-class="px-20"
+            >
+              <template #action="{ skipQuestion }">
+                <div
+                  class="flex items-center justify-end space-x-16 w-full border-t border-divider h-68 px-20"
+                  @mousedown.stop
+                >
+                  <Button primary type="submit"> Continue </Button>
 
-                <Button @click="skipQuestion"> Skip </Button>
-              </div>
-            </template>
-          </InputField>
-        </div>
+                  <Button @click="skipQuestion"> Skip </Button>
+                </div>
+              </template>
+            </InputField>
+          </div>
+        </AnswerTestPageTransition>
       </div>
     </div>
   </div>
