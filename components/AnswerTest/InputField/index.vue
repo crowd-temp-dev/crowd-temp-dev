@@ -25,6 +25,10 @@ export default defineComponent({
       type: String,
       default: 'font-semibold mb-[0.5rem]',
     },
+    questionTitleClass: {
+      type: String,
+      default: undefined,
+    },
   },
 
   setup(_props, { root }) {
@@ -201,7 +205,11 @@ export default defineComponent({
   <div class="px-[1rem]">
     <h2 :class="titleClass">Question {{ $route.params.question }}</h2>
 
-    <p v-if="isOptionsType || isLinearScale" class="mb-8">
+    <p
+      v-if="isOptionsType || isLinearScale"
+      class="mb-8"
+      :class="questionTitleClass"
+    >
       {{ currentQuestion.title }}
     </p>
 

@@ -200,6 +200,7 @@ export default defineComponent({
             class="!px-0"
             content-class="px-20"
             title-class="font-semibold mb-[0.5rem] px-20"
+            question-title-class="px-20"
           >
             <template #action="{ skipQuestion }">
               <div
