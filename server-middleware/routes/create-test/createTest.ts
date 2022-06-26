@@ -23,7 +23,6 @@ import { uploadFile } from '../fileManager/utils'
 import { formSchema } from './utils'
 import { CreateTestForm } from '~/types/form'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
-import { CreateTestComponent } from '~/types'
 
 export interface CreateTestRes {
   welcomeScreen: WelcomeScreen
@@ -360,67 +359,57 @@ export default function (router: Router) {
               }
             }
 
-            const savePrototypeAndWebsiteEvaluation = async (
-              fields: typeof websiteEvaluation | typeof prototypeEvaluation,
-              model: typeof WebsiteEvaluation | typeof PrototypeEvaluation,
-              followUpQuestionsForeignKey: `${CreateTestComponent}Id`
-            ) => {
+            if (websiteEvaluation) {
               let key: QuestionIndex
-              let newRecord: WebsiteEvaluation | PrototypeEvaluation
 
-              for (key in fields) {
-                const section = fields[key]
+              for (key in websiteEvaluation) {
+                const section = websiteEvaluation[key]
 
-                const otherFields =
-                  fields instanceof WebsiteEvaluation
-                    ? {
-                        websiteLink: (
-                          section as CreateTestForm['WebsiteEvaluation']['0']
-                        ).websiteLink,
-                      }
-                    : {
-                        prototypeLink: (
-                          section as CreateTestForm['PrototypeEvaluation']['0']
-                        ).prototypeLink,
-                        prototypeProvider: 'figma',
-                    }
-                
-                console.log(otherFields)
-                
-
-                // @ts-expect-error
-                newRecord = await model.create(
+                const newRecord = await WebsiteEvaluation.create(
                   {
                     createdBy: user.id,
                     index: Number(key),
                     testId: createTest.id,
                     task: section.task,
                     id: section.id,
-                    ...otherFields,
+                    websiteLink: (
+                      section as CreateTestForm['WebsiteEvaluation']['0']
+                    ).websiteLink,
                   },
                   { transaction }
                 )
 
                 await saveFollowUpQuestions(section.followUpQuestions, {
-                  [followUpQuestionsForeignKey]: newRecord.id,
+                  WebsiteEvaluationId: newRecord.id,
                 })
               }
             }
 
-            if (websiteEvaluation) {
-              await savePrototypeAndWebsiteEvaluation(
-                websiteEvaluation,
-                WebsiteEvaluation,
-                'WebsiteEvaluationId'
-              )
-            }
-
             if (prototypeEvaluation) {
-              await savePrototypeAndWebsiteEvaluation(
-                prototypeEvaluation,
-                PrototypeEvaluation,
-                'PrototypeEvaluationId'
-              )
+              let key: QuestionIndex
+
+              for (key in prototypeEvaluation) {
+                const section = prototypeEvaluation[key]
+
+                const newRecord = await PrototypeEvaluation.create(
+                  {
+                    createdBy: user.id,
+                    index: Number(key),
+                    testId: createTest.id,
+                    task: section.task,
+                    id: section.id,
+                    prototypeLink: (
+                      section as CreateTestForm['PrototypeEvaluation']['0']
+                    ).prototypeLink,
+                    prototypeProvider: 'figma',
+                  },
+                  { transaction }
+                )
+
+                await saveFollowUpQuestions(section.followUpQuestions, {
+                  PrototypeEvaluationId: newRecord.id,
+                })
+              }
             }
 
             if (preferenceTest) {
