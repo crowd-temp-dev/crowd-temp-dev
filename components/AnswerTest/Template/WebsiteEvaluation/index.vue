@@ -1,7 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import EvaluationDialog from '../EvaluationDialog/index.vue'
-import Spinner from '~/components/Base/Spinner/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import IFrame from '~/components/Base/IFrame/index.vue'
 
@@ -9,7 +8,7 @@ type IframeErrorReason = 'deny' | 'sameorigin' | 'allow' | 'unknown' | '500'
 
 export default defineComponent({
   name: 'AnswerTestTemplateWebsiteEvaluation',
-  components: { EvaluationDialog, Spinner, FadeTransition, IFrame },
+  components: { EvaluationDialog, FadeTransition, IFrame },
   setup(_, { root }) {
     const iframeFetched = ref(false)
 
@@ -162,7 +161,11 @@ export default defineComponent({
             v-if="!iframeFetched"
             class="pseudo z-10 flex-centered text-[44px] text-text-subdued bg-sky-light"
           >
-            <Spinner />
+            <p
+              class="text-text-subdued font-sf-pro-display font-semibold text-display-small"
+            >
+              Loading...
+            </p>
           </div>
 
           <div
