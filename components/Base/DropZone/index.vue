@@ -322,8 +322,8 @@ export default defineComponent({
             >
               <img
                 v-if="getFiles[0]"
-                :src="getFiles[0].src"
-                :alt="getFiles[0].alt"
+                :src="(getFiles[0] || {}).src"
+                :alt="(getFiles[0] || {}).alt"
                 class="w-full h-full block object-contain rounded"
               />
             </div>
@@ -354,13 +354,18 @@ export default defineComponent({
 
                     <template #content>
                       <div class="grid gap-y-8">
-                        <p><strong>Name:</strong> {{ getFiles[0].alt }}</p>
-
                         <p>
-                          <strong>Type:</strong> {{ getFiles[0].file.type }}
+                          <strong>Name:</strong> {{ (getFiles[0] || {}).alt }}
                         </p>
 
-                        <p><strong>Size:</strong> {{ getFiles[0].size }}</p>
+                        <p>
+                          <strong>Type:</strong>
+                          {{ (getFiles[0] || {}).file.type }}
+                        </p>
+
+                        <p>
+                          <strong>Size:</strong> {{ (getFiles[0] || {}).size }}
+                        </p>
                       </div>
                     </template>
                   </Tooltip>
@@ -387,7 +392,10 @@ export default defineComponent({
                       }
                     "
                   >
-                    <PIcon source="DeleteMajor" class="fill-border-critical-subdued" />
+                    <PIcon
+                      source="DeleteMajor"
+                      class="fill-border-critical-subdued"
+                    />
                   </button>
                 </Tooltip>
 
