@@ -298,10 +298,14 @@ export default defineComponent({
               class="absolute right-4 top-4 inline-block transition-[opacity,transform] opacity-30 group-hover:opacity-70 hover:opacity-100 active:opacity-90 active:scale-[0.99] pointer-events-auto"
               @click.stop="open"
             >
-              <PIcon
-                source="MaximizeMinor"
-                class="w-24 h-24 fill-icon-default"
-              />
+              <Tooltip v-slot="{ events }" :disabled="active" label="Maximize">
+                <span v-on="events">
+                  <PIcon
+                    source="MaximizeMinor"
+                    class="w-24 h-24 fill-icon-default"
+                  />
+                </span>
+              </Tooltip>
             </span>
           </FadeTransition>
         </div>
