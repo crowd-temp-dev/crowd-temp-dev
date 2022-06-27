@@ -327,7 +327,7 @@ export const creatTestProgressRegExpString =
 export const roleRegExpString = '^(?:user|tester)$'
 
 export const urlRegExpString =
-  '^((http(s?)?):\\/\\/)?([wW]{3}\\.)?[a-zA-Z0-9\\-.]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$'
+  '^((http(s?)?):\\/\\/)?([wW]{3}\\.)?[a-zA-Z0-9\\-.]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?/?$'
 
 export const addTransitioningDataAttr = () => {
   if (process.client) {

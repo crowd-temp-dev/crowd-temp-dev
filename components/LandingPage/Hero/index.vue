@@ -5,7 +5,7 @@
     </h2>
 
     <h3 class="landing-page-subtitle mb-25 mx-14 md:mx-auto">
-      A usability testing platform built you to help you get useful feedback
+      A usability testing platform built to help you get useful feedback
       about your products
     </h3>
 
