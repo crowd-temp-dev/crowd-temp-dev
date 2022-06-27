@@ -48,8 +48,8 @@ export default defineComponent({
         const rightPosition =
           viewBox.value.width -
           Math.max(
-            Math.min(el.offsetLeft - pos1.value, viewBox.value.width - 4),
-            4
+            Math.min(el.offsetLeft - pos1.value, viewBox.value.width - 6),
+            6
           )
 
         // set the element's new position:
@@ -181,7 +181,7 @@ export default defineComponent({
   <div ref="viewboxRef" class="absolute inset-0 pointer-events-none h-full">
     <div
       ref="contentRef"
-      class="bg-surface-default shadow-5 absolute z-10 top-4 right-4 pointer-events-auto lg:min-w-[612px] min-w-full"
+      class="bg-surface-default shadow-5 absolute z-10 top-4 right-6 pointer-events-auto lg:min-w-[612px] min-w-full"
       v-on="$breakpoint.isMobile ? {} : { mousedown: dragMouseDown }"
     >
       <div
