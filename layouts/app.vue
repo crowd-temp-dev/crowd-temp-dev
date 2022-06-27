@@ -26,7 +26,8 @@ export default defineComponent({
     )
 
     const transitionClasses = computed(() => {
-      const activeClass = 'transform-gpu transition-[transform,opacity] duration-[200ms] ease-spring'
+      const activeClass =
+        'transform-gpu transition-[transform,opacity] duration-[200ms] ease-spring'
 
       const genericClass = {
         enterActiveClass: activeClass,

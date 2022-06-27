@@ -317,11 +317,12 @@ export default defineComponent({
         </FadeTransition>
       </template>
 
-      <template #content="{ close, overlayEntered }">
+      <template #content="{ close, overlayEntered, active }">
         <div class="w-full h-full">
           <div class="w-full h-[calc(100%-80px)] flex-centered">
             <div
-              class="max-w-[1200px] h-full w-full max-h-[650px] p-10 rounded overflow-hidden"
+              class="max-w-[1200px] h-full w-full max-h-[650px] p-10 rounded overflow-hidden transition-opacity duration-[250ms]"
+              :class="{ 'opacity-0': !active }"
               @click.stop
             >
               <img
@@ -380,7 +381,7 @@ export default defineComponent({
                 <Tooltip
                   v-slot="{ events }"
                   invert
-                  label="Delete"
+                  label="Remove"
                   class="h-full"
                 >
                   <button
