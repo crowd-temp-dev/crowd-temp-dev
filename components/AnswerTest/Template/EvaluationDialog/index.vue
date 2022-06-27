@@ -48,8 +48,8 @@ export default defineComponent({
         const rightPosition =
           viewBox.value.width -
           Math.max(
-            Math.min(el.offsetLeft - pos1.value, viewBox.value.width - 8),
-            8
+            Math.min(el.offsetLeft - pos1.value, viewBox.value.width - 4),
+            4
           )
 
         // set the element's new position:
