@@ -101,8 +101,8 @@ export default defineComponent({
         })
 
         error({
-          message: "Invalid token!",
-          statusCode: 403
+          message: 'Invalid token!',
+          statusCode: 403,
         })
       }
     }
@@ -148,6 +148,7 @@ export default defineComponent({
               primary
               class="mb-20"
               type="submit"
+              size="large"
               :loading="loading"
             >
               Continue
@@ -178,6 +179,7 @@ export default defineComponent({
               full-width
               primary
               class="mb-24"
+              size="large"
               :loading="loading"
             >
               Reset password
@@ -185,7 +187,13 @@ export default defineComponent({
           </FormLayout>
         </template>
 
-        <Button plain icon="ArrowLeftMinor" to="/auth/login" class="mt-16">
+        <Button
+          plain
+          icon="ArrowLeftMinor"
+          to="/auth/login"
+          size="large"
+          class="mt-16"
+        >
           Back to login
         </Button>
       </Auth>

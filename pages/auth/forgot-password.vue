@@ -1,4 +1,3 @@
-
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
@@ -112,16 +111,16 @@ export default defineComponent({
 
         <template v-if="showSentScreen">
           <Button
-            v-if="false"
             full-width
             primary
-            class="mb-20"
-            to="/auth/reset-password"
+            size="large"
+            to="/auth/login"
+            class="my-20"
           >
-            Open email app
+            Back to login
           </Button>
 
-          <p class="text-text-subdued mb-24">
+          <p class="text-text-subdued">
             Didn't receive the email?
             <Button plain @click="resendVerification">Click to resend</Button>
           </p>
@@ -147,16 +146,24 @@ export default defineComponent({
               full-width
               primary
               class="mb-24"
+              size="large"
               :loading="loading"
             >
               Continue
             </Button>
+
+            <div>
+              <Button
+                plain
+                icon="ArrowLeftMinor"
+                to="/auth/login"
+                size="large"
+              >
+                Back to login
+              </Button>
+            </div>
           </FormLayout>
         </template>
-
-        <Button plain icon="ArrowLeftMinor" to="/auth/login" class="mt-16">
-          Back to login
-        </Button>
       </Auth>
     </main>
   </FadeTransition>

@@ -19,6 +19,10 @@ const mutation: MutationTree<AppState> = {
       ...state.alertDialog,
       ...payload,
     }
+  },
+
+  updateGlobalKey(state) {
+    state.globalKey += 1
   }
 }
 

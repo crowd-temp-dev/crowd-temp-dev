@@ -95,6 +95,7 @@ export default defineComponent({
                   beforeEnter: () => (iframeErrorReason = ''),
                   afterLeave: () => (iframeErrorReason = ''),
                 }"
+                dialog-content-class="resize-x w-[min(92vw,1500px)] min-w-[320px] max-w-[min(92vw,1500px)] max-h-[min(95vh,1200px)] min-h-[min(95vh,1200px)]"
                 :readonly="!acceptUrlShareTerms"
               >
                 Preview URL
@@ -104,9 +105,7 @@ export default defineComponent({
                 </template>
 
                 <template #dialog>
-                  <div
-                    class="min-w-[min(92vw,1500px)] min-h-[min(calc(95vh-72px),1200px)] h-full w-full"
-                  >
+                  <div class="h-full w-inherit">
                     <div class="relative w-full h-full overflow-hidden">
                       <FadeTransition>
                         <IFrame
@@ -143,9 +142,9 @@ export default defineComponent({
                           >
                             <p v-if="hideIframe">
                               x-frame-options in headers is set to
-                              <code class="bg-black/5 p-4 rounded font-medium">{{
-                                iframeErrorReason
-                              }}</code
+                              <code
+                                class="bg-black/5 p-4 rounded font-medium"
+                                >{{ iframeErrorReason }}</code
                               >.
                             </p>
 

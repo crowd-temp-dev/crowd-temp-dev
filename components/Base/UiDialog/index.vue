@@ -3,6 +3,7 @@ import {
   computed,
   defineComponent,
   nextTick,
+  onBeforeMount,
   onBeforeUnmount,
   ref,
   watch,
@@ -182,6 +183,12 @@ export default defineComponent({
         modelSync.value = false
       }
     }
+
+    onBeforeMount(() => {
+      if (modelSync.value) {
+        root.$store.commit('app/addToDialogs', id.value)
+      }
+    })
 
     onBeforeUnmount(cleanup)
 

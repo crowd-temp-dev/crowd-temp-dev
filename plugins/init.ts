@@ -27,6 +27,7 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
         extends: app,
         render(h) {
           return h('TeleportTarget', {
+            key: store.state.app.globalKey,
             props: {
               name: 'overlay',
               multiple: true,

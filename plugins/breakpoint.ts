@@ -23,7 +23,7 @@ const breakpointState = Vue.observable({
   state: {} as BreakpointOutput,
 })
 
-const breakpointPlugin: Plugin = function (_, inject) {
+const breakpointPlugin: Plugin = function ({ store }, inject) {
   if (!installed) {
     const updateBreakpoint = (br: BreakpointOutput) => {
       breakpointState.state = {
@@ -37,6 +37,10 @@ const breakpointPlugin: Plugin = function (_, inject) {
       useOrientation: true,
       onChange: (evt: BreakpointOutput) => {
         updateBreakpoint(evt)
+
+        if (evt.isMobile !== breakpointState.state.isMobile) {
+          store.commit('app/updateGlobalKey')
+        }
       },
     })
 

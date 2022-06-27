@@ -1,4 +1,5 @@
 export interface AppState {
+  globalKey: number
   dialogs: string[]
   fullscreenLoadingMessage: null | string
   alertDialog: {
@@ -16,6 +17,7 @@ export interface AppState {
 
 export default function state(): AppState {
   return {
+    globalKey: 0,
     dialogs: [],
     fullscreenLoadingMessage: null,
     alertDialog: {
@@ -23,7 +25,7 @@ export default function state(): AppState {
       active: false,
       title: '',
       subtitle: '',
-      actions: []
+      actions: [],
     },
   }
 }
