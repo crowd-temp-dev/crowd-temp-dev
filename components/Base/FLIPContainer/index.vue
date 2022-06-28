@@ -2,8 +2,21 @@
 import { left } from '@popperjs/core'
 import { defineComponent } from '@vue/composition-api'
 import UiTrapFocus from 'ui-trap-focus'
+import { LikeNumber } from '~/types'
 import { oneFrame, sleep, uid } from '~/utils'
 import eventKey from '~/utils/eventKey'
+
+const enterTransition = {
+  duration: 250,
+  ease: 'cubic-bezier(0.1, 0.5, 0.32, 1.05)',
+  property: 'all',
+}
+
+const leaveTransition = {
+  duration: 200,
+  ease: 'linear',
+  property: 'all',
+}
 
 export default defineComponent({
   name: 'FLIPContainer',
@@ -18,7 +31,7 @@ export default defineComponent({
     },
     tag: {
       type: String as () => keyof HTMLElementTagNameMap,
-      required: true,
+      default: 'div',
     },
     contentClass: {
       type: String,
@@ -29,10 +42,7 @@ export default defineComponent({
       default: '*',
     },
     disabled: Boolean,
-    closeOnEsc: {
-      type: Boolean,
-      default: true,
-    },
+    disableEsc: Boolean,
     viewPort: {
       type: [Object, String] as unknown as () => DOMRect | string,
       default: 'html',
@@ -40,6 +50,31 @@ export default defineComponent({
     triggerViewPort: {
       type: String,
       default: undefined,
+    },
+    ignoreBorderRadius: Boolean,
+    zIndex: {
+      type: String as () => LikeNumber,
+      default: undefined,
+    },
+    zIndexOffset: {
+      type: Number,
+      default: 100,
+    },
+    enterTransition: {
+      type: Object as () => {
+        duration: number
+        ease: string
+        property: string
+      },
+      default: () => enterTransition,
+    },
+    leaveTransition: {
+      type: Object as () => {
+        duration: number
+        ease: string
+        property: string
+      },
+      default: () => leaveTransition,
     },
   },
 
@@ -81,8 +116,12 @@ export default defineComponent({
             this.addToDialogs()
 
             this.openOverlay()
+
+            document.body.addEventListener('focusin', this.restoreFocus)
           } else {
             this.closeOverlay()
+
+            document.body.removeEventListener('focusin', this.restoreFocus)
           }
         }
       },
@@ -162,7 +201,7 @@ export default defineComponent({
       const key = eventKey(evt)
 
       if (key === 'esc') {
-        if (this.closeOnEsc) {
+        if (!this.disableEsc) {
           this.modelSync = false
         }
       } else {
@@ -240,7 +279,9 @@ export default defineComponent({
       if (triggerRef instanceof HTMLElement) {
         const contentBound = triggerRef.getBoundingClientRect()
 
-        const contentComputedStyle = getComputedStyle(triggerRef)
+        const contentComputedStyle = this.ignoreBorderRadius
+          ? {}
+          : getComputedStyle(triggerRef)
 
         const viewPort = this.getPort(this.viewPort) as DOMRect
 
@@ -254,9 +295,17 @@ export default defineComponent({
 
         const scaleFromY = contentBound.height / viewPort.height
 
-        const translateX = `${contentBound.left}px`
+        const translateX = `${contentBound.left - viewPort.left}px`
 
         const translateY = `${contentBound.top - viewPort.top}px`
+
+        const borderRadius = this.ignoreBorderRadius
+          ? {}
+          : {
+              clipPath: `inset(0 0 0 0 round ${
+                (contentComputedStyle as CSSStyleDeclaration).borderRadius
+              })`,
+            }
 
         return {
           height: overlayHeight,
@@ -264,7 +313,7 @@ export default defineComponent({
           top: overlayTop,
           left: overlayLeft,
           visibility: 'hidden',
-          clipPath: `inset(0 0 0 0 round ${contentComputedStyle.borderRadius})`,
+          ...borderRadius,
           transform: `scale3d(${scaleFromX},${scaleFromY},1) translate3d(${translateX},${translateY},0)`,
           transformOrigin: `${translateX} ${translateY}`,
         }
@@ -281,6 +330,7 @@ export default defineComponent({
         this.overlayStyles = {
           ...fromStyle,
           transitionDuration: '0s',
+          willChange: 'transform,opacity',
         }
 
         await this.$nextTick()
@@ -288,6 +338,13 @@ export default defineComponent({
         this.showOverlay = true
 
         await sleep(oneFrame)
+
+        const transition = {
+          ...enterTransition,
+          ...this.enterTransition,
+        }
+
+        const enterDuration = transition.duration
 
         this.overlayStyles = {
           height: fromStyle.height,
@@ -297,15 +354,16 @@ export default defineComponent({
           clipPath: 'inset(0 0 0 0 round 0)',
           transform: `scale3d(1,1,1) translate3d(0,0,0)`,
           transformOrigin: fromStyle.transformOrigin,
-          transitionDuration: '250ms',
-          transitionTimingFunction: 'cubic-bezier(0.1, 0.95, 0.32, 1.05)',
-          transitionProperty: 'all',
+          transitionDuration: `${enterDuration}ms`,
+          transitionTimingFunction: transition.ease,
+          transitionProperty: transition.property,
+          willChange: 'transform,opacity',
         }
 
-        await sleep(250)
+        await sleep(enterDuration)
 
         if (this.$refs.overlayRef && this.showOverlay) {
-          this.$refs.overlayRef.focus()
+          this.$refs.overlayWrapper.focus()
 
           this.overlayEntered = true
         }
@@ -317,26 +375,53 @@ export default defineComponent({
       if (triggerRef && this.$refs.overlayRef) {
         this.overlayEntered = false
 
+        const transition = {
+          ...leaveTransition,
+          ...this.leaveTransition,
+        }
+
+        const leaveDuration = transition.duration
+
         this.overlayStyles = {
           ...this.getFromStyle(),
           visibility: '',
-          transition: '200ms ease-out',
+          transition: `${leaveDuration}ms ${transition.ease}`,
+          transitionProperty: transition.property,
+          willChange: 'transform,opacity',
         }
 
-        await sleep(200)
+        await sleep(leaveDuration)
 
         if (this.showOverlay) {
           this.showOverlay = false
 
-          if (this.previousActive instanceof HTMLElement) {
+          if (
+            this.previousActive instanceof HTMLElement &&
+            document.contains(this.previousActive)
+          ) {
             this.previousActive.focus({
               preventScroll: true,
             })
-
-            this.previousActive = null
           }
 
+          this.previousActive = null
+
           this.removeFromDialogs()
+        }
+      }
+    },
+    restoreFocus(evt: FocusEvent) {
+      if (!this.modelSync) {
+        return
+      }
+
+      const overlayWrapper = this.$refs.overlayWrapper
+      if (overlayWrapper instanceof HTMLElement) {
+        if (
+          evt.target !== overlayWrapper &&
+          !overlayWrapper.contains(evt.target as HTMLElement)
+        ) {
+          overlayWrapper.focus()
         }
       }
     },
@@ -349,7 +434,9 @@ export default defineComponent({
       this.tag,
       {
         attrs: { ...this.$attrs },
-        on: { ...this.$listeners },
+        on: {
+          ...this.$listeners,
+        },
       },
       [
         this.$scopedSlots?.trigger(this.payload)?.[0] || null,
@@ -366,9 +453,41 @@ export default defineComponent({
             h(
               'div',
               {
-                staticClass: 'relative isolate',
+                ref: 'overlayWrapper',
+                attrs: {
+                  tabindex: this.modelSync ? '1' : undefined,
+                },
+                staticClass: 'relative isolate outline-none',
                 style: {
-                  'z-index': `${(this.indexInDialogs || 1) + 100}`,
+                  'z-index':
+                    this.zIndex ||
+                    `${(this.indexInDialogs || 1) + this.zIndexOffset}`,
+                },
+                directives: [
+                  {
+                    name: 'show',
+                    value: this.showOverlay || this.modelSync,
+                  },
+                ],
+                on: {
+                  keydown: this.contentKeydown,
+
+                  click: (evt: PointerEvent) => {
+                    if (this.modelSync) {
+                      const overlayEl = this.$refs.overlayRef
+
+                      if (overlayEl instanceof HTMLElement) {
+                        const target = evt.target as HTMLElement
+
+                        if (
+                          target !== overlayEl &&
+                          !overlayEl.contains(target)
+                        ) {
+                          overlayEl.focus({ preventScroll: true })
+                        }
+                      }
+                    }
+                  },
                 },
               },
               [
@@ -379,28 +498,26 @@ export default defineComponent({
                       'div',
                       {
                         ref: 'overlayRef',
-                        attrs: {
-                          tabindex: '0',
-                        },
-                        staticClass: 'fixed outline-none z-1',
+                        staticClass: 'fixed z-1',
                         class: [this.contentClass],
                         style: {
                           ...this.overlayStyles,
-                        },
-                        on: {
-                          keydown: this.contentKeydown,
                         },
                       },
                       [
                         h(
                           'div',
                           {
-                            staticClass: 'transition-opacity h-full w-full',
+                            staticClass:
+                              'transition-opacity h-full w-full overflow-hidden',
                             class: [
                               {
                                 'opacity-0': !expanded,
                               },
                             ],
+                            staticStyle: {
+                              clipPath: 'inherit',
+                            },
                           },
                           [this.$scopedSlots?.content?.(this.payload) || null]
                         ),

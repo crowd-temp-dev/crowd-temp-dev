@@ -1,3 +1,15 @@
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import Preview from './Preview/index.vue'
+
+export default defineComponent({
+  name: 'AppSettingsProfilePhoto',
+  components: { Preview },
+
+  setup() {},
+})
+</script>
+
 <template>
   <div>
     <aside
@@ -6,11 +18,7 @@
       <h3 class="text-heading font-semibold mb-20">Your photo</h3>
 
       <div class="flex items-center">
-        <PAvatar
-          :initials="$user.initials"
-          size="large"
-          class="text-decorative-text-one bg-decorative-surface-one mr-10 shrink-0 uppercase"
-        />
+        <Preview />
 
         <div>
           <strong class="mb-4"> Edit your photo </strong>
@@ -42,17 +50,3 @@
     </aside>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import Button from '~/components/Base/Button/index.vue'
-
-export default defineComponent({
-  name: 'AppSettingsProfilePhoto',
-  components: { Button },
-
-  setup() {},
-})
-</script>
-
-<style lang="postcss" scoped></style>

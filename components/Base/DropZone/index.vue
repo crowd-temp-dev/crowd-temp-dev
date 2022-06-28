@@ -42,6 +42,7 @@ export default defineComponent({
       type: String,
       default: 'or drop files to upload',
     },
+    disablePreview: Boolean,
   },
   setup(_props, { emit, attrs, root }) {
     const input = ref<HTMLInputElement | null>(null)
@@ -153,18 +154,20 @@ export default defineComponent({
 
 <template>
   <Id v-slot="{ id }">
-    <FLIPContainer tag="div" :trigger-view-port="`#${rootId}`">
-      <template #trigger="{ open, ref, active }">
+    <FLIPContainer
+      tag="div"
+      :trigger-view-port="`#${rootId}-preview`"
+      :disabled="disablePreview"
+    >
+      <template #trigger="{ open, active }">
         <div
           :id="rootId"
-          :ref="ref"
           class="min-h-[200px] p-[1.5rem] rounded-lg border-dashed border-2 relative isolate cursor-pointer transition-all active:scale-[0.9975] focus-within:ring-2 ring-offset-2 ring-action-primary-default group"
           :class="{
             'border-border-default hover:bg-surface-hovered': !dragEnter,
             'bg-surface-default': !getFiles.length,
             'bg-surface-hovered': getFiles.length,
             'border-interactive-default bg-surface-selected-default': dragEnter,
-            'opacity-0': active,
           }"
           @dragenter="dragEnter = true"
           @dragover="dragEnter = true"
@@ -221,7 +224,11 @@ export default defineComponent({
                   >
                     <template #default="{ events }">
                       <div
-                        class="w-full h-full bg-surface-default pointer-events-auto rounded border border-divider flex-centered relative group cursor-default overflow-hidden shadow-1"
+                        :id="`${rootId}-preview`"
+                        class="w-full h-full bg-surface-default pointer-events-auto rounded border border-divider flex-centered relative group cursor-default overflow-hidden shadow-1 transition-opacity"
+                        :class="{
+                          'opacity-0': active,
+                        }"
                         v-on="events"
                         @click.stop
                       >
@@ -292,9 +299,9 @@ export default defineComponent({
             :value="getFiles.length ? 'true' : ''"
           />
 
-          <FadeTransition>
+          <FadeTransition v-if="!disablePreview">
             <span
-              v-if="getFiles.length"
+              v-if="getFiles.length && !active"
               class="absolute right-4 top-4 inline-block transition-[opacity,transform] opacity-30 group-hover:opacity-70 hover:opacity-100 active:opacity-90 active:scale-[0.99] pointer-events-auto"
               @click.stop="open"
             >
@@ -321,8 +328,8 @@ export default defineComponent({
         <div class="w-full h-full">
           <div class="w-full h-[calc(100%-80px)] flex-centered">
             <div
-              class="max-w-[1200px] h-full w-full max-h-[650px] p-10 rounded overflow-hidden transition-opacity duration-[250ms]"
-              :class="{ 'opacity-0': !active }"
+              class="max-w-full h-full w-full max-h-[650px] p-10 rounded overflow-hidden transition-opacity"
+              :class="{ 'opacity-0 duration-[250ms]': !active }"
               @click.stop
             >
               <img
@@ -340,7 +347,7 @@ export default defineComponent({
               :class="{ 'opacity-0 translate-y-[100%]': !overlayEntered }"
             >
               <div
-                class="rounded-lg h-50 bg-[rgb(68,68,68,0.7)] border border-[rgb(85,85,85,0.7)] items-center flex space-x-4"
+                class="rounded-lg h-50 bg-[rgb(50,50,50,0.9)] border border-[rgb(75,75,75,0.7)] items-center flex space-x-4"
                 @click.stop
               >
                 <span class="flex items-center h-full">
@@ -375,7 +382,7 @@ export default defineComponent({
                     </template>
                   </Tooltip>
 
-                  <hr class="h-[90%] w-1 border-r border-[rgb(85,85,85,0.7)]" />
+                  <hr class="h-[85%] w-1 border-r border-[rgb(75,75,75,0.7)]" />
                 </span>
 
                 <Tooltip
@@ -413,8 +420,10 @@ export default defineComponent({
                   <label
                     :for="id"
                     tabindex="0"
+                    role="button"
                     class="flex-centered overlay-btn cursor-pointer"
                     v-on="events"
+                    @keydown.space="$event.currentTarget.click()"
                   >
                     <PIcon source="ReplaceMajor" class="fill-white" />
                   </label>
@@ -445,6 +454,6 @@ export default defineComponent({
 
 <style scoped lang="postcss">
 .overlay-btn {
-  @apply transition-opacity opacity-70 hover:opacity-90 active:opacity-80 focus:opacity-100 h-full w-50 outline-none focus:ring-2 ring-offset-0 ring-action-primary-default;
+  @apply transition-opacity opacity-70 hover:opacity-90 active:opacity-80 focus:opacity-100 h-full w-50 outline-none focus-visible:ring-2 ring-offset-0 ring-action-primary-default;
 }
 </style>

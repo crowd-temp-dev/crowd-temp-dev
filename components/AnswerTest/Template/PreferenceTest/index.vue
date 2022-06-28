@@ -81,7 +81,7 @@ export default defineComponent({
   <AnswerTestPageTransition>
     <BlankPage class="!mt-[4rem]">
       <div class="grid grid-cols-2 gap-x-38 w-full max-w-[1400px] px-[1rem]">
-        <div class="my-auto pb-16">
+        <div class="my-auto pb-64">
           <h2
             class="font-semibold mb-10"
             :class="{ 'shake-anim': addTitleShake }"
@@ -104,7 +104,7 @@ export default defineComponent({
         <AnswerTestPageTransition>
           <div
             :key="$route.fullPath"
-            class="mt-198 w-fit h-fit"
+            class="mt-198 w-fit h-fit sticky top-[calc(198px+4rem)]"
             v-on="
               noneSelected
                 ? {
