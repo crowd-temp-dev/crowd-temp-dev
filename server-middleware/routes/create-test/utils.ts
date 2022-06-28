@@ -92,7 +92,7 @@ export const formSchema = {
     task: Joi.string().max(255).required(),
     cards: Joi.array().min(2).max(50).items(Joi.string()).required(),
     categories: Joi.array().min(2).max(50).items(Joi.string()).required(),
-    followUpQuestions,
+    followUpQuestions: followUpQuestions.min(0),
   } as Record<keyof CreateTestForm['CardSorting']['0'], any>),
 
   DesignSurvey: Joi.object({
@@ -138,5 +138,6 @@ export const formSchema = {
   CustomMessage: Joi.object({
     id: uuidv4.required(),
     message: Joi.string().required(),
+    title: Joi.string().required(),
   } as Record<keyof CreateTestForm['CustomMessage']['0'], any>),
 } as Record<keyof CreateTestForm, any>

@@ -9,6 +9,12 @@ import {
   Sequelize,
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
+import { CreateTestTypes } from '~/types'
+
+interface Answer {
+  type: CreateTestTypes
+  questions: Record<string, any[]>
+}
 
 export class TestAnswer extends Model<
   InferAttributes<TestAnswer>,
@@ -18,7 +24,7 @@ export class TestAnswer extends Model<
   declare userId: string
   declare username: string
   declare testId: string
-  declare answers: CreationOptional<Record<`${number}${string}`, any>[]>
+  declare answers: CreationOptional<Record<`${number}`, Answer>>
   declare done: CreationOptional<boolean>
 }
 
@@ -48,14 +54,14 @@ export default function initPrototypeEvaluation(DB: Sequelize) {
       },
       answers: {
         type: DataTypes.JSON(),
-        defaultValue: () => [],
+        defaultValue: () => ({}),
         allowNull: false,
       },
       done: {
         type: DataTypes.BOOLEAN(),
         allowNull: false,
-        defaultValue: false
-      }
+        defaultValue: false,
+      },
     },
     {
       sequelize: DB,

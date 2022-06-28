@@ -50,6 +50,7 @@ export default defineComponent({
       :question-id="state.id"
       :root-number="rootNumber"
       class="mt-[-20px]"
+      :min-length="0"
     />
   </Section>
 </template>

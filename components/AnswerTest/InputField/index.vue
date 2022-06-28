@@ -162,6 +162,7 @@ export default defineComponent({
         })
         ;(formElement.elements[0] as HTMLElement).focus()
       } else {
+        
         await root.$store.dispatch(
           'answer-test/answerQuestion',
           getAppendedValue(

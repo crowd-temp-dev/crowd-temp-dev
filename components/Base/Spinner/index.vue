@@ -23,14 +23,15 @@ export default defineComponent({
 <style lang="postcss" scoped>
 @keyframes base-spinnner-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translateZ(0);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg) translateZ(0);
   }
 }
 
 .spin {
   animation: base-spinnner-spin 550ms linear infinite;
+  will-change: transform;
 }
 </style>

@@ -18,6 +18,7 @@ export class CustomMessage extends Model<
   declare createdBy: string
   declare testId: string
   declare index: number
+  declare title: string
   declare message: string
 }
 
@@ -44,6 +45,10 @@ export default function initCustomMessage(DB: Sequelize) {
       },
       createdBy: {
         ...Uuidv4,
+        allowNull: false,
+      },
+      title: {
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       message: {

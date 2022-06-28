@@ -52,14 +52,12 @@ export default defineComponent({
         <p
           class="font-sf-pro-display text-display-small text-text-default mb-8"
         >
-          <strong> Custom message Title </strong>
+          <strong> {{ currentSection.title }} </strong>
         </p>
 
-        <p class="text-[#202123]">
+        <p class="text-[#202123] text-center">
           {{ currentSection.message }}
         </p>
-
-        <p class="mb-16">Pay attention and answer the follow-up question</p>
 
         <FormLayout
           v-slot="{ loading }"

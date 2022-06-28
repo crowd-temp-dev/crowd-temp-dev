@@ -1,5 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, ref, onMounted, watch } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  ref,
+  onMounted,
+  watch,
+} from '@vue/composition-api'
 import type { Placement } from '@popperjs/core'
 
 import ComboBox from '../ComboBox/index.vue'
@@ -81,17 +87,16 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    hidePreview: Boolean,
   },
   setup(_props, { emit }) {
     const triggerRefSelector = ref(uid())
 
     const getId = computed(() => _props.id || uid('select-'))
 
-    const props= computed(()=>_props)
+    const props = computed(() => _props)
 
-    const manualModel = ref(
-      _props.mandatory ? _props.value : ''
-    )
+    const manualModel = ref(_props.mandatory ? _props.value : '')
 
     const contentRef = ref<HTMLElement | null>(null)
 
@@ -287,15 +292,18 @@ export default defineComponent({
       })
     }
 
-    watch(() => props.value.options, (nv) => {
-      if (!nv.find(option => option.value === modelSync.value)) {
-        modelSync.value = ''
+    watch(
+      () => props.value.options,
+      (nv) => {
+        if (!nv.find((option) => option.value === modelSync.value)) {
+          modelSync.value = ''
+        }
       }
-    })
+    )
 
     onMounted(() => {
-      if (_props.mandatory && !modelSync.value) {        
-        modelSync.value = _props.value         
+      if (_props.mandatory && !modelSync.value) {
+        modelSync.value = _props.value
       }
     })
 
@@ -361,10 +369,12 @@ export default defineComponent({
             }"
             @keydown="(evt) => labelOnKeydown(evt, active, open, close)"
           >
-            <span class="flex-grow relative">
+            <span class="flex-grow relative h-full w-full flex items-center">
               <slot v-if="getLabel" name="prepend" />
 
-              {{ getLabel }}
+              <slot name="preview">
+                {{ getLabel }}
+              </slot>
 
               <slot v-if="getLabel" name="append" />
 

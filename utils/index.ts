@@ -474,6 +474,7 @@ export const newTestConstructor = (
 
     ...addPaths(type === 'CustomMessage', {
       message: '',
+      title: '',
     }),
 
     ...addPaths(type === 'PreferenceTest', {
@@ -764,3 +765,6 @@ export const sortObject = (
     })
   )
 }
+
+export const generateShareLink = (link: string) =>
+  process.client ? `${location.origin}/answer-test/${link}/` : ''

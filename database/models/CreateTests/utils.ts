@@ -32,15 +32,25 @@ type QuestionKey = `question-${number}`
 export async function getFullTest(
   id: string,
   transaction: Transaction,
-  includeId: boolean = false
+  includeId: boolean = false,
+  matchUserId?: string,
+  testDetailsAttrs?: string[]
 ) {
   // get test, welcome screen and thank you screen
   const testDetails = await TestDetail.findByPk(id, {
-    attributes: ['description', 'name', includeId ? 'id' : undefined].filter(
-      Boolean
-    ) as string[],
+    attributes: [
+      'description',
+      'name',
+      includeId ? 'id' : undefined,
+      matchUserId ? 'createdBy' : undefined,
+      ...(testDetailsAttrs || []),
+    ].filter(Boolean) as string[],
     transaction,
   })
+
+  if (matchUserId && testDetails.createdBy !== matchUserId) {
+    throw new Error('{403} You cannot access this test!')
+  }
 
   if (testDetails) {
     const welcomeScreen =
@@ -224,10 +234,15 @@ export async function getFullTest(
 
     const customMessage = await getSection(CustomMessage, 'CustomMessage', [
       'message',
+      'title',
     ])
 
+    const getTestDetails = testDetails.get()
+
+    delete getTestDetails.createdBy
+
     const data = sortObject({
-      testDetails: testDetails.get(),
+      testDetails: getTestDetails,
       welcomeScreen,
       thankYouScreen,
       ...simpleSurvey,
@@ -238,7 +253,6 @@ export async function getFullTest(
       ...preferenceTest,
       ...prototypeEvaluation,
       ...websiteEvaluation,
-      empty: false,
     }) as unknown as CreateTestForm
 
     const indexes: (
@@ -255,6 +269,12 @@ export async function getFullTest(
         const qIndex = (key.match(/\d+$/g) || [])[0]
 
         if (qIndex) {
+          if (typeof (data[key] as Record<string, any>).file === 'string') {
+            const file = (data[key] as Record<string, any>).file
+
+            ;(data[key] as Record<string, any>).file = [file]
+          }
+
           const qIndexLetters =
             (data[key] as CreateTestFormQuestion).followUpQuestions?.map(
               (_, i) => `${qIndex}${getAlphabets(i)}` as `${number}${string}`
@@ -262,17 +282,19 @@ export async function getFullTest(
 
           const questionType = (data[key] as CreateTestFormQuestion).type
 
+          const fallbackQNumber = `${Number(qIndex)}a` as `${number}${string}`
+
           if (questionType === 'CustomMessage') {
-            indexes.push(`${Number(qIndex)}a`)
+            indexes.push(fallbackQNumber)
           } else {
-            indexes.push(`confirm-${qIndexLetters[0]}`)
+            indexes.push(`confirm-${qIndexLetters[0] || fallbackQNumber}`)
           }
 
           if (/FiveSecondsTest|CardSorting/.test(questionType)) {
-            indexes.push(`${qIndexLetters[0]}-instruction`)
+            indexes.push(`${qIndexLetters[0] || fallbackQNumber}-instruction`)
           }
 
-          indexes.push(...qIndexLetters)
+          qIndexLetters.length && indexes.push(...qIndexLetters)
         }
       }
     }
@@ -287,5 +309,6 @@ export async function getFullTest(
 
   return {
     error: true,
+    message: '',
   }
 }

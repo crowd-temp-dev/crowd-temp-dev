@@ -353,6 +353,7 @@ export default function (router: Router) {
                     testId: createTest.id,
                     id: section.id,
                     message: section.message,
+                    title: section.title
                   },
                   { transaction }
                 )

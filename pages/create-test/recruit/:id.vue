@@ -1,9 +1,9 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref, nextTick } from '@vue/composition-api'
 import LabelSwitch from '@/components/App/CreateTest/Steps/Switch/index.vue'
 import Button from '@/components/Base/Button/index.vue'
 import FadeTransition from '@/components/Base/FadeTransition/index.vue'
-import { splitPath } from '~/utils'
+import { generateShareLink, splitPath } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import { CreateTestState } from '~/store/create-test'
 import copyText from '~/utils/copyText'
@@ -112,7 +112,7 @@ export default defineComponent({
         return ''
       }
 
-      return `${location.origin}/answer-test/${testDetails.value.shareLink}/`
+      return generateShareLink(testDetails.value.shareLink)
     })
 
     const copyLink = async () => {
@@ -143,16 +143,18 @@ export default defineComponent({
       features,
       testDetails,
       testState,
-      copyLink,
-      updateFeatureSwitch,
       featureState,
       getShareLink,
+      copyLink,
+      updateFeatureSwitch,
     }
   },
 
   fetch({ store, route }) {
-    store.dispatch('create-test/setId', route.params.id).then(() => {
-      store.dispatch('create-test/getRecruit')
+    nextTick(() => {
+      store.dispatch('create-test/setId', route.params.id).then(() => {
+        store.dispatch('create-test/getRecruit')
+      })
     })
   },
 })
@@ -243,7 +245,13 @@ export default defineComponent({
 
       <div class="flex justify-center">
         <FadeTransition>
-          <Button v-if="testDetails.published" primary> View Results </Button>
+          <Button
+            v-if="testDetails.published"
+            primary
+            :to="`/create-test/view-result/${testDetails.id}`"
+          >
+            View Results
+          </Button>
 
           <Button
             v-else

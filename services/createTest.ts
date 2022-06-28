@@ -4,6 +4,7 @@ import { CreateTestRes } from '~/server-middleware/routes/create-test/createTest
 import { CreateTestForm } from '~/types/form'
 import { CreateTestState } from '~/store/create-test'
 import { UpdateTestDetailForm } from '~/server-middleware/routes/create-test/updateTestDetail'
+import { ViewResultState } from '~/store/create-test/view-result'
 
 export const CreateTest: ServiceHandler<
   Record<string, any>,
@@ -28,6 +29,20 @@ export const GetRecruit: ServiceHandler<string, CreateTestForm> = async (
   id
 ) => {
   return await axios.$get(`/create-test/recruit/${id}`, {
+    ...validateStatus,
+  })
+}
+
+// get test for /create-test/view-result/?:id
+export const GetViewResult: ServiceHandler<
+  string,
+  {
+    responses: ViewResultState['responses']
+    questions: ViewResultState['questions']
+    answers: ViewResultState['answers']
+  }
+> = async (axios, id) => {
+  return await axios.$get(`/create-test/view-result/${id}`, {
     ...validateStatus,
   })
 }

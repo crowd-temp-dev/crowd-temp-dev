@@ -53,6 +53,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    minLength: {
+      type: Number,
+      required: true,
+    },
   },
   emits: ['on-delete', 'on-duplicate'],
   setup(_props, { emit, root: { $createTestForm } }) {
@@ -101,7 +105,6 @@ export default defineComponent({
             options: ['', ''],
             addOtherAsChoice: false,
           }
-
         } else {
           delete newValue.choices
         }
@@ -223,7 +226,9 @@ export default defineComponent({
             v-model="modelSync.conditionalLogic"
             label="Add conditional Logic"
             :disabled="disableConditionalLogic"
-            :tooltip="disableConditionalLogic ? 'Add another question' : undefined"
+            :tooltip="
+              disableConditionalLogic ? 'Add another question' : undefined
+            "
           />
 
           <div class="flex items-center space-x-26">
@@ -239,7 +244,14 @@ export default defineComponent({
 
             <LabelSwitch v-model="modelSync.required" label="Required" />
 
-            <Tooltip v-slot="{ events }" :label="`Delete ${questionTitle}`">
+            <Tooltip
+              v-slot="{ events }"
+              :label="
+                disableDelete
+                  ? `Min question is ${minLength}`
+                  : `Delete ${questionTitle}`
+              "
+            >
               <span :class="{ 'cursor-pointer': !disableDelete }" v-on="events">
                 <PIcon
                   source="DeleteMajor"

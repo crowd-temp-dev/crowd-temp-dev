@@ -15,6 +15,8 @@ import Tooltip from '../Tooltip/index.vue'
 import FadeTransition from '../FadeTransition/index.vue'
 import { uid } from '~/utils'
 
+export type DrawerFrom = 'top' | 'right' | 'bottom' | 'left'
+
 export default defineComponent({
   name: 'BaseDialog',
   components: { FadeTransition, Button, Tooltip },
@@ -69,6 +71,14 @@ export default defineComponent({
     transition: {
       type: String as () => 'scale' | 'slide-y',
       default: 'scale',
+    },
+    asDrawer: {
+      type: Boolean,
+      default: false,
+    },
+    from: {
+      type: String as () => DrawerFrom,
+      default: 'right',
     },
   },
 
@@ -126,7 +136,7 @@ export default defineComponent({
       if (isFurthestDialog.value) {
         new TrapFocus({
           loop: true,
-        }).init(evt)
+        }).init(evt)        
       }
 
       emit('keydown', evt)
@@ -218,12 +228,23 @@ export default defineComponent({
         v-show="modelSync"
         v-bind="$attrs"
         class="UiDialog"
-        :class="{
-          'p-20': !fullScreen,
-          'flex-centered': centered,
-          'bg-black/50': !hideBackdrop,
-          'pointer-events-none': hideBackdrop,
-        }"
+        :class="[
+          asDrawer
+            ? [
+                'p-8',
+                {
+                  'justify-end': from === 'right',
+                },
+              ]
+            : {
+                'p-20': !fullScreen,
+                'flex-centered': centered,
+              },
+          {
+            'bg-black/50': !hideBackdrop,
+            'pointer-events-none': hideBackdrop,
+          },
+        ]"
         :style="{
           'z-index': `${(indexInDialogs || 1) + 100}`,
         }"
@@ -242,8 +263,8 @@ export default defineComponent({
               :tabindex="modelSync ? '0' : undefined"
               class="content"
               :class="[
-                transition,
                 contentClass,
+                asDrawer ? [`slide-from-${from} as-drawer`] : [transition],
                 {
                   'grid-rows-[68px,calc(100%-68px)]':
                     showHeader && !canShowFooter,
@@ -324,7 +345,7 @@ export default defineComponent({
 
 <style scoped lang="postcss">
 .UiDialog {
-  @apply fixed inset-0 w-full h-full touch-none;
+  @apply fixed inset-0 w-full h-full touch-none flex;
   --fade-enter-duration: 250ms;
 }
 
@@ -359,8 +380,21 @@ export default defineComponent({
   @apply translate-y-[-4rem];
 }
 
+.fade-transition-enter-active .content.as-drawer {
+  transition-timing-function: cubic-bezier(0.1, 0.5, 0.32, 1.1);
+}
+
+.fade-transition-enter .content.slide-from-right {
+  @apply translate-x-[40%];
+}
+
+.fade-transition-enter .content.slide-from-right,
+.fade-transition-leave-to .content.slide-from-right {
+  @apply translate-x-[40%];
+}
+
 .content {
-  @apply rounded-lg bg-surface-default shadow-5 z-1 relative outline-none max-h-full grid touch-auto overflow-hidden;
+  @apply bg-surface-default shadow-5 z-1 relative outline-none max-h-full grid touch-auto overflow-hidden rounded-lg;
 }
 
 .header {

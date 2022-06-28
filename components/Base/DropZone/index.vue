@@ -68,12 +68,23 @@ export default defineComponent({
     })
 
     const getFiles = computed(() => {
-      return modelSync.value.map((file) => ({
-        file,
-        src: URL.createObjectURL(file),
-        alt: file.name,
-        size: formatByte(file.size),
-      }))
+      return modelSync.value.map((file) => {
+        if (typeof file === 'string') {
+          return {
+            src: `/file/${file}`,
+            file: {
+              type: 'image/',
+            },
+          }
+        }
+
+        return {
+          file,
+          src: URL.createObjectURL(file),
+          alt: file.name,
+          size: formatByte(file.size),
+        }
+      })
     })
 
     const onChange = (evt: InputEvent) => {
@@ -135,6 +146,17 @@ export default defineComponent({
       },
     }))
 
+    const width = Math.min(innerWidth, 800)
+
+    const height = Math.min(innerHeight, 650)
+
+    const viewPort = {
+      width,
+      height,
+      x: innerWidth / 2 - width / 2,
+      y: innerHeight / 2 - height / 2 - 40,
+    }
+
     return {
       modelSync,
       dragEnter,
@@ -142,6 +164,7 @@ export default defineComponent({
       inputAttrs,
       input,
       rootId,
+      viewPort,
       removeFile,
       openInput,
       onDrop,
@@ -157,6 +180,7 @@ export default defineComponent({
     <FLIPContainer
       tag="div"
       :trigger-view-port="`#${rootId}-preview`"
+      :view-port="viewPort"
       :disabled="disablePreview"
     >
       <template #trigger="{ open, active }">
@@ -224,7 +248,6 @@ export default defineComponent({
                   >
                     <template #default="{ events }">
                       <div
-                        :id="`${rootId}-preview`"
                         class="w-full h-full bg-surface-default pointer-events-auto rounded border border-divider flex-centered relative group cursor-default overflow-hidden shadow-1 transition-opacity"
                         :class="{
                           'opacity-0': active,
@@ -232,7 +255,10 @@ export default defineComponent({
                         v-on="events"
                         @click.stop
                       >
-                        <div class="w-full h-full flex-centered">
+                        <div
+                          :id="`${rootId}-preview`"
+                          class="w-full h-full flex-centered"
+                        >
                           <img
                             v-if="file.file.type.startsWith('image/')"
                             :src="file.src"
@@ -264,7 +290,9 @@ export default defineComponent({
 
                     <template #content>
                       <div class="grid gap-y-8">
-                        <p><strong>Name:</strong> {{ file.alt }}</p>
+                        <p>
+                          <strong>Name:</strong> {{ file.alt || 'From server' }}
+                        </p>
 
                         <p><strong>Type:</strong> {{ file.file.type }}</p>
 
@@ -320,13 +348,13 @@ export default defineComponent({
 
       <template #prepend="{ active }">
         <FadeTransition>
-          <div v-if="active" class="bg-black/90 fixed inset-0" />
+          <div v-if="active" class="bg-black/95 fixed inset-0" />
         </FadeTransition>
       </template>
 
-      <template #content="{ close, overlayEntered, active }">
-        <div class="w-full h-full">
-          <div class="w-full h-[calc(100%-80px)] flex-centered">
+      <template #content="{ active }">
+        <div class="w-full h-full flex-centered">
+          <div class="w-full h-[calc(100%-64px)] flex-centered">
             <div
               class="max-w-full h-full w-full max-h-[650px] p-10 rounded overflow-hidden transition-opacity"
               :class="{ 'opacity-0 duration-[250ms]': !active }"
@@ -336,18 +364,25 @@ export default defineComponent({
                 v-if="getFiles[0]"
                 :src="(getFiles[0] || {}).src"
                 :alt="(getFiles[0] || {}).alt"
-                class="w-full h-full block object-contain rounded"
+                class="w-full h-full block rounded object-contain"
               />
             </div>
           </div>
+        </div>
+      </template>
 
+      <template #append="{ close, overlayEntered, active }">
+        <div
+          v-if="active"
+          class="pointer-events-none fixed inset-0 flex items-end"
+        >
           <div class="w-full h-80 flex-centered z-2 relative">
             <div
               class="transition-[opacity,transform]"
               :class="{ 'opacity-0 translate-y-[100%]': !overlayEntered }"
             >
               <div
-                class="rounded-lg h-50 bg-[rgb(50,50,50,0.9)] border border-[rgb(75,75,75,0.7)] items-center flex space-x-4"
+                class="rounded-lg h-50 bg-[rgb(50,50,50,0.9)] border border-[rgb(75,75,75,0.7)] items-center flex space-x-4 pointer-events-auto"
                 @click.stop
               >
                 <span class="flex items-center h-full">
@@ -367,7 +402,8 @@ export default defineComponent({
                     <template #content>
                       <div class="grid gap-y-8">
                         <p>
-                          <strong>Name:</strong> {{ (getFiles[0] || {}).alt }}
+                          <strong>Name:</strong>
+                          {{ (getFiles[0] || {}).alt || 'From server' }}
                         </p>
 
                         <p>

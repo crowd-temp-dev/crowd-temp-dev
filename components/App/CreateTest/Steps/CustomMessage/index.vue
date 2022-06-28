@@ -20,12 +20,16 @@ export default defineComponent({
       Want to add special instructions before a test type? Add it here
     </p>
 
-    <TextField
-      v-model="state.message"
-      multiline
-      label="Your message or instructions"
-      :min-height="72"
-      required
-    />
+    <div class="grid gap-y-20">
+      <TextField v-model="state.title" label="Title" required />
+
+      <TextField
+        v-model="state.message"
+        multiline
+        label="Your message or instructions"
+        :min-height="72"
+        required
+      />
+    </div>
   </Section>
 </template>

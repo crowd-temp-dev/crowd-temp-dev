@@ -8,7 +8,7 @@ import eventKey from '~/utils/eventKey'
 
 const enterTransition = {
   duration: 250,
-  ease: 'cubic-bezier(0.1, 0.5, 0.32, 1.05)',
+  ease: 'cubic-bezier(0.1, 0.5, 0.32, 1.075)',
   property: 'all',
 }
 

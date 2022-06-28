@@ -5,9 +5,10 @@ import DB from '../../../database'
 import { AnswerTestUser } from '../../../database/models/AnswerTest/User'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
-import { getAlphabetIndex } from '../../../utils'
+import { getAlphabetIndex, sortObject } from '../../../utils'
 import { getCurrentTestIndex } from '../../utils/answerTest'
 import getFullTestFromSession from './utils'
+import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 
 export interface GetUserRes {
   sendTo?: string
@@ -124,7 +125,7 @@ export default function (router: Router) {
                 const indexes = res.get('qIndexes')
 
                 const values = reqValues.filter(
-                  (x, i) => typeof x === 'string' || i < reqValues.length - 2
+                  (x, i) => typeof x === 'string' || i >= reqValues.length - 2
                 ) as string[]
 
                 const appendedValues =
@@ -144,32 +145,68 @@ export default function (router: Router) {
                     parseIndexes.indexOf(user.currentIndex[testId]) + 1
                   ] || 'done'
 
-                const saveProgressAndSendRes = async (_ans: any) => {
-                  const ans = [_ans].flat()
+                const saveProgressAndSendRes = async (
+                  _ans: any,
+                  followUpQuestion?: QuestionModelValue
+                ) => {
+                  const followUpQuestionType = followUpQuestion?.type
+                  const followUpQuestionId = followUpQuestion.id
 
-                  const skip = ans[0] === skipQuestion
+                  if (followUpQuestionType) {
+                    const ans = [_ans].flat()
 
-                  const answers = skip
-                    ? {}
-                    : {
-                        answers: {
-                          ...answer.answers,
-                          [currentIndex]: ans,
-                          // preference test answer preference could change on any question
-                          ...(currentQuestion.type === 'PreferenceTest'
-                            ? {
-                                [`${currentIndex}-file`]: appendedValues[0],
-                              }
-                            : {}),
-                        },
-                      }
+                    const skip = ans[0] === skipQuestion
 
-                  await answer.update({
-                    ...answers,
-                    done: nextIndexValue === 'done',
-                  })
+                    const qIndex = Number(currentIndex.replace(/[a-zA-Z]/, ''))
 
-                  await answer.save({ transaction })
+                    const qAlphabet = (
+                      (currentIndex.match(/\d+[a-z]/g) || [])[0] || 'a'
+                    ).replace(/\d/g, '')
+
+                    const preferenceTest =
+                      currentQuestion.type === 'PreferenceTest' &&
+                      typeof appendedValues[0] === 'object'
+                        ? {
+                            preference: appendedValues[0],
+                          }
+                        : {}
+
+                    const followUpQuestions = followUpQuestionType
+                      ? {
+                          questions: sortObject({
+                            ...((answer.answers[`${qIndex}`] || {}).questions ||
+                              {}),
+                            [qAlphabet]: {
+                              type: followUpQuestionType,
+                              id: followUpQuestionId,
+                              ...(skip ? { skip } : { value: ans }),
+                            },
+                          }),
+                        }
+                      : {}
+
+                    const qAnswer = {
+                      type: currentQuestion.type,
+                      ...preferenceTest,
+                      ...followUpQuestions,
+                    }
+
+                    await answer.update({
+                      answers: sortObject({
+                        ...answer.answers,
+                        [`${qIndex}`]: qAnswer,
+                      }),
+                      done: nextIndexValue === 'done',
+                    })
+
+                    await answer.save({ transaction })
+                  } else {
+                    await answer.update({
+                      done: nextIndexValue === 'done',
+                    })
+
+                    await answer.save({ transaction })
+                  }
 
                   await user.update({
                     currentIndex: {
@@ -198,8 +235,6 @@ export default function (router: Router) {
                     throw new Error('{404} Indexes not found! Report issue!')
                   }
 
-                  // check custom message
-
                   // check short text or long text
                   if (
                     ['short-text', 'long-text'].includes(followUpQuestion.type)
@@ -209,14 +244,14 @@ export default function (router: Router) {
                       values[0].length <=
                       (followUpQuestion.type === 'short-text' ? 255 : 999)
                     ) {
-                      await saveProgressAndSendRes(values[0])
+                      await saveProgressAndSendRes(values[0], followUpQuestion)
                     } else {
                       throw new Error('{400} Your answer is too long!')
                     }
                   }
 
                   // check multichoice or checkbox
-                  if (
+                  else if (
                     ['multi-choice', 'checkbox'].includes(followUpQuestion.type)
                   ) {
                     if (values.some((value) => value.length > 255)) {
@@ -267,11 +302,11 @@ export default function (router: Router) {
                       x.replace(otherChoicePrefix, '')
                     )
 
-                    await saveProgressAndSendRes(filterValues)
+                    await saveProgressAndSendRes(filterValues, followUpQuestion)
                   }
 
                   // check linear-scale
-                  if (followUpQuestion.type === 'linear-scale') {
+                  else if (followUpQuestion.type === 'linear-scale') {
                     if (values.length !== 1) {
                       throw new Error('{400} Length of value must be 1')
                     }
@@ -288,10 +323,13 @@ export default function (router: Router) {
                       throw new Error('{400} Invalid value')
                     }
 
-                    await saveProgressAndSendRes(numberValue.toString())
+                    await saveProgressAndSendRes(
+                      numberValue.toString(),
+                      followUpQuestion
+                    )
+                  } else {
+                    throw new Error('{400} Feature not implemented!')
                   }
-
-                  throw new Error('{400} Feature not implemented!')
                 } else if (currentQuestion.type === 'CustomMessage') {
                   // value must be true
                   const value = Boolean(Number(values[0]))

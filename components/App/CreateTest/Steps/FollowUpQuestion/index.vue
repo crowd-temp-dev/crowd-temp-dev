@@ -34,8 +34,8 @@ export default defineComponent({
     },
     minLength: {
       type: [String, Number] as unknown as () => LikeNumber,
-      default: 0
-    }
+      default: 1,
+    },
   },
   setup(_props, { emit }) {
     const id = ref(uid())
@@ -71,18 +71,18 @@ export default defineComponent({
 
           newInput.scrollIntoView({
             behavior: 'smooth',
-            block: 'center'
+            block: 'center',
           })
         }
       })
     }
 
-    const duplicate = async (index: number) => {      
+    const duplicate = async (index: number) => {
       modelSync.value = [
         ...modelSync.value.slice(0, index),
         {
           ...modelSync.value[index],
-          id: uuidv4()
+          id: uuidv4(),
         },
         ...modelSync.value.slice(index),
       ] as QuestionModelValue[]
@@ -101,7 +101,7 @@ export default defineComponent({
 
           newInput.scrollIntoView({
             behavior: 'smooth',
-            block: 'center'
+            block: 'center',
           })
         }
       })
@@ -119,7 +119,7 @@ export default defineComponent({
       addQuestion,
       questionAdded,
       removeQuestion,
-      duplicate
+      duplicate,
     }
   },
 })
@@ -156,6 +156,7 @@ export default defineComponent({
           :appear="questionAdded"
           :disable-drag="modelSync.length < 2"
           :disable-delete="modelSync.length <= Number(minLength)"
+          :min-length="minLength"
           @on-delete="removeQuestion(i)"
           @on-duplicate="duplicate(i)"
         />
@@ -166,10 +167,10 @@ export default defineComponent({
 
     <p
       v-else
-      class="ml-30 text-text-subdued font-semibold grid grid-flow-col items-center justify-start"
+      class="ml-30 text-border-critical-default font-semibold grid grid-flow-col items-center justify-start"
     >
       <PIcon source="AlertMinor" class="fill-icon mr-8" />
-      Nothing to show
+      No follow up question
     </p>
 
     <div class="flex justify-end mt-20">

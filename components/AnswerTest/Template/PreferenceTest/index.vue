@@ -61,7 +61,14 @@ export default defineComponent({
     const selectedFile = computed(() => {
       const file = files.value[selected.value]
 
-      return file ? [file] : undefined
+      return file
+        ? [
+            {
+              file,
+              index: files.value.indexOf(file),
+            },
+          ]
+        : undefined
     })
 
     return {

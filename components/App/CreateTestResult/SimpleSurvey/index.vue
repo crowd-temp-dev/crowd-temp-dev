@@ -5,14 +5,14 @@ import Question from '../Question/index.vue'
 import viewResultTestType from '~/mixins/view-result-test-type'
 
 export default defineComponent({
-  name: 'AppCreateTestResultDesignSurvey',
+  name: 'AppCreateTestResultSimpleSurvey',
   components: { Question, QuestionSection },
-  mixins: [viewResultTestType]
+  mixins: [viewResultTestType],
 })
 </script>
 
 <template>
-  <QuestionSection :title="`${numbering}. Design Survey`">
+  <QuestionSection :title="`${numbering}. Simple Survey`">
     <Question
       v-for="(question, index) in followUpQuestions"
       :key="index"

@@ -186,7 +186,7 @@ export default defineComponent({
     const onSubmit = async (evt: Event) => {
       if (!root.$breakpoint) {
         return
-      }
+      }      
 
       emit('submit', evt)
 

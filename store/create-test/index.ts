@@ -2,7 +2,8 @@ import Vue from 'vue'
 // eslint-disable-next-line import/named
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { nextTick } from '@vue/composition-api'
-import { RootState } from '.'
+import { RootState } from '..'
+import viewResult from './view-result'
 import {
   formBody,
   getObjectPathValue,
@@ -119,7 +120,7 @@ const mutations: MutationTree<CreateTestState> = {
   },
 
   updateForm(
-    state: CreateTestState,
+    state,
     payload: {
       path: string
       value: any
@@ -181,20 +182,20 @@ const mutations: MutationTree<CreateTestState> = {
     state.loading = false
   },
 
-  resetForm(state: CreateTestState) {
+  resetForm(state) {
     state.form = freshForm()
     state.details.published = false
     state.details = {
       id: null,
-      published: false
-    }    
+      published: false,
+    }
   },
 
-  setLoading(state: CreateTestState, val?: boolean) {
+  setLoading(state, val?: boolean) {
     state.loading = typeof val === 'boolean' ? val : true
   },
 
-  setSubmitting(state: CreateTestState, val: boolean) {
+  setSubmitting(state, val: boolean) {
     state.submitting = val
   },
 }
@@ -339,7 +340,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
 
               return [key, value]
             })
-        )        
+        )
 
         formatForm.set('fields', JSON.stringify(formFields))
       })
@@ -359,13 +360,11 @@ const actions: ActionTree<CreateTestState, RootState> = {
         return {}
       }
 
-      console.log(formatForm)
-      
       const { data, error, message } = await CreateTest(app.$axios, formatForm)
 
       commit('setSubmitting', false)
 
-      app.$nextTick(() => {        
+      app.$nextTick(() => {
         if (!error) {
           this.$router.push(`/create-test/recruit/${state.details.id}`)
 
@@ -484,4 +483,7 @@ export default {
   mutations,
   actions,
   getters,
+  modules: {
+    'view-result': viewResult,
+  },
 }

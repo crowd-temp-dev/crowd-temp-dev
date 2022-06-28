@@ -79,7 +79,13 @@ export default function (router: Router) {
                   transaction,
                 })
 
-                await Recover.create(user.get(), { transaction })
+                await Recover.create(
+                  {
+                    ...user.get(),
+                    session: {},
+                  },
+                  { transaction }
+                )
 
                 await user.destroy({ transaction })
               } catch (err) {

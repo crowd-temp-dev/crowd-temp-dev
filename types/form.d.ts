@@ -75,6 +75,7 @@ export interface CreateTestForm {
   CustomMessage: Question<{
     id: string
     message: string
+    title: string
   }>
 }
 
@@ -105,6 +106,7 @@ export interface CreateTestFormQuestion {
   prototypeProvider: string
 
   // for custom message
+  title?: string
   message?: string
 
   // for preference test

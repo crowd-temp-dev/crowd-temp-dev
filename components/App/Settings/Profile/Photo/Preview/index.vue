@@ -60,7 +60,7 @@ export default defineComponent({
 
       <template #prepend="{ active }">
         <FadeTransition>
-          <div v-if="active" class="bg-black/90 fixed inset-0" />
+          <div v-if="active" class="bg-black/95 fixed inset-0" />
         </FadeTransition>
       </template>
 
