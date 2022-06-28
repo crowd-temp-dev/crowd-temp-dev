@@ -94,7 +94,7 @@ export default defineComponent({
           participantChoseValue,
           valuePercent: `${
             participantChoseValue
-              ? ((totalParticipants / participantChoseValue) * 100).toFixed(0)
+              ? ((participantChoseValue / totalParticipants) * 100).toFixed(0)
               : '0'
           }%`,
         }
