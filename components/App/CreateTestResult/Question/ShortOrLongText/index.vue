@@ -47,17 +47,6 @@ export default defineComponent({
       ]
     })
 
-    const toggleFavourite = async (index: number) => {
-      const { number, alpha } = qNumberAndAlpha.value
-
-      await root.$store.dispatch('create-test/view-result/updateAnser', {
-        followUpAlpha: alpha,
-        qIndex: Number(number),
-        userIndex: index,
-        values: { favourite: !answers.value[index].favourite },
-      } as UpdateAnswerPayload)
-    }
-
     const answers = computed(() => {
       const { number, alpha } = qNumberAndAlpha.value
 
@@ -69,7 +58,19 @@ export default defineComponent({
           return {
             ...answer,
             username: user.username,
-            toggleFavourite: async () => await toggleFavourite(index),
+            toggleFavourite: async () => {
+              const { number, alpha } = qNumberAndAlpha.value
+
+              await root.$store.dispatch(
+                'create-test/view-result/updateAnser',
+                {
+                  followUpAlpha: alpha,
+                  qIndex: Number(number),
+                  userIndex: index,
+                  values: { favourite: !answer.favourite },
+                } as UpdateAnswerPayload
+              )
+            },
           }
         })
         .filter((val) => {
