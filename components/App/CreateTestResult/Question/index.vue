@@ -22,7 +22,6 @@ export default defineComponent({
   components: {
     DialogButton,
     Button,
-    SearchField,
     FadeTransition,
     Id,
     Choices,
@@ -137,15 +136,20 @@ export default defineComponent({
           ]
         )
 
-      const questionHeader = () => [
-        h('p', { staticClass: 'mb-20' }, question.value.title),
+      const questionHeader = (key: string) => [
+        h(
+          'p',
+          { key: `${key}-main`, staticClass: 'mb-20' },
+          question.value.title
+        ),
 
         div(
           {
+            key: `${key}-content`,
             staticClass: 'flex items-center justify-between space-x-12',
           },
           [
-            h('SearchField', {
+            h(SearchField, {
               props: {
                 placeholder: 'Search responses',
                 outlined: true,
@@ -227,7 +231,7 @@ export default defineComponent({
       return div(null, [
         questionHeading('main-heading'),
 
-        questionHeader(),
+        questionHeader('main-header'),
 
         h('FadeTransition', [
           !answers.value.length
@@ -285,7 +289,7 @@ export default defineComponent({
                                     questionHeading('dialog-heading'),
                                   dialog: () => [
                                     div({ staticClass: 'min-w-[768px]' }, [
-                                      questionHeader(),
+                                      questionHeader('dialog-header'),
 
                                       AnswersComponent('dialog'),
                                     ]),
