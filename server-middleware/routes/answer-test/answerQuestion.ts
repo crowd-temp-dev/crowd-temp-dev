@@ -150,7 +150,7 @@ export default function (router: Router) {
                   followUpQuestion?: QuestionModelValue
                 ) => {
                   const followUpQuestionType = followUpQuestion?.type
-                  const followUpQuestionId = followUpQuestion.id
+                  // const followUpQuestionId = followUpQuestion.id
 
                   if (followUpQuestionType) {
                     const ans = [_ans].flat()
@@ -178,7 +178,7 @@ export default function (router: Router) {
                               {}),
                             [qAlphabet]: {
                               type: followUpQuestionType,
-                              id: followUpQuestionId,
+                              // id: followUpQuestionId,
                               ...(skip ? { skip } : { value: ans }),
                             },
                           }),
@@ -310,21 +310,24 @@ export default function (router: Router) {
                     if (values.length !== 1) {
                       throw new Error('{400} Length of value must be 1')
                     }
+
                     // check to see value is valid
                     const numberValue = Number(values[0])
 
-                    const { linearScale } = followUpQuestion
+                    if (reqValues.slice(-1)[0] !== skipQuestion) {
+                      const { linearScale } = followUpQuestion
 
-                    if (
-                      !numberValue ||
-                      numberValue < Number(linearScale.start.value) ||
-                      numberValue > Number(linearScale.end.value)
-                    ) {
-                      throw new Error('{400} Invalid value')
+                      if (
+                        !numberValue ||
+                        numberValue < Number(linearScale.start.value) ||
+                        numberValue > Number(linearScale.end.value)
+                      ) {
+                        throw new Error('{400} Invalid value')
+                      }
                     }
 
                     await saveProgressAndSendRes(
-                      numberValue.toString(),
+                      skipQuestion ? [skipQuestion] : numberValue.toString(),
                       followUpQuestion
                     )
                   } else {

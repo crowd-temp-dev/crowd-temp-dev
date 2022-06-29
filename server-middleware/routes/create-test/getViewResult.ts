@@ -54,7 +54,7 @@ export default function (router: Router) {
             where: {
               testId: id,
             },
-            attributes: ['username', 'done', 'answers'],
+            attributes: ['username', 'done', 'answers', 'id'],
             transaction,
           })
 

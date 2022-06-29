@@ -2,15 +2,17 @@
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from '..'
 import { CreateTestForm } from '.'
-import { GetViewResult } from '~/services/createTest'
+import { GetViewResult, UpdateResultAnswer } from '~/services/createTest'
 import { CreateTestTypes } from '~/types'
 import { showToasts } from '~/utils/showToast'
+import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
 
 export interface QuestionAnswer {
   id: string
   type: string
   value?: any[]
   skip?: boolean
+  loading?: boolean
 }
 
 export interface TestAnswer {
@@ -25,6 +27,7 @@ export interface TestAnswer {
 export interface TestSuite {
   username: string
   done: boolean
+  id: string
   answers: Record<`${number}`, TestAnswer>
 }
 
@@ -35,6 +38,10 @@ export interface ViewResultState {
   questions: CreateTestForm
   answers: TestSuite[]
   testDetails: CreateTestForm['testDetails']
+}
+
+export interface UpdateAnswerPayload extends UpdateResultAnswerForm {
+  userIndex: number
 }
 
 const state = (): ViewResultState => ({
@@ -70,6 +77,17 @@ const mutations: MutationTree<ViewResultState> = {
 
     state.loading = false
   },
+  updateAnswer(state, payload: UpdateAnswerPayload) {
+    const { qIndex, userIndex, followUpAlpha, values } = payload
+
+    const answer =
+      state.answers[userIndex].answers[qIndex].questions[followUpAlpha]
+
+    state.answers[userIndex].answers[qIndex].questions[followUpAlpha] = {
+      ...answer,
+      ...values,
+    }
+  },
 }
 
 const actions: ActionTree<ViewResultState, RootState> = {
@@ -100,7 +118,52 @@ const actions: ActionTree<ViewResultState, RootState> = {
 
     commit('setId', paramId)
 
+    app.$store.commit('create-test/setId', paramId)
+
     return { data, message, status, error }
+  },
+
+  async updateAnser({ commit, state }, payload: UpdateAnswerPayload) {
+    const { qIndex, userIndex, followUpAlpha, values } = payload
+
+    const toggleLoading = (loading: boolean) => {
+      commit('updateAnswer', {
+        qIndex,
+        userIndex,
+        followUpAlpha,
+        values: { loading },
+      })
+    }
+
+    toggleLoading(true)
+
+    const { app } = this.$router
+
+    const user = state.answers[userIndex]
+
+    const { data, error, message } = await UpdateResultAnswer(app.$axios, {
+      qIndex,
+      followUpAlpha,
+      id: user.id,
+      values,
+    })
+
+    toggleLoading(false)
+
+    await app.$nextTick()
+
+    if (data) {
+      commit('updateAnswer', {
+        qIndex,
+        userIndex,
+        followUpAlpha,
+        values,
+      })
+    }
+
+    showToasts(app.$pToast, message)
+
+    return { data, error, message }
   },
 }
 

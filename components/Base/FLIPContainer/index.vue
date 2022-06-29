@@ -308,24 +308,30 @@ export default defineComponent({
             }
 
         return {
-          height: overlayHeight,
-          width: `${viewPort.width}px`,
-          top: overlayTop,
-          left: overlayLeft,
-          visibility: 'hidden',
-          ...borderRadius,
-          transform: `scale3d(${scaleFromX},${scaleFromY},1) translate3d(${translateX},${translateY},0)`,
-          transformOrigin: `${translateX} ${translateY}`,
+          styles: {
+            height: overlayHeight,
+            width: `${viewPort.width}px`,
+            top: overlayTop,
+            left: overlayLeft,
+            visibility: 'hidden',
+            ...borderRadius,
+            transform: `scale3d(${scaleFromX},${scaleFromY},1) translate3d(${translateX},${translateY},0)`,
+            transformOrigin: `${translateX} ${translateY}`,
+          },
+          triggerRef,
         }
       }
 
       return {}
     },
     async openOverlay() {
-      const triggerRef = this.triggerRef()
+      const { triggerRef, styles: fromStyle } = this.getFromStyle()
 
       if (triggerRef) {
-        const fromStyle = this.getFromStyle()
+        triggerRef.scrollIntoViewIfNeeded({
+          behavior: 'smooth',
+          block: 'center',
+        })
 
         this.overlayStyles = {
           ...fromStyle,
@@ -370,7 +376,7 @@ export default defineComponent({
       }
     },
     async closeOverlay() {
-      const triggerRef = this.triggerRef()
+      const { triggerRef, styles: toStyles } = this.getFromStyle()
 
       if (triggerRef && this.$refs.overlayRef) {
         this.overlayEntered = false
@@ -383,7 +389,7 @@ export default defineComponent({
         const leaveDuration = transition.duration
 
         this.overlayStyles = {
-          ...this.getFromStyle(),
+          ...toStyles,
           visibility: '',
           transition: `${leaveDuration}ms ${transition.ease}`,
           transitionProperty: transition.property,

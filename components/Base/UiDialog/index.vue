@@ -367,7 +367,8 @@ export default defineComponent({
   @apply scale-[0.95];
 }
 
-.fade-transition-enter-active .content.content.slide-y {
+.fade-transition-enter-active .content.content.slide-y,
+.fade-transition-enter-active .content.content.slide-y-reverse {
   transition-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
 }
 
@@ -378,6 +379,15 @@ export default defineComponent({
 .fade-transition-enter .content.slide-y,
 .fade-transition-leave-to .content.slide-y {
   @apply translate-y-[-4rem];
+}
+
+.fade-transition-enter .content.slide-y-reverse {
+  @apply translate-y-[4rem];
+}
+
+.fade-transition-enter .content.slide-y-reverse,
+.fade-transition-leave-to .content.slide-y-reverse {
+  @apply translate-y-[4rem];
 }
 
 .fade-transition-enter-active .content.as-drawer {
@@ -398,7 +408,7 @@ export default defineComponent({
 }
 
 .header {
-  @apply h-68 p-20 pr-12 flex items-center justify-between min-w-[240px] space-x-12 shadow-divide-bottom;
+  @apply h-68 p-20 pr-16 flex items-center justify-between min-w-[240px] space-x-12 shadow-divide-bottom;
 }
 
 .body {

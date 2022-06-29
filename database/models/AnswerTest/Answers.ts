@@ -10,10 +10,23 @@ import {
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
 import { CreateTestTypes } from '~/types'
+import { SelectValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 
-interface Answer {
+export interface Answer {
   type: CreateTestTypes
-  questions: Record<string, any[]>
+  preference?: {
+    file: string
+    index: number
+  }
+  questions: Record<
+    string,
+    {
+      type: SelectValue
+      skip?: boolean
+      value?: boolean
+      favourite?: boolean
+    }
+  >
 }
 
 export class TestAnswer extends Model<

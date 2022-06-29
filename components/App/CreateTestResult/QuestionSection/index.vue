@@ -22,7 +22,11 @@ export default defineComponent({
         {{ title }}
       </h2>
 
-      <PreviewQuestion />
+      <div class="flex space-x-20 items-center">
+        <slot name="header-action" />
+
+        <PreviewQuestion />
+      </div>
     </div>
 
     <hr class="mb-20" />

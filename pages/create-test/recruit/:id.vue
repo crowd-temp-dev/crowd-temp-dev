@@ -180,7 +180,6 @@ export default defineComponent({
         >
           <h5 class="text-text-subdued text-[13px] leading-[20px] my-10">
             You have {{ 0 }} response{{ '' }}
-            <!-- You have (0 | 1) response, You have 2 responses -->
           </h5>
 
           <div class="flex items-center space-x-12">

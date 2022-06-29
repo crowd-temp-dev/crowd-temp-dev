@@ -7,14 +7,14 @@ import DialogButton from '~/components/Base/DialogButton/index.vue'
 import { ViewResultState } from '~/store/create-test/view-result'
 
 export default defineComponent({
-  name: 'AppCreateTestResultDesignSurvey',
+  name: 'AppCreateTestResultFiveSecondsTest',
   components: { Question, QuestionSection, DialogButton },
   mixins: [viewResultTestType],
   setup(_props, { root }) {
     const props = computed(() => _props as Record<string, any>)
 
     const sectionTitle = computed(() => {
-      return `${props.value.numbering}. Design Survey`
+      return `${props.value.numbering}. Five Seconds Test`
     })
 
     const mediaFile = computed(() => {

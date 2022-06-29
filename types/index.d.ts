@@ -1,3 +1,5 @@
+import { VNodeData, VNodeChildrenArrayContents, VNode } from 'vue'
+import { ScopedSlot } from 'vue/types/vnode'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
 import { MessageObject, UserData } from '~/server-middleware/types'
@@ -126,3 +128,8 @@ export type FiveSecondsTestDurations =
   | 30000
   | 45000
   | 60000
+
+export type RenderFunction = (
+  d: VNodeData,
+  c?: string | boolean | VNodeChildrenArrayContents | [ScopedSlot]
+) => VNode

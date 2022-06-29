@@ -5,6 +5,7 @@ import { CreateTestForm } from '~/types/form'
 import { CreateTestState } from '~/store/create-test'
 import { UpdateTestDetailForm } from '~/server-middleware/routes/create-test/updateTestDetail'
 import { ViewResultState } from '~/store/create-test/view-result'
+import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
 
 export const CreateTest: ServiceHandler<
   Record<string, any>,
@@ -45,6 +46,17 @@ export const GetViewResult: ServiceHandler<
   return await axios.$get(`/create-test/view-result/${id}`, {
     ...validateStatus,
   })
+}
+
+export const UpdateResultAnswer: ServiceHandler<
+  UpdateResultAnswerForm,
+  number
+> = async (axios, payload) => {
+  return await axios.$post(
+    '/create-test/view-result/updateAnswer',
+    payload,
+    validateStatus
+  )
 }
 
 // publish test

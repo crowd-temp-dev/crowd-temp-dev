@@ -15,13 +15,14 @@ export default defineComponent({
   name: 'LandingPageHeader',
   components: { Button, HeaderLogo },
   setup(_, { root }) {
-    const featuresTo = '#features'
-    const pricingTo = '#pricing'
-    const contactTo = '#contact'
+    const featuresTo = '/#features'
+    const pricingTo = '/#pricing'
+    const contactTo = '/#contact'
 
-    const scrollToHash = (hash: string) => {
+    const scrollToHash = (hash: string) => {      
       sleep().then(() => {
-        root.$route.path === '/' && scrollToLandingPageHash(hash, true)
+        root.$route.path === '/' &&
+          scrollToLandingPageHash(hash.replace('/', ''), true)
       })
     }
 

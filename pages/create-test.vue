@@ -144,7 +144,7 @@ export default defineComponent({
           title: 'View Results',
           icon: 'NoteMajor',
           active: routeName === viewResultRouteName,
-          done: testPublished || testCreated,
+          done: testPublished,
           disabled: [createTestRouteName, recruitRouteName].includes(routeName),
           select: () => root.$router.push(`/create-test/view-result/${testId}`),
         },

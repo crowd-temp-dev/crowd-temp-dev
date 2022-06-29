@@ -75,13 +75,13 @@ export default defineComponent({
     const close = () => toggle(false)
 
     const attemptOpen = (e: Event) => {
+      emit('click', e)
+
       if (_props.disableButton) return
 
       if (typeof _props.modelValue === 'undefined') {
         open()
       }
-
-      emit('click', e)
     }
 
     const id = uid()

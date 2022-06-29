@@ -4,6 +4,7 @@ import Notes from '@/components/App/CreateTestResult/Notes/index.vue'
 import Summary from '@/components/App/CreateTestResult/Summary/index.vue'
 import DesignSurvey from '@/components/App/CreateTestResult/DesignSurvey/index.vue'
 import SimpleSurvey from '@/components/App/CreateTestResult/SimpleSurvey/index.vue'
+import FiveSecondsTest from '@/components/App/CreateTestResult/FiveSecondsTest/index.vue'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import type { ViewResultState } from '~/store/create-test/view-result'
 import { splitPath } from '~/utils'
@@ -19,6 +20,7 @@ export default defineComponent({
     FadeTransition,
     DesignSurvey,
     SimpleSurvey,
+    FiveSecondsTest,
   },
 
   transition: (to, from) => {
@@ -60,13 +62,11 @@ export default defineComponent({
         })
     })
 
-    root.$nextTick(() => {
-      root.$store
-        .dispatch('create-test/setId', root.$route.params.id)
-        .then(() => {
-          root.$store.dispatch('create-test/view-result/getResult')
-        })
-    })
+    root.$store
+      .dispatch('create-test/setId', root.$route.params.id)
+      .then(() => {
+        root.$store.dispatch('create-test/view-result/getResult')
+      })
 
     return { result, fetchingResult, resultAnswers }
   },
