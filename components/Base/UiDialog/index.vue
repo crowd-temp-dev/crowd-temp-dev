@@ -385,7 +385,7 @@ export default defineComponent({
 }
 
 .fade-transition-enter .content.slide-from-right {
-  @apply translate-x-[40%];
+  @apply translate-x-[50%];
 }
 
 .fade-transition-enter .content.slide-from-right,

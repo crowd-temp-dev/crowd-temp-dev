@@ -7,13 +7,13 @@
           <template v-for="(step, i) in steps">
             <Button
               :key="step.title"
-              :disabled="step.disabled"
+              :disabled="step.disabled && !step.done"
               plain
               tabindex="-1"
               class="px-35 h-full m-0 !no-underline"
               :class="{
                 'pointer-events-none': !step.done,
-                'text-text-default': step.done,
+                'text-text-default': step.done && !step.active,
               }"
               @click="step.select"
             >
@@ -21,7 +21,7 @@
                 <PIcon
                   :source="step.icon"
                   class="mr-20 fill-icon"
-                  :class="{ 'text-icon-default': step.done }"
+                  :class="{ 'text-icon-default': step.done && !step.active }"
                 />
                 {{ step.title }}
               </div>
@@ -82,6 +82,7 @@ import { Layout } from '~/types'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { CreateTestState } from '~/store/create-test'
 
 type Step = {
   title: 'Create test' | 'Recruit' | 'View Results'
@@ -107,28 +108,45 @@ export default defineComponent({
     const steps = computed(() => {
       const routePath = root.$route.path
 
+      const routeName = root.$route.name
+
+      const testState = root.$store.state['create-test'] as CreateTestState
+
+      const testId = testState.details.id
+
+      const createTestRouteName = 'create-test-:id'
+
+      const recruitRouteName = 'create-test-recruit-:id'
+
+      const viewResultRouteName = 'create-test-view-result-:id'
+
+      const testCreated = 'published' in testState.details
+
+      const testPublished = testState.details.published
+
       return [
         {
           title: 'Create test',
           icon: 'CirclePlusMinor',
-          active: /^\/create-test\/?/.test(routePath),
-          done: /^\/create-test\/(?:recruit|view-results)\/?/.test(routePath),
-          select: () => root.$router.push('/create-test/'),
+          active: routeName === createTestRouteName,
+          done: /^\/create-test\/(?:recruit|view-result)\/?/.test(routePath),
+          select: () => root.$router.push(`/create-test/${testId}/`),
         },
         {
           title: 'Recruit',
           icon: 'CustomerPlusMajor',
-          active: /^\/create-test\/recruit\/?/.test(routePath),
-          done: /^\/create-test\/view-results\/?/.test(routePath),
-          disabled: /^\/create-test\/?$/.test(routePath),
-          select: () => root.$router.push('/create-test/recruit'),
+          active: routeName === recruitRouteName,
+          done: /^\/create-test\/view-result\/?/.test(routePath) || testCreated,
+          disabled: routeName === createTestRouteName,
+          select: () => root.$router.push(`/create-test/recruit/${testId}`),
         },
         {
           title: 'View Results',
-          icon: 'CirclePlusMinor',
-          active: /^\/create-test\/view-results\/?/.test(routePath),
-          disabled: /^\/create-test(?:\/?|\/recruit)$/.test(routePath),
-          select: () => root.$router.push('/create-test/view-results'),
+          icon: 'NoteMajor',
+          active: routeName === viewResultRouteName,
+          done: testPublished || testCreated,
+          disabled: [createTestRouteName, recruitRouteName].includes(routeName),
+          select: () => root.$router.push(`/create-test/view-result/${testId}`),
         },
       ] as Step[]
     })
