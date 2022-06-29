@@ -70,13 +70,9 @@ export default defineComponent({
           const answer =
             ((user.answers[`${number}`] || {}).questions || {})[alpha] || {}
 
-          const value = answer.value
-
-          return {
-            value,
-          }
+          return answer
         })
-        .filter((val) => !!val.value)
+        .filter((val) => !!val.value && !val.skip)
     })
 
     const isShortOrLongText = computed(() => {
