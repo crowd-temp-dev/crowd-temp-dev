@@ -259,7 +259,7 @@ export default defineComponent({
               <Checkbox
                 v-model="choicesModel[i]"
                 :label="choice"
-                v-bind="fieldIdAndError(`${id}-${choice}-${i}`)"
+                v-bind="fieldIdAndError(id)"
               />
             </Id>
           </div>

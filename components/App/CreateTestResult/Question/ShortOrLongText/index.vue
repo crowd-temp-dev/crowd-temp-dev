@@ -47,17 +47,29 @@ export default defineComponent({
       ]
     })
 
+    const toggleFavourite = async (index: number) => {
+      const { number, alpha } = qNumberAndAlpha.value
+
+      await root.$store.dispatch('create-test/view-result/updateAnser', {
+        followUpAlpha: alpha,
+        qIndex: Number(number),
+        userIndex: index,
+        values: { favourite: !answers.value[index].favourite },
+      } as UpdateAnswerPayload)
+    }
+
     const answers = computed(() => {
       const { number, alpha } = qNumberAndAlpha.value
 
       return viewResult.value.answers
-        .map((user) => {
+        .map((user, index) => {
           const answer =
             ((user.answers[`${number}`] || {}).questions || {})[alpha] || {}
 
           return {
             ...answer,
-            username: user.username
+            username: user.username,
+            toggleFavourite: async () => await toggleFavourite(index),
           }
         })
         .filter((val) => {
@@ -74,22 +86,10 @@ export default defineComponent({
         .slice(0, _props.limit)
     })
 
-    const toggleFavourite = async (index: number) => {
-      const { number, alpha } = qNumberAndAlpha.value
-
-      await root.$store.dispatch('create-test/view-result/updateAnser', {
-        followUpAlpha: alpha,
-        qIndex: Number(number),
-        userIndex: index,
-        values: { favourite: !answers.value[index].favourite },
-      } as UpdateAnswerPayload)
-    }
-
     return {
       viewResult,
       question,
       answers,
-      toggleFavourite,
     }
   },
 })
@@ -129,7 +129,7 @@ export default defineComponent({
               <button
                 class="h-36 w-46 focus-visible:ring-2 ring-action-primary-default outline-none transition-[opacity,transform] active:opacity-60 active:scale-[0.99]"
                 v-on="events"
-                @click="toggleFavourite(i)"
+                @click="answer.toggleFavourite"
               >
                 <div class="flex-centered">
                   <Spinner v-if="answer.loading" class="fill-icon-default" />
