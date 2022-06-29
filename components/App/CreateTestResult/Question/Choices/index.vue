@@ -63,7 +63,8 @@ export default defineComponent({
 
       const totalParticipants = viewResult.value.answers.filter((user) => {
         return !!(
-          ((user.answers[`${number}`].questions || {})[alpha] || {}).value || []
+          (((user.answers[`${number}`] || {}).questions || {})[alpha] || {})
+            .value || []
         ).length
       }).length
 
@@ -71,8 +72,9 @@ export default defineComponent({
         const participantChoseValue = viewResult.value.answers.filter(
           (user) => {
             return (
-              (((user.answers[`${number}`].questions || {})[alpha] || {})
-                .value || [])[0] === value
+              ((
+                ((user.answers[`${number}`] || {}).questions || {})[alpha] || {}
+              ).value || [])[0] === value
             )
           }
         ).length
