@@ -162,7 +162,6 @@ export default defineComponent({
         })
         ;(formElement.elements[0] as HTMLElement).focus()
       } else {
-        
         await root.$store.dispatch(
           'answer-test/answerQuestion',
           getAppendedValue(
@@ -252,13 +251,15 @@ export default defineComponent({
           </RadioGroup>
 
           <div v-else class="grid gap-y-8">
-            <Checkbox
-              v-for="(choice, i) in currentQuestion.choices.options"
-              :key="i + choicesModel.length"
-              v-model="choicesModel[i]"
-              :label="choice"
-              v-bind="fieldIdAndError(`${choice}-${i}`)"
-            />
+            <Id v-slot="{ id }">
+              <Checkbox
+                v-for="(choice, i) in currentQuestion.choices.options"
+                :key="i + choicesModel.length"
+                v-model="choicesModel[i]"
+                :label="choice"
+                v-bind="fieldIdAndError(`${id}-${choice}-${i}`)"
+              />
+            </Id>
           </div>
 
           <div v-if="currentQuestion.choices.addOtherAsChoice">

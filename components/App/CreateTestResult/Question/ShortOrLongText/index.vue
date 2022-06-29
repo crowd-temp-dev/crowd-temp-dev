@@ -108,7 +108,7 @@ export default defineComponent({
 
           <p class="grow ml-[0.2rem] flex items-center mr-10">
             <span class="text-caption-sm text-text-subdued shrink-0">
-              {{ viewResult.answers[i].username }} {{ i + 1 }}:
+              {{ viewResult.answers[i].username }}:
             </span>
 
             <strong class="ml-8 text-text-subdued inline-block max-w-[420px]">
