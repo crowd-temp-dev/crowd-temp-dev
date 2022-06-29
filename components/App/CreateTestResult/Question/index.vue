@@ -111,31 +111,33 @@ export default defineComponent({
 
       const maxShortOrLongTextLength = 5
 
-      const questionHeading = div(
-        {
-          staticClass: 'mb-8 flex items-center space-x-8',
-        },
-        [
-          h(
-            'h3',
-            { staticClass: 'text-[16px] leading-[19.09px] font-semibold' },
-            `Question ${_props.numbering}`
-          ),
+      const questionHeading = (key: string) =>
+        div(
+          {
+            key,
+            staticClass: 'mb-8 flex items-center space-x-8',
+          },
+          [
+            h(
+              'h3',
+              { staticClass: 'text-[16px] leading-[19.09px] font-semibold' },
+              `Question ${_props.numbering}`
+            ),
 
-          h(
-            'PBadge',
-            {
-              class: 'bg-surface-neutral-default',
-              props: {
-                size: 'small',
+            h(
+              'PBadge',
+              {
+                class: 'bg-surface-neutral-default',
+                props: {
+                  size: 'small',
+                },
               },
-            },
-            type.value
-          ),
-        ]
-      )
+              type.value
+            ),
+          ]
+        )
 
-      const questionHeader = [
+      const questionHeader = () => [
         h('p', { staticClass: 'mb-20' }, question.value.title),
 
         div(
@@ -223,9 +225,9 @@ export default defineComponent({
         })
 
       return div(null, [
-        questionHeading,
+        questionHeading('main-heading'),
 
-        questionHeader,
+        questionHeader(),
 
         h('FadeTransition', [
           !answers.value.length
@@ -279,10 +281,11 @@ export default defineComponent({
                                   },
                                 },
                                 scopedSlots: {
-                                  'dialog-header': () => questionHeading,
+                                  'dialog-header': () =>
+                                    questionHeading('dialog-heading'),
                                   dialog: () => [
                                     div({ staticClass: 'min-w-[768px]' }, [
-                                      questionHeader,
+                                      questionHeader(),
 
                                       AnswersComponent('dialog'),
                                     ]),

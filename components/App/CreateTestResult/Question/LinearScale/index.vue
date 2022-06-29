@@ -110,7 +110,7 @@ export default defineComponent({
         </button>
       </Tooltip>
 
-      <div class="border border-divider flex items-center py-4 shrink-0">
+      <div class="border border-divider flex items-center shrink-0">
         <span class="text-caption-sm text-text-subdued pl-8 pr-10">
           {{ option.valuePercent }}
         </span>
