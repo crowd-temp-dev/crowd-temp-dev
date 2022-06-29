@@ -44,7 +44,8 @@ export default defineComponent({
 
       return viewResult.value.answers
         .map((user) => {
-          const answer = user.answers[`${number}`].questions[alpha] || {}
+          const answer =
+            ((user.answers[`${number}`] || {}).questions || {})[alpha] || {}
 
           const value = answer.value
 
