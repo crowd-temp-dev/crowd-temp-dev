@@ -52,7 +52,8 @@ export default defineComponent({
 
       return viewResult.value.answers
         .map((user) => {
-          const answer = user.answers[`${number}`].questions[alpha] || {}
+          const answer =
+            ((user.answers[`${number}`] || {}).questions || {})[alpha] || {}
 
           return answer
         })
@@ -107,7 +108,7 @@ export default defineComponent({
 
           <p class="grow ml-[0.2rem] flex items-center mr-10">
             <span class="text-caption-sm text-text-subdued shrink-0">
-              {{viewResult.answers[i].username}} {{ i + 1 }}:
+              {{ viewResult.answers[i].username }} {{ i + 1 }}:
             </span>
 
             <strong class="ml-8 text-text-subdued inline-block max-w-[420px]">

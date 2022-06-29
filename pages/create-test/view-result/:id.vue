@@ -5,6 +5,9 @@ import Summary from '@/components/App/CreateTestResult/Summary/index.vue'
 import DesignSurvey from '@/components/App/CreateTestResult/DesignSurvey/index.vue'
 import SimpleSurvey from '@/components/App/CreateTestResult/SimpleSurvey/index.vue'
 import FiveSecondsTest from '@/components/App/CreateTestResult/FiveSecondsTest/index.vue'
+import WebsiteEvaluation from '@/components/App/CreateTestResult/WebsiteEvaluation/index.vue'
+import PrototypeEvaluation from '@/components/App/CreateTestResult/PrototypeEvaluation/index.vue'
+
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import type { ViewResultState } from '~/store/create-test/view-result'
 import { splitPath } from '~/utils'
@@ -21,6 +24,8 @@ export default defineComponent({
     DesignSurvey,
     SimpleSurvey,
     FiveSecondsTest,
+    WebsiteEvaluation,
+    PrototypeEvaluation,
   },
 
   transition: (to, from) => {

@@ -104,7 +104,7 @@ export default defineComponent({
           }
         }
 
-        if (!_props.allowPointer) {
+        if (_props.allowPointer) {
           const checkErrorReason = await checkUrlFrameOptions(iframe.src)
 
           if (checkErrorReason === '500' || checkErrorReason === 'allow') {

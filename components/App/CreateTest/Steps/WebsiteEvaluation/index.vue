@@ -2,53 +2,28 @@
 import { defineComponent, ref } from '@vue/composition-api'
 import Section from '../Section/index.vue'
 import FollowUpQuestion from '../FollowUpQuestion/index.vue'
+import PreviewURL from '../../PreviewURL/index.vue'
 import createTest from '~/mixins/createTest'
 import { urlRegExpString } from '~/utils'
-import DialogButton from '~/components/Base/DialogButton/index.vue'
-import IFrame from '~/components/Base/IFrame/index.vue'
-import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestStepsWebsiteEvaluation',
   components: {
     Section,
     FollowUpQuestion,
-    DialogButton,
-    IFrame,
-    FadeTransition,
+    PreviewURL,
   },
   mixins: [createTest],
   setup() {
-    const iframeErrorReason = ref('')
-
-    const iframeKey = ref(0)
-
     const acceptUrlShareTerms = ref(false)
 
-    const reloadIframe = () => {
-      iframeErrorReason.value = ''
-
-      iframeKey.value += 1
-    }
-
     return {
-      iframeErrorReason,
       acceptUrlShareTerms,
-      reloadIframe,
     }
   },
   computed: {
     disablePreview() {
       return !new RegExp(urlRegExpString, 'g').test(this.state.websiteLink)
-    },
-    previewSrc() {
-      return `https://${((this.state || {}).websiteLink || '').replace(
-        /^https?:\/\//,
-        ''
-      )}`
-    },
-    hideIframe() {
-      return /^(?:sameorigin|deny)$/.test(this.iframeErrorReason)
     },
   },
 })
@@ -84,89 +59,11 @@ export default defineComponent({
             "
           >
             <span v-on="events" @click="open">
-              <DialogButton
-                label="Preview URL"
+              <PreviewURL
                 :disable-button="disablePreview"
-                :dialog-attrs="{
-                  transition: 'slide-y',
-                  noBodyPadding: true,
-                }"
-                :dialog-events="{
-                  beforeEnter: () => (iframeErrorReason = ''),
-                  afterLeave: () => (iframeErrorReason = ''),
-                }"
-                dialog-content-class="resize-x w-[min(92vw,1500px)] min-w-[320px] max-w-[min(92vw,1500px)] max-h-[min(95vh,1200px)] min-h-[min(95vh,1200px)]"
                 :readonly="!acceptUrlShareTerms"
-              >
-                Preview URL
-
-                <template #dialog-header>
-                  <strong> Preview URL </strong>
-                </template>
-
-                <template #dialog>
-                  <div class="h-full w-inherit">
-                    <div class="relative w-full h-full overflow-hidden">
-                      <FadeTransition>
-                        <IFrame
-                          v-if="!hideIframe"
-                          :src="previewSrc"
-                          :frame-name="`preview-url-${id}`"
-                          @error-reason="(evt) => (iframeErrorReason = evt)"
-                        />
-
-                        <div
-                          v-else
-                          key="error-bg"
-                          class="w-full h-full bg-base-critical/5 text-center content-start grid justify-center grid-rows-[auto,auto,auto,1fr,auto]"
-                        >
-                          <h2
-                            class="text-display-large uppercase text-text-critical font-semibold font-sf-pro-display mt-64 mb-32"
-                          >
-                            Cannot load URL
-                          </h2>
-
-                          <p class="text-heading text-text-default/80 mb-32">
-                            An error occured trying to load
-                            <a
-                              :href="previewSrc"
-                              target="_blank"
-                              rel="noreferrer noopener"
-                              class="text-action-primary-default pointer-events-auto"
-                              >{{ state.websiteLink }}</a
-                            >
-                          </p>
-
-                          <div
-                            class="font-mono text-text-subdued text-text-default/70 text-heading"
-                          >
-                            <p v-if="hideIframe">
-                              x-frame-options in headers is set to
-                              <code
-                                class="bg-black/5 p-4 rounded font-medium"
-                                >{{ iframeErrorReason }}</code
-                              >.
-                            </p>
-
-                            <p v-else>An unknown error occured</p>
-                          </div>
-
-                          <div class="min-h-full w-full" />
-
-                          <Button
-                            primary
-                            class="pointer-events-auto mb-32"
-                            size="large"
-                            @click="reloadIframe"
-                          >
-                            Retry
-                          </Button>
-                        </div>
-                      </FadeTransition>
-                    </div>
-                  </div>
-                </template>
-              </DialogButton>
+                :preview-src="state.websiteLink"
+              />
             </span>
           </Tooltip>
         </div>
