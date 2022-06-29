@@ -55,7 +55,10 @@ export default defineComponent({
           const answer =
             ((user.answers[`${number}`] || {}).questions || {})[alpha] || {}
 
-          return answer
+          return {
+            ...answer,
+            username: user.username
+          }
         })
         .filter((val) => {
           const hasValue = !!val.value
@@ -108,7 +111,7 @@ export default defineComponent({
 
           <p class="grow ml-[0.2rem] flex items-center mr-10">
             <span class="text-caption-sm text-text-subdued shrink-0">
-              {{ viewResult.answers[i].username }}:
+              {{ answer.username }}:
             </span>
 
             <strong class="ml-8 text-text-subdued inline-block max-w-[420px]">

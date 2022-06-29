@@ -251,10 +251,12 @@ export default defineComponent({
           </RadioGroup>
 
           <div v-else class="grid gap-y-8">
-            <Id v-slot="{ id }">
+            <Id
+              v-for="(choice, i) in currentQuestion.choices.options"
+              :key="i + choicesModel.length"
+              v-slot="{ id }"
+            >
               <Checkbox
-                v-for="(choice, i) in currentQuestion.choices.options"
-                :key="i + choicesModel.length"
                 v-model="choicesModel[i]"
                 :label="choice"
                 v-bind="fieldIdAndError(`${id}-${choice}-${i}`)"
