@@ -2,12 +2,13 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
+import Item from './Item/index.vue'
 import viewResultTestType from '~/mixins/view-result-test-type'
 import { ViewResultState } from '~/store/create-test/view-result'
 
 export default defineComponent({
   name: 'AppCreateTestResultCardSorting',
-  components: { Question, QuestionSection },
+  components: { Question, QuestionSection, Item },
   mixins: [viewResultTestType],
   setup(_props, { root }) {
     const props = computed(() => _props as Record<string, any>)
@@ -31,7 +32,7 @@ export default defineComponent({
     })
 
     const categories = computed(() => {
-      if (cardSorted.value) {        
+      if (cardSorted.value) {
         return currentQuestion.value.categories.map((category, index) => {
           const allCards = usersThatSortedCards.value
             .map((user) => {
@@ -78,44 +79,7 @@ export default defineComponent({
       </p>
 
       <div v-if="cardSorted" class="grid gap-y-20 mb-20">
-        <div
-          v-for="(category, i) in categories"
-          :key="i"
-          class="rounded-[3px] border border-divider"
-        >
-          <p class="h-60 flex items-center border-b border-divider p-20">
-            <strong class="text-text-subdued">
-              {{ category.category }}
-            </strong>
-          </p>
-
-          <div class="min-h-[62px] bg-surface-subdued p-20 flex">
-            <ul class="grow grid grid-flow-col gap-8 justify-start">
-              <li
-                v-for="(card, cardIndex) in category.cards"
-                :key="cardIndex"
-                class="flex items-center justify-center space-x-4 h-22 rounded-[10px] py-2 px-8 min-w-[82px] bg-surface-neutral-default text-[13px] leading-[16px] w-fit"
-              >
-                <span>
-                  {{ card.title }}
-                </span>
-
-                <span
-                  class="inline-flex justify-center items-center text-white w-14 h-14 rounded-full bg-icon-default text-[10px] leading-[12px]"
-                >
-                  {{ card.repeated }}
-                </span>
-              </li>
-            </ul>
-
-            <Button plain>
-              <div class="flex-centered">
-                <PIcon source="CaretDownMinor" class="fill-icon-default" />
-                <span class="sr-only">Expand</span>
-              </div>
-            </Button>
-          </div>
-        </div>
+        <Item v-for="(category, i) in categories" :key="i" v-bind="category" />
       </div>
 
       <div

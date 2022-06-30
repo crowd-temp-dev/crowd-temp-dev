@@ -21,7 +21,7 @@ export default defineComponent({
       asDrawer: true,
     }"
   >
-    <span> Previous questions </span>
+    <span> Preview questions </span>
 
     <template #dialog-header>
       <p>View questions</p>
