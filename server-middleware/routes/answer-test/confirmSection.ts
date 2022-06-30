@@ -77,7 +77,7 @@ export default function (router: Router) {
             parseIndexes[parseIndexes.indexOf(user.currentIndex[testId]) + 1] ||
             'done'
 
-          if (!/(?:done|confirm|instruction)/.test(nextIndexValue)) {
+          if (!/(?:done|confirm|instruction)/.test(user.currentIndex[testId])) {
             throw new Error('{400} Already confirmed!')
           }
 
