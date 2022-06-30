@@ -5,12 +5,11 @@ import Button from '~/components/Base/Button/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { LikeNumber } from '~/types'
 import CopyText from '~/components/Base/CopyText/index.vue'
-import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
 
 export default defineComponent({
   name: 'AppHomeTestListTestItem',
-  components: { Button, Tooltip, CopyText, FadeTransition, Spinner },
+  components: { Button, Tooltip, CopyText, Spinner },
   props: {
     favourite: Boolean,
     id: {
@@ -129,15 +128,13 @@ export default defineComponent({
           v-on="events"
         >
           <div class="w-20 h-20 flex-centered">
-            <FadeTransition>
-              <PIcon
-                v-if="!loading"
-                :source="favourite ? 'StarFilledMinor' : 'StarOutlineMinor'"
-                class="fill-icon"
-              />
+            <PIcon
+              v-if="!loading"
+              :source="favourite ? 'StarFilledMinor' : 'StarOutlineMinor'"
+              class="fill-icon"
+            />
 
-              <Spinner v-else />
-            </FadeTransition>
+            <Spinner v-else />
           </div>
         </Button>
       </Tooltip>
