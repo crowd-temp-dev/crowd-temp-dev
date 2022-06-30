@@ -161,10 +161,7 @@ export default function (router: Router) {
 
                     const qAlphabet = (
                       (currentIndex.match(/\d+[a-z]/g) || [])[0] || 'a'
-                    ).replace(/\d/g, '')
-
-                    console.log({ appendedValues, reqValues })
-                    
+                    ).replace(/\d/g, '')                    
 
                     const preferenceTest =
                       currentQuestion.type === 'PreferenceTest' &&

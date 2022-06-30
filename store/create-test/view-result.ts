@@ -21,6 +21,10 @@ export interface TestAnswer {
     file: string
     index: number
   }
+  cardSorting?: {
+    items: string[]
+    title: string
+  }[]
   questions: Record<string, QuestionAnswer>
 }
 

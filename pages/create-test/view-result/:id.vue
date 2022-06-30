@@ -8,6 +8,7 @@ import FiveSecondsTest from '@/components/App/CreateTestResult/FiveSecondsTest/i
 import WebsiteEvaluation from '@/components/App/CreateTestResult/WebsiteEvaluation/index.vue'
 import PrototypeEvaluation from '@/components/App/CreateTestResult/PrototypeEvaluation/index.vue'
 import PreferenceTest from '@/components/App/CreateTestResult/PreferenceTest/index.vue'
+import CardSorting from '@/components/App/CreateTestResult/CardSorting/index.vue'
 
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import type { ViewResultState } from '~/store/create-test/view-result'
@@ -27,7 +28,8 @@ export default defineComponent({
     FiveSecondsTest,
     WebsiteEvaluation,
     PrototypeEvaluation,
-    PreferenceTest
+    PreferenceTest,
+    CardSorting,
   },
 
   transition: (to, from) => {

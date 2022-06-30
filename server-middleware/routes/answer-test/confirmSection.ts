@@ -77,32 +77,11 @@ export default function (router: Router) {
             parseIndexes[parseIndexes.indexOf(user.currentIndex[testId]) + 1] ||
             'done'
 
-          if (!testDone) {
-            if (nextIndexValue === 'done') {
-              const answer = await TestAnswer.findOne({
-                where: {
-                  userId: ansUserId,
-                  testId,
-                },
-                transaction,
-              })
+          if (!/(?:done|confirm|instruction)/.test(nextIndexValue)) {
+            throw new Error('{400} Already confirmed!')
+          }
 
-              await answer.update({
-                done: true
-              })
-
-              await answer.save({ transaction })
-            }
-
-            await user.update({
-              currentIndex: {
-                ...user.currentIndex,
-                [testId]: nextIndexValue,
-              },
-            })
-
-            await user.save({ transaction })
-          } else {
+          if (testDone) {
             throw new Error('{403} You have completed this test!')
           }
 
@@ -113,6 +92,57 @@ export default function (router: Router) {
             transaction,
             includeId: true,
           })
+
+          if (nextIndexValue === 'done' || req.body.value) {
+            const answer = await TestAnswer.findOne({
+              where: {
+                userId: ansUserId,
+                testId,
+              },
+              transaction,
+            })
+
+            let answerValues = {}
+
+            const currentIndex = user.currentIndex[testId]
+
+            const qNumber = currentIndex.replace(
+              /(?:confirm-|-instruction)/,
+              ''
+            )
+
+            const qIndex = parseFloat(qNumber)
+
+            const currentQuestion = data[`question-${qIndex}`]
+
+            if (currentQuestion.type === 'CardSorting') {
+              answerValues = {
+                answers: {
+                  ...answer.answers,
+                  [`${qIndex}`]: {
+                    ...(answer.answers[`${qIndex}`] || {}),
+                    cardSorting: req.body.value,
+                  },
+                },
+              }
+            }
+
+            await answer.update({
+              done: nextIndexValue === 'done',
+              ...answerValues,
+            })
+
+            await answer.save({ transaction })
+          }
+
+          await user.update({
+            currentIndex: {
+              ...user.currentIndex,
+              [testId]: nextIndexValue,
+            },
+          })
+
+          await user.save({ transaction })
 
           sendSuccess(res, {
             data: {
