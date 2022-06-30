@@ -195,14 +195,14 @@ export default defineComponent({
           </FadeTransition>
         </div>
 
-        <h6
+        <p
           class="text-display-small mb-16"
           :class="{
             'text-text-subdued': !price.popular,
           }"
         >
           {{ price.description }}
-        </h6>
+        </p>
 
         <Button
           v-if="settingsPage"

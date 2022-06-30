@@ -37,7 +37,7 @@ export type BreakpointOutput = {
 }
 
 export interface HTMLAttrs {
-  lang: 'en'
+  lang: 'en-us'
   class: string
 }
 

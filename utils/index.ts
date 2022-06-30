@@ -20,7 +20,7 @@ import type {
 import { CreateTestFormQuestion } from '~/types/form'
 
 export const htmlAttrs: HTMLAttrs = {
-  lang: 'en',
+  lang: 'en-us',
   class: 'bg-surface-default text-text-default text-body-sm md:text-body',
 }
 
