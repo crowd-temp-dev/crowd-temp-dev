@@ -26,7 +26,7 @@ export default defineComponent({
       const totalParticipants = viewResult.value.answers.filter((user) => {
         const currentAnswer = user.answers[`${props.value.numbering}`]
 
-        return !!currentAnswer.preference
+        return !!currentAnswer?.preference
       }).length
 
       return (getFiles as string[]).map((value) => {
@@ -34,7 +34,7 @@ export default defineComponent({
           (user) => {
             const currentAnswer = user.answers[`${props.value.numbering}`]
 
-            if (currentAnswer.preference) {
+            if (currentAnswer?.preference) {
               return currentAnswer.preference.file === value
             }
             return false
