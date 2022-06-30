@@ -1,6 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, nextTick, ref } from '@vue/composition-api'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { sleep } from '~/utils'
 
 export default defineComponent({
   name: 'AppCreateTestResultCardSortingItem',
@@ -21,6 +22,8 @@ export default defineComponent({
   setup() {
     const expanded = ref(false)
 
+    const rootRef = ref<HTMLElement>(null)
+
     const thead = [
       {
         title: 'Cards',
@@ -28,20 +31,43 @@ export default defineComponent({
       },
       {
         title: 'Frequency',
-        class:'pr-20'
+        class: 'pr-20',
       },
       {
         title: 'Agreement',
         class: 'text-right',
       },
     ]
-    return { expanded, thead }
+
+    const toggleExpand = async () => {
+      expanded.value = !expanded.value
+
+      await nextTick()
+
+      if (expanded.value) {
+        await sleep(300)
+
+        if (rootRef.value) {
+          const rootEl = rootRef.value
+
+          const { top, bottom } = rootEl.getBoundingClientRect()
+
+          if (top < 56 + 76 || bottom > innerHeight) {
+            rootRef.value.scrollIntoView({
+              block: 'center',
+              behavior: 'smooth',
+            })
+          }
+        }
+      }
+    }
+    return { expanded, thead, rootRef, toggleExpand }
   },
 })
 </script>
 
 <template>
-  <div class="rounded-[3px] border border-divider">
+  <div ref="rootRef" class="rounded-[3px] border border-divider">
     <p class="h-60 flex items-center border-b border-divider p-20">
       <strong class="text-text-subdued">
         {{ category }}
@@ -64,7 +90,11 @@ export default defineComponent({
             </thead>
 
             <tbody>
-              <tr v-for="(card, cardIndex) in cards" :key="cardIndex" class="h-60">
+              <tr
+                v-for="(card, cardIndex) in cards"
+                :key="cardIndex"
+                class="h-60"
+              >
                 <td>
                   {{ card.title }}
                 </td>
@@ -98,7 +128,7 @@ export default defineComponent({
         </ul>
       </FadeTransition>
 
-      <Button plain @click="expanded = !expanded">
+      <Button plain @click="toggleExpand">
         <div class="flex-centered">
           <PIcon
             :source="expanded ? 'CaretUpMinor' : 'CaretDownMinor'"
