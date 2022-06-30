@@ -22,7 +22,7 @@ export default defineComponent({
 
     const usersThatSortedCards = computed(() => {
       return viewResult.value.answers.filter((user) => {
-        return 'cardSorting' in (user.answers[props.value.numbering] || {})
+        return Object.values(user.answers).find((x) => 'cardSorting' in x)
       })
     })
 
@@ -31,12 +31,12 @@ export default defineComponent({
     })
 
     const categories = computed(() => {
-      if (cardSorted.value) {
-        return currentQuestion.value.categories.map((category) => {
+      if (cardSorted.value) {        
+        return currentQuestion.value.categories.map((category, index) => {
           const allCards = usersThatSortedCards.value
             .map((user) => {
               const cardCategory =
-                user.answers[`${props.value.numbering}`].cardSorting[0]
+                user.answers[`${props.value.numbering}`].cardSorting[index]
 
               if (cardCategory.title === category) {
                 return cardCategory.items
