@@ -102,7 +102,7 @@ export default defineComponent({
         <div class="flex-centered">
           <PIcon
             :source="expanded ? 'CaretUpMinor' : 'CaretDownMinor'"
-            class="fill-icon-default"
+            class="fill-icon text-icon-default"
           />
           <span class="sr-only">Expand</span>
         </div>
