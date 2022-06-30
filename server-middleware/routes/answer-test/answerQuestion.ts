@@ -163,6 +163,9 @@ export default function (router: Router) {
                       (currentIndex.match(/\d+[a-z]/g) || [])[0] || 'a'
                     ).replace(/\d/g, '')
 
+                    console.log({ appendedValues, reqValues })
+                    
+
                     const preferenceTest =
                       currentQuestion.type === 'PreferenceTest' &&
                       typeof appendedValues[0] === 'object'

@@ -328,11 +328,6 @@ export default defineComponent({
       const { triggerRef, styles: fromStyle } = this.getFromStyle()
 
       if (triggerRef) {
-        triggerRef.scrollIntoViewIfNeeded({
-          behavior: 'smooth',
-          block: 'center',
-        })
-
         this.overlayStyles = {
           ...fromStyle,
           transitionDuration: '0s',
@@ -379,6 +374,8 @@ export default defineComponent({
       const { triggerRef, styles: toStyles } = this.getFromStyle()
 
       if (triggerRef && this.$refs.overlayRef) {
+        // ;(triggerRef as HTMLElement).scrollIntoView()
+
         this.overlayEntered = false
 
         const transition = {
