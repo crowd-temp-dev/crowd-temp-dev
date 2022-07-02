@@ -1,11 +1,7 @@
 import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
 import { user as userValidation } from '../../utils/validation'
-import {
-  sendError,
-  sendFormattedError,
-  sendSuccess,
-} from '../../utils/sendRes'
+import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { authenticate } from '../../utils/middleware'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
@@ -86,15 +82,29 @@ export default function (router: Router) {
                           ${req.headers['user-agent']}
                         </em>
                       </p>
+
+                      <p>
+                        <strong>Request at: </strong>
+                        <em>
+                          ${new Date().toLocaleDateString('en', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            dateStyle: 'full',
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                          })}
+                        </em>
+                      </p>
                     </div>`,
               })
 
               sendSuccess(res, {
                 data: user,
                 message: {
-                  content: "Password changed!",
-                  type: "success"
-                }
+                  content: 'Password changed!',
+                  type: 'success',
+                },
               })
             } else {
               throw new Error('{404} User not found!')
