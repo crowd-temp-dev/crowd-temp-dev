@@ -60,9 +60,9 @@ export default function (router: Router) {
 
         const email = _email.toLowerCase().trim()
 
-        const throwErrorCreatingAccount = () => {
-          throw new Error(`{409} Error creating account`)
-        }
+        // const throwErrorCreatingAccount = () => {
+        //   throw new Error(`{409} Error creating account`)
+        // }
 
         // check to see that the email isnt taken.
         const sendRes = async (user: User) => {
@@ -75,21 +75,22 @@ export default function (router: Router) {
           })
 
           // add new token
-          ConfirmAccount.create(
+          const confirmAccount = await ConfirmAccount.create(
             {
               userId: user.id,
             },
             { transaction }
           )
-            .then((token) => {
-              const getToken = token.get().id as string
 
-              mailer
-                .sendMail({
-                  from: 'UnbugQA',
-                  to: email,
-                  subject: 'Confirm your Crowd Testing account',
-                  html: `<div>
+          if (confirmAccount) {
+            const getToken = confirmAccount.get().id as string
+
+            try {
+              const sendConfirmation = await mailer.sendMail({
+                from: 'UnbugQA',
+                to: email,
+                subject: 'Confirm your Crowd Testing account',
+                html: `<div>
                       <p>
                         Hi ${
                           user.name
@@ -100,29 +101,35 @@ export default function (router: Router) {
                           <a href="${
                             process.env.CLIENT_ORIGIN
                           }/action?${apiActionQuery({
-                    key: 'confirm_account',
-                    token: getToken,
-                    id: user.id,
-                  })}">
+                  key: 'confirm_account',
+                  token: getToken,
+                  id: user.id,
+                })}">
                             Confirm account
                           </a>
                         </strong>
                       </p>
                     </div>`,
+              })
+
+              if (sendConfirmation.accepted) {
+                sendSuccess(res, {
+                  data: user.get(),
+                  message: {
+                    type: 'success',
+                    content: 'Confirm account!',
+                    duration: 5000,
+                  },
                 })
-                .then(() => {
-                  sendSuccess(res, {
-                    data: user.get(),
-                    message: {
-                      type: 'success',
-                      content: 'Confirm account!',
-                      duration: 5000,
-                    },
-                  })
-                })
-                .catch(throwErrorCreatingAccount)
-            })
-            .catch(throwErrorCreatingAccount)
+              }
+            } catch (err) {
+              console.log({err});
+              
+              throw new Error('{500} Error sending confirmation. Please report')
+            }
+          } else {
+            throw new Error(`{409} Error creating account`)
+          }
         }
 
         const findUser = await User.findOne({
@@ -150,7 +157,7 @@ export default function (router: Router) {
             await sendRes(findUser)
           }
         } else {
-          User.create(
+          const user = await User.create(
             {
               email,
               name,
@@ -161,8 +168,12 @@ export default function (router: Router) {
             },
             { transaction }
           )
-            .then(sendRes)
-            .catch(throwErrorCreatingAccount)
+
+          if (user) {
+            await sendRes(user)
+          } else {
+            throw new Error(`{409} Error creating account`)
+          }
         }
       })
     } catch (err: any) {

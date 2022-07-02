@@ -133,7 +133,7 @@ export default defineComponent({
     const previousActive = ref<HTMLElement | null>(null)
 
     const trapFocus = (evt: KeyboardEvent) => {
-      if (isFurthestDialog.value) {
+      if (isFurthestDialog.value) {        
         new TrapFocus({
           loop: true,
         }).init(evt)        
@@ -369,7 +369,7 @@ export default defineComponent({
 
 .fade-transition-enter-active .content.content.slide-y,
 .fade-transition-enter-active .content.content.slide-y-reverse {
-  transition-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+  transition-timing-function: cubic-bezier(0, 0.15, 0.45, 1);
 }
 
 .fade-transition-enter .content.slide-y {
@@ -391,14 +391,13 @@ export default defineComponent({
 }
 
 .fade-transition-enter-active .content.as-drawer {
-  transition-timing-function: cubic-bezier(0.1, 0.5, 0.32, 1.1);
+  transition-timing-function: cubic-bezier(0, 0.5, 0.3, 1.075);
 }
 
 .fade-transition-enter .content.slide-from-right {
-  @apply translate-x-[50%];
+  @apply translate-x-[80%];
 }
 
-.fade-transition-enter .content.slide-from-right,
 .fade-transition-leave-to .content.slide-from-right {
   @apply translate-x-[40%];
 }

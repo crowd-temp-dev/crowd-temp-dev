@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import { createTransport } from 'nodemailer'
 
 const {
   EMAIL_SERVICE,
@@ -10,7 +10,7 @@ const {
   EMAIL_PASSWORD,
 } = process.env
 
-const mailer = nodemailer.createTransport({
+const mailer = createTransport({
   // @ts-ignore
   service: EMAIL_SERVICE,
   auth: {
