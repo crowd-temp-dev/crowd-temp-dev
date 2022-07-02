@@ -79,10 +79,29 @@ export default function (router: Router) {
                   transaction,
                 })
 
+                const {
+                  email,
+                  action,
+                  name,
+                  password,
+                  role,
+                  newsUpdate,
+                  showDashboardGuide,
+                  confirmedAt,
+                } = user
+
                 await Recover.create(
                   {
-                    ...user.get(),
+                    email,
+                    action,
                     session: {},
+                    confirmed: true,
+                    name,
+                    password,
+                    role,
+                    newsUpdate,
+                    showDashboardGuide,
+                    confirmedAt,
                   },
                   { transaction }
                 )
