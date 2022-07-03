@@ -113,7 +113,7 @@
           >
             <div class="flex h-full items-end">
               <Img
-                src="/png/answer-test/radio-wave.png"
+                src="static/png/answer-test/radio-wave"
                 :height="50"
                 class="h-50"
               />

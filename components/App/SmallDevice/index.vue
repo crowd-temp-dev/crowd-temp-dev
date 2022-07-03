@@ -29,7 +29,7 @@ export default defineComponent({
 
     <main class="grid justify-items-center font-sf-pro-display px-16">
       <Img
-        src="/png/app/small-screen-vector.png"
+        src="static/png/app/small-screen-vector"
         alt="Vector image of a person standing beside a question mark"
         :width="234.67"
         :height="176"
