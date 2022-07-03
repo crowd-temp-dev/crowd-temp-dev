@@ -140,8 +140,9 @@ export default defineComponent({
           />
           <strong class="flex relative">
             Annual
-            <PImage
-              source="/png/landing-page/pricing/vector-curve.png"
+            <Img
+              alt="Vector arrow"
+              src="static/png/landing-page/pricing/vector-curve"
               class="h-16 w-24 -mt-8"
             />
           </strong>

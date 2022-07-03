@@ -5,8 +5,8 @@
     >
       <h2 class="text-[20.07px] leading-[20.57px] font-medium hidden md:block">
         <NuxtLink to="/" class="flex items-center">
-          <PImage
-            source="/logo.png"
+          <Img
+            src="static/logo"
             alt="App logo"
             :width="22.26"
             :height="16"

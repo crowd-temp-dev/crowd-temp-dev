@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
-import Auth from '~/components/Form/Auth/index.vue'
+import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import ConfirmPasswordField from '~/components/Base/ConfirmPasswordField/index.vue'
 import PasswordField from '~/components/Base/PasswordField/index.vue'
@@ -125,8 +125,8 @@ export default defineComponent({
           :full-width="$breakpoint.isMobile"
         >
           <div class="flex items-center">
-            <PImage
-              source="/png/icon/google.png"
+            <Img
+              src="static/png/icon/google"
               alt="Google logo"
               :width="19"
               :height="19"
@@ -142,8 +142,8 @@ export default defineComponent({
           :full-width="$breakpoint.isMobile"
         >
           <div class="flex items-center">
-            <PImage
-              source="/png/icon/twitter.png"
+            <Img
+              src="static/png/icon/twitter"
               alt="Twitter logo"
               :width="19"
               :height="19"

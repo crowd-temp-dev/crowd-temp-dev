@@ -23,8 +23,8 @@ export default defineComponent({
       class="inline-flex items-center"
       @click.native="scrollToTop"
     >
-      <PImage
-        source="/logo.png"
+      <Img
+        src="static/logo"
         alt="App logo"
         :width="22.26"
         :height="16"

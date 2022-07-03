@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
-import Auth from '~/components/Form/Auth/index.vue'
+import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { OnSubmit } from '~/types'

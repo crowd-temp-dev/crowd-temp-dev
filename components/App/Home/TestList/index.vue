@@ -172,8 +172,8 @@ export default defineComponent({
         v-if="!testList.length"
         class="text-center grid justify-items-center"
       >
-        <PImage
-          source="/png/app/home/test-list/empty-state.png"
+        <Img
+          src="static/png/app/home/test-list/empty-state"
           alt="Vector illustration of an empty state"
           :width="100"
           :height="100"

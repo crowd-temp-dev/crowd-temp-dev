@@ -112,8 +112,8 @@
             class="min-h-[254px] grid grid-rows-[1fr,auto] bg-[#FBFAFA] rounded-[5px] p-20"
           >
             <div class="flex h-full items-end">
-              <PImage
-                source="/png/answer-test/radio-wave.png"
+              <Img
+                src="/png/answer-test/radio-wave.png"
                 :height="50"
                 class="h-50"
               />

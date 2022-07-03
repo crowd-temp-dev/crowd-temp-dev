@@ -24,7 +24,11 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: 'https://res.cloudinary.com/crowd-mvp/image/upload/v1656851512/static/favicon.png',
+      },
       {
         rel: 'preconnect',
         hid: 'google-font-preconnect-1',
@@ -149,7 +153,9 @@ export default {
     './server-middleware/baseEndpoint',
   ],
 
-  env: {},
+  env: {
+    CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+  },
 
   typescript: {
     typeCheck: {

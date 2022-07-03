@@ -49,7 +49,7 @@ export default function (router: Router) {
         }
         // find user
         const user = await User.findOne({
-          where: { email },
+          where: { email: email.toLowerCase() },
           transaction,
         })
 

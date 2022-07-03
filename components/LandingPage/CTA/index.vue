@@ -1,8 +1,8 @@
 <template>
   <section class="w-750 mx-auto grid justify-items-center mb-100">
     <span id="contact" class="sr-only">Contact us</span>
-    <PImage
-      source="/png/landing-page/cta/poster-vector.png"
+    <Img
+      src="static/png/landing-page/cta/poster-vector"
       alt="Vector image of a person sitting and drinking a hot drink"
       :width="$breakpoint.isMobile ? 228.37 : 399"
       :height="$breakpoint.isMobile ? 124.48 : 224.48"

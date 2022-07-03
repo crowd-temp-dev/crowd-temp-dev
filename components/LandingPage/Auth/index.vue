@@ -1,3 +1,13 @@
+
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
+  name: 'LandingPageAuth',
+  props: { plain: Boolean },
+})
+</script>
+
 <template>
   <div
     class="bg-surface-default max-w-[100%] md:max-w-[620px] mx-auto rounded-[5px] px-16 md:px-30 py-32 md:py-30"
@@ -30,14 +40,3 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-
-export default defineComponent({
-  name: 'FormAuth',
-  props: { plain: Boolean },
-  setup() {},
-})
-</script>
-
-<style scoped></style>

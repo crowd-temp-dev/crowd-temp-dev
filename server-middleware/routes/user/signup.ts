@@ -159,7 +159,7 @@ export default function (router: Router) {
         } else {
           const user = await User.create(
             {
-              email,
+              email: _email,
               name,
               password: hashedPassword,
               role: 'tester',

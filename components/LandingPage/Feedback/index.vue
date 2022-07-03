@@ -35,8 +35,8 @@
           </p>
 
           <div class="flex space-x-[12.5px] md:space-x-16">
-            <PImage
-              source="/png/landing-page/feedback/avatar.png"
+            <Img
+              src="static/png/landing-page/feedback/avatar"
               alt="pretty smiling joyfully personl ooking with satisfaction"
               :width="$breakpoint.isMobile ? 43.18 : 60"
               :height="$breakpoint.isMobile ? 43.18 : 60"

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "export NODE_ENV=development FORCE_SYNC=0 && nuxt",
-    "build": "export NODE_ENV=production FORCE_SYNC=1 && nuxt build",
+    "build": "export NODE_ENV=production FORCE_SYNC=0 && nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
@@ -24,6 +24,7 @@
     "@vue/composition-api": "^1.4.9",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "cloudinary-vue": "^1.2.4",
     "connect-memcached": "^2.0.0",
     "cookie-parser": "^1.4.6",
     "cookie-universal-nuxt": "^2.1.5",

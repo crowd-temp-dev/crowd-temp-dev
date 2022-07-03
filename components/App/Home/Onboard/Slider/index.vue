@@ -13,8 +13,8 @@
         <div
           class="relative flex items-center justify-center rounded-l-lg overflow-hidden w-fit shrink-0"
         >
-          <PImage
-            source="/png/app/home/onboard/poster.png"
+          <Img
+            src="static/png/app/home/onboard/poster"
             alt="Poster"
             :width="191"
             :height="182"

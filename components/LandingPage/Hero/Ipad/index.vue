@@ -2,8 +2,8 @@
   <div
     class="relative flex justify-center items-center w-[246.12px] h-[168.48px] md:w-[661px] md:h-[452.48px] mx-auto"
   >
-    <PImage
-      source="/png/landing-page/hero/ipad.png"
+    <Img
+      src="static/png/landing-page/hero/ipad"
       alt="Ipad image"
       :width="$breakpoint.isMobile ? 246.12 : 661"
       :height="452.48"
@@ -12,8 +12,8 @@
 
     <!-- video goes here -->
 
-    <PImage
-      source="/png/landing-page/hero/video.png"
+    <Img
+      src="static/png/landing-page/hero/video"
       alt="Onboard video"
       :width="$breakpoint.isMobile ? 223.89 : 601.28"
       :height="$breakpoint.isMobile ? 144.9 : 389.15"

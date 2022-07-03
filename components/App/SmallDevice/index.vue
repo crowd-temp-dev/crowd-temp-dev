@@ -14,8 +14,8 @@ export default defineComponent({
     <header class="pt-24 pl-10 mb-36">
       <h1 class="text-[20.07px] leading-[20.57px] font-medium font-epilogue">
         <NuxtLink to="/" class="flex items-center">
-          <PImage
-            source="/logo.png"
+          <Img
+            src="/logo.png"
             alt="App logo"
             :width="22.26"
             :height="16"
@@ -28,8 +28,8 @@ export default defineComponent({
     </header>
 
     <main class="grid justify-items-center font-sf-pro-display px-16">
-      <PImage
-        source="/png/app/small-screen-vector.png"
+      <Img
+        src="/png/app/small-screen-vector.png"
         alt="Vector image of a person standing beside a question mark"
         :width="234.67"
         :height="176"

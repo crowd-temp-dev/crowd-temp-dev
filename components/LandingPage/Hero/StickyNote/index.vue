@@ -1,24 +1,3 @@
-<template>
-  <figure class="StickyNote inline-block" :class="[`${type}-type`]">
-    <PImage
-      :source="`/png/landing-page/hero/sticky-notes/${type}.png`"
-      alt="Sticky note user image"
-      :width="$breakpoint.isMobile ? 25.63 : 50"
-      :height="$breakpoint.isMobile ? 25.63 : 50"
-      class="img"
-    />
-
-    <figcaption
-      class="caption"
-      :style="{
-        '--bg': color,
-      }"
-    >
-      {{ caption }}
-    </figcaption>
-  </figure>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
 
@@ -58,6 +37,26 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <figure class="StickyNote inline-block" :class="[`${type}-type`]">
+    <Img
+      :src="`static/png/landing-page/hero/sticky-notes/${type}`"
+      alt="Sticky note user image"
+      :width="$breakpoint.isMobile ? 25.63 : 50"
+      :height="$breakpoint.isMobile ? 25.63 : 50"
+      class="img"
+    />
+    <figcaption
+      class="caption"
+      :style="{
+        '--bg': color,
+      }"
+    >
+      {{ caption }}
+    </figcaption>
+  </figure>
+</template>
 
 <style scoped lang="postcss">
 .StickyNote {
