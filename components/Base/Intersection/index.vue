@@ -11,6 +11,7 @@ import {
 } from '@vue/composition-api'
 import { Config } from './types'
 import { defaultConfig, inactiveEntry, isHTML } from './utils'
+import { nextFrame } from '~/utils'
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -85,9 +86,14 @@ export default defineComponent({
       observer.value?.observe(elem)
     }
 
-    const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
+    const intersectionCallback = async (
+      entries: IntersectionObserverEntry[]
+    ) => {
       for (const _entry of entries) {
+        await nextFrame()
+
         entry.value = _entry
+
         emit('update:entry', _entry)
 
         if (props.value.once) {

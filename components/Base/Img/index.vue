@@ -3,6 +3,8 @@ import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import Intersection from '../Intersection/index.vue'
 import { oneFrame, sleep } from '~/utils'
 
+const loadedSrc = new Map() as Map<string, number>
+
 export default defineComponent({
   name: 'BaseImg',
   components: { Intersection },
@@ -27,16 +29,19 @@ export default defineComponent({
   },
   emits: ['load:success', 'load:error'],
   setup(_props, { emit }) {
-    const loaded = ref(false)
+    const props = computed(() => _props)
+
+    const loaded = ref(!!loadedSrc.get(props.value.src))
 
     const error = ref(false)
 
-    const props = computed(()=>_props)
-
-    watch(() => props.value.src, () => {
-      loaded.value = false;
-      error.value = false;
-    })
+    watch(
+      () => props.value.src,
+      () => {
+        loaded.value = false
+        error.value = false
+      }
+    )
 
     const onError = () => {
       emit('load:error')
@@ -49,6 +54,8 @@ export default defineComponent({
         emit('load:success')
         loaded.value = true
         error.value = false
+
+        loadedSrc.set(props.value.src, 1)
       })
     }
 

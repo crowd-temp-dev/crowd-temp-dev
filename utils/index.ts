@@ -74,6 +74,11 @@ export const features: Feature = {
   },
 }
 
+export const nextFrame = () =>
+  new Promise((resolve) => {
+    requestAnimationFrame(resolve)
+  })
+
 export const sleep = (duration: number = 0) =>
   new Promise((resolve) => {
     const timeout = setTimeout(() => {
