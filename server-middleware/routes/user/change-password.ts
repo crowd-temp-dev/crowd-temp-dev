@@ -21,10 +21,6 @@ const formValidation: RequestHandler = (req, res, next) => {
   const schema = Joi.object({
     currentPassword: user.password.required(),
     password: user.password
-      .not(req.body.currentPassword)
-      .rule({
-        message: 'New password must be different from current password.',
-      })
       .required(),
     confirmPassword: user.password.valid(Joi.ref('password')).required(),
   } as Record<keyof ChangePasswordForm, any>)
