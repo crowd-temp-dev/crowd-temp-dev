@@ -59,7 +59,7 @@ export default defineComponent({
           class="my-16 w-full h-full cursor-pointer"
           @click="$emit('on-select')"
         >
-          <img
+          <Img
             :src="getSrc"
             :alt="imageAlt"
             class="w-full h-240 object-contain"

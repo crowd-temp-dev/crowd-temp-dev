@@ -9,8 +9,6 @@ import DB from '../../../database'
 import { File } from '../../../database/models/File/File'
 import { sendError, sendFormattedError } from '../../utils/sendRes'
 import { uuidv4 } from '../../utils/validation'
-import { formatByte } from '../../../utils'
-import { routeQuery } from '../../utils'
 import cloudinary from './cloudinary'
 
 export function uploadFile(arg: {
@@ -51,11 +49,6 @@ export function uploadFile(arg: {
       files.forEach((file, index) => {
         const fileId = config.fileNames[index]
 
-        const fullFileId = `${fileId}?${routeQuery({
-          s: formatByte(file.size),
-          t: file.mimetype,
-        })}`
-
         const fileExt = (file.name.match(/\.[a-z]+$/g) || [])[0] || ''
 
         const fileName = `${fileId}${fileExt}`
@@ -89,7 +82,7 @@ export function uploadFile(arg: {
             newFiles.push({
               ...fileData,
               id: fileId,
-              name: fullFileId,
+              name: fileName,
               size: file.size,
               encoding: file.encoding,
               mimetype: file.mimetype,
@@ -128,6 +121,8 @@ export function uploadFile(arg: {
 
                 for (const file of newFiles) {
                   try {
+                    const filePath = path.join(rootDir, `${file.name}`)
+
                     await cloudinary.uploader.upload(filePath, {
                       public_id: file.id,
                       folder: 'uploads',
@@ -135,6 +130,8 @@ export function uploadFile(arg: {
 
                     fs.unlinkSync(filePath)
                   } catch (err) {
+                    console.log({ err })
+
                     throw new Error('{500} Error uploading file(s)')
                   }
                 }
