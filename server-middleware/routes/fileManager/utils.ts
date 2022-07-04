@@ -1,4 +1,5 @@
 import path from 'path'
+import https from 'https'
 import fs from 'fs'
 import { Request, RequestHandler, Response } from 'express'
 import { UploadedFile } from 'express-fileupload'
@@ -8,6 +9,9 @@ import DB from '../../../database'
 import { File } from '../../../database/models/File/File'
 import { sendError, sendFormattedError } from '../../utils/sendRes'
 import { uuidv4 } from '../../utils/validation'
+import { formatByte } from '../../../utils'
+import { routeQuery } from '../../utils'
+import cloudinary from './cloudinary'
 
 export function uploadFile(arg: {
   req: Request
@@ -40,109 +44,113 @@ export function uploadFile(arg: {
     if (files.length) {
       const { fileData } = arg
 
-      const uploadRoot = path.join(__dirname, '..', '..', '..')
+      // const uploadPath = ['uploads', ...config.path.split('/').filter(Boolean)]
 
-      const uploadPath = ['uploads', ...config.path.split('/').filter(Boolean)]
+      const newFiles: File[] = []
 
-      const findOrCreateDir = () => {
-        return new Promise((resolve, reject) => {
-          let index = 0
+      files.forEach((file, index) => {
+        const fileId = config.fileNames[index]
 
-          while (index < uploadPath.length) {
-            const dir = uploadPath[index]
+        const fullFileId = `${fileId}?${routeQuery({
+          s: formatByte(file.size),
+          t: file.mimetype,
+        })}`
 
-            const currentPath = path.join(
-              uploadRoot,
-              ...uploadPath.slice(0, index)
+        const fileExt = (file.name.match(/\.[a-z]+$/g) || [])[0] || ''
+
+        const fileName = `${fileId}${fileExt}`
+
+        const rootDirPaths = [__dirname, '..', '..', 'uploads']
+
+        const rootDir = path.join(...rootDirPaths)
+
+        const createUploadsFolder = () => {
+          const hasUploadsFolder = fs
+            .readdirSync(
+              path.join(...rootDirPaths.slice(0, rootDirPaths.length - 1))
             )
+            .includes('uploads')
 
-            const ls = fs.readdirSync(currentPath)
-
-            if (!ls.includes(dir)) {
-              fs.mkdir(path.join(currentPath, dir), (err) => {
-                if (err) {
-                  index = uploadPath.length
-
-                  reject(new Error('Cannot upload right now'))
-                } else {
-                  index += 1
-                }
-              })
-            } else {
-              index += 1
-            }
+          if (!hasUploadsFolder) {
+            fs.mkdirSync(rootDir)
           }
 
-          resolve(1)
-        })
-      }
+          return Promise.resolve()
+        }
 
-      findOrCreateDir()
-        .then(() => {
-          const newFiles: Record<string, any>[] = []
+        createUploadsFolder().then(() => {
+          const filePath = path.join(rootDir, fileName)
 
-          files.forEach((file, index) => {
-            const fileExt = (file.name.match(/\.[a-z]+$/g) || [])[0] || ''
+          file.mv(filePath, (err) => {
+            if (err) {
+              reject(err)
+            }
 
-            const fileName = `${config.fileNames[index]}${fileExt}`
+            newFiles.push({
+              ...fileData,
+              id: fileId,
+              name: fullFileId,
+              size: file.size,
+              encoding: file.encoding,
+              mimetype: file.mimetype,
+              path: `/uploads/${config.path}/`.replace(/\/{2,}/, '/'),
+              fullPath: `/uploads/${config.path}/${fileName}`.replace(
+                /\/{2,}/g,
+                '/'
+              ),
+            } as File)
 
-            const filePath = path.join(uploadRoot, ...uploadPath, fileName)
+            if (index === files.length - 1) {
+              const { transaction } = arg
 
-            file.mv(filePath, (err) => {
-              if (err) {
-                reject(err)
-              }
+              // remove all repeated files before saving new ones to db
+              const saveToDB = async () => {
+                const filterNewFiles = [
+                  ...new Set(
+                    newFiles.map((value) => ({
+                      name: value.name,
+                      size: value.size,
+                      mimetype: value.mimetype,
+                    }))
+                  ),
+                ]
 
-              newFiles.push({
-                ...fileData,
-                id: config.fileNames[index],
-                name: fileName,
-                size: file.size,
-                encoding: file.encoding,
-                mimetype: file.mimetype,
-                path: config.path,
-                fullPath: `/${config.path}/${fileName}`.replace(/\/{2,}/g, '/'),
-              })
-
-              if (index === files.length - 1) {
-                const { transaction } = arg
-
-                // remove all repeated files before saving new ones to db
-                const saveToDB = async () => {
-                  const filterNewFiles = [
-                    ...new Set(
-                      newFiles.map((value) => ({
-                        name: value.name,
-                        size: value.size,
-                        mimetype: value.mimetype,
-                      }))
-                    ),
-                  ]
-
-                  for (const value of filterNewFiles) {
-                    await File.destroy({
-                      where: {
-                        name: value.name,
-                        size: value.size,
-                        mimetype: value.mimetype,
-                      },
-                      transaction,
-                    })
-                  }
-
-                  await File.bulkCreate(newFiles, {
-                    transaction: arg.transaction,
+                for (const value of filterNewFiles) {
+                  await File.destroy({
+                    where: {
+                      name: value.name,
+                      size: value.size,
+                      mimetype: value.mimetype,
+                    },
+                    transaction,
                   })
-
-                  return Promise.resolve()
                 }
 
-                saveToDB().then(resolve).catch(reject)
+                for (const file of newFiles) {
+                  try {
+                    await cloudinary.uploader.upload(filePath, {
+                      public_id: file.id,
+                      folder: 'uploads',
+                    })
+
+                    fs.unlinkSync(filePath)
+                  } catch (err) {
+                    throw new Error('{500} Error uploading file(s)')
+                  }
+                }
+
+                await File.bulkCreate(newFiles, {
+                  transaction: arg.transaction,
+                })
+
+                return Promise.resolve()
               }
-            })
+
+              saveToDB().then(resolve).catch(reject)
+            }
           })
         })
-        .catch(reject)
+      })
     } else {
       reject(new Error('{400} No file to add'))
     }
@@ -186,34 +194,29 @@ export function getFileHandler() {
       }
 
       await DB.transaction(async (transaction) => {
-        const fileInfo = await File.findByPk(id, {
+        const fileInfo = await File.findOne({
+          where: {
+            id,
+          },
           transaction,
         })
 
         if (fileInfo) {
-          fs.readFile(
-            path.join(
-              __dirname,
-              '..',
-              '..',
-              '..',
-              'uploads',
-              fileInfo.fullPath
-            ),
-            (err, file) => {
-              if (err) {
-                console.log({ err })
-
-                notFound()
-              } else {
-                res.writeHead(200, {
-                  'Content-Type': fileInfo.mimetype,
-                })
-
-                res.end(file)
-              }
-            }
+          const url = cloudinary.url(
+            `${fileInfo.path}${fileInfo.id}`.replace(/^\//, '')
           )
+
+          https.get(url, (res) => {
+            let data = ''
+
+            res.on('data', (chunk) => {
+              data += chunk
+            })
+
+            res.on('end', () => {
+              console.log(JSON.parse(data).explanation)
+            })
+          })
         } else notFound()
       })
     } catch (err) {

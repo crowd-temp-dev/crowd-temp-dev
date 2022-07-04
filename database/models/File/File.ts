@@ -1,10 +1,7 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import {
   Model,
   InferAttributes,
   InferCreationAttributes,
-  CreationOptional,
   DataTypes,
   Sequelize,
 } from 'sequelize'
@@ -12,7 +9,7 @@ import { Uuidv4 } from '../../utils/model'
 import { convertToByte } from '../../../utils'
 
 export class File extends Model<InferAttributes<File>, InferCreationAttributes<File>> {
-  declare id: CreationOptional<string>
+  declare id?: string
   declare createdBy: string
   declare createdFor: string
   declare name: string
@@ -27,8 +24,13 @@ export default function initDesignSurvey(DB: Sequelize) {
   File.init(
     {
       id: {
-        ...Uuidv4,
-        defaultValue: uuidv4,
+        type: DataTypes.STRING(500),
+        validate: {
+          is: {
+            msg: 'Invalid File ID',
+            args: /^f.+(\?).+(=).+(&).+$/,
+          },
+        },
         primaryKey: true,
         unique: true,
       },

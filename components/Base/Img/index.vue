@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import Intersection from '../Intersection/index.vue'
-import { oneFrame, sleep } from '~/utils'
+import { sleep } from '~/utils'
 
 const loadedSrc = new Map() as Map<string, number>
 
@@ -27,7 +27,7 @@ export default defineComponent({
       default: 'high',
     },
   },
-  emits: ['load:success', 'load:error'],
+  emits: ['load:success', 'load:error', 'load', 'error'],
   setup(_props, { emit }) {
     const props = computed(() => _props)
 
@@ -45,13 +45,15 @@ export default defineComponent({
 
     const onError = () => {
       emit('load:error')
+      
       loaded.value = false
       error.value = true
     }
 
     const onLoad = () => {
-      sleep(oneFrame).then(() => {
+      sleep().then(() => {
         emit('load:success')
+
         loaded.value = true
         error.value = false
 
@@ -69,11 +71,13 @@ export default defineComponent({
     v-if="!loaded"
     v-slot="{ isIntersecting }"
     :disabled="loading === 'eager'"
+    :config="{ rootMargin: '64px' }"
     once
   >
     <figure
       class="flex-centered bg-surface-default border border-divider/30"
       :title="error ? alt : undefined"
+      :aria-label="alt"
     >
       <CldImage
         v-if="isIntersecting && !error"
@@ -108,5 +112,7 @@ export default defineComponent({
     :fetchpriority="fetchpriority"
     v-bind="$attrs"
     v-on="$listeners"
+    @load.native="$emit('load')"
+    @error.native="$emit('error')"
   />
 </template>

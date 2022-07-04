@@ -22,7 +22,7 @@ export default defineComponent({
   },
   setup(_props) {
     const getSrc = computed(() => {
-      return `/file/${_props.src}`
+      return `uploads/${_props.src}`
     })
     const imageAlt = computed(() => {
       return `Version ${_props.index} image`
@@ -102,7 +102,7 @@ export default defineComponent({
 
         <div class="flex-centered h-full w-full">
           <!-- <div class="aspect-w-16 aspect-h-6"> -->
-          <img
+          <Img
             :src="getSrc"
             :alt="imageAlt"
             class="w-auto h-[80%] object-contain"

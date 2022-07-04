@@ -44,8 +44,8 @@ export default defineComponent({
   <div>
     <PEmptyState class="max-w-[760px] mx-auto w-full h-fit mt-[4%]">
       <div class="grid justify-items-center justify-center">
-        <img
-          src="/png/app/Home/test-list/empty-state.png"
+        <Img
+          src="static/png/app/Home/test-list/empty-state"
           class="mb-32 h-172"
         />
 

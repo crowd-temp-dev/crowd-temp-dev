@@ -15,8 +15,6 @@ import type { RenderFunction } from '~/types'
 
 type Numbering = `${number}${string}`
 
-// type QuestionComponent = 'ShortOrLongText' | 'Choices' | 'LinearScale' | ''
-
 export default defineComponent({
   name: 'AppCreateTestResultsQuestion',
   components: {
@@ -24,9 +22,6 @@ export default defineComponent({
     Button,
     FadeTransition,
     Id,
-    Choices,
-    ShortOrLongText,
-    LinearScale,
   },
   props: {
     numbering: {
@@ -103,10 +98,12 @@ export default defineComponent({
     })
 
     return () => {
+      const p: RenderFunction = (d, c) => h('p', d, c)
       const div: RenderFunction = (d, c) => h('div', d, c)
       const span: RenderFunction = (d, c) => h('span', d, c)
       const strong: RenderFunction = (d, c) => h('strong', d, c)
       const Button: RenderFunction = (d, c) => h('Button', d, c)
+      const Select: RenderFunction = (d, c) => h('Select', d, c)
 
       const maxShortOrLongTextLength = 5
 
@@ -137,11 +134,7 @@ export default defineComponent({
         )
 
       const questionHeader = (key: string) => [
-        h(
-          'p',
-          { key: `${key}-main`, staticClass: 'mb-20' },
-          question.value.title
-        ),
+        p({ key: `${key}-main`, staticClass: 'mb-20' }, question.value.title),
 
         div(
           {
@@ -169,7 +162,7 @@ export default defineComponent({
                       'relative isolate shrink-0 w-full max-w-[194px]',
                   },
                   [
-                    h('Select', {
+                    Select({
                       props: {
                         options: [
                           { label: 'Participants', value: 'participants' },
@@ -287,6 +280,7 @@ export default defineComponent({
                                 scopedSlots: {
                                   'dialog-header': () =>
                                     questionHeading('dialog-heading'),
+
                                   dialog: () => [
                                     div({ staticClass: 'min-w-[768px]' }, [
                                       questionHeader('dialog-header'),

@@ -20,7 +20,7 @@ export default defineComponent({
     })
 
     const imgSrc = computed(() =>
-      currentSection.value.file ? `/file/${currentSection.value.file}` : ''
+      currentSection.value.file ? `uploads/${currentSection.value.file}` : ''
     )
 
     const expandedKeyboardEvent = computed(() => {
@@ -106,8 +106,9 @@ export default defineComponent({
                   'aspect-w-16 aspect-h-6': expanded,
                 }"
               >
-                <img
+                <Img
                   :src="imgSrc"
+                  alt="Image"
                   class="mx-auto rounded object-contain"
                   :class="{
                     'w-full border-divider': !expanded,

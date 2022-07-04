@@ -3,10 +3,11 @@ import { defineComponent } from '@vue/composition-api'
 import FLIPContainer from '~/components/Base/FLIPContainer/index.vue'
 import Id from '~/components/Base/Id/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import Img from '~/components/Base/Img/index.vue'
 
 export default defineComponent({
   name: 'AppSettingsProfilePhotoPreview',
-  components: { FLIPContainer, Id, FadeTransition },
+  components: { FLIPContainer, Id, FadeTransition, Img },
   setup() {
     const size = 500
 
@@ -69,9 +70,9 @@ export default defineComponent({
           class="w-full h-full overflow-hidden transition-all rounded-full"
           :class="{ 'rounded-full': !active }"
         >
-          <img
+          <Img
             alt="Avatar"
-            src="/png/app/Home/onboard/poster.png"
+            src="static/png/app/Home/onboard/poster"
             class="w-full h-full"
           />
         </div>

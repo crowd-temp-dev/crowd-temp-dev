@@ -23,7 +23,7 @@ export default defineComponent({
       ).questions[`question-${props.value.numbering}`].file
 
       return {
-        src: `/file/${file}`,
+        src: `uploads/${file}`,
         alt: `${sectionTitle.value} media file`,
       }
     })

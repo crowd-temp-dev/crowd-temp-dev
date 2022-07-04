@@ -24,6 +24,7 @@
     "@vue/composition-api": "^1.4.9",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "cloudinary": "^1.30.0",
     "cloudinary-vue": "^1.2.4",
     "connect-memcached": "^2.0.0",
     "cookie-parser": "^1.4.6",

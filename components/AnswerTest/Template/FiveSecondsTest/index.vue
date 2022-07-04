@@ -51,7 +51,7 @@ export default defineComponent({
     })
 
     const imgSrc = computed(() =>
-      currentSection.value.file ? `/file/${currentSection.value.file}` : ''
+      currentSection.value.file ? `uploads/${currentSection.value.file}` : ''
     )
 
     const formatDuration = computed(() => {
@@ -132,8 +132,9 @@ export default defineComponent({
       >
         <PEmptyState class="max-w-[760px] mx-auto w-full h-fit">
           <div class="grid justify-items-center justify-center">
-            <img
-              src="/png/app/Home/test-list/empty-state.png"
+            <Img
+              src="static/png/app/Home/test-list/empty-state"
+              alt="Image"
               class="mb-32 h-172"
             />
 
@@ -154,9 +155,10 @@ export default defineComponent({
 
             <Button primary @click="showImage">
               View image
-              <img
+              <Img
                 v-if="!pseudoImageLoaded"
                 :src="imgSrc"
+                alt="Image"
                 class="sr-only"
                 decoding="async"
                 @load="pseudoImageLoaded = true"
@@ -183,8 +185,9 @@ export default defineComponent({
             >
               <div class="h-full mt-[2%]">
                 <div class="aspect-w-16 aspect-h-6 drop-shadow-sm">
-                  <img
+                  <Img
                     :src="imgSrc"
+                    alt="Image"
                     class="object-contain"
                     @load="startCountdown"
                   />

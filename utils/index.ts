@@ -685,7 +685,7 @@ export const scrollToLandingPageHash = (
 
       const top = hashEl.offsetTop - (32 + (header ? header.clientHeight : 0))
 
-      sleep(oneFrame).then(() => {
+      sleep().then(() => {
         window.scrollTo({
           top,
           behavior: smooth ? 'smooth' : 'auto',

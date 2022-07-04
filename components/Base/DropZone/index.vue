@@ -71,7 +71,7 @@ export default defineComponent({
       return modelSync.value.map((file) => {
         if (typeof file === 'string') {
           return {
-            src: `/file/${file}`,
+            src: `uploads/${file}`,
             file: {
               type: 'image/',
             },
