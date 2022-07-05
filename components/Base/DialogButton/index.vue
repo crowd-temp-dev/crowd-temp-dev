@@ -54,10 +54,10 @@ export default defineComponent({
 
     const modelSync = computed({
       get() {
-        if (typeof _props.modelValue === 'undefined') {
-          return manual.value
+        if (typeof _props.modelValue === 'boolean') {
+          return _props.modelValue
         }
-        return _props.modelValue
+        return manual.value
       },
       set(val: boolean) {
         if (typeof val === 'boolean') {
@@ -79,9 +79,7 @@ export default defineComponent({
 
       if (_props.disableButton) return
 
-      if (typeof _props.modelValue === 'undefined') {
-        open()
-      }
+      open()
     }
 
     const id = uid()

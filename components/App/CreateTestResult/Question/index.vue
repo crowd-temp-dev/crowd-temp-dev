@@ -66,7 +66,10 @@ export default defineComponent({
 
           return answer
         })
-        .filter((val) => !!val.value && !val.skip)
+        .filter(
+          (val) =>
+            !!val.value && !val.skip && (starred.value ? val.favourite : true)
+        )
     })
 
     const isShortOrLongText = computed(() => {

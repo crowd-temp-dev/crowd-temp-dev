@@ -201,7 +201,11 @@ export default defineComponent({
       }
     })
 
-    onBeforeUnmount(cleanup)
+    onBeforeUnmount(() => {
+      cleanup()
+
+      close()
+    })
 
     return {
       enter,
