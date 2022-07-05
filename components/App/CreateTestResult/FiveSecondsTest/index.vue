@@ -24,7 +24,7 @@ export default defineComponent({
 
       return {
         src: `uploads/${file}`,
-        alt: `${sectionTitle.value} media file`,
+        alt: `Question ${sectionTitle.value} media file`,
       }
     })
 

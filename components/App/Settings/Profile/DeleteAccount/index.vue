@@ -96,6 +96,7 @@ export default defineComponent({
             <FadeTransition>
               <PasswordField
                 v-if="confirmed"
+                autofocus
                 required
                 label="Password*"
                 v-bind="fieldIdAndError('password')"

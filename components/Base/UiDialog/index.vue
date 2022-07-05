@@ -14,6 +14,7 @@ import Tooltip from '../Tooltip/index.vue'
 
 import FadeTransition from '../FadeTransition/index.vue'
 import { uid } from '~/utils'
+import eventKey from '~/utils/eventKey'
 
 export type DrawerFrom = 'top' | 'right' | 'bottom' | 'left'
 
@@ -133,10 +134,10 @@ export default defineComponent({
     const previousActive = ref<HTMLElement | null>(null)
 
     const trapFocus = (evt: KeyboardEvent) => {
-      if (isFurthestDialog.value) {        
+      if (isFurthestDialog.value && eventKey(evt) === 'tab') {
         new TrapFocus({
           loop: true,
-        }).init(evt)        
+        }).init(evt)
       }
 
       emit('keydown', evt)
@@ -370,6 +371,7 @@ export default defineComponent({
 .fade-transition-enter-active .content.content.slide-y,
 .fade-transition-enter-active .content.content.slide-y-reverse {
   transition-timing-function: cubic-bezier(0, 0.15, 0.45, 1);
+  transition-duration: 300ms;
 }
 
 .fade-transition-enter .content.slide-y {

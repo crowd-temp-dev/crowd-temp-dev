@@ -185,8 +185,11 @@ export default defineComponent({
 
     const onSubmit = async (evt: Event) => {
       if (!root.$breakpoint) {
-        return
-      }      
+        return root.$nuxt.error({
+          message: 'Overlay not properly registered',
+          statusCode: 500,
+        })
+      }
 
       emit('submit', evt)
 
@@ -259,7 +262,7 @@ export default defineComponent({
 <template>
   <FadeTransition>
     <form
-      :id="name || $attrs.id"
+      :id="$attrs.id || name"
       :key="rootKey"
       ref="rootRef"
       :name="name"

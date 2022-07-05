@@ -66,9 +66,9 @@ export default {
     '@plugins/alertDialog',
     '@/plugins/fullscreenLoading',
     '@/plugins/user',
+    '@/plugins/breakpoint',
     '@/plugins/init',
     '@/plugins/autoLogin',
-    '@/plugins/breakpoint',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
