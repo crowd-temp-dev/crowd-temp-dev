@@ -63,12 +63,12 @@ export default {
   plugins: [
     '@/plugins/register-libraries',
     '@/plugins/register-components',
-    '@plugins/alertDialog',
-    '@/plugins/fullscreenLoading',
-    '@/plugins/user',
-    '@/plugins/breakpoint',
-    '@/plugins/init',
     '@/plugins/autoLogin',
+    '@/plugins/user',
+    '@/plugins/fullscreenLoading',
+    '@/plugins/breakpoint',
+    '@plugins/alertDialog',
+    '@/plugins/init',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
