@@ -124,7 +124,7 @@ export default defineComponent({
             <Tooltip
               v-slot="{ events }"
               :open-delay="500"
-              label="Favourite"
+              label="Toggle favourite"
               :disabled="answer.loading"
             >
               <button
