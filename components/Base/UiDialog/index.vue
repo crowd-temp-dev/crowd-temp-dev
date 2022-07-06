@@ -375,7 +375,6 @@ export default defineComponent({
 .fade-transition-enter-active .content.content.slide-y,
 .fade-transition-enter-active .content.content.slide-y-reverse {
   transition-timing-function: cubic-bezier(0, 0.15, 0.45, 1);
-  transition-duration: 300ms;
 }
 
 .fade-transition-enter .content.slide-y {
@@ -397,7 +396,8 @@ export default defineComponent({
 }
 
 .fade-transition-enter-active .content.as-drawer {
-  transition-timing-function: cubic-bezier(0, 0.5, 0.3, 1.075);
+  transition-timing-function: cubic-bezier(0, 0.5, 0.3, 1);
+  transition-duration: 300ms;
 }
 
 .fade-transition-enter .content.slide-from-right {

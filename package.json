@@ -1,6 +1,6 @@
 {
   "name": "crowd-app",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "export NODE_ENV=development FORCE_SYNC=0 && nuxt",
