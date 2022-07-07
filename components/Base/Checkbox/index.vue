@@ -66,7 +66,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="postcss">
-.root:focus-within >>> .Polaris-Choice__Label {
-  @apply underline;
+.root:focus-within >>> .Polaris-Checkbox {
+  @apply ring-2 ring-offset-1 ring-action-primary-default rounded;
 }
 </style>

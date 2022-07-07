@@ -191,15 +191,19 @@ export default defineComponent({
           v-bind="fieldIdAndError('confirmPassword')"
         />
 
-        <Checkbox required v-bind="fieldIdAndError('agreed')">
-          I agree to Crowd's
+        <div class="flex items-center space-x-4">
+          <Checkbox required v-bind="fieldIdAndError('agreed')">
+            I agree to Crowd's
+          </Checkbox>
+
           <NuxtLink
             to="/privacy-and-policy"
             class="text-action-primary-default hover:underline"
+            @click.native.stop
           >
             terms and privacy policies
           </NuxtLink>
-        </Checkbox>
+        </div>
 
         <Checkbox
           id="newsUpdate"
