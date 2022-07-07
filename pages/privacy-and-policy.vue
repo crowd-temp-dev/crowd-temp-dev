@@ -77,7 +77,7 @@ export default defineComponent({
       </h2>
 
       <section
-        class="bg-surface-default max-w-[1000px] rounded-[5px] p-20 px-16 mx:8 md:mx-0 md:px-20 lg:px-30 lg:p-30 mt-16 mx-auto"
+        class="bg-surface-default max-w-[calc(100%-16px)] md:max-w-[1000px] rounded-[5px] p-20 px-16 md:px-20 lg:px-30 lg:p-30 mt-16 mx-auto"
       >
         <p class="text-text-subdued text-center mb-20">
           Updated at {{ updatedAt }}
