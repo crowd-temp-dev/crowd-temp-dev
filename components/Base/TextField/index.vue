@@ -10,7 +10,13 @@
     :help-text="helpText"
     :type="type"
     v-on="$listeners"
-  />
+  >
+    <template #label>
+      <slot>
+        {{ label }}
+      </slot>
+    </template>
+  </PTextField>
 </template>
 
 <script lang="ts">
@@ -38,13 +44,13 @@ export default defineComponent({
     },
     updateModelValue: {
       type: Function,
-      default: undefined
+      default: undefined,
     },
   },
   data() {
     return {
       manualModel: this.value,
-      uid: uid()
+      uid: uid(),
     }
   },
   computed: {

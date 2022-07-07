@@ -11,9 +11,11 @@
     v-on="$listeners"
     @change="modelSync = !modelSync"
   >
-    <slot>
-      {{ label }}
-    </slot>
+    <template #label>
+      <slot>
+        {{ label }}
+      </slot>
+    </template>
   </PCheckbox>
 </template>
 
