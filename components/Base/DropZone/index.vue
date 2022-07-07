@@ -182,6 +182,10 @@ export default defineComponent({
       :trigger-view-port="`#${rootId}-preview`"
       :view-port="viewPort"
       :disabled="disablePreview"
+      :enter-transition="{
+        duration: '350',
+        ease: 'cubic-bezier(0.175, 0.885, 0.32, 1.05)',
+      }"
     >
       <template #trigger="{ open, active }">
         <div
@@ -378,8 +382,16 @@ export default defineComponent({
         >
           <div class="w-full h-80 flex-centered z-2 relative">
             <div
-              class="transition-[opacity,transform]"
+              class="transition-[opacity,transform] duration-300"
               :class="{ 'opacity-0 translate-y-[100%]': !overlayEntered }"
+              :style="{
+                'transition-timing-function': ` cubic-bezier(
+                  0.175,
+                  0.885,
+                  0.32,
+                  1.1
+                )`,
+              }"
             >
               <div
                 class="rounded-lg h-50 bg-[rgb(50,50,50,0.9)] border border-[rgb(75,75,75,0.7)] items-center flex space-x-4 pointer-events-auto"
@@ -389,6 +401,7 @@ export default defineComponent({
                   <Tooltip invert>
                     <template #default="{ events }">
                       <span
+                        aria-label="File info"
                         class="rounded-l-lg flex-centered w-50 h-50 transition-opacity opacity-40 hover:opacity-90"
                         v-on="events"
                       >
@@ -428,6 +441,7 @@ export default defineComponent({
                   class="h-full"
                 >
                   <button
+                    aria-label="Delete file"
                     class="flex-centered overlay-btn"
                     v-on="events"
                     @click="
@@ -454,6 +468,7 @@ export default defineComponent({
                   class="h-full"
                 >
                   <label
+                    aria-label="Replace file"
                     :for="id"
                     tabindex="0"
                     role="button"
@@ -472,6 +487,7 @@ export default defineComponent({
                   class="h-full"
                 >
                   <button
+                    aria-label="Close preview"
                     class="rounded-r-lg flex-centered overlay-btn"
                     v-on="events"
                     @click="close"

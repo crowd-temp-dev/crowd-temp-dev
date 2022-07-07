@@ -32,7 +32,7 @@ export default defineComponent({
       const extraSeat = [
         '2 teams members (',
         billAnnually.value ? '$144' : '$12',
-        'per extra seat',
+        'per extra seat)',
       ]
 
       return [

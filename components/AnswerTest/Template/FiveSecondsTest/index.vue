@@ -72,6 +72,16 @@ export default defineComponent({
       return ''
     })
 
+    const getCountdownTime = computed(() => {
+      if (/[1-9]\d?:/.test(countdownTime.value)) {
+        const minute = parseFloat(countdownTime.value.split(':')[0])
+
+        return `${countdownTime.value} minute${minute > 1 ? 's' : ''}`
+      }
+
+      return `${countdownTime.value} seconds`
+    })
+
     const timeFormatter = Intl.DateTimeFormat('en', {
       minute: 'numeric',
       second: '2-digit',
@@ -114,6 +124,7 @@ export default defineComponent({
       questionIndexAndLetter,
       formatDuration,
       countdownTime,
+      getCountdownTime,
       pseudoImageLoaded,
       countdownDone,
       startCountdown,
@@ -175,7 +186,7 @@ export default defineComponent({
               class="image-header flex-centered h-76 w-full absolute top-0 z-10 bg-surface-default shadow-divide-header"
             >
               <strong class="font-sf-pro-display countdown-time">
-                The image below will disappear in {{ countdownTime }} seconds
+                The image below will disappear in {{ getCountdownTime }}
               </strong>
             </div>
 

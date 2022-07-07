@@ -1,13 +1,14 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import Intersection from '../Intersection/index.vue'
+import Tooltip from '../Tooltip/index.vue'
 import { sleep } from '~/utils'
 
 const loadedSrc = new Map() as Map<string, number>
 
 export default defineComponent({
   name: 'BaseImg',
-  components: { Intersection },
+  components: { Intersection, Tooltip },
 
   props: {
     src: {
@@ -35,17 +36,16 @@ export default defineComponent({
 
     const error = ref(false)
 
-    watch(
-      () => props.value.src,
-      () => {
-        loaded.value = false
-        error.value = false
-      }
-    )
+    const reload = () => {
+      loaded.value = false
+      error.value = false
+    }
+
+    watch(() => props.value.src, reload)
 
     const onError = () => {
       emit('load:error')
-      
+
       loaded.value = false
       error.value = true
     }
@@ -61,7 +61,7 @@ export default defineComponent({
       })
     }
 
-    return { loaded, error, onLoad, onError }
+    return { loaded, error, onLoad, onError, reload }
   },
 })
 </script>
@@ -95,11 +95,26 @@ export default defineComponent({
         class="animate-pulse w-full h-full rounded-[inherit] bg-surface-highlight-default/20"
       />
 
-      <PIcon
-        v-else
-        source="ImageMajor"
-        class="fill-icon-default w-[1.25em] h-[1.25em]"
-      />
+      <span v-else class="group">
+        <PIcon
+          source="ImageMajor"
+          class="fill-icon-default w-[1.25em] h-[1.25em] group-hover:hidden"
+        />
+
+        <Tooltip
+          v-slot="{ events }"
+          label="Reload"
+          class="hidden group-hover:block"
+          title=""
+        >
+          <button class="outline-none" v-on="events" @click="reload">
+            <PIcon
+              source="RefreshMajor"
+              class="fill-icon-default w-[1.25em] h-[1.25em] cursor-pointer"
+            />
+          </button>
+        </Tooltip>
+      </span>
     </figure>
   </Intersection>
 

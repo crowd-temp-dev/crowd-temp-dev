@@ -1,25 +1,3 @@
-<template>
-  <div>
-    <main
-      class="grid items-center justify-center max-w-[1230px] mx-auto isolate min-h-screen h-fit mt-24 xs:mt-44 md:mt-60 grid-cols-1 px-8 md:px-0"
-    >
-      <Hero />
-
-      <Features />
-
-      <ExtraFeatures />
-
-      <Feedback />
-
-      <Pricing />
-
-      <CTA />
-    </main>
-
-    <Footer />
-  </div>
-</template>
-
 <script lang="ts">
 import {
   computed,
@@ -56,4 +34,24 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<template>
+  <div>
+    <main
+      class="grid items-center justify-center max-w-[1230px] mx-auto isolate min-h-screen h-fit mt-24 xs:mt-44 md:mt-60 grid-cols-1 px-8 md:px-0"
+    >
+      <Hero />
+
+      <Features />
+
+      <ExtraFeatures />
+
+      <Feedback />
+
+      <Pricing />
+
+      <CTA />
+    </main>
+
+    <Footer />
+  </div>
+</template>

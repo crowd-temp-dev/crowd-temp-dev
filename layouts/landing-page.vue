@@ -15,7 +15,16 @@ export default defineComponent({
 
 <template>
   <!-- Layout for clients not signed in -->
-  <div class="bg-surface-default" :class="{ 'hide-ui': !mounted }">
+  <div
+    :class="[
+      /^auth-(?:sign-up|login)|privacy-and-policy/.test($route.name)
+        ? 'bg-sky-light min-h-screen'
+        : 'bg-surface-default',
+      {
+        'hide-ui': !mounted,
+      },
+    ]"
+  >
     <Header />
     <NuxtChild />
   </div>

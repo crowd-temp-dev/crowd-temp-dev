@@ -106,6 +106,6 @@ button,
 
 .Polaris-Frame-ToastManager.Polaris-Frame-Toast--Position-bottom,
 .Polaris-Frame-ToastManager.Polaris-Frame-Toast--Position-top {
-  animation-timing-function: var(--ease-back-out) !important;
-  animation-duration: 250ms !important;
+  animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.125) !important;
+  animation-duration: 350ms !important;
 }

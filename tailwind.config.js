@@ -8,6 +8,7 @@ module.exports = {
     './pages/**/*.vue',
     './nuxt.config.{js,ts}',
     './store/**/*.ts',
+    './database/seed/privacyAndPolicy',
     // './plugins/**/*.{js,ts}',
   ],
   mode: 'jit',

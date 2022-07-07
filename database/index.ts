@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize'
 import { getModules } from '../server-middleware/utils'
 import envConfigs from './config'
 import setAssociation from './models/setAssociation'
+import seedPrivacyAndPolicies from './seed/privacyAndPolicy'
 import seedUser from './seed/user'
 
 const NODE_ENV = process.env.NODE_ENV as keyof typeof envConfigs
@@ -69,6 +70,8 @@ export function startDB() {
             setAssociation()
               .then(async () => {
                 await seedUser()
+
+                await seedPrivacyAndPolicies()
 
                 console.log('DB Started!')
 

@@ -236,7 +236,7 @@ export default defineComponent({
         :class="[
           asDrawer
             ? [
-                'p-8',
+                'p-8 as-drawer',
                 {
                   'justify-end': from === 'right',
                 },
@@ -354,6 +354,10 @@ export default defineComponent({
   --fade-enter-duration: 250ms;
 }
 
+.UiDialog.as-drawer{
+  --fade-enter-duration: 350ms;
+}
+
 .fade-transition-enter-active .content,
 .fade-transition-leave-active .content {
   @apply transition-[transform,opacity] duration-[inherit];
@@ -396,12 +400,12 @@ export default defineComponent({
 }
 
 .fade-transition-enter-active .content.as-drawer {
-  transition-timing-function: cubic-bezier(0, 0.5, 0.3, 1);
-  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  transition-duration: inherit;
 }
 
 .fade-transition-enter .content.slide-from-right {
-  @apply translate-x-[80%];
+  @apply translate-x-[90%];
 }
 
 .fade-transition-leave-to .content.slide-from-right {
