@@ -42,7 +42,7 @@ export default defineComponent({
       } else return []
     })
 
-    const hasHtml = /<[a-z].+?>.+<\/[a-z]>/
+    const hasHtml = /<[a-z]*.+?(?:>.+<\/[a-z]+?>|\/>)/
 
     return { state, updatedAt, intro, sections, hasHtml }
   },
@@ -53,13 +53,18 @@ export default defineComponent({
 
   head: {
     title: 'Privacy and Policy',
+    meta: [
+      {
+        name: 'description',
+        content: 'Our privacy and policy - Crowd Mvp',
+        hid: 'description',
+      },
+    ],
   },
 })
 </script>
 
 <template>
-  <!-- eslint-disable vue/valid-v-html -->
-  <!-- eslint-disable vue/no-v-html -->
   <main class="min-h-full w-full bg-sky-light">
     <div v-if="state.loading" class="w-full mt-[10%] flex-centered">
       <p
@@ -100,40 +105,28 @@ export default defineComponent({
 
               <div class="grid gap-y-12">
                 <template v-for="(contentValue, contentIndex) in content">
-                  <p
+                  <VHTML
                     v-if="typeof contentValue === 'string'"
                     :key="`${contentIndex}-${i}-${title}-string`"
-                  >
-                    <span
-                      v-if="hasHtml.test(contentValue)"
-                      v-html="contentValue"
-                    ></span>
-
-                    <span v-else>
-                      {{ contentValue }}
-                    </span>
-                  </p>
+                    :use-html="hasHtml.test(contentValue)"
+                    :text="contentValue"
+                    tag="p"
+                  />
 
                   <ul
                     v-else-if="contentValue.constructor === Array"
                     :key="`${contentIndex}-${i}-${title}-array`"
                     class="list-disc ml-16"
                   >
-                    <li
+                    <VHTML
                       v-for="(
                         contentValueListItem, contentValueListItemIndex
                       ) in contentValue"
                       :key="`${contentIndex}-${i}-${title}-ul-${contentValueListItemIndex}`"
-                    >
-                      <span
-                        v-if="hasHtml.test(contentValueListItem)"
-                        v-html="contentValueListItem"
-                      ></span>
-
-                      <span v-else>
-                        {{ contentValueListItem }}
-                      </span>
-                    </li>
+                      :use-html="hasHtml.test(contentValueListItem)"
+                      :text="contentValueListItem"
+                      tag="li"
+                    />
                   </ul>
 
                   <div
@@ -144,21 +137,15 @@ export default defineComponent({
                       {{ contentValue.title }}
                     </h4>
 
-                    <p
+                    <VHTML
                       v-for="(
                         contentValueItem, contentValueItemIndex
                       ) in contentValue.content"
                       :key="`${contentIndex}-${i}-${title}-object-${contentValueItemIndex}`"
-                    >
-                      <span
-                        v-if="hasHtml.test(contentValueItem)"
-                        v-html="contentValueItem"
-                      ></span>
-
-                      <span v-else>
-                        {{ contentValueItem }}
-                      </span>
-                    </p>
+                      :use-html="hasHtml.test(contentValueItem)"
+                      :text="contentValueItem"
+                      tag="p"
+                    />
                   </div>
                 </template>
               </div>
