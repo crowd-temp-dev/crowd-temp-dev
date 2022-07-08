@@ -30,7 +30,9 @@ module.exports = {
       ])
       addVariant('landscape', '@media (orientation: landscape)')
       addVariant('portrait', '@media (orientation: portrait)')
-      addVariant('portrait', '@media (orientation: portrait)')
+      addVariant('lock-html-scroll', ':root[data-overlay-active] &')
+      addVariant('windows-os', ':root[data-os-windows] &')
+      addVariant('mac-os', ':root[data-os-mac]&')
     }),
     require('@tailwindcss/aspect-ratio'),
   ],

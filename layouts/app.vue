@@ -129,7 +129,7 @@ export default defineComponent({
 
         <main
           ref="main"
-          class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain"
+          class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain lock-html-scroll:pr-4"
           :class="{
             'overflow-y-auto': !dialogs.length,
             'overflow-hidden': dialogs.length,

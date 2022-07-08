@@ -1,3 +1,17 @@
+/* scroll bar styles (webkit only)*/
+
+/* ::-webkit-scrollbar-corner,
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+} */
+
+/* moz */
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+  }
+}
+
 hr {
   pointer-events: none;
   @apply border-divider;
