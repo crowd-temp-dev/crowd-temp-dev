@@ -24,6 +24,7 @@ export interface GetAllTestsResItem {
   progress: CreateTestProgress
   published: boolean
   shareLink: string
+  responses: number
   TestAnswers: TestAnswer[]
 }
 
@@ -90,14 +91,20 @@ export default function (router: Router) {
               'stopAcceptingResponse',
             ],
             group: ['TestDetail.id', 'TestAnswers.id'],
-            order: [
-              ['createdAt', 'DESC']
-            ],
+            order: [['createdAt', 'DESC']],
             transaction,
           })
 
           sendSuccess(res, {
-            data: testDetail,
+            data: testDetail.map((val) => {
+              const output = { ...val.get() } as unknown as GetAllTestsRes[0]
+
+              output.responses = output.TestAnswers.filter((x) => x.done).length
+
+              delete output.TestAnswers
+
+              return output
+            }),
           })
         })
       } catch (err) {

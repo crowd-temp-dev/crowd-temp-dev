@@ -85,7 +85,7 @@ export default defineComponent({
       <template #append="{ overlayEntered, close, active }">
         <div
           v-if="active"
-          class="w-full h-full fixed pointer-events-none inset-0 flex items-end"
+          class="w-full h-full fixed pointer-events-none inset-0 flex items-end z-10"
         >
           <div class="w-full h-80 flex-centered z-2 relative">
             <div

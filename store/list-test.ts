@@ -64,7 +64,6 @@ const actions: ActionTree<AnswerTestState, RootState> = {
           ...val,
           loading: false,
           shareLink: `${location.origin}/answer-test/${val.shareLink}/`,
-          responses: val.TestAnswers.filter((x) => x.done).length,
           to: `create-test/${
             val.progress === 'Draft: Create'
               ? ''
