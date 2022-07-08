@@ -169,6 +169,7 @@ export default defineComponent({
           v-bind="fieldIdAndError('name')"
           :autofocus="!$breakpoint.isMobile"
         />
+        
         <TextField
           v-model="email"
           label="Email address"
@@ -176,6 +177,7 @@ export default defineComponent({
           required
           v-bind="fieldIdAndError('email')"
         />
+
         <PasswordField
           v-model="password"
           help-text="At least 8 characters with a min of one special character, one uppercase and one number."
@@ -192,9 +194,11 @@ export default defineComponent({
         />
 
         <div class="flex items-center space-x-4">
-          <Checkbox required v-bind="fieldIdAndError('agreed')">
-            I agree to Crowd's
-          </Checkbox>
+          <Checkbox
+            required
+            v-bind="fieldIdAndError('agreed')"
+            label="I agree to Crowd's"
+          />
 
           <NuxtLink
             to="/privacy-and-policy"

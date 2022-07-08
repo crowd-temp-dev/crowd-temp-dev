@@ -11,7 +11,7 @@
     :type="type"
     v-on="$listeners"
   >
-    <template #label>
+    <template v-if="$slots.default" #label>
       <slot>
         {{ label }}
       </slot>

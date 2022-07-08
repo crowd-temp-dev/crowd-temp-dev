@@ -88,6 +88,10 @@ export default defineComponent({
       default: undefined,
     },
     hidePreview: Boolean,
+    contentClass: {
+      type: String,
+      default: '',
+    },
   },
   setup(_props, { emit }) {
     const triggerRefSelector = ref(uid())
@@ -364,9 +368,12 @@ export default defineComponent({
             :id="triggerRefSelector"
             :for="getId"
             class="rounded h-36 flex items-center justify-between transition-all bg-surface-default border border-[#BABFC3] shadow-1 pl-[1.2rem] pr-[0.8rem] cursor-pointer active:scale-[0.995] hover:bg-surface-hovered active:bg-surface-pressed focus-within:ring-2 ring-offset-1 ring-action-primary-default"
-            :class="{
-              'pointer-events-none opacity-80': disabled,
-            }"
+            :class="[
+              contentClass,
+              {
+                'pointer-events-none opacity-80': disabled,
+              },
+            ]"
             @keydown="(evt) => labelOnKeydown(evt, active, open, close)"
           >
             <span class="flex-grow relative h-full w-full flex items-center">

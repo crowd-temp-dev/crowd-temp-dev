@@ -75,8 +75,12 @@ export default defineComponent({
       </slot>
     </label>
 
-    <Tooltip v-if="showSwitch && tooltip" v-slot="{ events }" :label="tooltip">
-      <span v-on="events">
+    <Tooltip
+      v-if="showSwitch && tooltip"
+      v-slot="{ events, open }"
+      :label="tooltip"
+    >
+      <span v-on="events" @click="open">
         <UiSwitch
           :id="id"
           v-model="modelSync"

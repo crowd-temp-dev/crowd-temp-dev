@@ -119,6 +119,7 @@ export default defineComponent({
       bold-label
       :options="[{ label: 'Value', value: 'value' }]"
       class="flex-grow shrink-0"
+      content-class="min-w-[110px]"
       required
     />
 

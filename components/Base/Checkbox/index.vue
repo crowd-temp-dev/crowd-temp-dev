@@ -11,7 +11,7 @@
     v-on="$listeners"
     @change="modelSync = !modelSync"
   >
-    <template #label>
+    <template v-if="$slots.default" #label>
       <slot>
         {{ label }}
       </slot>
