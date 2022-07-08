@@ -95,8 +95,7 @@ export default defineComponent({
           <strong> {{ confirmDetails.title }} </strong>
         </h2>
 
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <p class="mb-24" v-html="confirmDetails.subtitle" />
+        <VHTML tag="p" use-html class="mb-24" :text="confirmDetails.subtitle" />
 
         <div class="flex items-center space-x-12">
           <Button primary :loading="confirming" @click="confirm">

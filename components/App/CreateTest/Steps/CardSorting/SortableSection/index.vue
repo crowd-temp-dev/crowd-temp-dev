@@ -92,8 +92,7 @@ export default defineComponent({
 
         <template #content>
           <div class="max-w-[240px] text-body">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <span v-html="tooltipContent" />
+            <VHTML use-html :text="tooltipContent" />
           </div>
         </template>
       </Tooltip>
