@@ -238,6 +238,10 @@ export default defineComponent({
         }
 
         if (['space', 'enter'].includes(key)) {
+          if (key === 'space' && searchField.value.value) {
+            return
+          }
+
           evt.preventDefault()
 
           if (contentRef.value) {
