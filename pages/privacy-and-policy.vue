@@ -81,27 +81,27 @@ export default defineComponent({
         Crowd Privacy Policy
       </h2>
 
-      <section
+      <div
         class="bg-surface-default max-w-[calc(100%-16px)] md:max-w-[1000px] rounded-[5px] p-20 px-16 md:px-20 lg:px-30 lg:p-30 mt-16 mx-auto"
       >
-        <p class="text-text-subdued text-center mb-20">
+        <h3 class="text-text-subdued text-center mb-20">
           Updated at {{ updatedAt }}
-        </p>
+        </h3>
 
-        <hr class="h-1 w-full border-t border-divider" />
+        <hr class="h-1 w-full border-t border-[#F7F7F7]" />
 
         <div class="max-w-[832px] mx-auto">
-          <div class="pt-20">
+          <section class="pt-20">
             <p v-for="(content, i) in intro" :key="i" class="mb-20">
               {{ content }}
             </p>
-          </div>
+          </section>
 
           <div class="grid gap-y-20">
             <section v-for="({ title, content }, i) in sections" :key="i">
-              <h3 class="font-semibold text-[18px] leading-[20px] mb-8">
+              <h4 class="font-semibold text-[18px] leading-[20px] mb-8">
                 {{ title }}
-              </h3>
+              </h4>
 
               <div class="grid gap-y-12">
                 <template v-for="(contentValue, contentIndex) in content">
@@ -133,9 +133,9 @@ export default defineComponent({
                     v-else-if="typeof contentValue === 'object'"
                     :key="`${contentIndex}-${i}-${title}-object`"
                   >
-                    <h4 class="font-semibold mb-4 text-[15px]">
+                    <h5 class="font-semibold mb-4 text-[15px]">
                       {{ contentValue.title }}
-                    </h4>
+                    </h5>
 
                     <VHTML
                       v-for="(
@@ -152,7 +152,7 @@ export default defineComponent({
             </section>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   </main>
 </template>

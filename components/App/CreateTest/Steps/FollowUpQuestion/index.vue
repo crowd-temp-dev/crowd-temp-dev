@@ -108,16 +108,15 @@ export default defineComponent({
     }
 
     const removeQuestion = (index: number) => {
-      // remove from array
       modelSync.value = modelSync.value.filter((_, i) => i !== index)
     }
 
     return {
       id,
       modelSync,
+      questionAdded,
       getAlphabets,
       addQuestion,
-      questionAdded,
       removeQuestion,
       duplicate,
     }

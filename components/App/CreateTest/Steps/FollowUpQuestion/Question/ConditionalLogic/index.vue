@@ -66,9 +66,11 @@ export default defineComponent({
         return []
       }
 
+      const followUpQuestionIndex = question?.followUpQuestions?.findIndex(x => x.id === _props.followUpQuestionId)
+
       return question?.followUpQuestions
-        ?.map((item, index) => {
-          if (item.id === _props.followUpQuestionId) {
+        ?.map((_, index) => {          
+          if (index <= followUpQuestionIndex) {
             return null
           }
 

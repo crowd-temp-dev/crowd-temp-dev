@@ -66,7 +66,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="postcss">
+.root >>> .Polaris-Checkbox {
+  @apply transition-shadow rounded ring-action-primary-default;
+}
+
 .root:focus-within >>> .Polaris-Checkbox {
-  @apply ring-2 ring-offset-1 ring-action-primary-default rounded;
+  @apply ring-2 ring-offset-1;
 }
 </style>

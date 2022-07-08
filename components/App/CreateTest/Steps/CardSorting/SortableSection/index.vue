@@ -92,7 +92,7 @@ export default defineComponent({
 
         <template #content>
           <div class="max-w-[240px] text-body">
-            <VHTML use-html :text="tooltipContent" />
+            <VHTML :text="tooltipContent" />
           </div>
         </template>
       </Tooltip>

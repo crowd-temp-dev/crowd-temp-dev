@@ -71,7 +71,7 @@ export default defineComponent({
     v-if="!loaded"
     v-slot="{ isIntersecting }"
     :disabled="loading === 'eager'"
-    :config="{ rootMargin: '64px' }"
+    :config="{ rootMargin: '96px' }"
     once
   >
     <figure

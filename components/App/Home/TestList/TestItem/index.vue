@@ -143,7 +143,7 @@ export default defineComponent({
     <div class="flex items-center w-full mr-32">
       <div class="w-[42%]">
         <!-- TODO: make search component with render fn to avoid hack below -->
-        <VHTML tag="strong" use-html :text="name" />
+        <VHTML tag="strong" :text="name" />
 
         <p class="caption">Created {{ formatDate(createdAt) }}</p>
       </div>

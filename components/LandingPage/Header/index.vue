@@ -19,7 +19,7 @@ export default defineComponent({
     const pricingTo = '/#pricing'
     const contactTo = '/#contact'
 
-    const scrollToHash = (hash: string) => {      
+    const scrollToHash = (hash: string) => {
       sleep().then(() => {
         root.$route.path === '/' &&
           scrollToLandingPageHash(hash.replace('/', ''), true)
@@ -66,10 +66,12 @@ export default defineComponent({
 <template>
   <header
     id="landing-page-header"
-    class="md:shadow-2 md:sticky md:top-0 z-10 bg-surface-default md:not-supports-backdrop-filter:bg-surface-default md:supports-backdrop-filter:bg-surface-default/70 md:supports-backdrop-filter:backdrop-blur-xl px-8 md:px-20"
+    class="md:shadow-2 md:sticky md:top-0 z-10 bg-surface-default px-8 md:px-20"
     :class="{
       // make header sticky for auth pages
       'shadow-2 sticky top-0 bg-surface-default': mobileAuthPage,
+      'md:not-supports-backdrop-filter:bg-surface-default md:supports-backdrop-filter:bg-surface-default/70 md:supports-backdrop-filter:backdrop-blur-xl':
+        $route.name !== 'privacy-and-policy',
     }"
   >
     <div

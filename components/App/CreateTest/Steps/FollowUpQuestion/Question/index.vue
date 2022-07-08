@@ -85,7 +85,16 @@ export default defineComponent({
       )
 
       if (question) {
-        return (question.followUpQuestions?.length || 0) < 2
+        const tooShort = (question.followUpQuestions?.length || 0) < 2
+
+        const followUpQuestionIndex = question.followUpQuestions.findIndex(
+          (x) => x.id === modelSync.value.id
+        )        
+
+        return (
+          tooShort ||
+          followUpQuestionIndex >= question.followUpQuestions.length - 1
+        )
       }
 
       return true

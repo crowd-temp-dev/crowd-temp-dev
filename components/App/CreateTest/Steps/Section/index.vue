@@ -144,8 +144,8 @@ export default defineComponent({
     }
 
     return {
-      toggleExpand,
       expanded,
+      toggleExpand,
       removeSection,
       focusOnSelfOrCloseDropdown,
       duplicateSection,

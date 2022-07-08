@@ -4,7 +4,10 @@ import { defineComponent } from '@vue/composition-api'
 export default defineComponent({
   name: 'BaseVHTML',
   props: {
-    useHtml: Boolean,
+    useHtml: {
+      type: Boolean,
+      default: true,
+    },
     tag: {
       type: String as () => keyof HTMLElementTagNameMap,
       default: 'span',

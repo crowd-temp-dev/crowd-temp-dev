@@ -95,7 +95,7 @@ export default defineComponent({
           <strong> {{ confirmDetails.title }} </strong>
         </h2>
 
-        <VHTML tag="p" use-html class="mb-24" :text="confirmDetails.subtitle" />
+        <VHTML tag="p" class="mb-24" :text="confirmDetails.subtitle" />
 
         <div class="flex items-center space-x-12">
           <Button primary :loading="confirming" @click="confirm">
