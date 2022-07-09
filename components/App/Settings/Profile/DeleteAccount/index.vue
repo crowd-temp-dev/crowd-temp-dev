@@ -166,6 +166,7 @@ export default defineComponent({
                   required
                   label="Token*"
                   :help-text="`Confirmation token has been sent to '${$user.email}'`"
+                  pattern="^\w{6,6}$"
                   v-bind="fieldIdAndError('token')"
                 />
               </div>
@@ -182,7 +183,7 @@ export default defineComponent({
               destructive
               form="delete-account"
               class="ml-16"
-              :disabled="!confirmed || !providerConfirmed"
+              :disabled="!confirmed || !providerConfirmed || invalidToken"
               :loading="deleting"
             >
               Delete account
