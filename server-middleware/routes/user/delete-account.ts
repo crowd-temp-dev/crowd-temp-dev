@@ -14,6 +14,7 @@ import { Token } from '../../../database/models/User/Token'
 export interface DeleteAccountForm {
   confirm: string
   password: string
+  token?: string
 }
 
 const formValidation: RequestHandler = (req, res, next) => {

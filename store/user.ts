@@ -212,7 +212,7 @@ const actions: ActionTree<UserState, RootState> = {
 
     const app = this.$router.app
 
-    const { message, error } = await DeleteAccount(app.$axios, payload)
+    const { message, error, data } = await DeleteAccount(app.$axios, payload)
 
     if (!error) {
       app.$cookies.set('remember', '0')
@@ -223,6 +223,8 @@ const actions: ActionTree<UserState, RootState> = {
 
       location.reload()
     } else showToasts(app.$pToast, message)
+
+    return { message, error, data } 
   },
 }
 

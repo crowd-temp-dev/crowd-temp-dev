@@ -61,12 +61,22 @@ export default defineComponent({
 
         await $user.delete(formValues)
 
-        formFields.password.value = ''
+        if ($user.provider === 'email') {
+          formFields.password.value = ''
+        } else {
+          formFields.token.value = ''
+        }
 
         enableFormFields(formFields)
 
         deleting.value = false
       }
+    }
+
+    const resetForm = () => {
+      sendingConfirmation.value = false
+      confirmField.value = ''
+      deleting.value = false
     }
 
     return {
@@ -78,6 +88,7 @@ export default defineComponent({
       providerConfirmed,
       sendingConfirmation,
       confirmOrDeleteAccount,
+      resetForm,
     }
   },
 })
@@ -93,10 +104,7 @@ export default defineComponent({
         label="Confirm delete account"
         :dialog-content-class="['min-w-[500px]']"
         :dialog-events="{
-          afterLeave: () => {
-            sendingConfirmation = false
-            confirmField = false
-          },
+          afterLeave: resetForm,
         }"
         @click="confirmField = ''"
       >
