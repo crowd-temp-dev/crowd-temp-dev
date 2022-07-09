@@ -81,7 +81,7 @@ export default defineComponent({
       }
     }
 
-    return { main, dialogs, tooltips, closeAllTooltips, transitionClasses }
+    return { main, dialogs, tooltips, transitionClasses, closeAllTooltips }
   },
 
   head() {

@@ -79,3 +79,9 @@ declare module '@nuxt/types' {
     $alert: AlertDialog
   }
 }
+
+declare global {
+  interface Window {
+    $user: User
+  }
+}

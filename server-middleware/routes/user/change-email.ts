@@ -30,77 +30,77 @@ const formValidation: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.post(
-    '/auth/changeEmail',
-    formValidation,
-    async (req, res) => {
-      const { token, id } = req.body
+  return router.post('/auth/changeEmail', formValidation, async (req, res) => {
+    const { token, id } = req.body
 
-      try {
-        await DB.transaction(async (transaction) => {
-          // check that the token exists;
-          const temporaryEmail = await TemporaryEmail.findByPk(token, {
-            transaction,
-          })
+    try {
+      await DB.transaction(async (transaction) => {
+        // check that the token exists;
+        const temporaryEmail = await TemporaryEmail.findByPk(token, {
+          transaction,
+        })
 
-          if (temporaryEmail) {
-            const destroyToken = async () => {
-               await temporaryEmail.destroy({ transaction })
+        if (temporaryEmail) {
+          const destroyToken = async () => {
+            await temporaryEmail.destroy({ transaction })
+          }
+
+          // check temporaryEmail isn't expired
+          if (temporaryEmail.expires < Date.now()) {
+            await destroyToken()
+
+            throw new Error('{403} This link has expired!')
+          }
+
+          // check user exists
+          const user = await User.findByPk(id, { transaction })
+
+          if (user) {
+            if (user.provider !== 'email') {
+              throw new Error(
+                `{403} ${user.provider} manages account email!`
+              )
             }
 
-            // check temporaryEmail isn't expired
-            if (temporaryEmail.expires < Date.now()) {
-              await destroyToken();
+            await user.update({
+              email: temporaryEmail.email,
+            })
 
-              throw new Error('{403} This link has expired!')
-            }
+            await user.save({ transaction })
 
-            // check user exists
-            const user = await User.findByPk(id, { transaction })
+            await user.reload({ transaction })
 
-            if (user) {
-              await user.update({
-                email: temporaryEmail.email
-              })
+            await destroyToken()
 
-              await user.save({ transaction })
-              
-              await user.reload({ transaction })
-
-              await destroyToken()
-
-               mailer.sendMail({
-                 from: 'UnbugQA',
-                 to: user.email,
-                 subject: 'Email changed!',
-                 html: `<div>
+            mailer.sendMail({
+              from: 'UnbugQA',
+              to: user.email,
+              subject: 'Email changed!',
+              html: `<div>
                       <p>
-                        Hi ${
-                          user.name
-                        }! Your email has been updated to this one. Use this to login moving on.
+                        Hi ${user.name}! Your email has been updated to this one. Use this to login moving on.
                       </p>
                     </div>`,
-               })
+            })
 
-              sendSuccess(res, {
-                data: user.get(),
-                message: {
-                  content: 'Email changed!',
-                  type: 'success',
-                },
-              })
-            } else {
-              await destroyToken()
-
-              throw new Error("{403} This account doesn't exist!")
-            }
+            sendSuccess(res, {
+              data: user.get(),
+              message: {
+                content: 'Email changed!',
+                type: 'success',
+              },
+            })
           } else {
-            throw new Error('{403} Cannot change email!')
+            await destroyToken()
+
+            throw new Error("{403} This account doesn't exist!")
           }
-        })
-      } catch (err) {
-        sendFormattedError(err, res)
-      }
+        } else {
+          throw new Error('{403} Cannot change email!')
+        }
+      })
+    } catch (err) {
+      sendFormattedError(err, res)
     }
-  )
+  })
 }

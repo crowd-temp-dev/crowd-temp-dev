@@ -59,6 +59,12 @@ export default function (router: Router) {
             })
 
             if (user) {
+              if (user.provider !== 'email') {
+                throw new Error(
+                  `{403} ${user.provider} manages account password!`
+                )
+              }
+
               await user.update({
                 password,
               })

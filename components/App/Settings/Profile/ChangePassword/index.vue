@@ -51,7 +51,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <Section title="Change password">
+  <Section v-if="$user.provider === 'email'" title="Change password">
     <FormLayout
       v-slot="{ fieldIdAndError }"
       name="change-password"
@@ -70,7 +70,7 @@ export default defineComponent({
       <PasswordField
         v-model="newPassword"
         :error="
-          (currentPassword === newPassword && newPassword)
+          currentPassword === newPassword && newPassword
             ? 'Choose a different password'
             : fieldIdAndError('password').error
         "
@@ -88,12 +88,7 @@ export default defineComponent({
     </FormLayout>
 
     <template #cta>
-      <Button
-        type="submit"
-        primary
-        :loading="loading"
-        form="change-password"
-      >
+      <Button type="submit" primary :loading="loading" form="change-password">
         Save changes
       </Button>
     </template>

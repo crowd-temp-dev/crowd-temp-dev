@@ -57,9 +57,7 @@ export default function (router: Router) {
 
           // check that the token isn't expired;
           if (forgotPassword.expires < Date.now()) {
-            throw new Error(
-              '{403} Token expired! Please try again'
-            )
+            throw new Error('{403} Token expired! Please try again')
           }
 
           // check to see that the token's user exist;
@@ -69,6 +67,12 @@ export default function (router: Router) {
 
           if (!findUser) {
             throw new Error('{403} User not found!')
+          }
+
+          if (findUser.provider !== 'email') {
+            throw new Error(
+              `{403} ${findUser.provider} manages account password!`
+            )
           }
 
           // All set. Confirm user, add a new user session, and delete token

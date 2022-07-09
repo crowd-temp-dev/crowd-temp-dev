@@ -11,7 +11,7 @@ import {
 } from '~/components/Base/FormLayout/utils'
 import { LoginPayload } from '~/store/user'
 import { googleOAuthUrl } from '~/utils/oauth/google'
-import { showServerAuthError } from '~/utils'
+import { showServerAuthMessage } from '~/utils'
 
 export default defineComponent({
   name: 'LoginPage',
@@ -61,7 +61,7 @@ export default defineComponent({
 
     // show server error
     onMounted(() => {
-      showServerAuthError('login', $pToast, $cookies)
+      showServerAuthMessage('login', $pToast, $cookies)
     })
 
     return {

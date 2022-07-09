@@ -79,6 +79,10 @@ export default function (router: Router) {
 
             // email changed
             if (email) {
+              if (user.provider !== 'email') {
+                throw new Error(`{403} ${user.provider} manages account email!`)
+              }
+
               const clearAllTempEmails = async () => {
                 await TemporaryEmail.destroy({
                   where: {

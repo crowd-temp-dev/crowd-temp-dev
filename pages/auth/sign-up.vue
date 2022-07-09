@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
 import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -13,7 +13,8 @@ import {
 import { SignUpForm } from '~/server-middleware/routes/user/signup'
 import { Signup } from '~/services/auth'
 import { showToasts } from '~/utils/showToast'
-import { showServerAuthError } from '~/utils'
+import { showServerAuthMessage } from '~/utils'
+import { googleOAuthUrl } from '~/utils/oauth/google'
 
 export default defineComponent({
   name: 'SignUpPage',
@@ -28,7 +29,7 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: { $pToast, $axios, $cookies } }) {
+  setup(_, { root: { $pToast, $axios, $cookies, $nuxt } }) {
     const focusOn = ref($cookies.get('signup_focus'))
 
     const email = ref('')
@@ -38,6 +39,10 @@ export default defineComponent({
     const confirmPassword = ref('')
 
     const formKey = ref(0)
+
+    const getGoogleOAuthUrl = computed(() => {
+      return googleOAuthUrl($nuxt.context.env)
+    })
 
     const attemptSignup: OnSubmit<SignUpForm> = async ({
       formValues,
@@ -84,7 +89,7 @@ export default defineComponent({
 
     // show server error
     onMounted(() => {
-      showServerAuthError('signup', $pToast, $cookies)
+      showServerAuthMessage('signup', $pToast, $cookies)
     })
 
     return {
@@ -93,6 +98,7 @@ export default defineComponent({
       password,
       formKey,
       confirmPassword,
+      getGoogleOAuthUrl,
       attemptSignup,
     }
   },
@@ -133,6 +139,7 @@ export default defineComponent({
           :size="$breakpoint.isMobile ? 'large' : 'medium'"
           :full-width="$breakpoint.isMobile"
           :autofocus="focusOn === 'google'"
+          :href="getGoogleOAuthUrl"
         >
           <div class="flex items-center">
             <Img

@@ -2,13 +2,11 @@ import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
 import { user as userValidation } from '../../utils/validation'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
-import { setAuthCookies } from '../../utils/cookies'
-import { apiActionQuery, loggedInMessage } from '../../utils'
+import { loggedInMessage } from '../../utils'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
-import { inOneDay, uuidv4 } from '../../../utils'
 import { matchPassword } from '../../../database/utils'
-import mailer from '../../email'
+import { loginUser } from './utils'
 
 export interface LoginForm {
   email: string
@@ -60,44 +58,11 @@ export default function (router: Router) {
             const passwordMatch = await matchPassword(password, user.password)
 
             if (passwordMatch) {
-              const session = uuidv4()
-
-              const actionToken = uuidv4()
-
-              await user.update({
-                action: {
-                  ...user.action,
-                  [actionToken]: inOneDay() * 2,
-                },
+              await loginUser({
+                user,
+                req,
+                res,
               })
-
-              await setAuthCookies(req, res, user, session)
-
-              if (process.env.NODE_ENV === 'production') {
-                mailer.sendMail({
-                  from: 'UnbugQA',
-                  to: user.email,
-                  subject: 'New Login!',
-                  html: `<div>
-                      <p>
-                        Hi ${
-                          user.name
-                        }! A new login has occured on your account!.
-                      </p>
-
-                      <p>
-                        <p><strong>This wasn't you?</strong></p>
-                        <a href="${
-                          process.env.CLIENT_ORIGIN
-                        }/action?${apiActionQuery({
-                    key: 'end_all_sessions',
-                    token: actionToken,
-                    id: user.id,
-                  })}">Sign out of all sessions</a>
-                      </p>
-                    </div>`,
-                })
-              }
 
               sendSuccess(res, {
                 message: loggedInMessage(user),

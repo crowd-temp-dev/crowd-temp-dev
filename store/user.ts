@@ -23,6 +23,7 @@ export interface UserInfo {
   id: string | null
   name: string | null
   email: string | null
+  provider: User['provider'] | null
 }
 
 export interface UserState {

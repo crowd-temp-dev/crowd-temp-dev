@@ -36,60 +36,71 @@ const formValidation: RequestHandler = (req, res, next) => {
 
 // sends steps to reset password
 export default function (router: Router) {
-  return router.post('/auth/forgotPassword', formValidation, async (req, res) => {
-    try {
-      await DB.transaction(async (transaction) => {
-        const { email } = req.body as ForgotPasswordForm
+  return router.post(
+    '/auth/forgotPassword',
+    formValidation,
+    async (req, res) => {
+      try {
+        await DB.transaction(async (transaction) => {
+          const { email } = req.body as ForgotPasswordForm
 
-        // check that the user exists
-        const user = await User.findOne({
-          where: { email },
-          transaction,
-        })
-
-        if (user) {
-          // check that the user hasn't made this request a minute ago
-          const previousForgotPasswordReq = await ForgotPassword.findOne({
-            where: {
-              userId: user.id,
-            },
+          // check that the user exists
+          const user = await User.findOne({
+            where: { email },
             transaction,
           })
 
-          if (previousForgotPasswordReq) {
-            const { tryAgainIn } = previousForgotPasswordReq;
-
-            if (tryAgainIn > Date.now()) {
-              const retryTimeout = Math.floor((tryAgainIn - Date.now()) / 1000)
-
+          if (user) {
+            if (user.provider !== 'email') {
               throw new Error(
-                `{403} Please try again in ${retryTimeout} second${
-                  tryAgainIn > 1 ? 's' : ''
-                }`
+                `{403} ${user.provider} manages account password!`
               )
             }
-          }
 
-          await ForgotPassword.destroy({
-            where: { userId: user.id },
-            transaction,
-          })
+            // check that the user hasn't made this request a minute ago
+            const previousForgotPasswordReq = await ForgotPassword.findOne({
+              where: {
+                userId: user.id,
+              },
+              transaction,
+            })
 
-          const forgotPassword = await ForgotPassword.create(
-            {
-              userId: user.id,
-              tryAgainIn: Date.now() + oneMinute,
-              expires: inOneDay(),
-            },
-            { transaction }
-          )
+            if (previousForgotPasswordReq) {
+              const { tryAgainIn } = previousForgotPasswordReq
 
-          mailer
-            .sendMail({
-              to: email,
-              from: 'UnbugQA',
-              subject: 'Reset your password',
-              html: `<div>
+              if (tryAgainIn > Date.now()) {
+                const retryTimeout = Math.floor(
+                  (tryAgainIn - Date.now()) / 1000
+                )
+
+                throw new Error(
+                  `{403} Please try again in ${retryTimeout} second${
+                    tryAgainIn > 1 ? 's' : ''
+                  }`
+                )
+              }
+            }
+
+            await ForgotPassword.destroy({
+              where: { userId: user.id },
+              transaction,
+            })
+
+            const forgotPassword = await ForgotPassword.create(
+              {
+                userId: user.id,
+                tryAgainIn: Date.now() + oneMinute,
+                expires: inOneDay(),
+              },
+              { transaction }
+            )
+
+            mailer
+              .sendMail({
+                to: email,
+                from: 'UnbugQA',
+                subject: 'Reset your password',
+                html: `<div>
                       <p>
                         Hi ${user.name}! Please follow the link below to reset your password.
                       </p>
@@ -101,25 +112,26 @@ export default function (router: Router) {
                         </strong>
                       </p>
                     </div>`,
-            })
-            .then(() => {
-              sendSuccess(res, {
-                message: {
-                  content: 'Reset your password',
-                  type: 'success',
-                },
-                data: { forgotPassword, now: Date.now() },
               })
-            })
-            .catch(() => {
-              throw new Error('{409} Error sending a reset link. Try again.')
-            })
-        } else {
-          throw new Error('{404} User not found!')
-        }
-      })
-    } catch (err: any) {
-      sendFormattedError(err, res)
+              .then(() => {
+                sendSuccess(res, {
+                  message: {
+                    content: 'Reset your password',
+                    type: 'success',
+                  },
+                  data: { forgotPassword, now: Date.now() },
+                })
+              })
+              .catch(() => {
+                throw new Error('{409} Error sending a reset link. Try again.')
+              })
+          } else {
+            throw new Error('{404} User not found!')
+          }
+        })
+      } catch (err: any) {
+        sendFormattedError(err, res)
+      }
     }
-  })
+  )
 }

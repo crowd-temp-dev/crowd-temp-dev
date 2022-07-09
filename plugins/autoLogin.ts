@@ -18,6 +18,22 @@ const autoLogin: Plugin = async function ({ store, $cookies, route }) {
   if (String(remember) === '1') {
     const { data } = await store.dispatch('user/reload')
 
+    const loginProviderAlert = $cookies.get('login_provider_alert')
+
+    if (loginProviderAlert) {
+      document.addEventListener(
+        'app-mounted',
+        () => {
+          window.$nuxt.$pToast.open({
+            message: loginProviderAlert,
+          })
+        },
+        { once: true }
+      )
+
+      $cookies.remove('login_provider_alert')
+    }
+
     if (data) {
       store.commit('user/update', data)
     } else {

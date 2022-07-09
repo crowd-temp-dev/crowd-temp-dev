@@ -47,6 +47,12 @@ export default function (router: Router) {
             const user = await User.findByPk(id, { transaction })
 
             if (user) {
+              if (user.provider !== 'email') {
+                throw new Error(
+                  `{403} ${user.provider} manages account email!`
+                )
+              }
+
               await temporaryEmail.destroy({ transaction })
 
               sendSuccess(res, {

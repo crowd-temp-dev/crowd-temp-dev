@@ -1,4 +1,5 @@
 export interface AppState {
+  mounted: boolean
   globalKey: number
   dialogs: string[]
   fullscreenLoadingMessage: null | string
@@ -17,6 +18,7 @@ export interface AppState {
 
 export default function state(): AppState {
   return {
+    mounted: false,
     globalKey: 0,
     dialogs: [],
     fullscreenLoadingMessage: null,

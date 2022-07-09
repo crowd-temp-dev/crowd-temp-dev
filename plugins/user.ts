@@ -58,6 +58,8 @@ const userPlugin: Plugin = function ({ store }, inject) {
   })
 
   inject('user', userProxy)
+
+  window.$user = userProxy
 }
 
 export default userPlugin

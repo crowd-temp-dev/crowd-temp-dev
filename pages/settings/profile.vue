@@ -11,6 +11,10 @@
       <ChangePassword />
 
       <DeleteAccount />
+
+      <p v-if="provider" class="text-center text-text-subdued mt-20">
+        Account managed by {{ provider }}
+      </p>
     </div>
 
     <!-- aside -->
@@ -19,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import Photo from '../../components/App/Settings/Profile/Photo/index.vue'
 import EmailPreference from '../../components/App/Settings/Profile/EmailPreference/index.vue'
 import PersonalInfo from '../../components/App/Settings/Profile/PersonalInfo/index.vue'
@@ -46,7 +50,17 @@ export default defineComponent({
     }
     return 'page-transition-fade'
   },
-  setup() {},
+  setup(_, { root: { $user } }) {
+    const provider = computed(() => {
+      if ($user.provider === 'email') {
+        return null
+      }
+
+      return $user.provider.replace(/[a-z]/, (x) => x.toUpperCase())
+    })
+
+    return { provider }
+  },
 
   head: {
     title: 'Profile settings',

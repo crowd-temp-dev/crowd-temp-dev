@@ -28,19 +28,19 @@ export default defineComponent({
 
     const loading = ref(false)
 
-    const formChanged = ref(false);
+    const formChanged = ref(false)
 
     const onUpdate: OnSubmit<Form> = async ({ formFields, formValues }) => {
       loading.value = true
 
       disableFormFields(formFields)
 
-      const {message} = await $user.update(formValues as unknown as UserData)
+      const { message } = await $user.update(formValues as unknown as UserData)
 
       enableFormFields(formFields)
 
       showToasts($pToast, message)
-      
+
       loading.value = false
     }
 
@@ -82,6 +82,7 @@ export default defineComponent({
         v-model="email"
         type="email"
         label="Email"
+        :disabled="$user.provider !== 'email'"
         v-bind="fieldIdAndError('email')"
         required
       />
@@ -98,12 +99,7 @@ export default defineComponent({
     </FormLayout>
 
     <template #cta>
-      <Button
-        primary
-        type="submit"
-        form="personal-info"
-        :loading="loading"
-      >
+      <Button primary type="submit" form="personal-info" :loading="loading">
         Save changes
       </Button>
     </template>

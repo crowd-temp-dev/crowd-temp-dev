@@ -798,23 +798,30 @@ export const setClientOs = () => {
   document.documentElement.dataset.os = getOS()
 }
 
-export const showServerAuthError = (
+export const showServerAuthMessage = (
   path: 'login' | 'signup',
   pToast: Vue['$pToast'],
   cookies: Vue['$cookies']
 ) => {
-  const messagePath = `${path}_error_message`
+  const errorMessagePath = `${path}_error_message`
+  const successMessagePath = `${path}_success_message`
 
-  const errorMessage = cookies.get(messagePath)
+  const errorMessage = cookies.get(errorMessagePath)
+  const successMessage = cookies.get(successMessagePath)
 
-  if (errorMessage) {
+  cookies.set('auth_provider_path', path)
+
+  if (errorMessage || successMessage) {
     pToast.open({
-      error: true,
-      message: errorMessage,
+      error: !!errorMessage,
+      message: successMessage || errorMessage,
       duration: 5000,
     })
   }
 
-  cookies.remove(messagePath)
-  cookies.remove(`${path}_focus`)
+  sleep(oneFrame).then(() => {
+    cookies.remove(errorMessagePath)
+    cookies.remove(successMessagePath)
+    cookies.remove(`${path}_focus`)
+  })
 }

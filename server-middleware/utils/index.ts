@@ -56,7 +56,7 @@ export const getModules = (arg: {
     .filter(
       (file) =>
         !exempt.find((exemptedFile) =>
-          new RegExp(`${exemptedFile}\\.(?:js|ts)?$`).test(file)
+          new RegExp(`${exemptedFile}$`).test(file)
         )
     )
     .forEach((file) => {

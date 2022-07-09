@@ -13,6 +13,8 @@ import { UserAction, UserSession } from '../../type'
 import { Uuidv4 } from '../../utils/model'
 import type { UserRole } from '~/types'
 
+export type UserProvider = 'google' | 'twitter' | 'email'
+
 // eslint-disable-next-line no-use-before-define
 export class User extends Model<
   InferAttributes<User>,
@@ -29,6 +31,7 @@ export class User extends Model<
   declare showDashboardGuide?: boolean
   declare confirmed?: boolean
   declare confirmedAt?: number
+  declare provider?: UserProvider
 }
 
 const clearInactiveSessions = (user: User) => {
@@ -111,6 +114,18 @@ export default function initUser(dbInstance: Sequelize) {
         type: DataTypes.JSON(),
         allowNull: false,
         defaultValue: () => ({}),
+      },
+
+      provider: {
+        type: DataTypes.STRING(),
+        validate: {
+          is: {
+            args: /^(?:google|twitter|email)$/,
+            msg: 'Invalid provider!',
+          },
+        },
+        allowNull: false,
+        defaultValue: 'email',
       },
     },
     {

@@ -20,8 +20,7 @@ const formValidation: RequestHandler = (req, res, next) => {
 
   const schema = Joi.object({
     currentPassword: user.password.required(),
-    password: user.password
-      .required(),
+    password: user.password.required(),
     confirmPassword: user.password.valid(Joi.ref('password')).required(),
   } as Record<keyof ChangePasswordForm, any>)
 
@@ -62,6 +61,12 @@ export default function (router: Router) {
           })
 
           if (user) {
+            if (user.provider !== 'email') {
+              throw new Error(
+                `{403} ${user.provider} manages account password!`
+              )
+            }
+
             const passwordMatch = await matchPassword(
               currentPassword,
               user.password
@@ -77,7 +82,7 @@ export default function (router: Router) {
                   session: {
                     [session]: {
                       expires: inOneHour(),
-                      userAgent: req.headers['user-agent'] || 'null'
+                      userAgent: req.headers['user-agent'] || 'null',
                     },
                   },
                 })

@@ -34,7 +34,7 @@ export const dbCreated = DB instanceof Sequelize
 if (dbCreated) {
   getModules({
     directory: [__dirname, '.', 'models'],
-    exempt: ['setReferences', 'utils'],
+    exempt: ['setReferences\\.(?:js|ts)?$', 'utils'],
   }).forEach((file) => {
     const initModel = file?.default
 
@@ -63,8 +63,8 @@ export function startDB() {
     DB.authenticate()
       .then(() =>
         DB.sync({
-          // force: true,
-          force: process.env.FORCE_SYNC === '1',
+          force: true,
+          // force: process.env.FORCE_SYNC === '1',
         })
           .then(() => {
             setAssociation()

@@ -3,6 +3,16 @@ import { AppState } from './state'
 import { oneFrame, setClientOs, sleep } from '~/utils'
 
 const mutation: MutationTree<AppState> = {
+  mountApp(state) {
+    state.mounted = true
+
+    document.dispatchEvent(
+      new Event('app-mounted', {
+        cancelable: false,
+      })
+    )
+  },
+
   addToDialogs(state, id: string) {
     state.dialogs = [...state.dialogs, id]
   },
