@@ -21,6 +21,7 @@ export async function loginUser(arg: {
       ...user.action,
       [actionToken]: inOneDay() * 2,
     },
+    freshAccount: false
   })
 
   await setAuthCookies(req, res, user, session)

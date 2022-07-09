@@ -32,6 +32,7 @@ export class User extends Model<
   declare confirmed?: boolean
   declare confirmedAt?: number
   declare provider?: UserProvider
+  declare freshAccount?: boolean
 }
 
 const clearInactiveSessions = (user: User) => {
@@ -126,6 +127,12 @@ export default function initUser(dbInstance: Sequelize) {
         },
         allowNull: false,
         defaultValue: 'email',
+      },
+
+      freshAccount: {
+        type: DataTypes.BOOLEAN(),
+        allowNull: false,
+        defaultValue: true,
       },
     },
     {
