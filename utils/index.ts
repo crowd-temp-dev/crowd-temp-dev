@@ -806,14 +806,17 @@ export const showServerAuthMessage = (
   const errorMessagePath = `${path}_error_message`
   const successMessagePath = `${path}_success_message`
 
-  const errorMessage = cookies.get(errorMessagePath)
+  const errorMessage =
+    cookies.get(errorMessagePath) ||
+    cookies.get(`${path === 'login' ? 'signup' : 'login'}_error_message`)
+  
   const successMessage = cookies.get(successMessagePath)
 
   cookies.set('auth_provider_path', path)
 
   if (errorMessage || successMessage) {
     pToast.open({
-      error: !!errorMessage,
+      error: !successMessage,
       message: successMessage || errorMessage,
       duration: 5000,
     })

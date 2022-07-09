@@ -31,7 +31,7 @@ export default async function googleSignUp(req: Request, res: Response) {
 
       focusOnLoginBtn()
 
-      throw new Error('{Account exist!} {/auth/sign-up}')
+      throw new Error('{Account exist!} {/auth/login}')
     } else {
       const newUser = await User.create(
         {
