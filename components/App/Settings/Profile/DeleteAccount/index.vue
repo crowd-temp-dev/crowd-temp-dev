@@ -74,6 +74,7 @@ export default defineComponent({
     }
 
     const resetForm = () => {
+      confirmationSent.value = false
       sendingConfirmation.value = false
       confirmField.value = ''
       deleting.value = false
