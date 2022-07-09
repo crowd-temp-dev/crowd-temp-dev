@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import DB from '../../../database'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
-import { Token } from '../../../database/models/User/UserToken'
+import { UserToken } from '../../../database/models/User/UserToken'
 import { User } from '../../../database/models/User/User'
 import { oneHour } from '../../../utils'
 import { authenticate } from '../../utils/middleware'
@@ -19,7 +19,7 @@ export default function (router: Router) {
           const user = await User.findByPk(userId, { transaction })
 
           // delete existing token
-          await Token.destroy({
+          await UserToken.destroy({
             where: {
               userId,
               type: 'delete_account',
@@ -28,7 +28,7 @@ export default function (router: Router) {
           })
 
           // create new token
-          const token = await Token.create({
+          const token = await UserToken.create({
             userId,
             duration: oneHour,
             type: 'delete_account',

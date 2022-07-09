@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
 import DB from '../../../database'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
-import { Token } from '../../../database/models/User/UserToken'
+import { UserToken } from '../../../database/models/User/UserToken'
 import { User } from '../../../database/models/User/User'
 import { uuidv4, inOneHour } from '../../../utils'
 import { setAuthCookies } from '../../utils/cookies'
@@ -50,7 +50,7 @@ export default function (router: Router) {
           const { token } = req.body as ConfirmAccountForm
 
           // check that token exists
-          const confirmAccount = await Token.findByPk(token, {
+          const confirmAccount = await UserToken.findByPk(token, {
             transaction,
           })
 

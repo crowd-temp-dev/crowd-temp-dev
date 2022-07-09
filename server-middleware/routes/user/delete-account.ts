@@ -9,7 +9,7 @@ import DB from '../../../database'
 import { matchPassword } from '../../../database/utils'
 import mailer from '../../email'
 import { Recover } from '../../../database/models/User/Recover'
-import { Token } from '../../../database/models/User/UserToken'
+import { UserToken } from '../../../database/models/User/UserToken'
 
 export interface DeleteAccountForm {
   confirm: string
@@ -81,7 +81,7 @@ export default function (router: Router) {
                 : true
 
             if (passwordMatch) {
-              const token = await Token.findOne({
+              const token = await UserToken.findOne({
                 where: {
                   type: 'delete_account',
                   userId,
