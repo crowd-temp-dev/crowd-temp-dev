@@ -4,7 +4,7 @@ import DB from '../../../database'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { ForgotPassword } from '../../../database/models/User/ForgotPassword'
 import { User } from '../../../database/models/User/User'
-import { uuidv4, inOneHour } from '../../../utils'
+import { uuidv4, inOneHour, capitalize } from '../../../utils'
 import { setAuthCookies } from '../../utils/cookies'
 
 export interface ForgotPasswordForm {
@@ -71,7 +71,7 @@ export default function (router: Router) {
 
           if (findUser.provider !== 'email') {
             throw new Error(
-              `{403} ${findUser.provider} manages account password!`
+              `{403} ${capitalize(findUser.provider)} manages account password!`
             )
           }
 

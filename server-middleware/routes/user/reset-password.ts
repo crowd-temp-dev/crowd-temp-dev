@@ -8,6 +8,7 @@ import { User } from '../../../database/models/User/User'
 import { hashPassword } from '../../../database/utils'
 import { setAuthCookies } from '../../utils/cookies'
 import mailer from '../../email'
+import { capitalize } from '../../../utils'
 
 export interface ResetPasswordForm {
   password: string
@@ -61,7 +62,7 @@ export default function (router: Router) {
             if (user) {
               if (user.provider !== 'email') {
                 throw new Error(
-                  `{403} ${user.provider} manages account password!`
+                  `{403} ${capitalize(user.provider)} manages account password!`
                 )
               }
 

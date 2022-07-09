@@ -4,7 +4,7 @@ import DB from '../../../database'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { ForgotPassword } from '../../../database/models/User/ForgotPassword'
 import { User } from '../../../database/models/User/User'
-import { oneMinute, inOneDay } from '../../../utils'
+import { oneMinute, inOneDay, capitalize } from '../../../utils'
 import { user } from '../../utils/validation'
 import mailer from '../../email'
 
@@ -53,7 +53,7 @@ export default function (router: Router) {
           if (user) {
             if (user.provider !== 'email') {
               throw new Error(
-                `{403} ${user.provider} manages account password!`
+                `{403} ${capitalize(user.provider)} manages account password!`
               )
             }
 

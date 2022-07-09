@@ -72,7 +72,7 @@ export default async function googleSignUp(req: Request, res: Response) {
     }
   } catch (err) {
     const [message, redirectTo] = (
-      (err.message as string).match(/\{\w+\}/g) || []
+      (err.message as string).match(/\{(?:(?:\/)|\w)+\}/g) || []
     ).map((x) => x.replace(/\{|\}/g, ''))
 
     res.cookie('signup_error_message', message)

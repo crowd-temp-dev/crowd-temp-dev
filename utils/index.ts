@@ -825,3 +825,7 @@ export const showServerAuthMessage = (
     cookies.remove(`${path}_focus`)
   })
 }
+
+export const capitalize = (string: string) => {
+  return string.replace(/^[a-zA-Z]/, (x) => x.toUpperCase())
+}

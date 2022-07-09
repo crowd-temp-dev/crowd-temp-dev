@@ -4,6 +4,7 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { TemporaryEmail } from '../../../database/models/User/TemporaryEmail'
 import { User } from '../../../database/models/User/User'
 import DB from '../../../database'
+import { capitalize } from '../../../utils'
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
@@ -49,7 +50,7 @@ export default function (router: Router) {
             if (user) {
               if (user.provider !== 'email') {
                 throw new Error(
-                  `{403} ${user.provider} manages account email!`
+                  `{403} ${capitalize(user.provider)} manages account email!`
                 )
               }
 

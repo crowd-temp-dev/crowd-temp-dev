@@ -7,7 +7,7 @@ import { user } from '../../utils/validation'
 import { User } from '../../../database/models/User/User'
 import DB from '../../../database'
 import { hashPassword, matchPassword } from '../../../database/utils'
-import { inOneHour } from '../../../utils'
+import { capitalize, inOneHour } from '../../../utils'
 
 export interface ChangePasswordForm {
   currentPassword: string
@@ -63,7 +63,7 @@ export default function (router: Router) {
           if (user) {
             if (user.provider !== 'email') {
               throw new Error(
-                `{403} ${user.provider} manages account password!`
+                `{403} ${capitalize(user.provider)} manages account password!`
               )
             }
 

@@ -5,7 +5,7 @@ import { authenticate } from '../../utils/middleware'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import { user } from '../../utils/validation'
 import DB from '../../../database'
-import { removeUndefinedValues } from '../../../utils'
+import { capitalize, removeUndefinedValues } from '../../../utils'
 import { User } from '../../../database/models/User/User'
 import { TemporaryEmail } from '../../../database/models/User/TemporaryEmail'
 import mailer from '../../email'
@@ -80,7 +80,9 @@ export default function (router: Router) {
             // email changed
             if (email) {
               if (user.provider !== 'email') {
-                throw new Error(`{403} ${user.provider} manages account email!`)
+                throw new Error(
+                  `{403} ${capitalize(user.provider)} manages account email!`
+                )
               }
 
               const clearAllTempEmails = async () => {
@@ -123,17 +125,20 @@ export default function (router: Router) {
                       subject: 'Change of email',
                       html: `<div>
                       <p>
-                        Hi ${user.name
+                        Hi ${
+                          user.name
                         }! A request has been made to change your email!.
                       </p>
 
                       <p>
                         <p><strong>This wasn't you?</strong></p>
-                        <a href="${process.env.CLIENT_ORIGIN}/action?${apiActionQuery({
-                          key: 'cancel_email_change',
-                          token: temporaryEmail.id,
-                          id: user.id,
-                        })}">Cancel this request</a>
+                        <a href="${
+                          process.env.CLIENT_ORIGIN
+                        }/action?${apiActionQuery({
+                        key: 'cancel_email_change',
+                        token: temporaryEmail.id,
+                        id: user.id,
+                      })}">Cancel this request</a>
                       </p>
                     </div>`,
                     })
@@ -144,24 +149,30 @@ export default function (router: Router) {
                         subject: 'Confirm new email',
                         html: `<div>
                       <p>
-                        Hi ${user.name
-                          }! A request was made to change your old email <em>${user.email
-                          }</em> to this one.
+                        Hi ${
+                          user.name
+                        }! A request was made to change your old email <em>${
+                          user.email
+                        }</em> to this one.
                       </p>
 
-                      <a href="${process.env.CLIENT_ORIGIN}/action?${apiActionQuery({
-                            key: 'change_email',
-                            token: temporaryEmail.id,
-                            id: user.id,
-                          })}">Change email</a>
+                      <a href="${
+                        process.env.CLIENT_ORIGIN
+                      }/action?${apiActionQuery({
+                          key: 'change_email',
+                          token: temporaryEmail.id,
+                          id: user.id,
+                        })}">Change email</a>
 
                       <p>
                         <p><strong>This wasn't you?</strong></p>
-                        <a href="${process.env.CLIENT_ORIGIN}/action?${apiActionQuery({
-                            key: 'cancel_email_change',
-                            token: temporaryEmail.id,
-                            id: user.id,
-                          })}">Cancel this request</a>
+                        <a href="${
+                          process.env.CLIENT_ORIGIN
+                        }/action?${apiActionQuery({
+                          key: 'cancel_email_change',
+                          token: temporaryEmail.id,
+                          id: user.id,
+                        })}">Cancel this request</a>
                       </p>
                     </div>`,
                       })
@@ -173,7 +184,9 @@ export default function (router: Router) {
                     duration: 7000,
                   })
                 } else {
-                  throw new Error('{409} Cannot update your email at this time!')
+                  throw new Error(
+                    '{409} Cannot update your email at this time!'
+                  )
                 }
               } else {
                 await clearAllTempEmails()
@@ -186,11 +199,11 @@ export default function (router: Router) {
               data: user.get(),
               message: [
                 {
-                  content: "Updated!",
-                  type: "success"
+                  content: 'Updated!',
+                  type: 'success',
                 },
-                ...messages
-              ]
+                ...messages,
+              ],
             })
           } else {
             throw new Error('{404} Account not found!')

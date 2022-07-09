@@ -56,7 +56,7 @@ export default defineComponent({
         return null
       }
 
-      return $user.provider.replace(/[a-z]/, (x) => x.toUpperCase())
+      return $user.provider.replace(/^[a-zA-Z]/, (x) => x.toUpperCase())
     })
 
     return { provider }
