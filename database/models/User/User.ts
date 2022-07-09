@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import {
   Model,
   InferAttributes,
@@ -146,23 +144,23 @@ export default function initUser(dbInstance: Sequelize) {
         },
 
         beforeUpdate: clearInactiveSessions,
-        beforeDestroy(user) {
-          const allUsers = path.join(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'uploads',
-            'user'
-          )
+        // beforeDestroy(user) {
+        //   const allUsers = path.join(
+        //     __dirname,
+        //     '..',
+        //     '..',
+        //     '..',
+        //     'uploads',
+        //     'user'
+        //   )
 
-          if (fs.readdirSync(allUsers).includes(user.id)) {
-            fs.rmSync(path.join(allUsers, user.id), {
-              recursive: true,
-              force: true,
-            })
-          }
-        },
+        //   if (fs.readdirSync(allUsers).includes(user.id)) {
+        //     fs.rmSync(path.join(allUsers, user.id), {
+        //       recursive: true,
+        //       force: true,
+        //     })
+        //   }
+        // },
       },
 
       sequelize: dbInstance,
