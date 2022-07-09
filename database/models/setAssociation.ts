@@ -1,6 +1,6 @@
 import { Model, ModelStatic } from 'sequelize'
 import { User } from './User/User'
-import { ConfirmAccount } from './User/ConfirmAccount'
+import { Token } from './User/Token'
 import { ForgotPassword } from './User/ForgotPassword'
 import { TestDetail } from './CreateTests/TestDetail'
 import { WelcomeScreen } from './CreateTests/WelcomeScreen'
@@ -30,8 +30,8 @@ export default function () {
 
     called = true
 
-    // a user has 1 slot in ConfirmAccount
-    User.hasOne(ConfirmAccount, {
+    // a user has 1 slot in Token
+    User.hasOne(Token, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
     })

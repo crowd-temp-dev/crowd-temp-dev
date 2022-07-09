@@ -413,7 +413,7 @@ export const getTestFeatureTitle = (
   }
 }
 
-const alphabets = Array.from(Array(26))
+export const alphabets = Array.from(Array(26))
   .map((_, i) => i + 65)
   .map((x) => String.fromCharCode(x).toLowerCase())
 

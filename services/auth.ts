@@ -31,10 +31,13 @@ export const Login: ServiceHandler<LoginForm, User> = async (
   return await axios.$post('/auth/login', payload, validateStatus)
 }
 
-export const ReloadUser: ServiceHandler<boolean, User> = async (axios, progress = false) => {
+export const ReloadUser: ServiceHandler<boolean, User> = async (
+  axios,
+  progress = false
+) => {
   return await axios.$get('auth/reload', {
     ...validateStatus,
-    progress
+    progress,
   })
 }
 
@@ -104,10 +107,10 @@ export const ChangeEmail: ServiceHandler<
   return await axios.$post('/auth/changeEmail', payload, validateStatus)
 }
 
-export const ChangePassword: ServiceHandler<
-  ChangePasswordForm,
-  User
-> = async (axios, payload) => {
+export const ChangePassword: ServiceHandler<ChangePasswordForm, User> = async (
+  axios,
+  payload
+) => {
   return await axios.$patch('/auth/changePassword', payload, validateStatus)
 }
 
@@ -119,4 +122,10 @@ export const DeleteAccount: ServiceHandler<DeleteAccountForm, []> = async (
     data,
     validateStatus: () => true,
   })
+}
+
+export const SendDeleteEmailConfirmation: ServiceHandler<null, []> = async (
+  axios
+) => {
+  return await axios.$post('/auth/deleteUser/confirm', null, validateStatus)
 }

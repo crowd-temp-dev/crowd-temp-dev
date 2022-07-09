@@ -1,4 +1,5 @@
 import { hash, compare } from 'bcrypt'
+import { alphabets } from '../../utils'
 
 /**
  * @name hashPassword
@@ -30,3 +31,31 @@ export async function matchPassword(
 }
 
 export const userRoleRegExpString = '^(?:tester|user)$'
+
+export const getTokenValue = () => {
+  const randomBoolean = () => {
+    return Boolean(Math.round(Math.random()))
+  }
+
+  const randomize = (arr: any[]) => {
+    return arr[Math.floor(Math.random() * arr.length)]
+  }
+
+  const numbers = Array.from(
+    {
+      length: 10,
+    },
+    (_, i) => i
+  )
+
+  return Array.from(
+    {
+      length: 6,
+    },
+    () => {
+      return randomBoolean() ? randomize(alphabets) : randomize(numbers)
+    }
+  )
+    .join('')
+    .toUpperCase()
+}

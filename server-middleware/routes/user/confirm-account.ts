@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
 import DB from '../../../database'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
-import { ConfirmAccount } from '../../../database/models/User/ConfirmAccount'
+import { Token } from '../../../database/models/User/Token'
 import { User } from '../../../database/models/User/User'
 import { uuidv4, inOneHour } from '../../../utils'
 import { setAuthCookies } from '../../utils/cookies'
@@ -50,7 +50,7 @@ export default function (router: Router) {
           const { token } = req.body as ConfirmAccountForm
 
           // check that token exists
-          const confirmAccount = await ConfirmAccount.findByPk(token, {
+          const confirmAccount = await Token.findByPk(token, {
             transaction,
           })
 
@@ -59,7 +59,7 @@ export default function (router: Router) {
               await confirmAccount.destroy({ transaction })
 
             // check that the token isn't expired;
-            if (confirmAccount.expires < Date.now()) {
+            if (confirmAccount.expired) {
               throw new Error(
                 '{403} Token expired! Please re-create your account'
               )

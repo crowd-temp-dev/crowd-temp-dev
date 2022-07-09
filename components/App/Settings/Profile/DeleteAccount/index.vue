@@ -3,7 +3,7 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 import Section from '~/components/App/Settings/Section/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
-import { confirmDeleteAccount } from '~/utils'
+import { confirmDeleteAccount, oneFrame, sleep } from '~/utils'
 import PasswordField from '~/components/Base/PasswordField/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { OnSubmit } from '~/types'
@@ -12,42 +12,72 @@ import {
   disableFormFields,
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
+import { SendDeleteEmailConfirmation } from '~/services/auth'
+import { showToasts } from '~/utils/showToast'
 
 export default defineComponent({
   name: 'AppSettingsProfileDeleteAccount',
   components: { Section, Button, DialogButton, PasswordField, FadeTransition },
-  setup(_, { root: { $user } }) {
+  setup(_, { root: { $user, $axios, $pToast } }) {
     const confirmField = ref('')
 
-    const loading = ref(false)
+    const confirmationSent = ref(false)
+
+    const sendingConfirmation = ref(false)
+
+    const deleting = ref(false)
 
     const confirmed = computed(
       () => confirmField.value === confirmDeleteAccount
     )
 
-    const deleteAccount: OnSubmit<DeleteAccountForm> = async ({
+    const providerConfirmed = computed(() => {
+      return $user.provider === 'email' ? true : confirmationSent.value
+    })
+
+    const confirmOrDeleteAccount: OnSubmit<DeleteAccountForm> = async ({
       formValues,
       formFields,
     }) => {
-      loading.value = true
+      if (!providerConfirmed.value) {
+        sendingConfirmation.value = true
 
-      disableFormFields(formFields)
+        const { data, message } = await SendDeleteEmailConfirmation(
+          $axios,
+          null
+        )
 
-      await $user.delete(formValues)
+        await sleep(oneFrame)
 
-      formFields.password.value = ''
+        showToasts($pToast, message)
 
-      enableFormFields(formFields)
+        confirmationSent.value = !!data
 
-      loading.value = false
+        sendingConfirmation.value = false
+      } else {
+        deleting.value = true
+
+        disableFormFields(formFields)
+
+        await $user.delete(formValues)
+
+        formFields.password.value = ''
+
+        enableFormFields(formFields)
+
+        deleting.value = false
+      }
     }
 
     return {
       confirmField,
       confirmDeleteAccount,
       confirmed,
-      deleteAccount,
-      loading,
+      deleting,
+      confirmationSent,
+      providerConfirmed,
+      sendingConfirmation,
+      confirmOrDeleteAccount,
     }
   },
 })
@@ -62,6 +92,12 @@ export default defineComponent({
         destructive
         label="Confirm delete account"
         :dialog-content-class="['min-w-[500px]']"
+        :dialog-events="{
+          afterLeave: () => {
+            sendingConfirmation = false
+            confirmField = false
+          },
+        }"
         @click="confirmField = ''"
       >
         Delete account
@@ -83,7 +119,7 @@ export default defineComponent({
           <FormLayout
             v-slot="{ fieldIdAndError }"
             name="delete-account"
-            @on-submit="deleteAccount"
+            @on-submit="confirmOrDeleteAccount"
           >
             <TextField
               v-model="confirmField"
@@ -95,12 +131,35 @@ export default defineComponent({
 
             <FadeTransition>
               <PasswordField
-                v-if="confirmed"
+                v-if="confirmed && $user.provider === 'email'"
                 autofocus
                 required
                 label="Password*"
                 v-bind="fieldIdAndError('password')"
               />
+
+              <div v-else-if="confirmed">
+                <Button
+                  v-if="!providerConfirmed"
+                  primary
+                  full-width
+                  autofocus
+                  form="delete-account"
+                  type="submit"
+                  :loading="sendingConfirmation"
+                >
+                  Send email confirmation
+                </Button>
+
+                <TextField
+                  v-else
+                  autofocus
+                  required
+                  label="Token*"
+                  :help-text="`Confirmation token has been sent to '${$user.email}'`"
+                  v-bind="fieldIdAndError('token')"
+                />
+              </div>
             </FadeTransition>
           </FormLayout>
         </template>
@@ -114,8 +173,8 @@ export default defineComponent({
               destructive
               form="delete-account"
               class="ml-16"
-              :disabled="!confirmed"
-              :loading="loading"
+              :disabled="!confirmed || !providerConfirmed"
+              :loading="deleting"
             >
               Delete account
             </Button>

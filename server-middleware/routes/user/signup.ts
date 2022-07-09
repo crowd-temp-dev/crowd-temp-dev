@@ -5,7 +5,7 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
 import { hashPassword } from '../../../database/utils'
-import { ConfirmAccount } from '../../../database/models/User/ConfirmAccount'
+import { Token } from '../../../database/models/User/Token'
 import mailer from '../../email'
 import { apiActionQuery } from '../../utils'
 
@@ -67,17 +67,19 @@ export default function (router: Router) {
         // check to see that the email isnt taken.
         const sendRes = async (user: User) => {
           // clear any previous token
-          await ConfirmAccount.destroy({
+          await Token.destroy({
             where: {
               userId: user.id,
+              type: 'confirm_account'
             },
             transaction,
           })
 
           // add new token
-          const confirmAccount = await ConfirmAccount.create(
+          const confirmAccount = await Token.create(
             {
               userId: user.id,
+              type: 'confirm_account'
             },
             { transaction }
           )

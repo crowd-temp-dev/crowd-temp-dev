@@ -9,6 +9,7 @@ import DB from '../../../database'
 import { matchPassword } from '../../../database/utils'
 import mailer from '../../email'
 import { Recover } from '../../../database/models/User/Recover'
+import { Token } from '../../../database/models/User/Token'
 
 export interface DeleteAccountForm {
   confirm: string
@@ -20,7 +21,8 @@ const formValidation: RequestHandler = (req, res, next) => {
 
   const schema = Joi.object({
     confirm: user.confirmDeleteAccount.required(),
-    password: user.password.required(),
+    password: user.password,
+    token: Joi.string().min(6).max(6),
   } as Record<keyof DeleteAccountForm, any>)
 
   const validate = schema.validate(body)
@@ -64,12 +66,40 @@ export default function (router: Router) {
               }
             }
 
-            const passwordMatch = await matchPassword(
-              req.body.password,
-              user.password
-            )
+            if (user.provider === 'email') {
+              if (!req.body.password) {
+                throw new Error('{400} Password is required!')
+              }
+            } else if (!req.body.token) {
+              throw new Error('{400} Token is required!')
+            }
+
+            const passwordMatch =
+              user.provider === 'email'
+                ? await matchPassword(req.body.password, user.password)
+                : true
 
             if (passwordMatch) {
+              const token = await Token.findOne({
+                where: {
+                  type: 'delete_account',
+                  userId,
+                },
+                transaction,
+              })
+
+              if (!token) {
+                throw new Error('{403} No token found!')
+              } else if (token.value !== req.body.token) {
+                await token.update({
+                  wrongInput: token.wrongInput + 1,
+                })
+
+                await token.save({ transaction })
+
+                throw new Error('{403} Invalid token!')
+              }
+
               // store old data
               try {
                 await Recover.destroy({
