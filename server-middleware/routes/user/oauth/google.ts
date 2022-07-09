@@ -4,7 +4,6 @@ import { User } from '../../../../database/models/User/User'
 import DB from '../../../../database'
 import { routeQuery } from '../../../utils'
 import {
-  sendError,
   sendFormattedError,
   sendSuccess,
 } from '../../../utils/sendRes'
