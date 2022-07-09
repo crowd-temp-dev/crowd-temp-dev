@@ -73,15 +73,15 @@ export default function initUser(dbInstance: Sequelize) {
             token.destroy({ transaction })
           }
         },
-        afterCreate(token) {
-          const timeout = setTimeout(() => {
-            if (token.get().id) {
-              token.destroy()
-            }
+        // afterCreate(token) {
+        //   const timeout = setTimeout(() => {
+        //     if (token.get().id) {
+        //       token.destroy()
+        //     }
 
-            clearTimeout(timeout)
-          }, token.duration)
-        },
+        //     clearTimeout(timeout)
+        //   }, token.duration)
+        // },
       },
     }
   )

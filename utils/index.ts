@@ -824,6 +824,8 @@ export const showServerAuthMessage = (
 
   sleep(oneFrame).then(() => {
     cookies.remove(errorMessagePath)
+    cookies.remove(`${path === 'login' ? 'signup' : 'login'}_error_message`)
+
     cookies.remove(successMessagePath)
     cookies.remove(`${path}_focus`)
   })
