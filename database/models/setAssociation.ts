@@ -1,6 +1,6 @@
 import { Model, ModelStatic } from 'sequelize'
 import { User } from './User/User'
-import { Token } from './User/Token'
+import { Token } from './User/UserToken'
 import { ForgotPassword } from './User/ForgotPassword'
 import { TestDetail } from './CreateTests/TestDetail'
 import { WelcomeScreen } from './CreateTests/WelcomeScreen'

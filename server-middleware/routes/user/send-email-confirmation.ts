@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import DB from '../../../database'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
-import { Token } from '../../../database/models/User/Token'
+import { Token } from '../../../database/models/User/UserToken'
 import { User } from '../../../database/models/User/User'
 import { oneHour } from '../../../utils'
 import { authenticate } from '../../utils/middleware'

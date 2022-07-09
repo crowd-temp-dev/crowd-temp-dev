@@ -9,7 +9,7 @@ import DB from '../../../database'
 import { matchPassword } from '../../../database/utils'
 import mailer from '../../email'
 import { Recover } from '../../../database/models/User/Recover'
-import { Token } from '../../../database/models/User/Token'
+import { Token } from '../../../database/models/User/UserToken'
 
 export interface DeleteAccountForm {
   confirm: string

@@ -10,9 +10,9 @@ import { Uuidv4 } from '../../utils/model'
 import { oneDay } from '../../../utils'
 import { getTokenValue } from '../../utils'
 
-export class Token extends Model<
-  InferAttributes<Token>,
-  InferCreationAttributes<Token>
+export class UserToken extends Model<
+  InferAttributes<UserToken>,
+  InferCreationAttributes<UserToken>
 > {
   declare id?: string
   declare value: string
@@ -25,7 +25,7 @@ export class Token extends Model<
 }
 
 export default function initUser(dbInstance: Sequelize) {
-  Token.init(
+  UserToken.init(
     {
       id: {
         ...Uuidv4,
@@ -86,11 +86,11 @@ export default function initUser(dbInstance: Sequelize) {
     }
   )
 
-  Object.defineProperty(Token.prototype, 'expired', {
-    get(this: Token) {
+  Object.defineProperty(UserToken.prototype, 'expired', {
+    get(this: UserToken) {
       return new Date(this.createdAt).getTime() + this.duration <= Date.now()
     },
   })
 
-  return Token
+  return UserToken
 }

@@ -5,7 +5,7 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
 import { hashPassword } from '../../../database/utils'
-import { Token } from '../../../database/models/User/Token'
+import { Token } from '../../../database/models/User/UserToken'
 import mailer from '../../email'
 import { apiActionQuery } from '../../utils'
 
