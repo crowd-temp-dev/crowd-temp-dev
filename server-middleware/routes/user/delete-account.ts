@@ -8,7 +8,6 @@ import { User } from '../../../database/models/User/User'
 import DB from '../../../database'
 import { matchPassword } from '../../../database/utils'
 import mailer from '../../email'
-import { Recover } from '../../../database/models/User/Recover'
 import { UserToken } from '../../../database/models/User/UserToken'
 
 export interface DeleteAccountForm {
@@ -101,46 +100,7 @@ export default function (router: Router) {
                 throw new Error('{403} Invalid token!')
               }
 
-              // store old data
-              try {
-                await Recover.destroy({
-                  where: {
-                    id: userId,
-                  },
-                  transaction,
-                })
-
-                const {
-                  email,
-                  action,
-                  name,
-                  password,
-                  role,
-                  newsUpdate,
-                  showDashboardGuide,
-                  confirmedAt,
-                } = user
-
-                await Recover.create(
-                  {
-                    email,
-                    action,
-                    session: {},
-                    confirmed: true,
-                    name,
-                    password,
-                    role,
-                    newsUpdate,
-                    showDashboardGuide,
-                    confirmedAt,
-                  },
-                  { transaction }
-                )
-
-                await user.destroy({ transaction })
-              } catch (err) {
-                throw new Error('{409} Error deleting account!')
-              }
+              await user.destroy({ transaction })
 
               clearAuthCookies(res)
 
