@@ -31,7 +31,7 @@ export default async function googleSignUp(req: Request, res: Response) {
 
       focusOnLoginBtn()
 
-      throw new Error('{Account exist!} {/auth/login}')
+      throw new Error('{Account exist!} {/auth/sign-up}')
     } else {
       const newUser = await User.create(
         {
@@ -71,11 +71,11 @@ export default async function googleSignUp(req: Request, res: Response) {
       res.redirect(302, `${process.env.CLIENT_ORIGIN}/auth/login`)
     }
   } catch (err) {
-    const [message, redirectTo] = (
-      (err.message as string).match(/\{(?:(?:\/)|\w)+\}/g) || []
-    ).map((x) => x.replace(/\{|\}/g, ''))
+    const [message, redirectTo] = (err.message as string)
+      .split(/\}\s/)
+      .map((x) => x.replace(/\{|\}/g, ''))
 
-    res.cookie('signup_error_message', message)
+    res.cookie('signup_error_message', message || '')
 
     res.redirect(302, `${process.env.CLIENT_ORIGIN}${redirectTo}`)
 

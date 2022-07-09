@@ -8,14 +8,6 @@ export default async function googleLogin(req: Request, res: Response) {
   try {
     const googleUserData = await getGoogleUserData(req.query.code as string)
 
-    const backToSignUp = (message: string) => {
-      res.cookie('signup_error_message', message)
-
-      res.redirect(302, `${process.env.CLIENT_ORIGIN}/auth/sign-up`)
-
-      res.end()
-    }
-
     // find user
     const transaction = await DB.transaction()
 
@@ -29,13 +21,13 @@ export default async function googleLogin(req: Request, res: Response) {
     if (!user) {
       await transaction.rollback()
 
-      backToSignUp("Account doesn't exist!")
-
       res.cookie('signup_focus', 'google')
+
+      throw new Error("{Account doesn't exist!} {/auth/sign-up}")
     } else if (user.provider !== 'google') {
-      backToSignUp('Invalid provider!')
+      throw new Error('{Invalid provider!} {/auth/sign-up}')
     } else if (!googleUserData.verified_email) {
-      backToSignUp('Google account not verified!')
+      throw new Error('{Google account not verified!} {/auth/sign-up}')
     } else {
       res.cookie('signup_error_message', '', { maxAge: 1 })
 
@@ -57,7 +49,13 @@ export default async function googleLogin(req: Request, res: Response) {
       res.redirect(302, `${process.env.CLIENT_ORIGIN}`)
     }
   } catch (err) {
-    res.redirect(302, `${process.env.CLIENT_ORIGIN}/auth/login`)
+    const [message, redirectTo] = (err.message as string)
+      .split(/\}\s/)
+      .map((x) => x.replace(/\{|\}/g, ''))
+
+    res.cookie('login_error_message', message || '')
+
+    res.redirect(302, `${process.env.CLIENT_ORIGIN}${redirectTo}`)
 
     res.end()
   }

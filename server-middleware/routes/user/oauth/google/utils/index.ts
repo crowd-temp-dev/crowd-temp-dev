@@ -12,7 +12,7 @@ export async function getOAuthTokens(code: string) {
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
       redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URL,
       grant_type: 'authorization_code',
-    }
+    }    
 
     const res = await axios.post<GoogleTokenResponse>(
       `${url}?${routeQuery(values)}`,
@@ -25,7 +25,7 @@ export async function getOAuthTokens(code: string) {
 
     return res.data
   } catch (err) {
-    throw new Error('{500} Error fetching Google tokens')
+    throw new Error('{Error fetching Google tokens} {/auth/sign-up}')
   }
 }
 
@@ -47,7 +47,7 @@ export async function getUserData(arg: {
 
     return res.data
   } catch (err) {
-    throw new Error('Error fetching Google user')
+    throw new Error('{Error fetching Google user} {/auth/sign-up}')
   }
 }
 
