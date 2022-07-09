@@ -155,6 +155,8 @@ export default {
 
   env: {
     CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+    GOOGLE_OAUTH_REDIRECT_URL: process.env.GOOGLE_OAUTH_REDIRECT_URL,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
 
   typescript: {

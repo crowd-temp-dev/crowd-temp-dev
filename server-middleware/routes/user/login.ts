@@ -15,7 +15,7 @@ export interface LoginForm {
   password: string
 }
 
-const middleware: RequestHandler = (req, res, next) => {
+const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
@@ -39,7 +39,7 @@ const middleware: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.post('/auth/login', middleware, async (req, res) => {
+  return router.post('/auth/login', formValidation, async (req, res) => {
     const { email, password } = req.body as LoginForm
 
     try {

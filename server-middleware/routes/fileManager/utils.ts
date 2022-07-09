@@ -203,17 +203,7 @@ export function getFileHandler() {
             `${fileInfo.path}${fileInfo.id}`.replace(/^\//, '')
           )
 
-          https.get(url, (res) => {
-            let data = ''
-
-            res.on('data', (chunk) => {
-              data += chunk
-            })
-
-            res.on('end', () => {
-              console.log(JSON.parse(data).explanation)
-            })
-          })
+          https.get(url)
         } else notFound()
       })
     } catch (err) {

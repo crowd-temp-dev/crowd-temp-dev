@@ -11,7 +11,7 @@ export interface ConfirmAccountForm {
   token: string
 }
 
-const middleware: RequestHandler = (req, res, next) => {
+const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
@@ -39,7 +39,7 @@ const middleware: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.post('/auth/confirmAccount', middleware, async (req, res) => {
+  return router.post('/auth/confirmAccount', formValidation, async (req, res) => {
     let destroyToken = null as unknown as () => Promise<void>
 
     try {

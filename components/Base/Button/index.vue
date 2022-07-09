@@ -28,13 +28,13 @@ export default defineComponent({
     const props = computed(() => _props)
 
     const autofocus = () => {
-      sleep(oneFrame).then(() => {
-        if (props.value.autofocus) {
-          if (rootRef.value && rootRef.value.$el) {
+      if (props.value.autofocus) {
+        sleep(oneFrame).then(() => {
+          if (rootRef.value?.$el) {
             ;(rootRef.value.$el as HTMLElement).focus()
           }
-        }
-      })
+        })
+      }
     }
 
     onMounted(autofocus)
@@ -62,6 +62,7 @@ export default defineComponent({
       'pointer-events-none': loading || readonly,
       'grayscale !opacity-50': disabled,
     }"
+    :connecteddisclosure="undefined"
     :destructive="destructive"
     :loading="false"
     v-on="$listeners"

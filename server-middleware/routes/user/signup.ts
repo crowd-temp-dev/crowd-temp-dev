@@ -18,7 +18,7 @@ export interface SignUpForm {
   newsUpdate: boolean
 }
 
-const middleware: RequestHandler = (req, res, next) => {
+const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
@@ -48,7 +48,7 @@ const middleware: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.post('/auth/signup', middleware, async (req, res) => {
+  return router.post('/auth/signup', formValidation, async (req, res) => {
     try {
       await DB.transaction(async (transaction) => {
         const {

@@ -18,13 +18,23 @@ export function sendError(
 ): void {
   const { message, status = 500, trace } = payload
 
-  res.set('$user', '')
-
-  res.status(status).send({
-    error: trace || {},
-    status,
-    message: [message].flat().filter(Boolean),
+  console.log({
+    SENT: res.headersSent,
   })
+
+  if (!res.headersSent) {
+    res.set('$user', '')
+
+    res.status(status)
+
+    res.send({
+      error: trace || {},
+      status,
+      message: [message].flat().filter(Boolean),
+    })
+  }
+
+  res.end()
 }
 
 /**
@@ -42,13 +52,19 @@ export function sendSuccess(
 ): void {
   const { data, status = 200, message } = payload
 
-  res.set('$user', '')
+  if (!res.headersSent) {
+    res.set('$user', '')
 
-  res.status(status).send({
-    data: removeSensitive ? removeSensitiveFields(data) : data,
-    status,
-    message: [message].flat().filter(Boolean),
-  })
+    res.status(status)
+
+    res.send({
+      data: removeSensitive ? removeSensitiveFields(data) : data,
+      status,
+      message: [message].flat().filter(Boolean),
+    })
+  }
+
+  res.end()
 }
 
 export function sendDataOrError(

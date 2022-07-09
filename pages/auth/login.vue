@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
 import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -10,6 +10,8 @@ import {
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
 import { LoginPayload } from '~/store/user'
+import { googleOAuthUrl } from '~/utils/oauth/google'
+import { showServerAuthError } from '~/utils'
 
 export default defineComponent({
   name: 'LoginPage',
@@ -24,7 +26,7 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: {  $user } }) {
+  setup(_, { root: { $user, $nuxt, $pToast, $cookies } }) {
     const formKey = ref(0)
 
     const password = ref('Qwerty$2')
@@ -53,7 +55,22 @@ export default defineComponent({
       toggleLoading?.(false)
     }
 
-    return { attemptLogin, formKey, password, rememberCheckbox }
+    const getGoogleOAuthUrl = computed(() => {
+      return googleOAuthUrl($nuxt.context.env)
+    })
+
+    // show server error
+    onMounted(() => {
+      showServerAuthError('login', $pToast, $cookies)
+    })
+
+    return {
+      formKey,
+      password,
+      rememberCheckbox,
+      getGoogleOAuthUrl,
+      attemptLogin,
+    }
   },
 
   head: {
@@ -91,6 +108,7 @@ export default defineComponent({
         <Button
           :size="$breakpoint.isMobile ? 'large' : 'medium'"
           :full-width="$breakpoint.isMobile"
+          :href="getGoogleOAuthUrl"
         >
           <div class="flex items-center">
             <Img
@@ -165,7 +183,11 @@ export default defineComponent({
           >Forgot password?</NuxtLink
         >
 
-        <Checkbox id="remember" v-model="rememberCheckbox" label="Remember me" />
+        <Checkbox
+          id="remember"
+          v-model="rememberCheckbox"
+          label="Remember me"
+        />
 
         <Button
           primary

@@ -11,7 +11,7 @@ export interface ForgotPasswordForm {
   token: string
 }
 
-const middleware: RequestHandler = (req, res, next) => {
+const formValidation: RequestHandler = (req, res, next) => {
   const query = req.query
 
   const schema = Joi.object({
@@ -39,7 +39,7 @@ const middleware: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.get('/auth/resetPassword', middleware, async (req, res) => {
+  return router.get('/auth/resetPassword', formValidation, async (req, res) => {
     let destroyToken = null as unknown as () => Promise<void>
 
     try {

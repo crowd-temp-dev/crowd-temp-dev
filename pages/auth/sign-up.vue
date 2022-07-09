@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
 import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -13,6 +13,7 @@ import {
 import { SignUpForm } from '~/server-middleware/routes/user/signup'
 import { Signup } from '~/services/auth'
 import { showToasts } from '~/utils/showToast'
+import { showServerAuthError } from '~/utils'
 
 export default defineComponent({
   name: 'SignUpPage',
@@ -27,7 +28,9 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: { $pToast, $axios } }) {
+  setup(_, { root: { $pToast, $axios, $cookies } }) {
+    const focusOn = ref($cookies.get('signup_focus'))
+
     const email = ref('')
 
     const password = ref('')
@@ -79,12 +82,18 @@ export default defineComponent({
       toggleLoading?.(false)
     }
 
+    // show server error
+    onMounted(() => {
+      showServerAuthError('signup', $pToast, $cookies)
+    })
+
     return {
       email,
-      attemptSignup,
+      focusOn,
       password,
       formKey,
       confirmPassword,
+      attemptSignup,
     }
   },
 
@@ -123,6 +132,7 @@ export default defineComponent({
         <Button
           :size="$breakpoint.isMobile ? 'large' : 'medium'"
           :full-width="$breakpoint.isMobile"
+          :autofocus="focusOn === 'google'"
         >
           <div class="flex items-center">
             <Img
@@ -167,9 +177,9 @@ export default defineComponent({
           label="Your name"
           required
           v-bind="fieldIdAndError('name')"
-          :autofocus="!$breakpoint.isMobile"
+          :autofocus="!$breakpoint.isMobile && !focusOn"
         />
-        
+
         <TextField
           v-model="email"
           label="Email address"

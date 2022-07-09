@@ -12,7 +12,7 @@ export interface ForgotPasswordForm {
   email: string
 }
 
-const middleware: RequestHandler = (req, res, next) => {
+const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
@@ -36,7 +36,7 @@ const middleware: RequestHandler = (req, res, next) => {
 
 // sends steps to reset password
 export default function (router: Router) {
-  return router.post('/auth/forgotPassword', middleware, async (req, res) => {
+  return router.post('/auth/forgotPassword', formValidation, async (req, res) => {
     try {
       await DB.transaction(async (transaction) => {
         const { email } = req.body as ForgotPasswordForm
