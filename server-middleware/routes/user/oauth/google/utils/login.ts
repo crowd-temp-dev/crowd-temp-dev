@@ -49,7 +49,7 @@ export default async function googleLogin(req: Request, res: Response) {
 
       res.cookie(
         'login_provider_alert',
-        user.freshAccount
+        user.loginCount < 2
           ? `Hi ${user.name}! Welcome to Crowd!`
           : `Welcome back ${user.name}!`
       )
