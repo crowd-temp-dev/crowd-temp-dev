@@ -1,5 +1,6 @@
 import { MutationTree } from 'vuex'
 import { AppState } from './state'
+import { oneFrame, setClientOs, sleep } from '~/utils'
 
 const mutation: MutationTree<AppState> = {
   addToDialogs(state, id: string) {
@@ -23,7 +24,9 @@ const mutation: MutationTree<AppState> = {
 
   updateGlobalKey(state) {
     state.globalKey += 1
-  }
+
+    sleep(oneFrame).then(setClientOs)
+  },
 }
 
 export default mutation

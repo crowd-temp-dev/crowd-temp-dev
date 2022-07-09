@@ -3,9 +3,9 @@ import { createTransport } from 'nodemailer'
 const {
   EMAIL_SERVICE,
   EMAIL_AUTH_TYPE,
-  EMAIL_CLIENT_ID,
-  EMAIL_CLIENT_SECRET,
-  EMAIL_REFRESH_TOKEN,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_REFRESH_TOKEN,
   EMAIL_ADDRESS,
   EMAIL_PASSWORD,
 } = process.env
@@ -17,9 +17,9 @@ const mailer = createTransport({
     type: EMAIL_AUTH_TYPE,
     user: EMAIL_ADDRESS,
     pass: EMAIL_PASSWORD,
-    clientId: EMAIL_CLIENT_ID,
-    clientSecret: EMAIL_CLIENT_SECRET,
-    refreshToken: EMAIL_REFRESH_TOKEN,
+    clientId: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    refreshToken: GOOGLE_REFRESH_TOKEN,
   },
 })
 

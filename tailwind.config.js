@@ -30,15 +30,13 @@ module.exports = {
       ])
       addVariant('landscape', '@media (orientation: landscape)')
       addVariant('portrait', '@media (orientation: portrait)')
-      addVariant('lock-html-scroll', [
-        ':root[data-overlay-active] &',
-        ':root[data-overlay-active]&',
-      ])
-      addVariant('windows-os', [
-        ':root[data-os-windows] &',
-        ':root[data-os-windows]&',
-      ])
-      addVariant('mac-os', [':root[data-os-mac] &', ':root[data-os-mac]&'])
+      addVariant('lock-html-scroll', [':root[data-overlay-active] &'])
+      addVariant('windows-os', [':root[data-os="windows"] &'])
+      addVariant('mac-os', [':root[data-os="mac"] &'])
+
+      addVariant('lock-html-scroll-self', [':root[data-overlay-active]&'])
+      addVariant('windows-os-self', [':root[data-os="windows"]&'])
+      addVariant('mac-os-self', [':root[data-os="mac"]&'])
     }),
     require('@tailwindcss/aspect-ratio'),
   ],

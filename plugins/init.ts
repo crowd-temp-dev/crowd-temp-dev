@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Plugin } from '@nuxt/types'
 import { CreateTestState } from '~/store/create-test'
 import { CreateTestForm } from '~/types/shim'
-import { oneFrame, sleep } from '~/utils'
+import { oneFrame, setClientOs, sleep } from '~/utils'
 
 const init: Plugin = function ({ app, store, $axios, $user }, inject) {
   if (process.client) {
@@ -11,29 +11,7 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
     // add html id
     document.documentElement.id = 'unbug-qa'
 
-    const getOS = () => {
-      const userAgent = window.navigator.userAgent
-
-      const platform =
-        // @ts-expect-error
-        window.navigator?.userAgentData?.platform || window.navigator.platform
-
-      if (/Mac/i.test(platform)) {
-        return 'Mac'
-      } else if (/iPhone/i.test(platform)) {
-        return 'Ios'
-      } else if (/windows/i.test(platform)) {
-        return 'Windows'
-      } else if (/Android/.test(userAgent)) {
-        return 'Android'
-      } else if (/Linux/.test(platform)) {
-        return 'Linux'
-      }
-
-      return ''
-    }
-
-    document.documentElement.dataset[`os${getOS()}`] = ''
+    setClientOs()
 
     sleep(oneFrame).then(() => {
       // add overlay element
