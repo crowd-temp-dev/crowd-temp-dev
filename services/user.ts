@@ -129,3 +129,14 @@ export const SendDeleteEmailConfirmation: ServiceHandler<null, []> = async (
 ) => {
   return await axios.$post('/auth/deleteUser/confirm', null, validateStatus)
 }
+
+export const RemoveAvatar: ServiceHandler<null, []> = async (axios) => {
+  return await axios.$patch('/auth/update/removeAvatar', null, validateStatus)
+}
+
+export const UpdateAvatar: ServiceHandler<Record<string, any>, User> = async (
+  axios,
+  payload
+) => {
+  return await axios.$patch('/auth/update/avatar', payload, validateStatus)
+}

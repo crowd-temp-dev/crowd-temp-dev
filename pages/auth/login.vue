@@ -29,6 +29,8 @@ export default defineComponent({
   setup(_, { root: { $user, $nuxt, $pToast, $cookies } }) {
     const formKey = ref(0)
 
+    const focusOn = ref($cookies.get('signup_focus'))
+
     const password = ref('Qwerty$2')
 
     const rememberCheckbox = ref(true)
@@ -69,6 +71,7 @@ export default defineComponent({
       password,
       rememberCheckbox,
       getGoogleOAuthUrl,
+      focusOn,
       attemptLogin,
     }
   },
@@ -109,6 +112,7 @@ export default defineComponent({
           :size="$breakpoint.isMobile ? 'large' : 'medium'"
           :full-width="$breakpoint.isMobile"
           :href="getGoogleOAuthUrl"
+          :autofocus="focusOn === 'google'"
         >
           <div class="flex items-center">
             <Img

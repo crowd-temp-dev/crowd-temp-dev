@@ -11,7 +11,7 @@ import {
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
 import { SignUpForm } from '~/server-middleware/routes/user/signup'
-import { Signup } from '~/services/auth'
+import { Signup } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 import { showServerAuthMessage } from '~/utils'
 import { googleOAuthUrl } from '~/utils/oauth/google'

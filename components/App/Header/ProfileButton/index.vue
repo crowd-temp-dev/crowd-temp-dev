@@ -69,10 +69,11 @@ export default defineComponent({
           }
         "
       >
-        <PAvatar
+        <Avatar
+          :src="$user.avatar"
+          :name="$user.name"
           :initials="$user.initials"
           size="small"
-          class="text-decorative-text-one bg-decorative-surface-one uppercase"
         />
       </Button>
     </Tooltip>

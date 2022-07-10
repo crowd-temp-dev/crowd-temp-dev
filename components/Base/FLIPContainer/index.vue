@@ -325,6 +325,12 @@ export default defineComponent({
       return {}
     },
     async openOverlay() {
+      if (!this.showOverlay) {
+        this.$emit('leaveCancelled')
+      }
+
+      this.$emit('beforeEnter')
+
       const { triggerRef, styles: fromStyle } = this.getFromStyle()
 
       if (triggerRef) {
@@ -335,6 +341,8 @@ export default defineComponent({
         }
 
         await this.$nextTick()
+
+        this.$emit('enter')
 
         this.showOverlay = true
 
@@ -364,13 +372,21 @@ export default defineComponent({
         await sleep(enterDuration)
 
         if (this.$refs.overlayRef && this.showOverlay) {
-          this.$refs.overlayWrapper.focus()
+          this.$refs.overlayWrapper?.focus()
 
           this.overlayEntered = true
+
+          this.$emit('afterEnter')
         }
       }
     },
     async closeOverlay() {
+      if (!this.overlayEntered) {
+        this.$emit('enterCancelled')
+      }
+
+      this.$emit('beforeLeave')
+
       const { triggerRef, styles: toStyles } = this.getFromStyle()
 
       if (triggerRef && this.$refs.overlayRef) {
@@ -393,10 +409,16 @@ export default defineComponent({
           willChange: 'transform,opacity',
         }
 
+        await this.$nextTick()
+
+        this.$emit('leave')
+
         await sleep(leaveDuration)
 
         if (this.showOverlay) {
           this.showOverlay = false
+
+          this.$emit('afterLeave')
 
           if (
             this.previousActive instanceof HTMLElement &&

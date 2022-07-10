@@ -65,7 +65,11 @@ export default defineComponent({
       default: 'bottom',
     },
     disabled: Boolean,
-    invert: Boolean
+    invert: Boolean,
+    triggerClass: {
+      type: String,
+      default: undefined,
+    },
   },
   emits: ['update:modelValue'],
   setup(_props, { emit, root }) {
@@ -286,7 +290,7 @@ export default defineComponent({
 
 <template>
   <div :id="id">
-    <div ref="triggerRef" class="w-full h-full">
+    <div ref="triggerRef" class="w-full h-full" :class="triggerClass">
       <slot v-bind="payload" />
     </div>
 
@@ -306,7 +310,10 @@ export default defineComponent({
             '--fade-leave-duration': leaveDuration,
           }"
           class="content text-sub-heading px-8 py-4 rounded pointer-events-none"
-          :class="{'bg-base-on-surface text-base-surface': !invert, 'bg-surface-default': invert}"
+          :class="{
+            'bg-base-on-surface text-base-surface': !invert,
+            'bg-surface-default': invert,
+          }"
         >
           <div data-popper-arrow class="arrow" />
           <slot name="content" v-bind="payload">

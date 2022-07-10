@@ -5,7 +5,7 @@ import {
   ChangeEmail,
   ConfirmAccount,
   LogoutAllSessions,
-} from '../services/auth'
+} from '../services/user'
 
 import type {
   ApiAction,
@@ -809,17 +809,23 @@ export const showServerAuthMessage = (
   const errorMessage =
     cookies.get(errorMessagePath) ||
     cookies.get(`${path === 'login' ? 'signup' : 'login'}_error_message`)
-  
+
   const successMessage = cookies.get(successMessagePath)
 
   cookies.set('auth_provider_path', path)
 
   if (errorMessage || successMessage) {
-    pToast.open({
-      error: !successMessage,
-      message: successMessage || errorMessage,
-      duration: 5000,
-    })
+    const message = ((successMessage || errorMessage) as string).replace(
+      /undefined/,
+      ''
+    )
+
+    message &&
+      pToast.open({
+        error: !successMessage,
+        message,
+        duration: 5000,
+      })
   }
 
   sleep(oneFrame).then(() => {

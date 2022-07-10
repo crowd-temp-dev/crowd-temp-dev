@@ -9,7 +9,7 @@ import {
   disableFormFields,
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
-import { ForgotPassword } from '~/services/auth'
+import { ForgotPassword } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 
 interface Form {

@@ -16,6 +16,10 @@ export default defineComponent({
     prop: 'modelValue',
   },
   props: {
+    id: {
+      type: String,
+      default: undefined,
+    },
     modelValue: {
       type: Array as () => File[],
       default: undefined,
@@ -42,8 +46,17 @@ export default defineComponent({
       type: String,
       default: 'or drop files to upload',
     },
+    actionAttrs: {
+      type: Object,
+      default: () => ({}),
+    },
     disablePreview: Boolean,
+    plain: Boolean,
+    hideIcon: Boolean,
+    outline: Boolean,
+    disabled: Boolean,
   },
+  emits: ['on-change'],
   setup(_props, { emit, attrs, root }) {
     const input = ref<HTMLInputElement | null>(null)
 
@@ -112,6 +125,8 @@ export default defineComponent({
         modelSync.value = _props.multiple
           ? [...modelSync.value, ...files]
           : files
+
+        emit('on-change', modelSync.value)
       }
 
       input.value = ''
@@ -133,12 +148,13 @@ export default defineComponent({
 
     const inputAttrs = computed(() => ({
       attrs: {
+        ...attrs,
         ref: 'input',
         type: 'file',
         autocomplete: 'off',
         multiple: _props.multiple ? 'multiple' : undefined,
         accept: _props.accept,
-        ...attrs,
+        disabled: _props.disabled,
       },
       events: {
         change: onChange,
@@ -157,6 +173,13 @@ export default defineComponent({
       y: innerHeight / 2 - height / 2 - 40,
     }
 
+    const showRootInput = computed(() => {
+      if (_props.plain) {
+        return true
+      }
+      return !getFiles.value.length ? true : dragEnter
+    })
+
     return {
       modelSync,
       dragEnter,
@@ -165,6 +188,7 @@ export default defineComponent({
       input,
       rootId,
       viewPort,
+      showRootInput,
       removeFile,
       openInput,
       onDrop,
@@ -176,12 +200,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <Id v-slot="{ id }">
+  <Id v-slot="idProps">
     <FLIPContainer
       tag="div"
       :trigger-view-port="`#${rootId}-preview`"
       :view-port="viewPort"
-      :disabled="disablePreview"
+      :disabled="disablePreview || plain"
       :enter-transition="{
         duration: '350',
         ease: 'cubic-bezier(0.175, 0.885, 0.32, 1.05)',
@@ -190,12 +214,15 @@ export default defineComponent({
       <template #trigger="{ open, active }">
         <div
           :id="rootId"
-          class="min-h-[200px] p-[1.5rem] rounded-lg border-dashed border-2 relative isolate cursor-pointer transition-all active:scale-[0.9975] focus-within:ring-2 ring-offset-2 ring-action-primary-default group"
+          class="rounded-lg border-dashed border-2 relative isolate cursor-pointer transition-all active:scale-[0.9975] focus-within:ring-2 ring-offset-2 ring-action-primary-default group"
           :class="{
             'border-border-default hover:bg-surface-hovered': !dragEnter,
             'bg-surface-default': !getFiles.length,
             'bg-surface-hovered': getFiles.length,
             'border-interactive-default bg-surface-selected-default': dragEnter,
+            'min-h-[200px] p-[1.5rem]': !outline,
+            'min-h-[110px] pt-[1rem]': outline,
+            'pointer-events-none': disabled,
           }"
           @dragenter="dragEnter = true"
           @dragover="dragEnter = true"
@@ -203,23 +230,33 @@ export default defineComponent({
           @drop="onDrop"
         >
           <div
-            class="p-[1.5rem] h-full items-center content-center justify-center justify-items-center grid gap-y-16"
+            class="p-[1.5rem] h-full items-center content-center justify-center justify-items-center grid"
+            :class="{ 'gap-y-16': !outline, 'gap-y-4': outline }"
           >
             <div
+              v-if="!plain"
               class="pseudo cursor-pointer !pointer-events-auto"
               @click="openInput"
             >
-              <label :for="id" class="sr-only">Select file(s)</label>
+              <label :for="id || idProps.id" class="sr-only"
+                >Select file(s)</label
+              >
             </div>
 
-            <template v-if="!dragEnter">
-              <template v-if="!getFiles.length">
+            <template v-if="!dragEnter && !plain">
+              <template v-if="!getFiles.length || outline">
                 <PIcon
+                  v-if="!hideIcon"
                   source="UploadMajor"
                   class="w-40 h-40 fill-icon-default pointer-events-none"
                 />
 
-                <Button tabindex="-1" class="pointer-events-none">
+                <Button
+                  v-if="actionTitle"
+                  tabindex="-1"
+                  class="pointer-events-none"
+                  v-bind="actionAttrs"
+                >
                   {{ actionTitle }}
                 </Button>
 
@@ -233,7 +270,7 @@ export default defineComponent({
                 class="h-full absolute inset-0 max-h-full py-24 pointer-events-none"
               >
                 <input
-                  :id="id"
+                  :id="id || idProps.id"
                   class="sr-only"
                   v-bind="inputAttrs.attrs"
                   v-on="inputAttrs.events"
@@ -309,15 +346,15 @@ export default defineComponent({
             </template>
 
             <p
-              v-else
+              v-else-if="!plain"
               class="text-heading-sm font-semibold text-interactive-default"
             >
               Drop files to upload
             </p>
 
             <input
-              v-if="!getFiles.length ? true : dragEnter"
-              :id="id"
+              v-if="showRootInput"
+              :id="id || idProps.id"
               class="absolute inset-0 opacity-0 text-[transparent] appearance-none cursor-pointer"
               v-bind="inputAttrs.attrs"
               v-on="inputAttrs.events"
@@ -325,13 +362,14 @@ export default defineComponent({
           </div>
 
           <input
+            v-if="!plain"
             type="text"
             class="sr-only"
             :required="required || undefined"
             :value="getFiles.length ? 'true' : ''"
           />
 
-          <FadeTransition v-if="!disablePreview">
+          <FadeTransition v-if="!disablePreview && !plain">
             <span
               v-if="getFiles.length && !active"
               class="absolute right-4 top-4 inline-block transition-[opacity,transform] opacity-30 group-hover:opacity-70 hover:opacity-100 active:opacity-90 active:scale-[0.99] pointer-events-auto"
@@ -469,7 +507,7 @@ export default defineComponent({
                 >
                   <label
                     aria-label="Replace file"
-                    :for="id"
+                    :for="id || idProps.id"
                     tabindex="0"
                     role="button"
                     class="flex-centered overlay-btn cursor-pointer"

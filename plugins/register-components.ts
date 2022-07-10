@@ -14,6 +14,7 @@ import Tooltip from '~/components/Base/Tooltip/index.vue'
 import Img from '~/components/Base/Img/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
 import VHTML from '~/components/Base/VHTML/index.vue'
+import Avatar from '~/components/Base/Avatar/index.vue'
 
 Vue.component('TextField', TextField)
 Vue.component('Checkbox', Checkbox)
@@ -28,3 +29,4 @@ Vue.component('Tooltip', Tooltip)
 Vue.component('Img', Img)
 Vue.component('Spinner', Spinner)
 Vue.component('VHTML', VHTML)
+Vue.component('Avatar', Avatar)

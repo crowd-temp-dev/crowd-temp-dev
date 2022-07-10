@@ -14,10 +14,7 @@ import type { UserRole } from '~/types'
 export type UserProvider = 'google' | 'twitter' | 'email'
 
 // eslint-disable-next-line no-use-before-define
-export class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
-> {
+export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<string>
   declare email: string
   declare name: string
@@ -31,6 +28,7 @@ export class User extends Model<
   declare confirmedAt?: number
   declare provider?: UserProvider
   declare loginCount?: number
+  declare avatar: CreationOptional<string>
 }
 
 const clearInactiveSessions = (user: User) => {
@@ -132,6 +130,11 @@ export default function initUser(dbInstance: Sequelize) {
         allowNull: false,
         defaultValue: 0,
       },
+
+      avatar: {
+        type: DataTypes.STRING(),
+        allowNull: true
+      }
     },
     {
       hooks: {

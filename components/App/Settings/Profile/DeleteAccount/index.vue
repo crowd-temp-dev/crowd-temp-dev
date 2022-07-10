@@ -12,7 +12,7 @@ import {
   disableFormFields,
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
-import { SendDeleteEmailConfirmation } from '~/services/auth'
+import { SendDeleteEmailConfirmation } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 
 export default defineComponent({

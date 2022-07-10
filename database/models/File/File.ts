@@ -8,7 +8,10 @@ import {
 import { Uuidv4 } from '../../utils/model'
 import { convertToByte } from '../../../utils'
 
-export class File extends Model<InferAttributes<File>, InferCreationAttributes<File>> {
+export class File extends Model<
+  InferAttributes<File>,
+  InferCreationAttributes<File>
+> {
   declare id?: string
   declare createdBy: string
   declare createdFor: string
@@ -73,14 +76,16 @@ export default function initDesignSurvey(DB: Sequelize) {
         type: DataTypes.STRING(),
         allowNull: false,
         validate: {
-          is: /^\/.+\/$/,
+          is: /\/+/,
         },
       },
       fullPath: {
         type: DataTypes.STRING(),
         allowNull: false,
         validate: {
-          is: /^\/.+\/$/,
+          isUrl: {
+            msg: 'Invalid file fullPath',
+          },
         },
       },
     },

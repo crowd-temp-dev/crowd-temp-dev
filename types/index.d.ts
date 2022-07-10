@@ -17,6 +17,8 @@ export interface ApiResponse<Data> {
 
 export interface User extends UserInfo {
   loggedIn: boolean
+  loading: boolean
+  avatarLoading: boolean
   initials: string
   login: (arg: LoginPayload) => Promise<ApiResponse<UserInfo>>
   logout: (alert?: boolean) => Promise<[]>
@@ -24,6 +26,8 @@ export interface User extends UserInfo {
   reload: () => Promise<ApiResponse<UserInfo>>
   delete: (arg: DeleteAccountForm) => Promise<ApiResponse<[]>>
   changePassword: (arg: ChangePasswordForm) => Promise<ApiResponse<UserInfo>>
+  removeAvatar: () => Promise<ApiResponse<UserInfo>>
+  updateAvatar: (payload: File[]) => Promise<ApiResponse<UserInfo>>
 }
 
 export type DynamicObject<value> = Record<string, value>

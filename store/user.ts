@@ -8,12 +8,14 @@ import {
   Login,
   Logout,
   ReloadUser,
+  RemoveAvatar,
+  UpdateAvatar,
   UpdateUser,
-} from '~/services/auth'
+} from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 import { LoginForm } from '~/server-middleware/routes/user/login'
 import { ApiResponse } from '~/types'
-import { sleep } from '~/utils'
+import { formBody, sleep } from '~/utils'
 import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
@@ -29,6 +31,7 @@ export interface UserInfo {
 export interface UserState {
   info: UserInfo | null
   loading: boolean
+  avatarLoading: boolean
 }
 
 export interface LoginPayload extends LoginForm {
@@ -38,6 +41,7 @@ export interface LoginPayload extends LoginForm {
 const state = (): UserState => ({
   info: null,
   loading: false,
+  avatarLoading: false,
 })
 
 const mutations: MutationTree<UserState> = {
@@ -56,10 +60,16 @@ const mutations: MutationTree<UserState> = {
     }
 
     state.loading = false
+
+    state.avatarLoading = false
   },
 
   setLoading(state: UserState, val?: boolean) {
     state.loading = typeof val === 'boolean' ? val : true
+  },
+
+  setAvatarLoading(state: UserState, val?: boolean) {
+    state.avatarLoading = typeof val === 'boolean' ? val : true
   },
 }
 
@@ -224,7 +234,43 @@ const actions: ActionTree<UserState, RootState> = {
       location.reload()
     } else showToasts(app.$pToast, message)
 
-    return { message, error, data } 
+    return { message, error, data }
+  },
+
+  async removeAvatar({ commit }) {
+    commit('setAvatarLoading')
+
+    const { app } = this.$router
+
+    const { data, error, message } = await RemoveAvatar(app.$axios, null)
+
+    if (data) {
+      commit('update', data)
+    }
+
+    showToasts(app.$pToast, message)
+
+    return { data, error, message }
+  },
+
+  async updateAvatar({ commit }, payload: File[]) {
+    commit('setAvatarLoading')
+
+    const { app } = this.$router
+
+    const form = formBody()
+
+    form.append('avatar', payload[0])
+
+    const { data, error, message } = await UpdateAvatar(app.$axios, form)
+
+    if (data) {
+      commit('update', data)
+    }
+
+    showToasts(app.$pToast, message)
+
+    return { data, error, message }
   },
 }
 

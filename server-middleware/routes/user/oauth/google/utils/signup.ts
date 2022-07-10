@@ -42,6 +42,7 @@ export default async function googleSignUp(req: Request, res: Response) {
           password: '',
           provider: 'google',
           role: 'tester',
+          avatar: googleUserData.picture
         },
         { transaction }
       )
@@ -53,15 +54,15 @@ export default async function googleSignUp(req: Request, res: Response) {
         to: newUser.email,
         subject: 'Welcome to Crowd',
         html: `<div>
-                      <p>
-                        Hi ${newUser.name}! Welcome to Crowd!
-                      </p>
-                      <p>
-                        <em>
-                          Account created with Google
-                        </em>
-                      </p>
-                    </div>`,
+                <p>
+                  Hi ${newUser.name}! Welcome to Crowd!
+                </p>
+                <p>
+                  <em>
+                    Account created with Google
+                  </em>
+                </p>
+              </div>`,
       })
 
       focusOnLoginBtn()

@@ -86,11 +86,6 @@ export function uploadFile(arg: {
               size: file.size,
               encoding: file.encoding,
               mimetype: file.mimetype,
-              path: `/uploads/${config.path}/`.replace(/\/{2,}/, '/'),
-              fullPath: `/uploads/${config.path}/${fileName}`.replace(
-                /\/{2,}/g,
-                '/'
-              ),
             } as File)
 
             if (index === files.length - 1) {
@@ -123,10 +118,18 @@ export function uploadFile(arg: {
                   try {
                     const filePath = path.join(rootDir, `${file.name}`)
 
-                    await cloudinary.uploader.upload(filePath, {
-                      public_id: file.id,
+                    const res = await cloudinary.uploader.upload(filePath, {
+                      public_id: fileId,
                       folder: 'uploads',
+                      colors: true,
+                      eager: true,
                     })
+
+                    if (res.secure_url) {
+                      file.fullPath = res.secure_url
+                      file.path = res.public_id
+                      file.size = res.bytes
+                    }
 
                     fs.unlinkSync(filePath)
                   } catch (err) {
@@ -179,6 +182,7 @@ export function getFileHandler() {
 
   const controller = async (req: Request, res: Response) => {
     const { id } = req.params
+
     try {
       const notFound = () => {
         sendError(res, {
@@ -199,11 +203,13 @@ export function getFileHandler() {
         })
 
         if (fileInfo) {
-          const url = cloudinary.url(
-            `${fileInfo.path}${fileInfo.id}`.replace(/^\//, '')
-          )
+          // const url = cloudinary.url(
+          //   `${fileInfo.path}${fileInfo.id}`.replace(/^\//, '')
+          // )
 
-          https.get(url)
+          console.log({ fileInfo })
+
+          https.get(fileInfo.fullPath)
         } else notFound()
       })
     } catch (err) {

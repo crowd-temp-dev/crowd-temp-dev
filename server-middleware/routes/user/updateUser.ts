@@ -71,15 +71,13 @@ export default function (router: Router) {
 
             await user.update(updateValues)
 
-            await user.save({ transaction }).catch(() => {
-              throw new Error('{409} Update failed! Try again later.')
-            })
+            await user.save({ transaction })
 
             const messages: MessageObject[] = []
 
             // email changed
             if (email) {
-              if (user.provider !== 'email') {
+              if (user.provider !== 'email' && email !== user.email) {
                 throw new Error(
                   `{403} ${capitalize(user.provider)} manages account email!`
                 )
@@ -193,7 +191,7 @@ export default function (router: Router) {
               }
             }
 
-            setAuthCookies(req, res, user)
+            await setAuthCookies(req, res, user)
 
             sendSuccess(res, {
               data: user.get(),

@@ -1,14 +1,18 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, nextTick, ref } from '@vue/composition-api'
 import FLIPContainer from '~/components/Base/FLIPContainer/index.vue'
 import Id from '~/components/Base/Id/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
-import Img from '~/components/Base/Img/index.vue'
+import Spinner from '~/components/Base/Spinner/index.vue'
+import { sleep } from '~/utils'
+import DropZone from '~/components/Base/DropZone/index.vue'
 
 export default defineComponent({
   name: 'AppSettingsProfilePhotoPreview',
-  components: { FLIPContainer, Id, FadeTransition, Img },
-  setup() {
+  components: { FLIPContainer, Id, FadeTransition, Spinner, DropZone },
+  setup(_, { root: { $user } }) {
+    const uploadedFile = ref<File[]>([])
+
     const size = 500
 
     const halfSize = size / 2
@@ -20,8 +24,27 @@ export default defineComponent({
       y: innerHeight / 2 - halfSize - 40,
     }
 
+    const removeAvatar = async (close: () => void) => {
+      const { data } = await $user.removeAvatar()
+
+      if (data) {
+        await sleep(100)
+
+        close()
+      }
+    }
+
+    const fileUploaded = async () => {
+      await nextTick()
+
+      await $user.updateAvatar(uploadedFile.value)
+    }
+
     return {
+      uploadedFile,
       viewPort,
+      removeAvatar,
+      fileUploaded,
     }
   },
 })
@@ -43,19 +66,28 @@ export default defineComponent({
           type="button"
           class="outline-none focus-visible:ring-2 ring-action-primary-default ring-offset-2 rounded-full inline-block transition-[opacity,transform] active:scale-[0.99] transform-gpu group relative isolate mr-10"
           :class="{ 'opacity-0 pointer-events-none': active }"
+          :disabled="$user.avatarLoading"
           @click="open"
         >
-          <PAvatar
+          <Avatar
             :id="`${id}-trigger`"
             :initials="$user.initials"
             size="large"
             :name="$user.name"
-            source="/png/app/Home/onboard/poster.png"
+            :src="$user.avatar"
             aria-label="Profile avatar"
             class="text-decorative-text-one bg-decorative-surface-one shrink-0 uppercase cursor-pointer !visible"
           />
 
+          <div
+            v-if="$user.avatarLoading"
+            class="fade-appear h-full w-full rounded-[inherit] absolute inset-0 z-1 flex-centered text-white supports-backdrop-filter:backdrop-blur-lg supports-backdrop-filter:bg-black/60 not-supports-backdrop-filter:bg-black/90 supports-backdrop-filter:border border-divider/20"
+          >
+            <Spinner />
+          </div>
+
           <span
+            v-else
             class="bg-black/60 w-full h-full rounded-full flex-centered absolute z-1 inset-0 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-90"
           >
             <PIcon source="MaximizeMinor" class="fill-white" />
@@ -71,14 +103,24 @@ export default defineComponent({
 
       <template #content="{ active }">
         <div
-          class="w-full h-full overflow-hidden transition-all rounded-full"
+          class="w-full h-full overflow-hidden transition-all rounded-full relative"
           :class="{ 'rounded-full': !active }"
         >
-          <Img
-            alt="Avatar"
-            src="static/png/app/Home/onboard/poster"
-            class="w-full h-full"
+          <Avatar
+            :name="$user.name"
+            :initials="$user.initials"
+            :src="$user.avatar"
+            class="w-full h-full text-[96px]"
+            :class="{ 'blur-md': $user.avatarLoading }"
+            size="auto"
           />
+
+          <div
+            v-if="$user.avatarLoading"
+            class="fade-appear h-full w-full rounded-[inherit] absolute inset-0 z-1 flex-centered text-display-x-large text-white supports-backdrop-filter:backdrop-blur-lg supports-backdrop-filter:bg-black/60 not-supports-backdrop-filter:bg-black/90 supports-backdrop-filter:border border-divider/20"
+          >
+            <Spinner />
+          </div>
         </div>
       </template>
 
@@ -107,6 +149,7 @@ export default defineComponent({
                 @click.stop
               >
                 <Tooltip
+                  v-if="$user.avatar"
                   v-slot="{ events }"
                   invert
                   label="Remove"
@@ -115,12 +158,10 @@ export default defineComponent({
                   <button
                     aria-label="Remove photo"
                     class="flex-centered overlay-btn rounded-l-lg"
+                    :class="{ '!opacity-40': $user.avatarLoading }"
+                    :disabled="$user.avatarLoading ? 'disabled' : undefined"
                     v-on="events"
-                    @click="
-                      () => {
-                        close()
-                      }
-                    "
+                    @click="removeAvatar(close)"
                   >
                     <PIcon
                       source="DeleteMajor"
@@ -132,19 +173,33 @@ export default defineComponent({
                 <Tooltip
                   v-slot="{ events }"
                   invert
-                  label="Update"
+                  :label="$user.avatar ? 'Update' : 'Upload'"
                   class="h-full"
                 >
                   <label
+                    :for="`${id}-file`"
                     aria-label="Replace photo"
-                    for="MISSING_FILE_INPUT"
-                    tabindex="0"
+                    :tabindex="$user.avatarLoading ? '-1' : '0'"
                     role="button"
                     class="flex-centered overlay-btn cursor-pointer"
+                    :class="{
+                      'rounded-l-lg': !$user.avatar,
+                      '!opacity-40 pointer-events-none': $user.avatarLoading,
+                    }"
                     v-on="events"
                     @keydown.space="$event.currentTarget.click()"
                   >
-                    <PIcon source="ReplaceMajor" class="fill-white" />
+                    <DropZone
+                      :id="`${id}-file`"
+                      v-model="uploadedFile"
+                      plain
+                      class="sr-only"
+                      @on-change="fileUploaded"
+                    />
+                    <PIcon
+                      :source="$user.avatar ? 'ReplaceMajor' : 'UploadMajor'"
+                      class="fill-white"
+                    />
                   </label>
                 </Tooltip>
 

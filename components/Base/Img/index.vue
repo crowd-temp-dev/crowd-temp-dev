@@ -95,25 +95,27 @@ export default defineComponent({
         class="animate-pulse w-full h-full rounded-[inherit] bg-surface-highlight-default/20"
       />
 
-      <span v-else class="group">
+      <span v-else class="group relative">
         <PIcon
           source="ImageMajor"
-          class="fill-icon-default w-[1.25em] h-[1.25em] group-hover:hidden"
+          class="fill-icon-default w-[1.25em] h-[1.25em] group-hover:opacity-0"
         />
 
-        <Tooltip
-          v-slot="{ events }"
-          label="Reload"
-          class="hidden group-hover:block"
-          title=""
-        >
-          <button class="outline-none" v-on="events" @click="reload">
-            <PIcon
-              source="RefreshMajor"
-              class="fill-icon-default w-[1.25em] h-[1.25em] cursor-pointer"
-            />
-          </button>
-        </Tooltip>
+        <div class="absolute inset-0 z-1 hidden group-hover:flex justify-center items-center">
+          <Tooltip
+            v-slot="{ events }"
+            label="Reload"
+            title=""
+            trigger-class="flex-centered"
+          >
+            <button class="outline-none" v-on="events" @click="reload">
+              <PIcon
+                source="RefreshMajor"
+                class="fill-icon-default w-[1.25em] h-[1.25em] cursor-pointer"
+              />
+            </button>
+          </Tooltip>
+        </div>
       </span>
     </figure>
   </Intersection>

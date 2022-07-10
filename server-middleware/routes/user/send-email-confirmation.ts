@@ -6,6 +6,7 @@ import { User } from '../../../database/models/User/User'
 import { oneHour } from '../../../utils'
 import { authenticate } from '../../utils/middleware'
 import mailer from '../../email'
+import { setAuthCookies } from '../../utils/cookies'
 
 export default function (router: Router) {
   return router.post(
@@ -59,7 +60,10 @@ export default function (router: Router) {
                       </em>
                     </div>`,
             })
-            .then(() => {
+            .then(async () => {
+
+            await setAuthCookies(req, res, user)
+
               sendSuccess(res, {
                 data: [],
                 message: {
@@ -68,9 +72,7 @@ export default function (router: Router) {
                 },
               })
             })
-            .catch((err) => {
-              console.log(err, user.email);
-              
+            .catch(() => {              
               sendError(res, {
                 message: {
                   content: 'Error sending confirmation',

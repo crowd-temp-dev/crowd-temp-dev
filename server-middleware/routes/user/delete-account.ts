@@ -91,13 +91,17 @@ export default function (router: Router) {
               if (!token) {
                 throw new Error('{403} No token found!')
               } else if (token.value !== req.body.token) {
+                const expired = token.wrongInput >= 2
+
                 await token.update({
                   wrongInput: token.wrongInput + 1,
                 })
 
                 await token.save({ transaction })
 
-                throw new Error('{403} Invalid token!')
+                throw new Error(
+                  `{403} ${expired ? 'Token rebuked!' : 'Invalid token!'}`
+                )
               }
 
               await user.destroy({ transaction })

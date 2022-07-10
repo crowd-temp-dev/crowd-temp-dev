@@ -11,7 +11,7 @@ import {
   disableFormFields,
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
-import { ResetPassword, ResetPasswordPage } from '~/services/auth'
+import { ResetPassword, ResetPasswordPage } from '~/services/user'
 import { ResetPasswordForm } from '~/server-middleware/routes/user/reset-password'
 import { showToasts } from '~/utils/showToast'
 import { sleep } from '~/utils'

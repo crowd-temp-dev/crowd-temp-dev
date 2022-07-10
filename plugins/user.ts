@@ -40,6 +40,15 @@ const userPlugin: Plugin = function ({ store }, inject) {
           await store.dispatch('user/changePassword', arg)
       }
 
+      if (path === 'removeAvatar') {
+        return async () => await store.dispatch('user/removeAvatar')
+      }
+
+      if (path === 'updateAvatar') {
+        return async (payload: File[]) =>
+          await store.dispatch('user/updateAvatar', payload)
+      }
+
       if (!userState) {
         return null
       }
@@ -51,6 +60,14 @@ const userPlugin: Plugin = function ({ store }, inject) {
 
       if (path === 'initials') {
         return store.getters['user/initials']
+      }
+
+      if (path === 'loading') {
+        return store.state.user.loading
+      }
+
+      if (path === 'avatarLoading') {
+        return store.state.user.avatarLoading
       }
 
       if (path) return userState[path]
