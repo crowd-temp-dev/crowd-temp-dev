@@ -176,7 +176,7 @@ const actions: ActionTree<UserState, RootState> = {
         this.$router.app &&
           this.$router.app.$pToast.open({
             error: true,
-            message: 'Session expired! *',
+            message: message[0].content,
             duration: 5000,
           })
 
