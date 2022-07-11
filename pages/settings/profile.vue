@@ -52,6 +52,10 @@ export default defineComponent({
   },
   setup(_, { root: { $user } }) {
     const provider = computed(() => {
+      if (!$user.provider) {
+        return ''
+      }
+
       if ($user.provider === 'email') {
         return null
       }

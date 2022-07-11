@@ -159,8 +159,8 @@ const actions: ActionTree<UserState, RootState> = {
   },
 
   // only reload after 5 seconds has elapsed
-  async reload({ commit, dispatch, state }, progress: boolean) {
-    if ((performance.now() - lastReload > 5000 || !lastReload) && state.info) {
+  async reload({ commit, dispatch }, progress: boolean) {
+    if ((performance.now() - lastReload > 5000 || !lastReload)) {
       lastReload = performance.now()
 
       const { data, error, message, status } = await ReloadUser(
@@ -283,7 +283,7 @@ const getters: GetterTree<UserState, RootState> = {
       return ''
     }
 
-    const splitName = state.info.name?.split(' ') || []
+    const splitName = state.info.name?.split(' ') || [[]]
 
     return `${splitName[0][0]}${(splitName[1] || [])[0] || ''}`
   },

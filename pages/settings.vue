@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class="isolate xxl:mx-auto xxl:max-w-app">
+    <div v-if="$user.loggedIn" class="isolate xxl:mx-auto xxl:max-w-app">
       <NuxtChild />
     </div>
   </div>
