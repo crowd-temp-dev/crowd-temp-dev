@@ -24,7 +24,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
   }
 
   if (!session || !userId) {
-    errorRes(!session ? 'No session' + userId : 'No user Id')
+    errorRes(!session ? 'Fixing log in error. Please use Google': 'No user Id')
   } else {
     // find user;
     const user = await User.findByPk(userId)
@@ -35,7 +35,8 @@ export const authenticate: RequestHandler = async function (req, res, next) {
 
       if (currentSession && currentSession.expires > Date.now()) {
         if (currentSession.userAgent !== req.headers['user-agent']) {
-          errorRes('Did you hack your way here? 🤔')
+          // errorRes('Did you hack your way here? 🤔')
+          errorRes('Session terminated!')
         } else {
           await setAuthCookies(req, res, user, session)
 

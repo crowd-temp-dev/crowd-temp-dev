@@ -15,7 +15,7 @@ export default defineComponent({
       <h1 class="text-[20.07px] leading-[20.57px] font-medium font-epilogue">
         <NuxtLink to="/" class="flex items-center">
           <Img
-            src="/logo.png"
+            src="static/logo.png"
             alt="App logo"
             :width="22.26"
             :height="16"
