@@ -24,7 +24,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
   }
 
   if (!session || !userId) {
-    errorRes(!session ? 'No session' : 'No user Id')
+    errorRes(!session ? 'No session' + userId : 'No user Id')
   } else {
     // find user;
     const user = await User.findByPk(userId)
@@ -34,9 +34,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
       const currentSession = user.session[session]
 
       if (currentSession && currentSession.expires > Date.now()) {
-        if (
-          currentSession.userAgent !== req.headers['user-agent']
-        ) {
+        if (currentSession.userAgent !== req.headers['user-agent']) {
           errorRes('Did you hack your way here? 🤔')
         } else {
           await setAuthCookies(req, res, user, session)
@@ -177,8 +175,8 @@ export const verifyAnsUser: RequestHandler = async function (req, res, next) {
           const user = await AnswerTestUser.findByPk(ansUserId, { transaction })
 
           // check that it's the same user
-          const sameUser = user ?
-              user.userAgent === userDetails.userAgent
+          const sameUser = user
+            ? user.userAgent === userDetails.userAgent
             : false
 
           if (!user || !sameUser || !user.currentIndex[testDetails.id]) {
