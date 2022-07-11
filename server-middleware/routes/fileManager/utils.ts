@@ -121,7 +121,6 @@ export function uploadFile(arg: {
                     const res = await cloudinary.uploader.upload(filePath, {
                       public_id: fileId,
                       folder: 'uploads',
-                      colors: true,
                       eager: true,
                     })
 

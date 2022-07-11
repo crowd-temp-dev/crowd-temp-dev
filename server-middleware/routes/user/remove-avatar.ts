@@ -4,6 +4,8 @@ import { sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
 import { setAuthCookies } from '../../utils/cookies'
+import cloudinary from '../fileManager/cloudinary'
+import { File } from '../../../database/models/File/File'
 
 export default function (router: Router) {
   return router.patch(
@@ -24,8 +26,19 @@ export default function (router: Router) {
           })
 
           if (user) {
+            if (user.avatar.startsWith('uploads/')) {
+              await cloudinary.api.delete_resources([user.avatar])
+
+              await File.destroy({
+                where: {
+                  id: user.avatar.replace(/^uploads\//, ''),
+                },
+                transaction,
+              })
+            }
+
             await user.update({
-              avatar: null
+              avatar: null,
             })
 
             await user.save({ transaction })

@@ -216,13 +216,15 @@ export default defineComponent({
           :id="rootId"
           class="rounded-lg border-dashed border-2 relative isolate cursor-pointer transition-all active:scale-[0.9975] focus-within:ring-2 ring-offset-2 ring-action-primary-default group"
           :class="{
-            'border-border-default hover:bg-surface-hovered': !dragEnter,
+            'hover:bg-surface-hovered': !dragEnter,
+            'border-border-default': !disabled,
             'bg-surface-default': !getFiles.length,
             'bg-surface-hovered': getFiles.length,
             'border-interactive-default bg-surface-selected-default': dragEnter,
             'min-h-[200px] p-[1.5rem]': !outline,
             'min-h-[110px] pt-[1rem]': outline,
-            'pointer-events-none': disabled,
+            'pointer-events-none grayscale opacity-50 border-border-default/50':
+              disabled,
           }"
           @dragenter="dragEnter = true"
           @dragover="dragEnter = true"
@@ -235,7 +237,8 @@ export default defineComponent({
           >
             <div
               v-if="!plain"
-              class="pseudo cursor-pointer !pointer-events-auto"
+              class="pseudo"
+              :class="{ 'cursor-pointer !pointer-events-auto': !disabled }"
               @click="openInput"
             >
               <label :for="id || idProps.id" class="sr-only"
@@ -277,8 +280,11 @@ export default defineComponent({
                 />
 
                 <div
-                  class="flex space-x-16 relative h-full px-16 hide-scrollbar overflow-x-auto pointer-events-auto cursor-pointer"
-                  :class="{ 'justify-center': getFiles.length === 1 }"
+                  class="flex space-x-16 relative h-full px-16 hide-scrollbar overflow-x-auto"
+                  :class="{
+                    'justify-center': getFiles.length === 1,
+                    'pointer-events-auto cursor-pointer': !disabled,
+                  }"
                   @click="openInput"
                 >
                   <Tooltip
@@ -320,7 +326,11 @@ export default defineComponent({
                             <div v-on="deleteTooltip.events">
                               <PIcon
                                 source="DeleteMajor"
-                                class="fill-white pointer-events-auto cursor-pointer"
+                                class="fill-white"
+                                :class="{
+                                  'pointer-events-auto cursor-pointer':
+                                    !disabled,
+                                }"
                                 @click.stop="removeFile(i)"
                               />
                             </div>

@@ -68,7 +68,7 @@ export default defineComponent({
             :action-attrs="{ plain: true }"
             hide-icon
             disable-preview
-            type="image"
+            accept="image/*"
             outline
             class="mt-24"
             @on-change="fileUploaded"

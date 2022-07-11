@@ -44,7 +44,7 @@ export default defineComponent({
       v-if="src"
       :alt="alt"
       :src="src"
-      class="h-full w-full object-fit rounded-full"
+      class="h-full w-full object-contain rounded-full"
       referrerpolicy="no-referrer"
     />
 
@@ -55,6 +55,8 @@ export default defineComponent({
       {{ initials }}
     </p>
 
-    <PIcon v-else source="CustomersMinor" />
+    <span v-else class="flex-centered w-full h-full">
+      <PIcon source="CustomersMinor" />
+    </span>
   </div>
 </template>

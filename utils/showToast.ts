@@ -1,4 +1,4 @@
-import { sleep, uid } from '.'
+import { nextFrame, sleep, uid } from '.'
 import { MessageObject } from '~/server-middleware/types'
 
 /**
@@ -20,6 +20,8 @@ export async function showToasts(
 
     const { content, type, duration } = messages[i]
 
+    await nextFrame()
+    
     await sleep(delay)
 
     $pToast.open({

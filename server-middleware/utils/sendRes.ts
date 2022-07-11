@@ -23,8 +23,6 @@ export function sendError(
   })
 
   if (!res.headersSent) {
-    res.set('$user', '')
-
     res.status(status)
 
     res.send({
@@ -53,8 +51,6 @@ export function sendSuccess(
   const { data, status = 200, message } = payload
 
   if (!res.headersSent) {
-    res.set('$user', '')
-
     res.status(status)
 
     res.send({

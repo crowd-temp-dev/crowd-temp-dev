@@ -28,12 +28,12 @@ export default function (router: Router) {
 
           // remove cloudinary image and stored file path
           if ((user.avatar || '').startsWith('file/')) {
-            const file = await File.findByPk(user.avatar.replace('file/', ''), {
+            const file = await File.findByPk(user.avatar.replace('uploads/', ''), {
               transaction,
             })
 
             if (file) {
-              await cloudinary.api.delete_resources([file.id])
+              await cloudinary.api.delete_resources([user.avatar])
 
               await file.destroy({ transaction })
             }

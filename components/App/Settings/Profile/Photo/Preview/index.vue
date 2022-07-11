@@ -76,7 +76,7 @@ export default defineComponent({
             :name="$user.name"
             :src="$user.avatar"
             aria-label="Profile avatar"
-            class="text-decorative-text-one bg-decorative-surface-one shrink-0 uppercase cursor-pointer !visible"
+            class="shrink-0 uppercase cursor-pointer !visible"
           />
 
           <div
@@ -193,6 +193,7 @@ export default defineComponent({
                       :id="`${id}-file`"
                       v-model="uploadedFile"
                       plain
+                      accept="image/*"
                       class="sr-only"
                       @on-change="fileUploaded"
                     />
