@@ -3,6 +3,7 @@ import { Response, Request } from 'express'
 import { oneHour } from '../../utils'
 import DB from '../../database'
 import { User } from '../../database/models/User/User'
+import { removeSensitiveFields } from '.'
 
 export function clearAuthCookies(res: Response) {
   if (res.headersSent) {
@@ -91,6 +92,17 @@ export async function setAuthCookies(
         secure: true,
         signed: true,
       })
+
+      try {
+        res.set(
+          '$user',
+          JSON.stringify(
+            removeSensitiveFields({
+              ...user.get(),
+            })
+          )
+        )
+      } catch (err) {}
     } else clearAuthCookies(res)
 
     await transaction.commit()
