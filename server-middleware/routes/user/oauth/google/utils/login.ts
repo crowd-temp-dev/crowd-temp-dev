@@ -37,6 +37,8 @@ export default async function googleLogin(req: Request, res: Response) {
         res,
       })
 
+      await user.save({ transaction })
+
       res.cookie('remember', '1')
 
       res.cookie(

@@ -64,6 +64,8 @@ export default function (router: Router) {
                 res,
               })
 
+              await user.save({ transaction })
+
               sendSuccess(res, {
                 message: loggedInMessage(user),
                 data: user.get(),
