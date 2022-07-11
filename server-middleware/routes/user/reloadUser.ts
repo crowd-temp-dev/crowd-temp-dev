@@ -27,36 +27,31 @@ const formValidation: RequestHandler = (req, res, next) => {
 }
 
 export default function (router: Router) {
-  return router.get(
-    '/auth/reload',
-    formValidation,
-    authenticate,
-     (_, res) => {
-      // at this point, a user exists in the res.
-      // Sha check if it doesnt and send error;
+  return router.get('/auth/reload', formValidation, authenticate, (_, res) => {
+    // at this point, a user exists in the res.
+    // Sha check if it doesnt and send error;
 
-      const user = res.get('$user')
+    const user = res.get('$user')
 
-      if (user) {
-        try {
-          const data = JSON.parse(user) as User
+    if (user) {
+      try {
+        const data = JSON.parse(user) as User
 
-          sendSuccess(res, {
-            data,
-            message: loggedInMessage(data)
-          })
-        } catch (err) {
-          clearAuthCookies(res)
+        sendSuccess(res, {
+          data,
+          message: loggedInMessage(data),
+        })
+      } catch (err) {
+        clearAuthCookies(res)
 
-          sendError(res, {
-            status: 401,
-            message: {
-              content: "Session not found!",
-              type: "error"
-            }
-          })
-        }
+        sendError(res, {
+          status: 401,
+          message: {
+            content: err?.message || 'Session not found!',
+            type: 'error',
+          },
+        })
       }
     }
-  )
+  })
 }

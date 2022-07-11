@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/named
 import { Response, Request } from 'express'
-import { oneHour } from '../../utils'
+import { inOneHour } from '../../utils'
 import DB from '../../database'
 import { User } from '../../database/models/User/User'
 import { removeSensitiveFields } from '.'
@@ -52,7 +52,7 @@ export async function setAuthCookies(
   if (userInstance === null && _session === null) {
     clearAuthCookies(res)
   } else if ((userId || isUserInstance()) && session) {
-    const expires = new Date(Date.now() + oneHour)
+    const expires = new Date(inOneHour())
 
     const transaction = await DB.transaction()
 
@@ -69,8 +69,7 @@ export async function setAuthCookies(
           ...user.session,
           [session]: {
             expires: expires.getTime(),
-            // userAgent: req.headers['user-agent'] || 'null',
-            userAgent: 'null',
+            userAgent: req.headers['user-agent'] || 'null',
           },
         },
       })

@@ -24,7 +24,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
   }
 
   if (!session || !userId) {
-    errorRes()
+    errorRes(!session ? 'No session' : 'No user Id')
   } else {
     // find user;
     const user = await User.findByPk(userId)
