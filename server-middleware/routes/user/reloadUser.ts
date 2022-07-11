@@ -4,7 +4,7 @@ import { authenticate } from '../../utils/middleware'
 import { loggedInMessage } from '../../utils'
 import { clearAuthCookies } from '../../utils/cookies'
 import { sendError, sendSuccess } from '../../utils/sendRes'
-import type { User } from '~/database/models/User/User'
+import type { User } from '../../../database/models/User/User'
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body

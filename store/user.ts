@@ -159,8 +159,8 @@ const actions: ActionTree<UserState, RootState> = {
   },
 
   // only reload after 5 seconds has elapsed
-  async reload({ commit, dispatch }, progress: boolean) {
-    if ((performance.now() - lastReload > 5000 || !lastReload)) {
+  async reload({ commit, dispatch, state }, progress: boolean) {
+    if ((performance.now() - lastReload > 5000 || !lastReload) && state.info) {
       lastReload = performance.now()
 
       const { data, error, message, status } = await ReloadUser(

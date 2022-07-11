@@ -24,7 +24,13 @@ export const authenticate: RequestHandler = async function (req, res, next) {
   }
 
   if (!session || !userId) {
-    errorRes(!session ? 'Fixing log in error. Please use Google': 'No user Id')
+    errorRes(
+      !session
+        ? 'Fixing log in error. Please use Google' + userId
+          ? ` ${userId}`
+          : ''
+        : 'No user Id'
+    )
   } else {
     // find user;
     const user = await User.findByPk(userId)
