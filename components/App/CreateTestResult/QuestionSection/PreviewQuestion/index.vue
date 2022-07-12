@@ -2,7 +2,7 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import DialogButton from '../../../../Base/DialogButton/index.vue'
 import Item from './Item/index.vue'
-import { CreateTestState } from '~/store/create-test'
+import { CreateTestState } from '~/store/create-test/create-test'
 
 export default defineComponent({
   name: 'AppCreateTestResultPreviewQuestion',

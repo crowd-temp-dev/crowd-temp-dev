@@ -1,7 +1,7 @@
 import { NuxtCookies } from 'cookie-universal-nuxt'
 import { CreateTestFormQuestion } from './form'
 import { BreakpointOutput, FullscreenLoading, User } from '.'
-import { CreateTestState } from '~/store/create-test'
+import { CreateTestState } from '~/store/create-test/create-test'
 import { AppState } from '~/store/app/state'
 
 interface ToastArg {

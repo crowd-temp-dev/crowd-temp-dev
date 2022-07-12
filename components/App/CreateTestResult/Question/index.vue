@@ -193,20 +193,22 @@ export default defineComponent({
 
                 Button(null, 'Filter results'),
 
-                Button(
-                  {
-                    attrs: {
-                      icon: 'StarFilledMinor',
-                      primary: starred.value,
-                    },
-                    on: {
-                      click: () => {
-                        starred.value = !starred.value
+                isShortOrLongText.value
+                  ? Button(
+                      {
+                        attrs: {
+                          icon: 'StarFilledMinor',
+                          primary: starred.value,
+                        },
+                        on: {
+                          click: () => {
+                            starred.value = !starred.value
+                          },
+                        },
                       },
-                    },
-                  },
-                  'Starred'
-                ),
+                      'Starred'
+                    )
+                  : null,
               ]
             ),
           ]

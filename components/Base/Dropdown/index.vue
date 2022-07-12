@@ -145,6 +145,8 @@ export default defineComponent({
                 staticClass: 'shadow-3 rounded-lg bg-surface-default',
               },
               [
+                slots?.append?.(slotProps),
+
                 typeof slots?.content === 'undefined'
                   ? [
                       h(
@@ -213,6 +215,8 @@ export default defineComponent({
                       ...slotProps,
                     })
                   : slots?.content || null,
+
+                slots?.prepend?.(slotProps),
               ]
             )
           },

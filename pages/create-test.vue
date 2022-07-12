@@ -1,3 +1,89 @@
+
+<script lang="ts">
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import { Layout } from '~/types'
+import { dynamicPageTransition } from '~/utils/pageTransition'
+import Button from '~/components/Base/Button/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { CreateTestState } from '~/store/create-test/create-test'
+
+type Step = {
+  title: 'Create test' | 'Recruit' | 'View Results'
+  icon: 'CirclePlusMinor' | 'CustomerPlusMajor'
+  active: boolean
+  done: boolean
+  disabled: Boolean
+  select: Function
+}
+
+export default defineComponent({
+  name: 'AppBillingPage',
+  components: { Button, FadeTransition },
+  layout: 'app' as Layout,
+  transition: (to, from) =>
+    dynamicPageTransition({
+      to,
+      from,
+    }),
+  setup(_, { root }) {
+    const showBanner = ref(false)
+
+    const steps = computed(() => {
+      const routePath = root.$route.path
+
+      const routeName = root.$route.name
+
+      const testState = root.$store.state['create-test'] as CreateTestState
+
+      const testId = testState.details.id
+
+      const createTestRouteName = 'create-test-:id'
+
+      const recruitRouteName = 'create-test-recruit-:id'
+
+      const viewResultRouteName = 'create-test-view-result-:id'
+
+      const testCreated = 'published' in testState.details
+
+      const testPublished = testState.details.published
+
+      return [
+        {
+          title: 'Create test',
+          icon: 'CirclePlusMinor',
+          active: routeName === createTestRouteName,
+          done: /^\/create-test\/(?:recruit|view-result)\/?/.test(routePath),
+          select: () => root.$router.push(`/create-test/${testId}/`),
+        },
+        {
+          title: 'Recruit',
+          icon: 'CustomerPlusMajor',
+          active: routeName === recruitRouteName,
+          done: /^\/create-test\/view-result\/?/.test(routePath) || testCreated,
+          disabled: routeName === createTestRouteName,
+          select: () => root.$router.push(`/create-test/recruit/${testId}`),
+        },
+        {
+          title: 'View Results',
+          icon: 'NoteMajor',
+          active: routeName === viewResultRouteName,
+          done: testPublished,
+          disabled: [createTestRouteName, recruitRouteName].includes(routeName),
+          select: () => root.$router.push(`/create-test/view-result/${testId}`),
+        },
+      ] as Step[]
+    })
+
+    return { steps, showBanner }
+  },
+
+  head: {
+    title: 'Create test',
+  },
+})
+</script>
+
+
 <template>
   <div class="h-[calc(100%-76px)]">
     <!-- <header> -->
@@ -75,87 +161,3 @@
     </FadeTransition>
   </div>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
-import { Layout } from '~/types'
-import { dynamicPageTransition } from '~/utils/pageTransition'
-import Button from '~/components/Base/Button/index.vue'
-import FadeTransition from '~/components/Base/FadeTransition/index.vue'
-import { CreateTestState } from '~/store/create-test'
-
-type Step = {
-  title: 'Create test' | 'Recruit' | 'View Results'
-  icon: 'CirclePlusMinor' | 'CustomerPlusMajor'
-  active: boolean
-  done: boolean
-  disabled: Boolean
-  select: Function
-}
-
-export default defineComponent({
-  name: 'AppBillingPage',
-  components: { Button, FadeTransition },
-  layout: 'app' as Layout,
-  transition: (to, from) =>
-    dynamicPageTransition({
-      to,
-      from,
-    }),
-  setup(_, { root }) {
-    const showBanner = ref(false)
-
-    const steps = computed(() => {
-      const routePath = root.$route.path
-
-      const routeName = root.$route.name
-
-      const testState = root.$store.state['create-test'] as CreateTestState
-
-      const testId = testState.details.id
-
-      const createTestRouteName = 'create-test-:id'
-
-      const recruitRouteName = 'create-test-recruit-:id'
-
-      const viewResultRouteName = 'create-test-view-result-:id'
-
-      const testCreated = 'published' in testState.details
-
-      const testPublished = testState.details.published
-
-      return [
-        {
-          title: 'Create test',
-          icon: 'CirclePlusMinor',
-          active: routeName === createTestRouteName,
-          done: /^\/create-test\/(?:recruit|view-result)\/?/.test(routePath),
-          select: () => root.$router.push(`/create-test/${testId}/`),
-        },
-        {
-          title: 'Recruit',
-          icon: 'CustomerPlusMajor',
-          active: routeName === recruitRouteName,
-          done: /^\/create-test\/view-result\/?/.test(routePath) || testCreated,
-          disabled: routeName === createTestRouteName,
-          select: () => root.$router.push(`/create-test/recruit/${testId}`),
-        },
-        {
-          title: 'View Results',
-          icon: 'NoteMajor',
-          active: routeName === viewResultRouteName,
-          done: testPublished,
-          disabled: [createTestRouteName, recruitRouteName].includes(routeName),
-          select: () => root.$router.push(`/create-test/view-result/${testId}`),
-        },
-      ] as Step[]
-    })
-
-    return { steps, showBanner }
-  },
-
-  head: {
-    title: 'Create test',
-  },
-})
-</script>

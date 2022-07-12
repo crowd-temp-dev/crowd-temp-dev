@@ -76,7 +76,9 @@ export default function (router: Router) {
                 },
               })
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log({err});
+              
               sendError(res, {
                 message: {
                   content: 'Error sending confirmation',

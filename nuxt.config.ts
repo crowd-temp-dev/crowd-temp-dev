@@ -133,6 +133,9 @@ export default {
 
   vite: {
     // build: true,
+    // ssr: {
+    //   noExternal: ['@lodash'],
+    // },
   },
 
   router: {

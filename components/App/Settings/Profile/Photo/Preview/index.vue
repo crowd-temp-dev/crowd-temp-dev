@@ -152,7 +152,7 @@ export default defineComponent({
                   v-if="$user.avatar"
                   v-slot="{ events }"
                   invert
-                  label="Remove"
+                  label="Delete"
                   class="h-full"
                 >
                   <button

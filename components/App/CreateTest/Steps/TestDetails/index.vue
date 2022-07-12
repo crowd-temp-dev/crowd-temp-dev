@@ -2,7 +2,7 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import Form from '../Form/index.vue'
 import Section from '../Section/index.vue'
-import { CreateTestState } from '~/store/create-test'
+import { CreateTestState } from '~/store/create-test/create-test'
 
 export default defineComponent({
   name: 'AppCreateTestStepsTestDetails',
@@ -40,7 +40,7 @@ export default defineComponent({
       class="mt-0"
       name="testDetails"
       :initial-value="{
-        name: 'New test',
+        name: '',
         description: '',
       }"
     >

@@ -2,10 +2,10 @@ import { ServiceHandler } from './type'
 import { validateStatus } from './utils'
 import { CreateTestRes } from '~/server-middleware/routes/create-test/createTest'
 import { CreateTestForm } from '~/types/form'
-import { CreateTestState } from '~/store/create-test'
-import { UpdateTestDetailForm } from '~/server-middleware/routes/create-test/updateTestDetail'
+import { CreateTestState } from '~/store/create-test/create-test'
 import { ViewResultState } from '~/store/create-test/view-result'
 import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
+import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 
 export const CreateTest: ServiceHandler<
   Record<string, any>,
@@ -15,10 +15,15 @@ export const CreateTest: ServiceHandler<
 }
 
 // get test for /create-test/?:id
-export const GetCreateTest: ServiceHandler<string, CreateTestForm> = async (
-  axios,
-  id
-) => {
+export const GetCreateTest: ServiceHandler<
+  string,
+  {
+    form: QuestionModelValue
+    details: {
+      published: boolean
+    }
+  }
+> = async (axios, id) => {
   return await axios.$get(`/create-test/${id}`, {
     ...validateStatus,
   })
@@ -69,7 +74,7 @@ export const PublishTest: ServiceHandler<
 
 // update test detail
 export const UpdateTestDetail: ServiceHandler<
-  UpdateTestDetailForm,
+  CreateTestState['details'],
   CreateTestState['details']
 > = async (axios, payload) => {
   return await axios.$patch('/create-test/updateDetail', payload, {

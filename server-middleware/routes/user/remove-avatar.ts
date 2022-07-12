@@ -49,7 +49,7 @@ export default function (router: Router) {
               data: user.get(),
               message: [
                 {
-                  content: 'Avatar removed!',
+                  content: 'Avatar deleted!',
                   type: 'success',
                 },
               ],

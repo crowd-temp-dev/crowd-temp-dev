@@ -12,7 +12,7 @@ import { DesignSurvey } from './DesignSurvey'
 import { TestDetail } from './TestDetail'
 import { ThankYouScreen } from './ThankYouScreen'
 import { WelcomeScreen } from './WelcomeScreen'
-import { CreateTestForm } from '~/store/create-test'
+import { CreateTestForm } from '~/store/create-test/create-test'
 import { CreateTestTypes } from '~/types'
 import { CreateTestFormQuestion } from '~/types/form'
 

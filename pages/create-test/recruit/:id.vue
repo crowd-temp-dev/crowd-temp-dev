@@ -5,7 +5,7 @@ import Button from '@/components/Base/Button/index.vue'
 import FadeTransition from '@/components/Base/FadeTransition/index.vue'
 import { generateShareLink, splitPath } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
-import { CreateTestState } from '~/store/create-test'
+import { CreateTestState } from '~/store/create-test/create-test'
 import copyText from '~/utils/copyText'
 
 interface Feature {
@@ -163,6 +163,14 @@ export default defineComponent({
 <template>
   <div class="mt-32 pb-112 px-64">
     <div
+      v-if="testState.loading"
+      class="flex-centered h-full w-full text-text-subdued text-display-large min-h-[300px]"
+    >
+      <Spinner />
+    </div>
+
+    <div
+      v-else
       class="p-20 rounded-lg bg-surface-default max-w-[800px] mx-auto shadow-2"
     >
       <h3 class="text-heading font-semibold text-center">

@@ -111,7 +111,8 @@ const actions: ActionTree<UserState, RootState> = {
       })
 
       // clear createTest form
-      $store.commit('create-test/resetForm')
+      !$store.state['create-test'].form.empty &&
+        $store.commit('create-test/resetForm')
     }
 
     nextTick(() => {

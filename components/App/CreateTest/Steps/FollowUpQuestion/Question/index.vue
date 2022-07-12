@@ -89,7 +89,7 @@ export default defineComponent({
 
         const followUpQuestionIndex = question.followUpQuestions.findIndex(
           (x) => x.id === modelSync.value.id
-        )        
+        )
 
         return (
           tooShort ||
@@ -214,7 +214,7 @@ export default defineComponent({
       <div class="flex-grow">
         <div class="flex mb-20">
           <TextField
-            v-model="modelSync.question"
+            v-model="modelSync.title"
             class="mr-10 flex-grow shrink-0"
             type="text"
             :multiline="modelSync.type === 'long-text'"

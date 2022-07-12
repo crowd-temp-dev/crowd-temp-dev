@@ -41,7 +41,7 @@ export default defineComponent({
     disabled: Boolean,
     ghostClass: {
       type: String,
-      default: 'opacity-0',
+      default: 'ghost-class',
     },
     handle: {
       type: String,

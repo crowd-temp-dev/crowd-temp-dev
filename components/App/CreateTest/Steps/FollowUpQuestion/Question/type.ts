@@ -18,7 +18,7 @@ export interface SelectOption {
 
 export interface QuestionModelValue {
   id: string
-  question: string
+  title: string
   conditionalLogic: boolean
   required: boolean
   type: SelectValue

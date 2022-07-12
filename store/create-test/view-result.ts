@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from '..'
-import { CreateTestForm } from '.'
+import { CreateTestForm } from './create-test'
 import { GetViewResult, UpdateResultAnswer } from '~/services/createTest'
 import { CreateTestTypes } from '~/types'
 import { showToasts } from '~/utils/showToast'
@@ -115,6 +115,13 @@ const actions: ActionTree<ViewResultState, RootState> = {
 
       showToasts(app.$pToast, message)
     } else {
+      await app.$store.dispatch('create-test/updateDetails', {
+        data: {
+          published: true,
+          name: data.questions.testDetails.name,
+        },
+      })
+
       commit('saveAnswers', data)
     }
 

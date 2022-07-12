@@ -1,15 +1,9 @@
-import Vue from 'vue'
 // eslint-disable-next-line import/named
-import { MutationTree, ActionTree, GetterTree } from 'vuex'
+import { ActionTree } from 'vuex'
 import { nextTick } from '@vue/composition-api'
-import { RootState } from '..'
-import viewResult, { ViewResultState } from './view-result'
-import {
-  formBody,
-  getObjectPathValue,
-  pingAddNewBlockBtn,
-  sleep,
-} from '~/utils'
+import { RootState } from '../..'
+import { CreateTestForm, CreateTestState } from '.'
+import { formBody, pingAddNewBlockBtn, sleep } from '~/utils'
 import {
   CreateTest,
   GetCreateTest,
@@ -19,187 +13,9 @@ import {
 } from '~/services/createTest'
 import { showToasts } from '~/utils/showToast'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
-import { CreateTestFormQuestion } from '~/types/form'
 import { UpdateTestDetailForm } from '~/server-middleware/routes/create-test/updateTestDetail'
 
 const createTestAlertTitle = 'You have a test in progress!'
-
-export interface CreateTestForm {
-  testDetails: {
-    name: string
-    description: string
-  }
-
-  welcomeScreen: {
-    title: string
-    message: string
-    buttonText: string
-  }
-
-  thankYouScreen: {
-    title: string
-    message: string
-  }
-
-  [key: `question-${number}`]: CreateTestFormQuestion
-
-  empty?: boolean
-}
-
-export interface CreateTestState {
-  details: {
-    id: string | null
-    published?: boolean
-    shareLink?: string
-    unlimitedInvites?: boolean
-    stopAcceptingResponse?: boolean
-    responses?: number
-    favourite?: boolean
-  }
-  form: CreateTestForm
-  loading: boolean
-  submitting: boolean
-  publishing: boolean
-  'view-result'?: ViewResultState
-}
-
-const freshForm = () =>
-  ({
-    testDetails: {
-      name: 'New test',
-      description: '',
-    },
-    welcomeScreen: {
-      buttonText: 'Get started',
-      message:
-        "You've been invited to take a short test. Your test contains more than one section, please pay attention to the instructions before each section. Also note that you can only answer each question once.",
-      title: 'Hi there 👋,',
-    },
-    thankYouScreen: {
-      message: '',
-      title: '',
-    },
-    empty: true,
-  } as CreateTestForm)
-
-const questionKeysRegExp = /^question-\d$/
-
-const state = (): CreateTestState => ({
-  form: freshForm(),
-  loading: false,
-  submitting: false,
-  details: {
-    id: null,
-    published: false,
-  },
-  publishing: false,
-})
-
-const mutations: MutationTree<CreateTestState> = {
-  setId(state, id: string | null) {
-    state.details.id = id
-  },
-
-  setPublishing(state, val: boolean) {
-    state.publishing = val
-  },
-
-  updateDetails(state, payload: CreateTestState['details']) {
-    const id = state.details.id
-
-    const newValue = {
-      ...state.details,
-      ...payload,
-    }
-
-    state.details = {
-      ...newValue,
-      id,
-    }
-
-    state.publishing = false
-  },
-
-  updateForm(
-    state,
-    payload: {
-      path: string
-      value: any
-      override?: boolean
-    }
-  ) {
-    if (payload) {
-      const splitPath = payload.path.split('.')
-
-      if (payload.path) {
-        if (state.form.empty) {
-          let oldValue = getObjectPathValue(payload.path, state.form)
-
-          if (typeof oldValue === 'string') {
-            oldValue = oldValue.trim()
-          }
-
-          const newValue =
-            typeof payload.value === 'string'
-              ? payload.value.trim()
-              : payload.value
-
-          state.form.empty = oldValue === newValue
-        }
-
-        const path = splitPath.splice(0, splitPath.length - 1).join('.')
-
-        const newState = { ...state.form }
-
-        Vue.set(
-          getObjectPathValue(path, newState),
-          splitPath.slice(-1)[0],
-          payload.value
-        )
-
-        state.form = { ...newState }
-      } else {
-        let newFormValue = payload.override
-          ? payload.value
-          : {
-              ...state.form,
-              ...payload.value,
-            }
-
-        if (state.form.empty) {
-          state.form.empty =
-            JSON.stringify(state.form) === JSON.stringify(newFormValue)
-
-          newFormValue = {
-            ...newFormValue,
-            empty: state.form.empty,
-          }
-        }
-
-        state.form = newFormValue
-      }
-    }
-
-    state.loading = false
-  },
-
-  resetForm(state) {
-    state.form = freshForm()
-    state.details.published = false
-    state.details = {
-      id: null,
-      published: false,
-    }
-  },
-
-  setLoading(state, val?: boolean) {
-    state.loading = typeof val === 'boolean' ? val : true
-  },
-
-  setSubmitting(state, val: boolean) {
-    state.submitting = val
-  },
-}
 
 const actions: ActionTree<CreateTestState, RootState> = {
   setId({ commit, state }, id: string | null) {
@@ -207,7 +23,19 @@ const actions: ActionTree<CreateTestState, RootState> = {
       if (typeof id === 'string') {
         const { app } = this.$router
 
-        if (state.details.id && state.details.id !== id && !state.form.empty) {
+        const createNewTest = () => {
+          const newForm = id !== state.details.id && !!state.details.id
+
+          commit('setId', id)
+
+          newForm && commit('resetForm')
+        }
+        if (
+          state.details.id &&
+          state.details.id !== id &&
+          !state.form.empty &&
+          !state.details.published
+        ) {
           sleep(250).then(() => {
             app.$alert.open({
               title: createTestAlertTitle,
@@ -222,9 +50,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
                   },
                   events: {
                     click: () => {
-                      commit('setId', id)
-
-                      commit('resetForm')
+                      createNewTest()
 
                       app.$alert.close()
                     },
@@ -254,6 +80,8 @@ const actions: ActionTree<CreateTestState, RootState> = {
             })
           })
         } else {
+          createNewTest()
+
           return id
         }
       } else return null
@@ -283,7 +111,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
       rootState.app.alertDialog.title === createTestAlertTitle
     ) {
       return
-    }
+    }    
 
     commit('updateDetails', payload)
   },
@@ -381,8 +209,10 @@ const actions: ActionTree<CreateTestState, RootState> = {
     }
   },
 
-  async getCreateTest({ dispatch, state }) {
+  async getCreateTest({ dispatch, state, commit }) {
     if (state.details.id) {
+      commit('setPageLoading')
+
       const { app } = this.$router
 
       const { data, error } = await GetCreateTest(app.$axios, state.details.id)
@@ -392,18 +222,26 @@ const actions: ActionTree<CreateTestState, RootState> = {
           message: 'Cannot create test. Try again',
           statusCode: 500,
         })
-      } else {
-        dispatch('updateForm', {
-          path: '',
-          value: data,
-          override: !!Object.keys(data || {}).length,
+      } else if (data.details) {
+        dispatch('updateDetails', {
+          data: data.details,
+        }).then(() => {
+          dispatch('updateForm', {
+            path: '',
+            value: data.form,
+            override: !!Object.keys(data.form || {}).length,
+          })
         })
+      } else {
+        // commit('resetForm')
       }
     }
   },
 
-  async getRecruit({ dispatch, state }) {
+  async getRecruit({ commit, dispatch, state }) {
     if (state.details.id) {
+      commit('setLoading')
+
       const { app } = this.$router
 
       const { data, error, message, status } = await GetRecruit(
@@ -417,7 +255,12 @@ const actions: ActionTree<CreateTestState, RootState> = {
           statusCode: status,
         })
       } else {
-        dispatch('updateDetails', data)
+        dispatch('updateForm', {
+          path: 'empty',
+          value: false,
+        }).then(() => {
+          dispatch('updateDetails', { data })
+        })
       }
     }
   },
@@ -435,7 +278,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
       showToasts(app.$pToast, message)
 
       if (data) {
-        dispatch('updateDetails', data)
+        dispatch('updateDetails', { data })
       }
     }
   },
@@ -458,33 +301,10 @@ const actions: ActionTree<CreateTestState, RootState> = {
       showToasts(app.$pToast, message)
 
       if (data) {
-        dispatch('updateDetails', data)
+        dispatch('updateDetails', { data })
       }
     }
   },
 }
 
-const getters: GetterTree<CreateTestState, RootState> = {
-  questionsLength(state) {
-    const questionKeys =
-      Object.keys(state.form).filter((key) => questionKeysRegExp.test(key)) ||
-      []
-
-    return questionKeys.length
-  },
-  questions(state) {
-    return Object.entries(state.form)
-      .filter((entry) => questionKeysRegExp.test(entry[0]))
-      .map((entry) => entry[1])
-  },
-}
-
-export default {
-  state,
-  mutations,
-  actions,
-  getters,
-  modules: {
-    'view-result': viewResult,
-  },
-}
+export default actions

@@ -62,7 +62,7 @@
         type="button"
         class="pedal-arrow fill-before rounded"
         :class="{
-          'grayscale pointer-events-none opacity-10': pedal.disabled,
+          'grayscale pointer-events-none opacity-0': pedal.disabled,
           'pointer-events-auto': !pedal.disabled,
           //'rounded-r-lg': i === 0,
           //'rounded-l-lg': i === 1,

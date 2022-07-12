@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Plugin } from '@nuxt/types'
-import { CreateTestState } from '~/store/create-test'
+import { CreateTestState } from '~/store/create-test/create-test'
 import { CreateTestForm } from '~/types/shim'
 import { oneFrame, setClientOs, sleep } from '~/utils'
 

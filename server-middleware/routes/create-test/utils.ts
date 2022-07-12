@@ -15,7 +15,7 @@ const followUpQuestions = Joi.array()
   .max(50)
   .items(
     Joi.object({
-      question: Joi.string().required(),
+      title: Joi.string().required(),
 
       type: Joi.string()
         .pattern(

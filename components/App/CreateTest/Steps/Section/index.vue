@@ -7,7 +7,7 @@ import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Dropdown from '~/components/Base/Dropdown/index.vue'
 import { TestIndex } from '~/store/createTest/state'
 import { layoutSizing, scrollMain, sleep, uuidv4 } from '~/utils'
-import { CreateTestState } from '~/store/create-test'
+import { CreateTestState } from '~/store/create-test/create-test'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 
 export default defineComponent({

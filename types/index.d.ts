@@ -137,3 +137,5 @@ export type RenderFunction = (
   d: VNodeData,
   c?: string | boolean | VNodeChildrenArrayContents | [ScopedSlot]
 ) => VNode
+
+export type HTMLElementTagNames = keyof HTMLElementTagNameMap

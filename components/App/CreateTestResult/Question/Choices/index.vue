@@ -1,8 +1,7 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import _ from 'lodash'
 import { ViewResultState } from '~/store/create-test/view-result'
-import { getAlphabetIndex } from '~/utils'
+import { capitalize, getAlphabetIndex } from '~/utils'
 
 type Numbering = `${number}${string}`
 
@@ -36,7 +35,7 @@ export default defineComponent({
     })
 
     const type = computed(() => {
-      return _.capitalize(question.value.type).replace(/-/g, ' ')
+      return capitalize(question.value.type).replace(/-/g, ' ')
     })
 
     const answers = computed(() => {

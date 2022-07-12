@@ -383,7 +383,7 @@ export const freshQuestion = () =>
   ({
     id: uuidv4(),
     conditionalLogic: false,
-    question: '',
+    title: '',
     required: false,
     type: 'short-text',
   } as unknown as CreateTestFormQuestion)

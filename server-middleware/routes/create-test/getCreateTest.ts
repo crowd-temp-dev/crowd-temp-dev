@@ -37,30 +37,34 @@ export default function (router: Router) {
     async (req, res) => {
       const id = req.params.id as string
 
-      const { userId } = req.signedCookies;
+      const { userId } = req.signedCookies
 
       try {
-
         await DB.transaction(async (transaction) => {
           // find the test and match the creator's id;
-          const testId = await TestDetail.findByPk(id, {
+          const test = await TestDetail.findByPk(id, {
             transaction,
-            attributes:['createdBy']
           })
 
-          if (testId) {
-            if (testId.createdBy !== userId) {
+          if (test) {
+            if (test.createdBy !== userId) {
               throw new Error('{403} You cannot access this test!')
             }
 
             const result = await getFullTest(id, transaction)
 
             sendSuccess(res, {
-              data: result.data
+              data: {
+                form: result.data,
+                details: {
+                  published: test.published,
+                  name: test.name,
+                },
+              },
             })
           } else {
             sendSuccess(res, {
-              data:{},
+              data: {},
             })
           }
         })

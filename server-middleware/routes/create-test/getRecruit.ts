@@ -53,6 +53,7 @@ export default function (router: Router) {
             sendSuccess(res, {
               data: {
                 published: testDetail.published,
+                name: testDetail.name,
                 ...(testDetail.published
                   ? {
                       shareLink: testDetail.shareLink,

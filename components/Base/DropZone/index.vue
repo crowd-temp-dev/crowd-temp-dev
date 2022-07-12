@@ -180,6 +180,10 @@ export default defineComponent({
       return !getFiles.value.length ? true : dragEnter
     })
 
+    const inputClickable = computed(() => {
+      return !!getFiles.value.length && !dragEnter.value
+    })
+
     return {
       modelSync,
       dragEnter,
@@ -189,6 +193,7 @@ export default defineComponent({
       rootId,
       viewPort,
       showRootInput,
+      inputClickable,
       removeFile,
       openInput,
       onDrop,
@@ -230,6 +235,7 @@ export default defineComponent({
           @dragover="dragEnter = true"
           @dragleave="dragEnter = false"
           @drop="onDrop"
+          @click="dragEnter = false"
         >
           <div
             class="p-[1.5rem] h-full items-center content-center justify-center justify-items-center grid"
@@ -238,12 +244,12 @@ export default defineComponent({
             <div
               v-if="!plain"
               class="pseudo"
-              :class="{ 'cursor-pointer !pointer-events-auto': !disabled }"
+              :class="{ 'cursor-copy !pointer-events-auto': !disabled }"
               @click="openInput"
             >
               <label :for="id || idProps.id" class="sr-only"
-                >Select file(s)</label
-              >
+                >Select file(s)
+              </label>
             </div>
 
             <template v-if="!dragEnter && !plain">
@@ -283,7 +289,7 @@ export default defineComponent({
                   class="flex space-x-16 relative h-full px-16 hide-scrollbar overflow-x-auto"
                   :class="{
                     'justify-center': getFiles.length === 1,
-                    'pointer-events-auto cursor-pointer': !disabled,
+                    'pointer-events-auto cursor-copy': !disabled,
                   }"
                   @click="openInput"
                 >
@@ -320,7 +326,7 @@ export default defineComponent({
                         </div>
 
                         <div
-                          class="pseudo bg-black/60 opacity-0 transition-opacity group-hover:opacity-100 flex-centered"
+                          class="pseudo pointer-events-auto bg-black/60 opacity-0 transition-opacity group-hover:opacity-100 flex-centered"
                         >
                           <Tooltip v-slot="deleteTooltip" label="Remove" invert>
                             <div v-on="deleteTooltip.events">
@@ -361,11 +367,14 @@ export default defineComponent({
             >
               Drop files to upload
             </p>
-
             <input
               v-if="showRootInput"
               :id="id || idProps.id"
-              class="absolute inset-0 opacity-0 text-[transparent] appearance-none cursor-pointer"
+              :tabindex="!plain ? '0' : '-1'"
+              class="absolute inset-0 opacity-0 text-[transparent] appearance-none cursor-copy"
+              :class="{
+                'pointer-events-none': inputClickable,
+              }"
               v-bind="inputAttrs.attrs"
               v-on="inputAttrs.events"
             />

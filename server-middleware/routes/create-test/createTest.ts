@@ -191,7 +191,7 @@ export default function (router: Router) {
                 conditionals: question.conditionals,
                 linearScale: question.linearScale,
                 required: question.required,
-                title: question.question,
+                title: question.title,
                 type: question.type,
                 ...modelId,
               })),
