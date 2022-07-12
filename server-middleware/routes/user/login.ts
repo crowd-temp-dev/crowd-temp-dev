@@ -60,6 +60,7 @@ export default function (router: Router) {
             if (passwordMatch) {
               await loginUser({
                 user,
+                transaction,
                 req,
                 res,
               })

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Transaction } from 'sequelize/types'
 import { setAuthCookies } from '../../utils/cookies'
 import { User } from '../../../database/models/User/User'
 import { inOneDay, uuidv4 } from '../../../utils'
@@ -7,10 +8,11 @@ import { apiActionQuery } from '../../utils'
 
 export async function loginUser(arg: {
   user: User
+  transaction: Transaction
   req: Request
   res: Response
 }) {
-  const { req, res, user } = arg
+  const { req, res, user, transaction } = arg
 
   const session = uuidv4()
 
@@ -24,7 +26,7 @@ export async function loginUser(arg: {
     loginCount: user.loginCount + 1,
   })
 
-  await setAuthCookies(req, res, user, session)
+  await setAuthCookies(req, res, transaction, user, session)
 
   if (process.env.NODE_ENV === 'production') {
     mailer.sendMail({
@@ -51,6 +53,4 @@ export async function loginUser(arg: {
                     </div>`,
     })
   }
-
-  return await user.reload()
 }

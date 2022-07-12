@@ -33,11 +33,14 @@ export default async function googleLogin(req: Request, res: Response) {
 
       await loginUser({
         user,
+        transaction,
         req,
         res,
       })
 
       await user.save({ transaction })
+
+      await transaction.commit()
 
       res.cookie('remember', '1')
 

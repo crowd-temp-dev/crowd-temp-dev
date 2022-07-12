@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
 import { Response, Request } from 'express'
+import { Transaction } from 'sequelize/types'
 import { oneHour } from '../../utils'
-import DB from '../../database'
 import { User } from '../../database/models/User/User'
 import { removeSensitiveFields } from '.'
 
@@ -34,8 +34,9 @@ export function clearAuthCookies(res: Response) {
 export async function setAuthCookies(
   req: Request,
   res: Response,
+  transaction: Transaction,
   userInstance?: User | null,
-  _session?: string | null
+  _session?: string | null,
 ) {
   if (res.headersSent) {
     return
@@ -53,8 +54,6 @@ export async function setAuthCookies(
     clearAuthCookies(res)
   } else if ((userId || isUserInstance()) && session) {
     const expires = new Date(Date.now() + oneHour)
-
-    const transaction = await DB.transaction()
 
     const user = isUserInstance()
       ? (userInstance as User)
@@ -103,7 +102,5 @@ export async function setAuthCookies(
         )
       } catch (err) {}
     } else clearAuthCookies(res)
-
-    await transaction.commit()
   } else clearAuthCookies(res)
 }

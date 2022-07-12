@@ -70,7 +70,7 @@ export default function (router: Router) {
           await UserToken.destroy({
             where: {
               userId: user.id,
-              type: 'confirm_account'
+              type: 'confirm_account',
             },
             transaction,
           })
@@ -79,7 +79,7 @@ export default function (router: Router) {
           const confirmAccount = await UserToken.create(
             {
               userId: user.id,
-              type: 'confirm_account'
+              type: 'confirm_account',
             },
             { transaction }
           )
@@ -125,8 +125,14 @@ export default function (router: Router) {
                 })
               }
             } catch (err) {
-              console.log({err});
-              
+              console.log({
+                err: {
+                  type: 'Sign up email error',
+                  err,
+                  msg: err?.message || 'No error message',
+                },
+              })
+
               throw new Error('{500} Error sending confirmation. Please report')
             }
           } else {

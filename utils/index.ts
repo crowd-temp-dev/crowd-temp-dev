@@ -814,7 +814,7 @@ export const showServerAuthMessage = (
 
   cookies.set('auth_provider_path', path)
 
-  if (errorMessage || successMessage) {
+  if ((errorMessage || successMessage || '').replace(/undefined/, '')) {
     const message = ((successMessage || errorMessage) as string).replace(
       /undefined/,
       ''
