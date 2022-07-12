@@ -61,8 +61,7 @@ export default function (router: Router) {
                     </div>`,
             })
             .then(async () => {
-
-            await setAuthCookies(req, res, user)
+              await setAuthCookies(req, res, transaction, user)
 
               sendSuccess(res, {
                 data: [],
@@ -72,7 +71,7 @@ export default function (router: Router) {
                 },
               })
             })
-            .catch(() => {              
+            .catch(() => {
               sendError(res, {
                 message: {
                   content: 'Error sending confirmation',

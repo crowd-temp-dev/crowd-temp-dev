@@ -220,7 +220,7 @@ export default defineComponent({
           <NuxtLink
             to="/privacy-and-policy"
             class="text-action-primary-default hover:underline"
-            @click.native.stop
+            target="_blank"
           >
             terms and privacy policies
           </NuxtLink>

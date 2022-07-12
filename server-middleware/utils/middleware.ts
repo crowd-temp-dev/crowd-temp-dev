@@ -32,26 +32,28 @@ export const authenticate: RequestHandler = async function (req, res, next) {
         : 'No user Id'
     )
   } else {
-    // find user;
-    const user = await User.findByPk(userId)
+    await DB.transaction(async (transaction) => {
+      // find user;
+      const user = await User.findByPk(userId)
 
-    if (user) {
-      // check if session is active;
-      const currentSession = user.session[session]
+      if (user) {
+        // check if session is active;
+        const currentSession = user.session[session]
 
-      if (currentSession && currentSession.expires > Date.now()) {
-        if (currentSession.userAgent !== req.headers['user-agent']) {
-          // errorRes('Did you hack your way here? 🤔')
-          errorRes('Session terminated!')
-        } else {
-          await setAuthCookies(req, res, user, session)
+        if (currentSession && currentSession.expires > Date.now()) {
+          if (currentSession.userAgent !== req.headers['user-agent']) {
+            // errorRes('Did you hack your way here? 🤔')
+            errorRes('Session terminated!')
+          } else {
+            await setAuthCookies(req, res, transaction, user, session)
 
-          next()
-        }
-      } else errorRes('Session expired!')
-    } else {
-      errorRes("Account doesn't exist!")
-    }
+            next()
+          }
+        } else errorRes('Session expired!')
+      } else {
+        errorRes("Account doesn't exist!")
+      }
+    })
   }
 }
 

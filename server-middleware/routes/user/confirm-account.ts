@@ -102,7 +102,7 @@ export default function (router: Router) {
 
             const userData = findUser.get()
 
-            await setAuthCookies(req, res, findUser)
+            await setAuthCookies(req, res, transaction, findUser)
 
             sendSuccess(res, {
               message: {

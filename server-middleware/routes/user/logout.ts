@@ -103,7 +103,7 @@ export default function (router: Router) {
 
             await user.save({ transaction })
 
-            await setAuthCookies(req, res, null, null)
+            await setAuthCookies(req, res, transaction, null, null)
 
             sendSuccessRes()
           } else {
