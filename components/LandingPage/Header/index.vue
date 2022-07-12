@@ -16,7 +16,7 @@ export default defineComponent({
   components: { Button, HeaderLogo },
   setup(_, { root }) {
     const featuresTo = '/#features'
-    const pricingTo = '/#pricing'
+    // const pricingTo = '/#pricing'
     const contactTo = '/#contact'
 
     const scrollToHash = (hash: string) => {
@@ -32,11 +32,11 @@ export default defineComponent({
         to: featuresTo,
         onClick: () => scrollToHash(featuresTo),
       },
-      {
-        title: 'Pricing',
-        to: pricingTo,
-        onClick: () => scrollToHash(pricingTo),
-      },
+      // {
+      //   title: 'Pricing',
+      //   to: pricingTo,
+      //   onClick: () => scrollToHash(pricingTo),
+      // },
       {
         title: 'Contact',
         to: contactTo,
