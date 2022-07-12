@@ -24,7 +24,7 @@ export const user = {
   name: sensitiveString
     .min(1)
     .max(99)
-    .pattern(new RegExp('^([a-zA-Z0-9\\s]){2,255}$'))
+    .pattern(new RegExp('^([a-zA-Z0-9\\s-_]){2,255}$'))
     .rule({ message: 'Name should be between 3 and 255 characters.' }),
 
   password: Joi.string()
