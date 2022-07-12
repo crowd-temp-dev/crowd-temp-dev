@@ -77,7 +77,7 @@ export default defineComponent({
         </template>
 
         <template #content="{ events }">
-          <div class="py-8">
+          <menu class="py-8">
             <div class="dropdown-item">
               Was this helpful?
 
@@ -105,7 +105,7 @@ export default defineComponent({
             >
               Dismiss welcome guide
             </div>
-          </div>
+          </menu>
         </template>
       </Dropdown>
     </h3>

@@ -59,8 +59,7 @@ export default function (router: Router) {
 
         if (!userId) {
           sendSuccessRes()
-        }
-        else {
+        } else {
           // find user
           const user = await User.findOne({
             where: {
@@ -103,7 +102,13 @@ export default function (router: Router) {
 
             await user.save({ transaction })
 
-            await setAuthCookies(req, res, transaction, null, null)
+            await setAuthCookies({
+              req,
+              res,
+              transaction,
+              userInstance: null,
+              session: null,
+            })
 
             sendSuccessRes()
           } else {

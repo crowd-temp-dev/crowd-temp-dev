@@ -72,7 +72,12 @@ export default function (router: Router) {
 
               await user.save({ transaction })
 
-              await setAuthCookies(req, res, transaction, user)
+              await setAuthCookies({
+                req,
+                res,
+                transaction,
+                userInstance: user,
+              })
 
               mailer.sendMail({
                 from: 'UnbugQA',

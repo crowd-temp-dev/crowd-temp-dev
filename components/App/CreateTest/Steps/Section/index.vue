@@ -1,6 +1,5 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
-import LabelSwitch from '../Switch/index.vue'
 import AddNewBlock from '../AddNewBlock/index.vue'
 import Form from '../Form/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -15,7 +14,6 @@ export default defineComponent({
   name: 'AppCreateTestStepsSection',
   components: {
     Button,
-    LabelSwitch,
     AddNewBlock,
     FadeTransition,
     Dropdown,
@@ -167,102 +165,112 @@ export default defineComponent({
         class="!space-y-0 w-full max-w-[800px] bg-surface-default rounded-lg p-20 shadow-2"
       >
         <div>
-          <h3
-            class="flex items-center justify-between font-semibold text-heading transition-all"
+          <div
+            class="flex items-center justify-between transition-all"
             :class="{
               'mb-24': expanded,
               'mb-0': !expanded,
             }"
           >
-            {{ title }}
+            <h3 class="font-semibold text-heading">
+              {{ title }}
+            </h3>
 
-            <Button
-              :id="id ? `collapse-${id}` : undefined"
-              @click="toggleExpand(!expanded)"
-            >
-              {{ expanded ? 'Collapse' : 'Expand' }}
-            </Button>
-          </h3>
+            <div class="flex items-center">
+              <div
+                v-if="!isStatic"
+                class="flex justify-between items-center mr-20"
+              >
+                <div class="text-icon-default flex items-center space-x-20">
+                  <Tooltip v-slot="{ events }" label="Duplicate section">
+                    <span class="cursor-pointer" v-on="events">
+                      <PIcon
+                        source="DuplicateMinor"
+                        class="fill-icon"
+                        @click="duplicateSection"
+                      />
+                    </span>
+                  </Tooltip>
 
-          <div
-            v-if="expanded && !isStatic"
-            class="flex justify-between items-center mb-20"
-          >
-            <LabelSwitch label="Add conditional Logic" />
-
-            <div class="text-icon-default flex items-center space-x-26">
-              <Tooltip v-slot="{ events }" label="Duplicate section">
-                <span class="cursor-pointer" v-on="events">
-                  <PIcon
-                    source="DuplicateMinor"
-                    class="fill-icon"
-                    @click="duplicateSection"
-                  />
-                </span>
-              </Tooltip>
-
-              <Dropdown :offset="[4, 2]">
-                <template #default="{ active, toggle, close }">
-                  <button
-                    tabindex="0"
-                    type="button"
-                    class="outline-none ring-offset-2 focus:ring-2 focus:ring-action-primary-default rounded-full transition-colors duration-[250ms]"
-                    :class="{
-                      'ring-2 ring-action-primary-default bg-background-selected':
-                        active,
-                    }"
-                    @click="toggle"
-                    v-on="
-                      active
-                        ? {
-                            blur: (evt) =>
-                              focusOnSelfOrCloseDropdown(evt, close),
-                          }
-                        : {}
-                    "
-                  >
-                    <PIcon source="DeleteMajor" class="fill-icon" />
-                  </button>
-                </template>
-
-                <template #content="{ events, close }">
-                  <div class="p-12">
-                    <p class="mb-8">
-                      <strong> Delete this section? </strong>
-                    </p>
-
-                    <div class="flex space-x-8 items-center justify-between">
-                      <Button
-                        tabindex="-1"
-                        role="menuitem"
-                        class="pseudo-focus"
-                        size="slim"
-                        v-on="events"
-                        @click="close"
+                  <Dropdown :offset="[4, 2]">
+                    <template #default="{ active, toggle, close }">
+                      <Tooltip
+                        v-slot="{ events }"
+                        :disabled="active"
+                        label="Delete question"
                       >
-                        Cancel
-                      </Button>
+                        <button
+                          tabindex="0"
+                          type="button"
+                          class="outline-none ring-offset-2 focus:ring-2 focus:ring-action-primary-default rounded-full transition-colors duration-[250ms]"
+                          :class="{
+                            'ring-2 ring-action-primary-default bg-background-selected':
+                              active,
+                          }"
+                          @click="toggle"
+                          v-on="
+                            active
+                              ? {
+                                  blur: (evt) =>
+                                    focusOnSelfOrCloseDropdown(evt, close),
+                                }
+                              : events
+                          "
+                        >
+                          <PIcon source="DeleteMajor" class="fill-icon" />
+                        </button>
+                      </Tooltip>
+                    </template>
 
-                      <Button
-                        tabindex="-1"
-                        role="menuitem"
-                        destructive
-                        class="pseudo-focus"
-                        size="slim"
-                        v-on="events"
-                        @click.stop="
-                          () => {
-                            close()
-                            removeSection()
-                          }
-                        "
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                </template>
-              </Dropdown>
+                    <template #content="{ events, close }">
+                      <div class="p-12">
+                        <p class="mb-8">
+                          <strong> Delete this section? </strong>
+                        </p>
+
+                        <menu
+                          class="flex space-x-8 items-center justify-between"
+                        >
+                          <Button
+                            tabindex="-1"
+                            role="menuitem"
+                            class="pseudo-focus"
+                            size="slim"
+                            v-on="events"
+                            @click="close"
+                          >
+                            Cancel
+                          </Button>
+
+                          <Button
+                            tabindex="-1"
+                            role="menuitem"
+                            destructive
+                            class="pseudo-focus"
+                            size="slim"
+                            v-on="events"
+                            @click.stop="
+                              () => {
+                                close()
+                                removeSection()
+                              }
+                            "
+                          >
+                            Delete
+                          </Button>
+                        </menu>
+                      </div>
+                    </template>
+                  </Dropdown>
+                </div>
+              </div>
+
+              <Button
+                :id="id ? `collapse-${id}` : undefined"
+                @click="toggleExpand(!expanded)"
+              >
+                {{ expanded ? 'Collapse' : 'Expand' }}
+              </Button>
             </div>
           </div>
         </div>

@@ -186,6 +186,7 @@ export default function (router: Router) {
                       : {}
 
                     const qAnswer = {
+                      ...answer.answers[`${qIndex}`],
                       type: currentQuestion.type,
                       ...preferenceTest,
                       ...followUpQuestions,

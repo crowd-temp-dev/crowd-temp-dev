@@ -1,3 +1,13 @@
+/* Light */
+
+@font-face {
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(/assets/sf-pro-text/SF-Pro-Text-Light.otf);
+}
+
 /* Regular */
 
 @font-face {

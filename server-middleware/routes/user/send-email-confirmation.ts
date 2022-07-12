@@ -61,7 +61,12 @@ export default function (router: Router) {
                     </div>`,
             })
             .then(async () => {
-              await setAuthCookies(req, res, transaction, user)
+              await setAuthCookies({
+                req,
+                res,
+                transaction,
+                userInstance: user,
+              })
 
               sendSuccess(res, {
                 data: [],

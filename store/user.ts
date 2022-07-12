@@ -31,6 +31,7 @@ export interface UserInfo {
 export interface UserState {
   info: UserInfo | null
   loading: boolean
+  loggingOut: boolean
   avatarLoading: boolean
 }
 
@@ -41,6 +42,7 @@ export interface LoginPayload extends LoginForm {
 const state = (): UserState => ({
   info: null,
   loading: false,
+  loggingOut: false,
   avatarLoading: false,
 })
 
@@ -62,10 +64,16 @@ const mutations: MutationTree<UserState> = {
     state.loading = false
 
     state.avatarLoading = false
+
+    state.loggingOut = false
   },
 
   setLoading(state: UserState, val?: boolean) {
     state.loading = typeof val === 'boolean' ? val : true
+  },
+
+  setLoggingOut(state: UserState, val?: boolean) {
+    state.loggingOut = typeof val === 'boolean' ? val : true
   },
 
   setAvatarLoading(state: UserState, val?: boolean) {
@@ -116,9 +124,11 @@ const actions: ActionTree<UserState, RootState> = {
   },
 
   async logout({ commit, state }, alert: boolean = true) {
-    if (!state.info || state.loading) {
+    if (!state.info || state.loading || state.loggingOut) {
       return {}
     }
+
+    commit('setLoggingOut')
 
     commit('setLoading')
 
@@ -160,7 +170,10 @@ const actions: ActionTree<UserState, RootState> = {
 
   // only reload after 5 seconds has elapsed
   async reload({ commit, dispatch, state }, progress: boolean) {
-    if ((performance.now() - lastReload > 5000 || !lastReload) && state.info) {
+    if (
+      (performance.now() - lastReload > 5000 || !lastReload) &&
+      !state.loggingOut
+    ) {
       lastReload = performance.now()
 
       const { data, error, message, status } = await ReloadUser(

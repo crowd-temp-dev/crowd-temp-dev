@@ -1,16 +1,3 @@
-<template>
-  <Draggable v-model="modelSync" v-bind="props" @start="onStart" @end="onEnd">
-    <TransitionGroup
-      type="transition"
-      :name="!drag ? 'flip-list' : null"
-      :tag="groupTag"
-      :class="groupClass"
-    >
-      <slot :props="{ drag: drag }" />
-    </TransitionGroup>
-  </Draggable>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import Draggable from 'vuedraggable'
@@ -29,7 +16,7 @@ export default defineComponent({
     },
     list: {
       type: Array as () => any[],
-      default: undefined
+      default: undefined,
     },
     transitionName: {
       type: String,
@@ -54,7 +41,7 @@ export default defineComponent({
     disabled: Boolean,
     ghostClass: {
       type: String,
-      default: undefined,
+      default: 'opacity-0',
     },
     handle: {
       type: String,
@@ -94,6 +81,19 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <Draggable v-model="modelSync" v-bind="props" @start="onStart" @end="onEnd">
+    <TransitionGroup
+      type="transition"
+      :name="!drag ? 'flip-list' : null"
+      :tag="groupTag"
+      :class="groupClass"
+    >
+      <slot :props="{ drag: drag }" />
+    </TransitionGroup>
+  </Draggable>
+</template>
 
 <style scoped lang="postcss">
 .flip-list-move {

@@ -148,11 +148,8 @@ export default defineComponent({
                 typeof slots?.content === 'undefined'
                   ? [
                       h(
-                        'ul',
+                        'menu',
                         {
-                          attrs: {
-                            role: 'menu',
-                          },
                           staticClass: 'py-8',
                         },
                         props.value.option.map((item: DropdownOption, key) => {

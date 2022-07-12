@@ -21,7 +21,7 @@ export default defineComponent({
       return viewResult.value.questions[`question-${props.value.numbering}`]
     })
 
-    const usersThatSortedCards = computed(() => {
+    const usersThatSortedCards = computed(() => {      
       return viewResult.value.answers.filter((user) => {
         return Object.values(user.answers).find((x) => 'cardSorting' in x)
       })
@@ -50,9 +50,14 @@ export default defineComponent({
 
           const distinctCards = Array.from(new Set(allCards)).map(
             (cardTitle) => {
+              const repeated = allCards.filter(
+                (card) => card === cardTitle
+              ).length
+
               return {
                 title: cardTitle,
-                repeated: allCards.filter((card) => card === cardTitle).length,
+                repeated,
+                agreement: Math.round((repeated / usersThatSortedCards.value.length) * 100),
               }
             }
           )

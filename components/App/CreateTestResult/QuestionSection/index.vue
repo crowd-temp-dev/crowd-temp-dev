@@ -11,7 +11,6 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {},
 })
 </script>
 
@@ -25,7 +24,7 @@ export default defineComponent({
       <div class="flex space-x-20 items-center">
         <slot name="header-action" />
 
-        <PreviewQuestion />
+        <PreviewQuestion :title="title" />
       </div>
     </div>
 

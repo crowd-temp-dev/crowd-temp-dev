@@ -191,7 +191,7 @@ export default function (router: Router) {
               }
             }
 
-            await setAuthCookies(req, res, transaction, user)
+            await setAuthCookies({ req, res, transaction, userInstance: user })
 
             sendSuccess(res, {
               data: user.get(),

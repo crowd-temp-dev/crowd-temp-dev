@@ -127,7 +127,7 @@ export default defineComponent({
 
         <TextField
           v-model="modelSync[i]"
-          class="flex-grow ml-14 mr-12"
+          class="flex-grow ml-14 mr-12 drag-handle"
           type="text"
           required
         />

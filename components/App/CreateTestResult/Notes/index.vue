@@ -1,3 +1,18 @@
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api'
+import Button from '~/components/Base/Button/index.vue'
+
+export default defineComponent({
+  name: 'AppCreateTestResultsNotes',
+  components: { Button },
+  setup() {
+    const modal = ref(false)
+
+    return { modal }
+  },
+})
+</script>
+
 <template>
   <div>
     <aside class="w-240 sticky top-96 xl:top-108">
@@ -19,7 +34,7 @@
         </li>
       </ul>
 
-      <DialogButton
+      <!-- <DialogButton
         icon="CirclePlusMinor"
         full-width
         class="bg-surface-default"
@@ -42,26 +57,7 @@
         <template #dialog-footer="{ close }">
           <Button primary @click="close"> Save </Button>
         </template>
-      </DialogButton>
+      </DialogButton> -->
     </aside>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
-import Button from '~/components/Base/Button/index.vue'
-import DialogButton from '~/components/Base/DialogButton/index.vue'
-import EditableText from '~/components/Base/EditableText/index.vue'
-
-export default defineComponent({
-  name: 'AppCreateTestResultsNotes',
-  components: { Button, DialogButton, EditableText },
-  setup() {
-    const modal = ref(false)
-
-    return { modal }
-  },
-})
-</script>
-
-<style scoped></style>

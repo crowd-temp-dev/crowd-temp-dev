@@ -114,9 +114,7 @@ export default defineComponent({
   <AnswerTestPageTransition>
     <div v-if="notConfirmed" class="h-max">
       <div class="sticky top-0 z-1">
-        <div
-          class="px-[1rem] h-76 bg-surface-default shadow-divide-header"
-        >
+        <div class="px-[1rem] h-76 bg-surface-default shadow-divide-header">
           <div class="flex-centered relative h-full max-w-[1312px] mx-auto">
             <h2 class="font-semibold">
               {{ currentSection.task }}
@@ -168,15 +166,15 @@ export default defineComponent({
                       <div
                         v-for="(item, i) in cards"
                         :key="i"
-                        class="h-36 w-full flex items-center"
+                        class="h-36 w-full flex items-center drag-handle"
                       >
                         <PIcon
                           source="DragHandleMinor"
-                          class="fill-icon-default w-16 h-16 shrink-0 drag-handle"
+                          class="fill-icon-default w-16 h-16 shrink-0"
                         />
 
                         <div
-                          class="rounded py-8 px-12 border border-[#BABFC3] shrink-0 grow mx-14"
+                          class="rounded py-8 px-12 border border-[#BABFC3] shrink-0 grow mx-14 bg-surface-default"
                         >
                           {{ item }}
                         </div>
@@ -221,15 +219,15 @@ export default defineComponent({
                     <div
                       v-for="(item, i) in category.items"
                       :key="i"
-                      class="h-36 w-full flex items-center"
+                      class="h-36 w-full flex items-center drag-handle"
                     >
                       <PIcon
                         source="DragHandleMinor"
-                        class="fill-icon-default w-16 h-16 shrink-0 drag-handle"
+                        class="fill-icon-default w-16 h-16 shrink-0"
                       />
 
                       <div
-                        class="rounded py-8 px-12 border border-[#BABFC3] shrink-0 grow mx-14"
+                        class="rounded py-8 px-12 border border-[#BABFC3] shrink-0 grow mx-14 bg-surface-default"
                       >
                         {{ item }}
                       </div>

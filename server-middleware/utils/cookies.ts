@@ -31,13 +31,15 @@ export function clearAuthCookies(res: Response) {
   } catch (err) {}
 }
 
-export async function setAuthCookies(
-  req: Request,
-  res: Response,
-  transaction: Transaction,
-  userInstance?: User | null,
-  _session?: string | null,
-) {
+export async function setAuthCookies(arg: {
+  req: Request
+  res: Response
+  transaction: Transaction
+  userInstance?: User | null
+  session?: string | null
+}) {
+  const { req, res, transaction, userInstance, session } = arg
+
   if (res.headersSent) {
     return
   }
@@ -46,13 +48,13 @@ export async function setAuthCookies(
 
   const { userId } = cookies
 
-  const session = _session || cookies.session
+  const getSession = session || cookies.session
 
   const isUserInstance = () => userInstance instanceof User
 
-  if (userInstance === null && _session === null) {
+  if (userInstance === null && session === null) {
     clearAuthCookies(res)
-  } else if ((userId || isUserInstance()) && session) {
+  } else if ((userId || isUserInstance()) && getSession) {
     const expires = new Date(Date.now() + oneHour)
 
     const user = isUserInstance()
@@ -66,7 +68,7 @@ export async function setAuthCookies(
       await user.update({
         session: {
           ...user.session,
-          [session]: {
+          [getSession]: {
             expires: expires.getTime(),
             userAgent: req.headers['user-agent'] || 'null',
           },
@@ -77,7 +79,7 @@ export async function setAuthCookies(
 
       await user.reload({ transaction })
 
-      res.cookie('session', session, {
+      res.cookie('session', getSession, {
         httpOnly: true,
         expires,
         secure: true,

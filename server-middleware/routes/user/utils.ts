@@ -26,7 +26,7 @@ export async function loginUser(arg: {
     loginCount: user.loginCount + 1,
   })
 
-  await setAuthCookies(req, res, transaction, user, session)
+  await setAuthCookies({ req, res, transaction, userInstance: user, session })
 
   if (process.env.NODE_ENV === 'production') {
     mailer.sendMail({

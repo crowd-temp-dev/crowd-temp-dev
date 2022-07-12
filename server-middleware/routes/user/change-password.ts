@@ -91,7 +91,12 @@ export default function (router: Router) {
 
                 await user.reload({ transaction })
 
-                await setAuthCookies(req, res, transaction, user)
+                await setAuthCookies({
+                  req,
+                  res,
+                  transaction,
+                  userInstance: user,
+                })
 
                 sendSuccess(res, {
                   data: user.get(),

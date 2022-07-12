@@ -34,7 +34,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
   } else {
     await DB.transaction(async (transaction) => {
       // find user;
-      const user = await User.findByPk(userId)
+      const user = await User.findByPk(userId, { transaction })
 
       if (user) {
         // check if session is active;
@@ -42,10 +42,15 @@ export const authenticate: RequestHandler = async function (req, res, next) {
 
         if (currentSession && currentSession.expires > Date.now()) {
           if (currentSession.userAgent !== req.headers['user-agent']) {
-            // errorRes('Did you hack your way here? 🤔')
             errorRes('Session terminated!')
           } else {
-            await setAuthCookies(req, res, transaction, user, session)
+            await setAuthCookies({
+              req,
+              res,
+              transaction,
+              userInstance: user,
+              session,
+            })
 
             next()
           }

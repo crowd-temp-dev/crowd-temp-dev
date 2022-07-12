@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, computed, h, ref } from '@vue/composition-api'
-import _ from 'lodash'
 import Choices from './Choices/index.vue'
 import ShortOrLongText from './ShortOrLongText/index.vue'
 import LinearScale from './LinearScale/index.vue'
@@ -8,7 +7,7 @@ import Button from '~/components/Base/Button/index.vue'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
 import SearchField from '~/components/Base/SearchField/index.vue'
 import { ViewResultState } from '~/store/create-test/view-result'
-import { getAlphabetIndex } from '~/utils'
+import { capitalize, getAlphabetIndex } from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Id from '~/components/Base/Id/index.vue'
 import type { RenderFunction } from '~/types'
@@ -53,7 +52,7 @@ export default defineComponent({
     })
 
     const type = computed(() => {
-      return _.capitalize(question.value.type).replace(/-/g, ' ')
+      return capitalize(question.value.type).replace(/-/g, ' ')
     })
 
     const answers = computed(() => {

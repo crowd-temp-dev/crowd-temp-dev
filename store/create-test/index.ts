@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { nextTick } from '@vue/composition-api'
 import { RootState } from '..'
-import viewResult from './view-result'
+import viewResult, { ViewResultState } from './view-result'
 import {
   formBody,
   getObjectPathValue,
@@ -60,6 +60,7 @@ export interface CreateTestState {
   loading: boolean
   submitting: boolean
   publishing: boolean
+  'view-result'?: ViewResultState
 }
 
 const freshForm = () =>

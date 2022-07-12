@@ -45,7 +45,7 @@ export default defineComponent({
       await nextTick()
 
       if (expanded.value) {
-        await sleep(300)
+        await sleep(250)
 
         if (rootRef.value) {
           const rootEl = rootRef.value
@@ -75,8 +75,8 @@ export default defineComponent({
     </p>
 
     <div class="min-h-[62px] bg-surface-subdued p-20 flex items-start">
-      <FadeTransition>
-        <div v-if="expanded" class="w-full mr-20">
+      <FadeTransition :duration="{ leave: 100 }">
+        <div v-if="expanded && cards.length" class="w-full mr-20">
           <table class="w-full">
             <thead>
               <th
@@ -103,13 +103,16 @@ export default defineComponent({
                   {{ card.repeated }}
                 </td>
 
-                <td class="text-right">100%</td>
+                <td class="text-right">{{ card.agreement }}%</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <ul v-else class="grow grid grid-flow-col gap-8 justify-start">
+        <ul
+          v-else-if="cards.length"
+          class="grow grid grid-flow-col gap-8 justify-start"
+        >
           <li
             v-for="(card, cardIndex) in cards"
             :key="cardIndex"
@@ -126,9 +129,18 @@ export default defineComponent({
             </span>
           </li>
         </ul>
+
+        <p
+          v-else
+          class="grow text-text-subdued font-medium flex items-center space-x-4"
+        >
+          <PIcon source="AlertMinor" class="shrink-0 fill-icon-default" />
+
+          <span class="grow"> No card in this category </span>
+        </p>
       </FadeTransition>
 
-      <Button plain @click="toggleExpand">
+      <Button plain :disabled="!cards.length" @click="toggleExpand">
         <div class="flex-centered">
           <PIcon
             :source="expanded ? 'CaretUpMinor' : 'CaretDownMinor'"
