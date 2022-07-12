@@ -180,12 +180,20 @@ export default defineComponent({
         name="signup"
         @on-submit="attemptSignup"
       >
-        <TextField
-          label="Your name"
-          required
-          v-bind="fieldIdAndError('name')"
-          :autofocus="!$breakpoint.isMobile && !focusOn"
-        />
+        <div class="grid gap-20 lg:grid-cols-2">
+          <TextField
+            label="First name"
+            required
+            v-bind="fieldIdAndError('firstName')"
+            :autofocus="!$breakpoint.isMobile && !focusOn"
+          />
+
+          <TextField
+            label="Last name"
+            required
+            v-bind="fieldIdAndError('lastName')"
+          />
+        </div>
 
         <TextField
           v-model="email"

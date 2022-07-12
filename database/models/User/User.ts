@@ -14,10 +14,14 @@ import type { UserRole } from '~/types'
 export type UserProvider = 'google' | 'twitter' | 'email'
 
 // eslint-disable-next-line no-use-before-define
-export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
   declare id: CreationOptional<string>
   declare email: string
-  declare name: string
+  declare firstName: string
+  declare lastName: string
   declare password: string
   declare role: UserRole
   declare session: UserSession
@@ -60,10 +64,16 @@ export default function initUser(dbInstance: Sequelize) {
       email: {
         type: DataTypes.STRING(),
         allowNull: false,
-        unique: true,
+        unique: false,
       },
 
-      name: {
+      firstName: {
+        type: DataTypes.STRING(255),
+        unique: false,
+        allowNull: false,
+      },
+
+      lastName: {
         type: DataTypes.STRING(255),
         unique: true,
         allowNull: false,
@@ -133,8 +143,8 @@ export default function initUser(dbInstance: Sequelize) {
 
       avatar: {
         type: DataTypes.STRING(),
-        allowNull: true
-      }
+        allowNull: true,
+      },
     },
     {
       hooks: {

@@ -36,7 +36,7 @@ export async function loginUser(arg: {
       html: `<div>
                       <p>
                         Hi ${
-                          user.name
+                          user.firstName
                         }! A new login has occured on your account!.
                       </p>
 

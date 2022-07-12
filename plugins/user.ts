@@ -58,6 +58,10 @@ const userPlugin: Plugin = function ({ store }, inject) {
         return true
       }
 
+      if (path === 'name') {
+        return `${userState.firstName} ${userState.lastName}`
+      }
+
       if (path === 'initials') {
         return store.getters['user/initials']
       }

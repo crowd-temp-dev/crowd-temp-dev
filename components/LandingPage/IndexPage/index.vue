@@ -9,14 +9,14 @@ import Hero from '~/components/LandingPage/Hero/index.vue'
 import Features from '~/components/LandingPage/Features/index.vue'
 import ExtraFeatures from '~/components/LandingPage/ExtraFeatures/index.vue'
 import Feedback from '~/components/LandingPage/Feedback/index.vue'
-import Pricing from '~/components/LandingPage/Pricing/index.vue'
+// import Pricing from '~/components/LandingPage/Pricing/index.vue'
 import CTA from '~/components/LandingPage/CTA/index.vue'
 import Footer from '~/components/LandingPage/Footer/index.vue'
 import { scrollToLandingPageHash } from '~/utils'
 
 export default defineComponent({
   name: 'LandingPageLayoutMarkup',
-  components: { Hero, Features, ExtraFeatures, Feedback, Pricing, CTA, Footer },
+  components: { Hero, Features, ExtraFeatures, Feedback, CTA, Footer },
   setup(_, { root }) {
     const hash = computed(() => root.$route.hash)
 
@@ -47,7 +47,7 @@ export default defineComponent({
 
       <Feedback />
 
-      <Pricing />
+      <!-- <Pricing /> -->
 
       <CTA />
     </main>

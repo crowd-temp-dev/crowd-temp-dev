@@ -38,7 +38,8 @@ export default async function googleSignUp(req: Request, res: Response) {
           email: googleUserData.email,
           confirmed: true,
           confirmedAt: Date.now(),
-          name: googleUserData.name,
+          firstName: googleUserData.given_name,
+          lastName: googleUserData.family_name,
           password: '',
           provider: 'google',
           role: 'tester',
@@ -55,7 +56,7 @@ export default async function googleSignUp(req: Request, res: Response) {
         subject: 'Welcome to Crowd',
         html: `<div>
                 <p>
-                  Hi ${newUser.name}! Welcome to Crowd!
+                  Hi ${newUser.firstName}! Welcome to Crowd!
                 </p>
                 <p>
                   <em>

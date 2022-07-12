@@ -37,7 +37,7 @@ export const loggedInMessage = (user: User) => {
   }
 
   return {
-    content: `Welcome back ${user.name}!`,
+    content: `Welcome back ${user.firstName}!`,
     type: 'success',
   } as MessageObject
 }

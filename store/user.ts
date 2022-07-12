@@ -23,7 +23,9 @@ import { ChangePasswordForm } from '~/server-middleware/routes/user/change-passw
 
 export interface UserInfo {
   id: string | null
-  name: string | null
+  firstName: string | null
+  lastName: string | null
+  name?: string
   email: string | null
   provider: User['provider'] | null
 }
@@ -297,7 +299,9 @@ const getters: GetterTree<UserState, RootState> = {
       return ''
     }
 
-    const splitName = state.info.name?.split(' ') || [[]]
+    const splitName = `${state.info.firstName} ${state.info.lastName}`?.split(
+      ' '
+    ) || [[]]
 
     return `${splitName[0][0]}${(splitName[1] || [])[0] || ''}`
   },

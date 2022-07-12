@@ -48,7 +48,7 @@ export default function (router: Router) {
               subject: 'Delete account token',
               html: `<div>
                       <p>
-                        Hi ${user.name}! A request has been made to <strong>delete your account</strong>!.
+                        Hi ${user.firstName}! A request has been made to <strong>delete your account</strong>!.
                       </p>
 
                       <p>
@@ -77,8 +77,8 @@ export default function (router: Router) {
               })
             })
             .catch((err) => {
-              console.log({err});
-              
+              console.log({ err })
+
               sendError(res, {
                 message: {
                   content: 'Error sending confirmation',

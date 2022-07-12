@@ -10,7 +10,8 @@ import mailer from '../../email'
 import { apiActionQuery } from '../../utils'
 
 export interface SignUpForm {
-  name: string
+  firstName: string
+  lastName: string
   email: string
   password: string
   confirmPassword: string
@@ -22,7 +23,8 @@ const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
-    name: userValidation.name.required(),
+    firstName: userValidation.name.required(),
+    lastName: userValidation.name.required(),
     email: userValidation.email.required(),
     password: userValidation.password.required(),
     confirmPassword: userValidation.password
@@ -30,7 +32,7 @@ const formValidation: RequestHandler = (req, res, next) => {
       .required(),
     agreed: Joi.boolean().equal(true).required(),
     newsUpdate: Joi.boolean().required(),
-  })
+  } as Record<keyof SignUpForm, any>)
 
   const validate = schema.validate(body)
 
@@ -54,7 +56,8 @@ export default function (router: Router) {
         const {
           email: _email,
           password,
-          name,
+          firstName,
+          lastName,
           newsUpdate,
         } = req.body as SignUpForm
 
@@ -95,7 +98,7 @@ export default function (router: Router) {
                 html: `<div>
                       <p>
                         Hi ${
-                          user.name
+                          user.firstName
                         }! Please click the link below to confirm your account.
                       </p>
                       <p>
@@ -153,7 +156,8 @@ export default function (router: Router) {
           } else {
             await findUser.update({
               password: hashedPassword,
-              name,
+              firstName,
+              lastName,
               role: 'tester',
               newsUpdate,
             })
@@ -168,7 +172,8 @@ export default function (router: Router) {
           const user = await User.create(
             {
               email: _email,
-              name,
+              firstName,
+              lastName,
               password: hashedPassword,
               role: 'tester',
               newsUpdate,

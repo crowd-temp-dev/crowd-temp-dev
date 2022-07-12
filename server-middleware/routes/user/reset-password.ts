@@ -85,7 +85,7 @@ export default function (router: Router) {
                 subject: 'Password changed!',
                 html: `<div>
                       <p>
-                        Hi ${user.name}! Your password has been changed!.
+                        Hi ${user.firstName}! Your password has been changed!.
                       </p>
 
                       <p>

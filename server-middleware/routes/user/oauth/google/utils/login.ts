@@ -47,8 +47,8 @@ export default async function googleLogin(req: Request, res: Response) {
       res.cookie(
         'login_provider_alert',
         user.loginCount < 2
-          ? `Hi ${user.name}! Welcome to Crowd!`
-          : `Welcome back ${user.name}!`
+          ? `Hi ${user.firstName}! Welcome to Crowd!`
+          : `Welcome back ${user.firstName}!`
       )
 
       res.redirect(302, `${process.env.CLIENT_ORIGIN}`)

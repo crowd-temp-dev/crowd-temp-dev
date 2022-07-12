@@ -111,7 +111,7 @@ export default function (router: Router) {
 
             sendSuccess(res, {
               message: {
-                content: `Hi ${userData.name}! Welcome to Crowd!`,
+                content: `Hi ${userData.firstName}! Welcome to Crowd!`,
                 type: 'success',
               },
               data: userData,

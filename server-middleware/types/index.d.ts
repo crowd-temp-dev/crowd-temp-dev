@@ -24,7 +24,8 @@ export interface UserNotification {
 }
 
 export interface UserData {
-  name: string
+  firstName: string
+  lastName: string
   email: string
   newsUpdate: boolean
   role: UserRole

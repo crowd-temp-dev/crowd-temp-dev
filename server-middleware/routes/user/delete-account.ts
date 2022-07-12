@@ -114,7 +114,7 @@ export default function (router: Router) {
                 subject: 'Account deleted',
                 html: `<div>
                       <p>
-                        Hi ${user.name}! We are sorry to see you go.
+                        Hi ${user.firstName}! We are sorry to see you go.
                       </p>
                     </div>`,
               })

@@ -16,7 +16,8 @@ const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
-    name: user.name,
+    firstName: user.name,
+    lastName: user.name,
     email: user.email,
     newsUpdate: Joi.boolean(),
     role: user.role,
@@ -58,12 +59,19 @@ export default function (router: Router) {
           })
 
           if (user) {
-            const { email, name, newsUpdate, role, showDashboardGuide } =
-              req.body as UserData
+            const {
+              email,
+              firstName,
+              lastName,
+              newsUpdate,
+              role,
+              showDashboardGuide,
+            } = req.body as UserData
 
             // update fields, if email is changed, send confirmation and add email to TemporaryEmail
             const updateValues = removeUndefinedValues({
-              name,
+              firstName,
+              lastName,
               newsUpdate,
               role,
               showDashboardGuide,
@@ -124,7 +132,7 @@ export default function (router: Router) {
                       html: `<div>
                       <p>
                         Hi ${
-                          user.name
+                          user.firstName
                         }! A request has been made to change your email!.
                       </p>
 
@@ -148,7 +156,7 @@ export default function (router: Router) {
                         html: `<div>
                       <p>
                         Hi ${
-                          user.name
+                          user.firstName
                         }! A request was made to change your old email <em>${
                           user.email
                         }</em> to this one.

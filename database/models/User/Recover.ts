@@ -18,7 +18,8 @@ export class Recover extends Model<
 > {
   declare id: CreationOptional<string>
   declare email: string
-  declare name: string
+  declare firstName: string
+  declare lastName: string
   declare password: string
   declare role: UserRole
   declare session: UserSession
@@ -45,7 +46,13 @@ export default function initUser(dbInstance: Sequelize) {
         unique: true,
       },
 
-      name: {
+      firstName: {
+        type: DataTypes.STRING(255),
+        unique: true,
+        allowNull: false,
+      },
+
+      lastName: {
         type: DataTypes.STRING(255),
         unique: true,
         allowNull: false,

@@ -102,7 +102,7 @@ export default function (router: Router) {
                 subject: 'Reset your password',
                 html: `<div>
                       <p>
-                        Hi ${user.name}! Please follow the link below to reset your password.
+                        Hi ${user.firstName}! Please follow the link below to reset your password.
                       </p>
                       <p>
                         <strong>

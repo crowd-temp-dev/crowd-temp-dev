@@ -22,7 +22,9 @@ export default defineComponent({
   components: { Section, Button },
   mixins: [settings],
   setup(_, { root: { $user, $pToast } }) {
-    const name = ref($user.name)
+    const firstName = ref($user.firstName)
+
+    const lastName = ref($user.lastName)
 
     const email = ref($user.email)
 
@@ -55,7 +57,15 @@ export default defineComponent({
       },
     ]
 
-    return { email, name, loading, onUpdate, roleOptions, formChanged }
+    return {
+      email,
+      firstName,
+      lastName,
+      loading,
+      onUpdate,
+      roleOptions,
+      formChanged,
+    }
   },
 })
 </script>
@@ -71,12 +81,21 @@ export default defineComponent({
       @form-revert="formChanged = false"
       @on-submit="onUpdate"
     >
-      <TextField
-        v-model="name"
-        v-bind="fieldIdAndError('name')"
-        label="Full name"
-        required
-      />
+      <div class="grid gap-x-20 grid-cols-2">
+        <TextField
+          v-model="firstName"
+          v-bind="fieldIdAndError('firstName')"
+          label="First name"
+          required
+        />
+
+        <TextField
+          v-model="lastName"
+          v-bind="fieldIdAndError('lastName')"
+          label="Last name"
+          required
+        />
+      </div>
 
       <TextField
         v-model="email"

@@ -79,7 +79,7 @@ export default function (router: Router) {
               subject: 'Email changed!',
               html: `<div>
                       <p>
-                        Hi ${user.name}! Your email has been updated to this one. Use this to login moving on.
+                        Hi ${user.firstName}! Your email has been updated to this one. Use this to login moving on.
                       </p>
                     </div>`,
             })
