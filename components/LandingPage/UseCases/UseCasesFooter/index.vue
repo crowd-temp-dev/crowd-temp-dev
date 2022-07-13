@@ -52,11 +52,11 @@ export default defineComponent({
       We've cracked the code of getting awesome insights for product teams.
     </h3>
 
-    <ul class="grid grid-cols-3 gap-30 max-w-[1230px] mx-auto mb-100 justify-items-center">
+    <ul class="w-fit grid grid-cols-3 gap-30 max-w-[1230px] mx-auto mb-100 justify-items-center">
       <li
         v-for="(item, i) in items"
         :key="i"
-        class="w-fit max-w-[348px] shadow-2 rounded-lg bg-surface-default pt-40 pb-80 px-20"
+        class="max-w-[348px] shadow-2 rounded-lg bg-surface-default pt-40 pb-80 px-20"
       >
         <Img :src="item.image" alt="Vector image" />
 
