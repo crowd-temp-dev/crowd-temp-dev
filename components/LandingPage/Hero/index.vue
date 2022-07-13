@@ -31,10 +31,7 @@ export default defineComponent({
 <template>
   <section class="text-center relative pt-108 w-full">
     <div class="landing-page-title md:w-[775px] mb-24 mx-auto text-center">
-      <VHTML
-        tag="h2"
-        :text="title"
-      />
+      <VHTML tag="h2" :text="title" />
     </div>
 
     <h3 class="landing-page-subtitle mb-34 mx-14 md:mx-auto !max-w-[620px]">
@@ -52,7 +49,7 @@ export default defineComponent({
       />
 
       <Button primary size="large" to="/auth/sign-up">
-        Get early access
+        Try our beta for free
       </Button>
     </div>
 

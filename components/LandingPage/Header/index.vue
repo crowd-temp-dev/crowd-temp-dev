@@ -5,7 +5,7 @@ import HeaderLogo from '~/components/Base/HeaderLogo/index.vue'
 import { scrollToLandingPageHash, sleep } from '~/utils'
 
 interface Link {
-  title: 'Features' | 'Pricing' | 'Contact' | 'Login' | 'Get early access'
+  title: 'Features' | 'Pricing' | 'Contact' | 'Login' | 'Try our beta for free'
   button?: boolean
   to: string
   onClick?: () => void
@@ -47,7 +47,7 @@ export default defineComponent({
         to: '/auth/login',
       },
       {
-        title: 'Get early access',
+        title: 'Try our beta for free',
         to: '/auth/sign-up',
         button: true,
       },
