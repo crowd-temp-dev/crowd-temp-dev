@@ -16,7 +16,6 @@
               'order-5': i === 4,
               'order-6': i === 5,
               'order-7': i === 6,
-              'order-8': i === 7,
             }
           : {
               'rotate-[-5.29deg] mb-[32.27px] translate-y-16': i === 0,
@@ -25,7 +24,7 @@
               'rotate-[-4.4deg] mb-[23.89px] translate-x-8': i === 3,
               'rotate-[-2.56deg] mb-[44.59px]': i === 4,
               'rotate-[5.1deg] translate-x-8 translate-y-8': i === 5,
-              '-translate-y-4': i === 6,
+              '-translate-y-36 translate-x-[-50%] relative left-[50%]': i === 6,
             }
       "
     />
@@ -50,7 +49,6 @@ export default defineComponent({
         'Website evaluation',
         'Prototype evaluation',
         'Preference test',
-        'Custom message',
       ] as FeatureTitle[],
     }
   },
