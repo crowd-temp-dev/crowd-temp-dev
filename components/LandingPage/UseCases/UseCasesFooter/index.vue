@@ -56,7 +56,7 @@ export default defineComponent({
       <li
         v-for="(item, i) in items"
         :key="i"
-        class="min-w-[348px] max-w-100% shadow-2 rounded-lg bg-surface-default pt-40 pb-80 px-20"
+        class="w-fit max-w-[348px] shadow-2 rounded-lg bg-surface-default pt-40 pb-80 px-20"
       >
         <Img :src="item.image" alt="Vector image" />
 
