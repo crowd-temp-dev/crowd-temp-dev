@@ -1,12 +1,45 @@
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import Ipad from './Ipad/index.vue'
+import StickyNoteWrapper from './StickyNoteWrapper/index.vue'
+import Button from '~/components/Base/Button/index.vue'
+import TextField from '~/components/Base/TextField/index.vue'
+import VHTML from '~/components/Base/VHTML/index.vue'
+
+export default defineComponent({
+  name: 'LandingPageHero',
+  components: { Button, Ipad, StickyNoteWrapper, TextField, VHTML },
+  setup() {
+    const emphasis = (text: string) =>
+      `<em class='not-italic text-base-primary'>${text}</em>`
+
+    const title = [
+      'Build ',
+      emphasis('better'),
+      ' products and ',
+      emphasis('grow'),
+      ' customer ',
+      emphasis('loyalty'),
+      ' with Crowd',
+    ].join('')
+
+    return { title }
+  },
+})
+</script>
+
 <template>
   <section class="text-center relative pt-108 w-full">
-    <h2 class="landing-page-title md:w-[750px] mb-24 mx-auto">
-      Make informed decisions and build better products with Crowd
-    </h2>
+    <div class="landing-page-title md:w-[775px] mb-24 mx-auto text-center !text-[36px]">
+      <VHTML
+        tag="h2"
+        :text="title"
+      />
+    </div>
 
-    <h3 class="landing-page-subtitle mb-25 mx-14 md:mx-auto">
-      A usability testing platform built to help you get useful feedback about
-      your products
+    <h3 class="landing-page-subtitle mb-34 mx-14 md:mx-auto">
+      Make informed decisions, drive product growth and increase customer
+      loyalty by collecting useful insights anytime, anywhere.
     </h3>
 
     <div
@@ -28,19 +61,3 @@
     <StickyNoteWrapper />
   </section>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import Ipad from './Ipad/index.vue'
-import StickyNoteWrapper from './StickyNoteWrapper/index.vue'
-import Button from '~/components/Base/Button/index.vue'
-import TextField from '~/components/Base/TextField/index.vue'
-
-export default defineComponent({
-  name: 'LandingPageHero',
-  components: { Button, Ipad, StickyNoteWrapper, TextField },
-  setup() {},
-})
-</script>
-
-<style scoped></style>
