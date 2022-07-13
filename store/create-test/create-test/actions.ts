@@ -23,13 +23,6 @@ const actions: ActionTree<CreateTestState, RootState> = {
       if (typeof id === 'string') {
         const { app } = this.$router
 
-        const createNewTest = () => {
-          const newForm = id !== state.details.id && !!state.details.id
-
-          commit('setId', id)
-
-          newForm && commit('resetForm')
-        }
         if (
           state.details.id &&
           state.details.id !== id &&
@@ -50,7 +43,9 @@ const actions: ActionTree<CreateTestState, RootState> = {
                   },
                   events: {
                     click: () => {
-                      createNewTest()
+                      commit('setId', id)
+
+                      commit('resetForm')
 
                       app.$alert.close()
                     },
@@ -80,7 +75,9 @@ const actions: ActionTree<CreateTestState, RootState> = {
             })
           })
         } else {
-          createNewTest()
+          if (id !== state.details.id && state.details.id) {
+            commit('resetForm')
+          }
 
           return id
         }
@@ -111,7 +108,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
       rootState.app.alertDialog.title === createTestAlertTitle
     ) {
       return
-    }    
+    }
 
     commit('updateDetails', payload)
   },
@@ -137,7 +134,10 @@ const actions: ActionTree<CreateTestState, RootState> = {
     const formatForm = formBody({
       fields: JSON.stringify({
         id: state.details.id,
-        TestDetails: rawForm.testDetails,
+        TestDetails: {
+          ...rawForm.testDetails,
+          name: state.details.name,
+        },
         WelcomeScreen: rawForm.welcomeScreen,
         ThankYouScreen: rawForm.thankYouScreen,
       }),
@@ -209,10 +209,8 @@ const actions: ActionTree<CreateTestState, RootState> = {
     }
   },
 
-  async getCreateTest({ dispatch, state, commit }) {
+  async getCreateTest({ dispatch, commit, state }) {
     if (state.details.id) {
-      commit('setPageLoading')
-
       const { app } = this.$router
 
       const { data, error } = await GetCreateTest(app.$axios, state.details.id)
@@ -223,17 +221,31 @@ const actions: ActionTree<CreateTestState, RootState> = {
           statusCode: 500,
         })
       } else if (data.details) {
-        dispatch('updateDetails', {
+        await dispatch('updateDetails', {
           data: data.details,
-        }).then(() => {
-          dispatch('updateForm', {
-            path: '',
-            value: data.form,
-            override: !!Object.keys(data.form || {}).length,
-          })
         })
+
+        await dispatch('updateForm', {
+          path: '',
+          value: data.form,
+          override: !!Object.keys(data.form || {}).length,
+        })
+
+        if (data.details.published) {
+          commit('setShowWarning', true)
+        } else {
+          commit('setShowWarning', false)
+        }
       } else {
-        // commit('resetForm')
+        commit('updateDetails', {
+          data: {
+            name: 'New Test',
+          },
+        })
+
+        commit('resetForm')
+
+        commit('setShowWarning', false)
       }
     }
   },
@@ -284,13 +296,8 @@ const actions: ActionTree<CreateTestState, RootState> = {
   },
 
   // updates published test switches basically
-  async updateTestDetails(
-    { dispatch, commit, state },
-    payload: UpdateTestDetailForm
-  ) {
+  async updateTestDetails({ dispatch, state }, payload: UpdateTestDetailForm) {
     if (state.details.id) {
-      commit('setLoading', true)
-
       const { app } = this.$router
 
       const { data, message } = await UpdateTestDetail(app.$axios, {

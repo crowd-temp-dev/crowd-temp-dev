@@ -44,6 +44,7 @@ export interface CreateTestState {
   pageLoading: boolean
   submitting: boolean
   publishing: boolean
+  showWarning: boolean
   'view-result'?: ViewResultState
 }
 
@@ -75,7 +76,8 @@ const state = (): CreateTestState => ({
     id: null,
   },
   publishing: false,
-  pageLoading: false,
+  pageLoading: true,
+  showWarning: false,
 })
 
 const getters: GetterTree<CreateTestState, RootState> = {

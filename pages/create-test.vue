@@ -1,4 +1,3 @@
-
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { Layout } from '~/types'
@@ -6,6 +5,7 @@ import { dynamicPageTransition } from '~/utils/pageTransition'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { CreateTestState } from '~/store/create-test/create-test'
+import { createTestWarningDuplicateId } from '~/utils'
 
 type Step = {
   title: 'Create test' | 'Recruit' | 'View Results'
@@ -74,7 +74,14 @@ export default defineComponent({
       ] as Step[]
     })
 
-    return { steps, showBanner }
+    const showWarning = computed(() => {
+      return (
+        root.$route.name === 'create-test-:id' &&
+        (root.$store.state['create-test'] as CreateTestState).showWarning
+      )
+    })
+
+    return { steps, showBanner, showWarning, createTestWarningDuplicateId }
   },
 
   head: {
@@ -83,9 +90,8 @@ export default defineComponent({
 })
 </script>
 
-
 <template>
-  <div class="h-[calc(100%-76px)]">
+  <div class="min-h-[calc(100%-76px)]">
     <!-- <header> -->
     <div class="app-page-header !h-56 !relative !z-1 !justify-center">
       <div>
@@ -125,27 +131,33 @@ export default defineComponent({
     <!-- </header> -->
 
     <!-- <banner> -->
-    <FadeTransition>
-      <div
-        v-if="showBanner"
-        class="bg-[#202123] shadow-3 h-56 px-32 flex items-center justify-between"
-        :style="{ '--fade-transition-duration': '150ms' }"
-      >
-        <p class="text-surface-default mr-16">
-          Making any update to this test will cancel your sharable link and
-          delete all your responses
-        </p>
+    <FadeTransition :duration="{ leave: 1, enter: 200 }">
+      <div v-if="showWarning" class="sticky top-76 z-1">
+        <div
+          class="bg-[#202123] shadow-3 h-56 px-32 flex items-center justify-between"
+          :style="{ '--fade-transition-duration': '150ms' }"
+        >
+          <p class="text-surface-default mr-16">
+            Making any update to this test will cancel your sharable link and
+            delete all your responses
+          </p>
 
-        <div class="flex items-center space-x-6">
-          <Button primary class="border-0"> Duplicate test </Button>
+          <div class="flex items-center space-x-6">
+            <Button :id="createTestWarningDuplicateId" primary class="border-0">
+              Duplicate test
+            </Button>
 
-          <Button
-            destructive
-            class="border border-interactive-critical after:ring-interactive-critical focus:after:ring-[0.2rem] !shadow-none"
-            @click="showBanner = false"
-          >
-            Continue
-          </Button>
+            <Button
+              outline
+              destructive
+              class="border border-interactive-critical after:ring-interactive-critical focus:after:ring-[0.2rem] !shadow-none ring-offset-2 ring-offset-black"
+              @click="showBanner = false"
+            >
+              <span class="text-white">
+                Continue
+              </span>
+            </Button>
+          </div>
         </div>
       </div>
     </FadeTransition>

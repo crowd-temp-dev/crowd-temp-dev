@@ -20,9 +20,10 @@ export default defineComponent({
       },
       set(val: string) {
         if (typeof val === 'string') {
-          root.$store.dispatch('create-test/updateForm', {
-            path: 'testDetails.name',
-            value: val,
+          root.$store.dispatch('create-test/updateDetails', {
+            data: {
+              name: val,
+            },
           })
         }
       },
@@ -33,7 +34,7 @@ export default defineComponent({
     })
 
     const enableEditing = computed(() => {
-      return !/^\/create-test\/(?:recruit|view)/.test(root.$route.name || '')
+      return root.$route.name === 'create-test-:id'
     })
 
     return { testTitle, testPublished, enableEditing, testState }
@@ -56,7 +57,7 @@ export default defineComponent({
         class="ml-16 mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
       >
         <Skeleton
-          :loading="!testState.details.name"
+          :loading="testState.pageLoading"
           loading-class="h-36 w-120 rounded bg-surface-neutral-default"
         >
           <Tooltip
@@ -75,7 +76,7 @@ export default defineComponent({
       </h2>
 
       <Skeleton
-        :loading="!testState.details.name"
+        :loading="testState.pageLoading"
         loading-class="h-24 w-56 rounded-full bg-surface-neutral-default"
       >
         <Transition

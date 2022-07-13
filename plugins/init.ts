@@ -55,7 +55,13 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
             return store.getters['create-test/questions']
           }
 
-          return (store.state['create-test'] as CreateTestState).form[path]
+          const createTestState = store.state['create-test'] as CreateTestState
+
+          if (path === 'warn') {
+            return createTestState.showWarning
+          }
+
+          return createTestState.form[path]
         },
       }
     )

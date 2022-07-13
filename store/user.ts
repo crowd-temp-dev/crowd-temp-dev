@@ -299,11 +299,9 @@ const getters: GetterTree<UserState, RootState> = {
       return ''
     }
 
-    const splitName = `${state.info.firstName} ${state.info.lastName}`?.split(
-      ' '
-    ) || [[]]
+    const { firstName, lastName } = state.info
 
-    return `${splitName[0][0]}${(splitName[1] || [])[0] || ''}`
+    return `${firstName[0] || ''}${lastName[0] || ''}` || '--'
   },
 }
 

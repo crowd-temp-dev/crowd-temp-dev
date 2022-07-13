@@ -840,3 +840,5 @@ export const showServerAuthMessage = (
 export const capitalize = (string: string) => {
   return string.replace(/^[a-zA-Z]/, (x) => x.toUpperCase())
 }
+
+export const createTestWarningDuplicateId = uid()

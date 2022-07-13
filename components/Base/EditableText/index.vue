@@ -8,7 +8,10 @@
     <span
       :aria-hidden="editing || undefined"
       class="inline-block transition-opacity"
-      :class="{ 'opacity-0 pointer-events-none': editing }"
+      :class="{
+        'opacity-0 pointer-events-none': editing,
+        'opacity-20': !modelSync,
+      }"
     >
       {{ modelSync || fallback }}
     </span>

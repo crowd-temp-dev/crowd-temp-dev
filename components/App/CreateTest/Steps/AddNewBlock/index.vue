@@ -203,7 +203,7 @@ export default defineComponent({
         >
           <Button
             primary
-            class="pointer-events-auto"
+            :class="{ 'pointer-events-auto': !$createTestForm.warn }"
             :disabled="$store.state['create-test'].submitting"
             @click="showHelper = true"
           >

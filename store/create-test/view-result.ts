@@ -122,6 +122,11 @@ const actions: ActionTree<ViewResultState, RootState> = {
         },
       })
 
+      await app.$store.dispatch('create-test/updateForm', {
+        path: 'empty',
+        value: false,
+      })
+
       commit('saveAnswers', data)
     }
 

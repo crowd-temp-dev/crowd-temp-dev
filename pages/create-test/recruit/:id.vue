@@ -187,7 +187,9 @@ export default defineComponent({
           class="grid justify-center justify-items-center mb-20"
         >
           <h5 class="text-text-subdued text-[13px] leading-[20px] my-10">
-            You have {{ 0 }} response{{ '' }}
+            You have {{ testDetails.responses }} response{{
+              testDetails.responses > 1 ? 's' : ''
+            }}
           </h5>
 
           <div class="flex items-center space-x-12">

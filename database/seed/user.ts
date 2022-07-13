@@ -17,7 +17,7 @@ export default async function seedUser() {
               email: `fakeuser${i ? `-${i}` : ''}@unbug.crowd`,
               password,
               firstName: `Fake`,
-              lastName: `user${i ? ` ${i}` : ''}`,
+              lastName: `User${i ? ` ${i}` : ''}`,
               newsUpdate: false,
               role: 'tester',
               session: {},

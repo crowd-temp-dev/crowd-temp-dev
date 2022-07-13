@@ -7,6 +7,7 @@ import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { VueElement } from '~/types'
 import { CreateTestFormQuestion } from '~/types/form'
+import { CreateTestState } from '~/store/create-test/create-test'
 
 type StaticTestSection = 'Test detail' | 'Welcome screen' | 'Thank you screen'
 
@@ -19,7 +20,7 @@ export default defineComponent({
   name: 'AppCreateTestSortSteps',
   components: { Button, SmootDrag, FadeTransition, Tooltip },
   emits: ['shuffled'],
-  setup(_, { root: { $store,  $createTestForm }, emit }) {
+  setup(_, { root: { $store, $createTestForm }, emit }) {
     const dragTitles = computed({
       get() {
         return $createTestForm.questions
@@ -156,9 +157,14 @@ export default defineComponent({
       }
     }
 
+    const showWarning = computed(() => {
+      return ($store.state['create-test'] as CreateTestState).showWarning
+    })
+
     return {
       dragTitles,
       staticTitles,
+      showWarning,
       nextStep,
       onDragEnd,
       scrollToSection,
@@ -172,7 +178,13 @@ export default defineComponent({
 
 <template>
   <div>
-    <aside class="sticky top-64 xl:top-76 -mt-32">
+    <aside
+      class="sticky -mt-32"
+      :class="{
+        'top-64 xl:top-76': !showWarning,
+        'top-120 xl:top-132': showWarning,
+      }"
+    >
       <div
         class="hide-scrollbar overflow-y-auto pt-32 px-4 pb-4 max-h-[calc(100vh-140px)]"
       >
@@ -251,7 +263,9 @@ export default defineComponent({
         <Button
           full-width
           primary
-          :disabled="!dragTitles.length || $store.state['create-test'].submitting"
+          :disabled="
+            !dragTitles.length || $store.state['create-test'].submitting
+          "
           @click="nextStep"
         >
           Save and continue

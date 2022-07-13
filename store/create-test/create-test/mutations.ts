@@ -30,7 +30,7 @@ const mutations: MutationTree<CreateTestState> = {
     state.details = {
       ...newValue,
       id,
-    }    
+    }
 
     state.publishing = false
 
@@ -107,7 +107,7 @@ const mutations: MutationTree<CreateTestState> = {
     state.details.published = false
     state.details = {
       id: null,
-      name: 'New Test'
+      name: 'New Test',
     }
   },
 
@@ -121,6 +121,10 @@ const mutations: MutationTree<CreateTestState> = {
 
   setPageLoading(state, val?: boolean) {
     state.pageLoading = typeof val === 'boolean' ? val : true
+  },
+
+  setShowWarning(state, val: boolean) {
+    state.showWarning = val
   },
 }
 

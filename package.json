@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "export NODE_ENV=development FORCE_SYNC=1 && nuxt",
+    "dev": "export NODE_ENV=development FORCE_SYNC=0 && nuxt",
     "build": "export NODE_ENV=production FORCE_SYNC=1 && nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

@@ -40,12 +40,21 @@ export default defineComponent({
       class="mt-0"
       name="testDetails"
       :initial-value="{
-        name: '',
+        name: 'New Test',
         description: '',
       }"
     >
       <TextField
-        v-bind="setup('name')"
+        v-bind="{
+          modelValue: $store.state['create-test'].details.name,
+          updateModelValue: (val) => {
+            $store.dispatch('create-test/updateDetails', {
+              data: {
+                name: val,
+              },
+            })
+          },
+        }"
         label="Test name"
         placeholder="New Test"
         required

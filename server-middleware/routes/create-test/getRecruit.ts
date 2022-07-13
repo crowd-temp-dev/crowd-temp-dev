@@ -5,6 +5,7 @@ import DB from '../../../database'
 import { uuidv4 } from '../../utils/validation'
 import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.params
@@ -50,6 +51,11 @@ export default function (router: Router) {
               throw new Error('{403} You cannot access this test!')
             }
 
+            const responses = await TestAnswer.count({
+              where: { done: true, testId: id },
+              transaction,
+            })
+
             sendSuccess(res, {
               data: {
                 published: testDetail.published,
@@ -59,6 +65,7 @@ export default function (router: Router) {
                       shareLink: testDetail.shareLink,
                       stopAcceptingResponse: testDetail.stopAcceptingResponse,
                       unlimitedInvites: testDetail.unlimitedInvites,
+                      responses,
                     }
                   : {}),
               },

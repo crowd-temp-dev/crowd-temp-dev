@@ -55,6 +55,7 @@ interface AlertDialog extends GetAlertDialog {
 export interface CreateTestForm extends CreateTestFormMap {
   questionsLength: number
   questions: CreateTestFormQuestion[]
+  warn: boolean
 }
 
 declare module 'vue/types/vue' {
