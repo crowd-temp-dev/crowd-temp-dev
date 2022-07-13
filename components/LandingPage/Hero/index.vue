@@ -30,7 +30,7 @@ export default defineComponent({
 
 <template>
   <section class="text-center relative pt-108 w-full">
-    <div class="landing-page-title md:w-[775px] mb-24 mx-auto text-center !text-[36px]">
+    <div class="landing-page-title md:w-[775px] mb-24 mx-auto text-center">
       <VHTML
         tag="h2"
         :text="title"
