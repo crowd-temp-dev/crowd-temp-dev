@@ -148,9 +148,8 @@ export default defineComponent({
             </Button>
 
             <Button
-              outline
               destructive
-              class="border border-interactive-critical after:ring-interactive-critical focus:after:ring-[0.2rem] !shadow-none ring-offset-2 ring-offset-black"
+              class="border border-interactive-critical after:ring-interactive-critical focus:after:ring-[0.2rem] !shadow-none ring-offset-2 ring-offset-black !bg-transparent hover:!bg-action-critical-hovered"
               @click="showBanner = false"
             >
               <span class="text-white">
