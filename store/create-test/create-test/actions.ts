@@ -19,7 +19,7 @@ const createTestAlertTitle = 'You have a test in progress!'
 
 const actions: ActionTree<CreateTestState, RootState> = {
   setId({ commit, state }, id: string | null) {
-    const getValue = (): string | undefined | null => {
+    const getValue = (): string | undefined | null => {      
       if (typeof id === 'string') {
         const { app } = this.$router
 
@@ -87,7 +87,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
     const value = getValue()
 
     if (typeof value !== 'undefined') {
-      commit('setId', value)
+      commit('setId', value)      
     }
   },
 
@@ -142,6 +142,9 @@ const actions: ActionTree<CreateTestState, RootState> = {
         ThankYouScreen: rawForm.thankYouScreen,
       }),
     })
+
+    console.log(state.details.id)
+    
 
     if (formatForm) {
       questions.forEach((question, index) => {
