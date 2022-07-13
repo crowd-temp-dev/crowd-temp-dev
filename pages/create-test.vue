@@ -6,6 +6,7 @@ import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { CreateTestState } from '~/store/create-test/create-test'
 import { createTestWarningDuplicateId } from '~/utils'
+import Warning from '~/components/App/CreateTest/Warning/index.vue'
 
 type Step = {
   title: 'Create test' | 'Recruit' | 'View Results'
@@ -18,7 +19,7 @@ type Step = {
 
 export default defineComponent({
   name: 'AppBillingPage',
-  components: { Button, FadeTransition },
+  components: { Button, FadeTransition, Warning },
   layout: 'app' as Layout,
   transition: (to, from) =>
     dynamicPageTransition({
@@ -93,7 +94,7 @@ export default defineComponent({
 <template>
   <div class="min-h-[calc(100%-76px)]">
     <!-- <header> -->
-    <div class="app-page-header !h-56 !relative !z-1 !justify-center">
+    <div class="app-page-header !h-56 !relative !z-2 !justify-center">
       <div>
         <div class="flex h-full mx-auto w-fit">
           <template v-for="(step, i) in steps">
@@ -104,7 +105,7 @@ export default defineComponent({
               tabindex="-1"
               class="px-35 h-full m-0 !no-underline"
               :class="{
-                'pointer-events-none': !step.done,
+                'pointer-events-none': !step.done || step.active,
                 'text-text-default': step.done && !step.active,
               }"
               @click="step.select"
@@ -130,37 +131,7 @@ export default defineComponent({
     </div>
     <!-- </header> -->
 
-    <!-- <banner> -->
-    <FadeTransition :duration="{ leave: 1, enter: 200 }">
-      <div v-if="showWarning" class="sticky top-76 z-1">
-        <div
-          class="bg-[#202123] shadow-3 h-56 px-32 flex items-center justify-between"
-          :style="{ '--fade-transition-duration': '150ms' }"
-        >
-          <p class="text-surface-default mr-16">
-            Making any update to this test will cancel your sharable link and
-            delete all your responses
-          </p>
-
-          <div class="flex items-center space-x-6">
-            <Button :id="createTestWarningDuplicateId" primary class="border-0">
-              Duplicate test
-            </Button>
-
-            <Button
-              destructive
-              class="border border-interactive-critical after:ring-interactive-critical focus:after:ring-[0.2rem] !shadow-none ring-offset-2 ring-offset-black !bg-transparent hover:!bg-action-critical-hovered"
-              @click="showBanner = false"
-            >
-              <span class="text-white">
-                Continue
-              </span>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </FadeTransition>
-    <!-- </banner -->
+    <Warning />
 
     <FadeTransition>
       <div

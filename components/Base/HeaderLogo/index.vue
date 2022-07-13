@@ -20,7 +20,7 @@ export default defineComponent({
   <h1 class="text-[20.07px] leading-[20.57px] font-medium font-epilogue">
     <NuxtLink
       to="/"
-      class="inline-flex items-center"
+      class="inline-flex items-end"
       @click.native="scrollToTop"
     >
       <Img
@@ -31,7 +31,11 @@ export default defineComponent({
         class="h-16 w-[22.26px] mr-2"
       />
 
-      crowd
+      <span> crowd </span>
+
+      <PBadge class="bg-surface-neutral-default font-sf-pro-text ml-4">
+        Beta
+      </PBadge>
     </NuxtLink>
   </h1>
 </template>

@@ -1,24 +1,3 @@
-<template>
-  <PTextField
-    :id="id || uid"
-    ref="root"
-    v-model="modelSync"
-    v-bind="$attrs"
-    :value="value"
-    :disabled="disabled"
-    :label="label"
-    :help-text="helpText"
-    :type="type"
-    v-on="$listeners"
-  >
-    <template v-if="$slots.default" #label>
-      <slot>
-        {{ label }}
-      </slot>
-    </template>
-  </PTextField>
-</template>
-
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 
@@ -44,6 +23,10 @@ export default defineComponent({
     },
     updateModelValue: {
       type: Function,
+      default: undefined,
+    },
+    height: {
+      type: String,
       default: undefined,
     },
   },
@@ -95,4 +78,31 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<template>
+  <PTextField
+    :id="id || uid"
+    ref="root"
+    v-model="modelSync"
+    v-bind="$attrs"
+    :value="value"
+    :disabled="disabled"
+    :label="label"
+    :help-text="helpText"
+    :type="type"
+    class="TextField"
+    :style="{ '--height': height }"
+    v-on="$listeners"
+  >
+    <template v-if="$slots.default" #label>
+      <slot>
+        {{ label }}
+      </slot>
+    </template>
+  </PTextField>
+</template>
+
+<style scoped>
+.TextField >>> .Polaris-TextField {
+  min-height: var(--height);
+}
+</style>

@@ -204,7 +204,7 @@ export default defineComponent({
     onBeforeUnmount(() => {
       cleanup()
 
-      close()
+      closeDialog()
     })
 
     return {

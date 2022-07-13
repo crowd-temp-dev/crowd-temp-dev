@@ -6,6 +6,7 @@ import { uuidv4 } from '../../utils/validation'
 import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
+import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.params
@@ -53,18 +54,38 @@ export default function (router: Router) {
 
             const result = await getFullTest(id, transaction)
 
+            const getParticipants = await TestAnswer.count({
+              where: { testId: id },
+              transaction,
+            })
+
+            const participants = getParticipants
+              ? {
+                  participants: getParticipants,
+                }
+              : {}
+
             sendSuccess(res, {
               data: {
                 form: result.data,
                 details: {
                   published: test.published,
+                  created: !!result.data.testDetails,
                   name: test.name,
+                  ...participants,
                 },
               },
             })
           } else {
             sendSuccess(res, {
-              data: {},
+              data: {
+                form: {
+                  empty: true,
+                },
+                details: {
+                  created: false,
+                },
+              },
             })
           }
         })

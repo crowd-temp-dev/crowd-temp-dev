@@ -3,7 +3,7 @@ import { ActionTree } from 'vuex'
 import { nextTick } from '@vue/composition-api'
 import { RootState } from '../..'
 import { CreateTestForm, CreateTestState } from '.'
-import { formBody, pingAddNewBlockBtn, sleep } from '~/utils'
+import { formBody, pingAddNewBlockBtn, sleep, uuidv4 } from '~/utils'
 import {
   CreateTest,
   GetCreateTest,
@@ -19,15 +19,26 @@ const createTestAlertTitle = 'You have a test in progress!'
 
 const actions: ActionTree<CreateTestState, RootState> = {
   setId({ commit, state }, id: string | null) {
-    const getValue = (): string | undefined | null => {      
+    const getValue = (): string | undefined | null => {
       if (typeof id === 'string') {
         const { app } = this.$router
+
+        console.log({
+          id: state.details.id,
+          idMatches: state.details.id !== id,
+          emptyForm: !state.form.empty,
+          testCreated: state.details.created,
+          createTestRoute: app.$route.name === 'create-test-:id',
+          details: state,
+          routeName: app.$route.name,
+        })
 
         if (
           state.details.id &&
           state.details.id !== id &&
           !state.form.empty &&
-          !state.details.published
+          !state.details.created &&
+          app.$route.name === 'create-test-:id'
         ) {
           sleep(250).then(() => {
             app.$alert.open({
@@ -87,7 +98,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
     const value = getValue()
 
     if (typeof value !== 'undefined') {
-      commit('setId', value)      
+      commit('setId', value)
     }
   },
 
@@ -113,7 +124,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
     commit('updateDetails', payload)
   },
 
-  async submit({ state, commit, getters }) {
+  async submit({ state, commit, getters }, duplicate?: boolean) {
     const questions = getters.questions as QuestionModelValue[]
 
     if (!questions.length) {
@@ -143,9 +154,6 @@ const actions: ActionTree<CreateTestState, RootState> = {
       }),
     })
 
-    console.log(state.details.id)
-    
-
     if (formatForm) {
       questions.forEach((question, index) => {
         const formFields = JSON.parse(formatForm.get('fields') as string)
@@ -159,7 +167,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
             .filter(([key]) => key !== 'type')
             .map(([key, value]) => {
               if (/^files?$/.test(key)) {
-                const id = question.id
+                const id = duplicate ? uuidv4() : question.id
 
                 const getFiles = (value as File[]).flat()
 
@@ -170,7 +178,19 @@ const actions: ActionTree<CreateTestState, RootState> = {
                 return [key, getFiles.length]
               }
 
-              return [key, value]
+              let getValue = value
+
+              if (duplicate) {
+                if (typeof value === 'string') {
+                  getValue = uuidv4()
+                } else if (Array.isArray(value)) {
+                  value.forEach((item) => {
+                    item.id = uuidv4()
+                  })
+                }
+              }
+
+              return [key, getValue]
             })
         )
 
@@ -198,18 +218,68 @@ const actions: ActionTree<CreateTestState, RootState> = {
 
       app.$nextTick(() => {
         if (!error) {
-          this.$router.push(`/create-test/recruit/${state.details.id}`)
+          if (duplicate) {
+            this.$router.replace({
+              params: {
+                id: state.details.id,
+              },
+            })
+          } else {
+            this.$router.push(`/create-test/recruit/${state.details.id}`)
+          }
 
           commit('resetForm')
-        }
 
-        showToasts(app.$pToast, message)
+          showToasts(
+            app.$pToast,
+            duplicate
+              ? [
+                  {
+                    content: 'Test duplicated!',
+                    type: 'success',
+                  },
+                ]
+              : 'published' in state.details
+              ? []
+              : message
+          )
+        } else {
+          showToasts(app.$pToast, message)
+        }
       })
 
       return { data, error, message }
     } else {
       return { error: { message: { content: 'Client only!' } } }
     }
+  },
+
+  async duplicate({ commit, dispatch, state }) {
+    const { app } = this.$router
+
+    if (app.$route.name !== 'create-test-:id') {
+      app.$nuxt.error({
+        message: 'Cannot duplicate test on this route!',
+        statusCode: 403,
+      })
+    }
+
+    const newId = uuidv4()
+
+    commit('setId', newId)
+
+    await app.$nextTick()
+
+    commit('updateDetails', {
+      data: {
+        name: `${state.details.name} copy`,
+        id: newId,
+      },
+    })
+
+    await app.$nextTick()
+
+    await dispatch('submit', true)
   },
 
   async getCreateTest({ dispatch, commit, state }) {
@@ -234,7 +304,7 @@ const actions: ActionTree<CreateTestState, RootState> = {
           override: !!Object.keys(data.form || {}).length,
         })
 
-        if (data.details.published) {
+        if (data.details.participants) {
           commit('setShowWarning', true)
         } else {
           commit('setShowWarning', false)

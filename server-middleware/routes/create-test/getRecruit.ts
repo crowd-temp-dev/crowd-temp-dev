@@ -51,6 +51,11 @@ export default function (router: Router) {
               throw new Error('{403} You cannot access this test!')
             }
 
+            const participants = await TestAnswer.count({
+              where: { testId: id },
+              transaction,
+            })
+
             const responses = await TestAnswer.count({
               where: { done: true, testId: id },
               transaction,
@@ -65,7 +70,9 @@ export default function (router: Router) {
                       shareLink: testDetail.shareLink,
                       stopAcceptingResponse: testDetail.stopAcceptingResponse,
                       unlimitedInvites: testDetail.unlimitedInvites,
+                      participants,
                       responses,
+                      created: true,
                     }
                   : {}),
               },

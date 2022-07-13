@@ -62,7 +62,7 @@ export default defineComponent({
       'pointer-events-none': loading || readonly,
       'grayscale !opacity-50': disabled,
     }"
-    :connecteddisclosure="undefined"
+    :connected-disclosure="undefined"
     :destructive="destructive"
     :loading="false"
     v-on="$listeners"

@@ -71,7 +71,7 @@ export default defineComponent({
       >
         <Avatar
           :src="$user.avatar"
-          :name="$user.name"
+          :name="$user.name || ''"
           :initials="$user.initials"
           size="small"
         />

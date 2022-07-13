@@ -20,7 +20,10 @@ export const GetCreateTest: ServiceHandler<
   {
     form: QuestionModelValue
     details: {
+      name: string
       published: boolean
+      responses?: number
+      participants?: number
     }
   }
 > = async (axios, id) => {

@@ -264,7 +264,9 @@ export default defineComponent({
           full-width
           primary
           :disabled="
-            !dragTitles.length || $store.state['create-test'].submitting
+            !dragTitles.length ||
+            $store.state['create-test'].submitting ||
+            $createTestForm.warn
           "
           @click="nextStep"
         >

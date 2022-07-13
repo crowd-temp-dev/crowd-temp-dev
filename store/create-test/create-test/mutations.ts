@@ -6,7 +6,7 @@ import { getObjectPathValue } from '~/utils'
 
 const mutations: MutationTree<CreateTestState> = {
   setId(state, id: string | null) {
-    state.details.id = id    
+    state.details.id = id
   },
 
   setPublishing(state, val: boolean) {
@@ -20,7 +20,7 @@ const mutations: MutationTree<CreateTestState> = {
       override?: boolean
     }
   ) {
-    const id = state.details.id    
+    const id = state.details.id
 
     const newValue = {
       ...(payload.override ? {} : state.details),
@@ -30,7 +30,7 @@ const mutations: MutationTree<CreateTestState> = {
     state.details = {
       ...newValue,
       id,
-    }    
+    }
 
     state.publishing = false
 

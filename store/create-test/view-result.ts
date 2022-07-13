@@ -119,6 +119,8 @@ const actions: ActionTree<ViewResultState, RootState> = {
         data: {
           published: true,
           name: data.questions.testDetails.name,
+          responses: data.responses,
+          created: true,
         },
       })
 

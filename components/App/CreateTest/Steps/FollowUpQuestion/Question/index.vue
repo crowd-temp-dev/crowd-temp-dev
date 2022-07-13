@@ -89,7 +89,7 @@ export default defineComponent({
 
         const followUpQuestionIndex = question.followUpQuestions.findIndex(
           (x) => x.id === modelSync.value.id
-        )
+        ) + 1
 
         return (
           tooShort ||
