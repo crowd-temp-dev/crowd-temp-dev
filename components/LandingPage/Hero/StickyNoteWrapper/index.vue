@@ -21,7 +21,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="absolute w-full max-w-[calc(100%-82px)] mx-auto h-full inset-0 pointer-events-none"
+    class="absolute w-full max-w-[1230px] mx-auto h-full inset-0 pointer-events-none"
   >
     <StickyNote
       v-for="(note, i) in notes"

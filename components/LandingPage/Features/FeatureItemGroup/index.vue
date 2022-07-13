@@ -1,3 +1,27 @@
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import FeatureItem from '../FeatureItem/index.vue'
+import { FeatureTitle } from '~/types'
+
+export default defineComponent({
+  name: 'LandingPageFeatureItemGroup',
+  components: { FeatureItem },
+  setup() {
+    return {
+      items: [
+        'Simple survey',
+        'Card sorting',
+        'Design Survey',
+        'Five second test',
+        'Website evaluation',
+        'Prototype evaluation',
+        'Preference test',
+      ] as FeatureTitle[],
+    }
+  },
+})
+</script>
+
 <template>
   <ul
     class="md:h-[537px] md:w-[837.97px] mx-auto mt-24 md:mt-32 mb-36 md:mb-32 grid gap-y-10 md:flex md:flex-wrap justify-between px-8 md:px-4"
@@ -30,29 +54,3 @@
     />
   </ul>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import FeatureItem from '../FeatureItem/index.vue'
-import { FeatureTitle } from '~/types'
-
-export default defineComponent({
-  name: 'LandingPageFeatureItemGroup',
-  components: { FeatureItem },
-  setup() {
-    return {
-      items: [
-        'Simple survey',
-        'Card sorting',
-        'Design Survey',
-        'Five second test',
-        'Website evaluation',
-        'Prototype evaluation',
-        'Preference test',
-      ] as FeatureTitle[],
-    }
-  },
-})
-</script>
-
-<style scoped></style>

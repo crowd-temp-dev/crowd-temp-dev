@@ -5,6 +5,7 @@ import {
   onMounted,
   watch,
 } from '@vue/composition-api'
+import UseCasesFooter from '../UseCases/UseCasesFooter/index.vue'
 import Hero from '~/components/LandingPage/Hero/index.vue'
 import Features from '~/components/LandingPage/Features/index.vue'
 import ExtraFeatures from '~/components/LandingPage/ExtraFeatures/index.vue'
@@ -16,7 +17,15 @@ import { scrollToLandingPageHash } from '~/utils'
 
 export default defineComponent({
   name: 'LandingPageLayoutMarkup',
-  components: { Hero, Features, ExtraFeatures, Feedback, CTA, Footer },
+  components: {
+    Hero,
+    Features,
+    ExtraFeatures,
+    Feedback,
+    CTA,
+    Footer,
+    UseCasesFooter,
+  },
   setup(_, { root }) {
     const hash = computed(() => root.$route.hash)
 
@@ -37,9 +46,11 @@ export default defineComponent({
 <template>
   <div>
     <main
-      class="grid items-center justify-center max-w-[1230px] mx-auto isolate min-h-screen h-fit mt-24 xs:mt-44 md:mt-60 grid-cols-1 px-8 md:px-0"
+      class="grid items-center justify-center isolate min-h-screen h-fit mt-24 xs:mt-44 md:mt-60 grid-cols-1 px-8 md:px-0"
     >
       <Hero />
+
+      <UseCasesFooter />
 
       <Features />
 

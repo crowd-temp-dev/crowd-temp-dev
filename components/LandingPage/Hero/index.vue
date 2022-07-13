@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import Ipad from './Ipad/index.vue'
 import StickyNoteWrapper from './StickyNoteWrapper/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import TextField from '~/components/Base/TextField/index.vue'
@@ -8,20 +7,14 @@ import VHTML from '~/components/Base/VHTML/index.vue'
 
 export default defineComponent({
   name: 'LandingPageHero',
-  components: { Button, Ipad, StickyNoteWrapper, TextField, VHTML },
+  components: { Button, StickyNoteWrapper, TextField, VHTML },
   setup() {
-    const emphasis = (text: string) =>
+    const em = (text: string) =>
       `<em class='not-italic text-base-primary'>${text}</em>`
 
-    const title = [
-      'Build ',
-      emphasis('better'),
-      ' products and ',
-      emphasis('grow'),
-      ' customer ',
-      emphasis('loyalty'),
-      ' with Crowd',
-    ].join('')
+    const title = `Build ${em('better')} products and ${em(
+      'grow'
+    )} customer ${em('loyalty')} with Crowd`
 
     return { title }
   },
@@ -52,8 +45,6 @@ export default defineComponent({
         Try our beta for free
       </Button>
     </div>
-
-    <Ipad />
 
     <StickyNoteWrapper />
   </section>

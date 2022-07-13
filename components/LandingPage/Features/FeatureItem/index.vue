@@ -1,24 +1,3 @@
-<template>
-  <li class="FeatureItem">
-    <div
-      class="color-frame"
-      :style="{
-        '--bg': content.color,
-      }"
-    />
-
-    <div>
-      <h4 class="text-heading font-semibold">
-        {{ title }}
-      </h4>
-
-      <h5 class="text-body mt-8">
-        {{ content.subtitle }}
-      </h5>
-    </div>
-  </li>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
 import { FeatureTitle } from '~/types'
@@ -42,6 +21,27 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <li class="FeatureItem">
+    <div
+      class="color-frame"
+      :style="{
+        '--bg': content.color,
+      }"
+    />
+
+    <div>
+      <h4 class="text-heading font-semibold">
+        {{ title }}
+      </h4>
+
+      <h5 class="text-body mt-8">
+        {{ content.subtitle }}
+      </h5>
+    </div>
+  </li>
+</template>
 
 <style scoped lang="postcss">
 .FeatureItem {
