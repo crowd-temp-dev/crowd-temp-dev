@@ -15,10 +15,10 @@ export default defineComponent({
 
 <template>
   <div>
-    <aside class="w-240 sticky top-96 xl:top-108">
+    <aside class="w-240" :class="{ 'sticky top-96 xl:top-108': false }">
       <p class="mb-8 font-medium">Your notes</p>
 
-      <ul class="grid mb-24 gap-y-8">
+      <ul v-if="false" class="grid mb-24 gap-y-8">
         <li
           v-for="i in 2"
           :key="i"
@@ -33,6 +33,11 @@ export default defineComponent({
           <Button plain> View </Button>
         </li>
       </ul>
+
+      <p v-else class="text-text-subdued flex items-center space-x-4">
+        <PIcon source="AlertMinor" class="shrink-0 fill-icon-default" />
+        <strong class="grow"> No note yet </strong>
+      </p>
 
       <!-- <DialogButton
         icon="CirclePlusMinor"
