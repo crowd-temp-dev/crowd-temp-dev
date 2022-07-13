@@ -45,6 +45,7 @@ export default defineComponent({
       {
         title: 'Login',
         to: '/auth/login',
+        onClick: () => {},
       },
       {
         title: 'Try our beta for free',
