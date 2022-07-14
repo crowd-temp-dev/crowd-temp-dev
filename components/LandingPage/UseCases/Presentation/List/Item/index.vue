@@ -95,7 +95,7 @@ export default defineComponent({
 }
 
 .progress-anim::after {
-  animation: progress-anim 10s cubic-bezier(0.645, 0.045, 0.355, 1);
+  animation: progress-anim 7.5s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 @media (hover: hover) {
