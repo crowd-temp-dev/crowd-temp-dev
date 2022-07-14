@@ -142,7 +142,8 @@ export default defineComponent({
             return h(
               'div',
               {
-                staticClass: 'shadow-3 rounded-lg bg-surface-default',
+                staticClass:
+                  'shadow-3 rounded-lg bg-surface-default fade-enter:scale-[0.95] fade-enter:opacity-0  transform-gpu transition-[transform,opacity] fade-leave-to:scale-[0.95] fade-leave-to:opacity-0 origin-[top_right]',
               },
               [
                 slots?.append?.(slotProps),

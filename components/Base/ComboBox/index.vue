@@ -83,6 +83,10 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    contentClass: {
+      type: String,
+      default: undefined,
+    },
   },
   emits: ['update:modelValue', 'active:true', 'active:false'],
   setup(_props, { emit, root: { $store } }) {
@@ -521,7 +525,7 @@ export default defineComponent({
               maxWidth: maxWidth,
             }"
             class="combobox pointer-events-auto"
-            :class="{ 'outline-none': trapTabFocus }"
+            :class="[{ 'outline-none': trapTabFocus }, contentClass]"
             @mousedown="focusTriggerInput"
             @mouseleave="clearFocus"
             v-on="

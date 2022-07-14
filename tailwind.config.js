@@ -39,6 +39,10 @@ module.exports = {
       addVariant('mac-os-self', [':root[data-os="mac"] &'])
 
       addVariant('pseudo-focus', ['&[data-pseudo-focus=true]'])
+      addVariant('fade-enter', ['.fade-transition-enter &'])
+      addVariant('fade-enter-active', ['.fade-transition-enter-active &'])
+      addVariant('fade-leave-to', ['.fade-transition-leave-to &'])
+      addVariant('fade-leave-active', ['.fade-transition-leave-active &'])
     }),
     require('@tailwindcss/aspect-ratio'),
   ],
