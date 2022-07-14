@@ -53,7 +53,7 @@ export default defineComponent({
 
     <ul class="flex space-x-30 w-fit mx-auto">
       <li v-for="(item, i) in icons" :key="i" class="h-50 w-fit">
-        <Tooltip v-slot="{ events }" :label="item.label">
+        <Tooltip v-slot="{ events }" :label="item.label" open-delay="500">
           <span v-on="events">
             <Img
               :src="`/static/png/icon/${item.title}`"
