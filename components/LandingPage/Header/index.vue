@@ -5,7 +5,12 @@ import HeaderLogo from '~/components/Base/HeaderLogo/index.vue'
 import { scrollToLandingPageHash, sleep } from '~/utils'
 
 interface Link {
-  title: 'Features' | 'Pricing' | 'Contact' | 'Login' | 'Try our beta for free'
+  title:
+    | 'Use cases'
+    | 'Features'
+    | 'Pricing'
+    | 'Contact'
+    | 'Try our beta for free'
   button?: boolean
   to: string
   onClick?: () => void
@@ -15,8 +20,9 @@ export default defineComponent({
   name: 'LandingPageHeader',
   components: { Button, HeaderLogo },
   setup(_, { root }) {
+    const useCases = '/#use-cases'
     const featuresTo = '/#features'
-    // const pricingTo = '/#pricing'
+    const pricingTo = '/#pricing'
     const contactTo = '/#contact'
 
     const scrollToHash = (hash: string) => {
@@ -28,24 +34,24 @@ export default defineComponent({
 
     const links = ref<Link[]>([
       {
+        title: 'Use cases',
+        to: useCases,
+        onClick: () => scrollToHash(useCases),
+      },
+      {
         title: 'Features',
         to: featuresTo,
         onClick: () => scrollToHash(featuresTo),
       },
-      // {
-      //   title: 'Pricing',
-      //   to: pricingTo,
-      //   onClick: () => scrollToHash(pricingTo),
-      // },
+      {
+        title: 'Pricing',
+        to: pricingTo,
+        onClick: () => scrollToHash(pricingTo),
+      },
       {
         title: 'Contact',
         to: contactTo,
         onClick: () => scrollToHash(contactTo),
-      },
-      {
-        title: 'Login',
-        to: '/auth/login',
-        onClick: () => {},
       },
       {
         title: 'Try our beta for free',

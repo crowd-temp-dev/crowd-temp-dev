@@ -21,6 +21,7 @@ export default defineComponent({
 
 <template>
   <section
+    id="pricing"
     class="mb-160 bg-[#1A1C1D] rounded-lg p-40 grid justify-center max-w-[914px] mx-auto text-center"
   >
     <h2
@@ -35,7 +36,12 @@ export default defineComponent({
       class="font-sf-pro-display text-display-small mb-32 text-surface-default"
     />
 
-    <Button primary size="large" class="!border-none mx-auto w-fit" to="/auth/sign-up">
+    <Button
+      primary
+      size="large"
+      class="!border-none mx-auto w-fit"
+      to="/auth/sign-up"
+    >
       Try our beta for free
     </Button>
   </section>

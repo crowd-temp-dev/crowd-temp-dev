@@ -671,7 +671,7 @@ export const scrollToLandingPageHash = (
   routeHash: string,
   smooth?: boolean
 ) => {
-  const validHash = ['features', 'pricing', 'contact']
+  const validHash = ['use-cases', 'features', 'pricing', 'contact']
 
   const hashValue = routeHash.replace(/^#/, '').trim()
 

@@ -20,7 +20,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="mb-162">
+  <section id="use-cases" class="mb-162">
     <h2 class="sr-only">Use cases</h2>
 
     <div class="flex space-x-30">
