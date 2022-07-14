@@ -63,10 +63,11 @@ export default defineComponent({
 <template>
   <Intersection v-slot="{ isIntersecting }">
     <li
-      class="lg:w-350 w-full h-114 rounded-lg p-20 grid gap-y-10 transition-all relative isolate fill-after after:z-1 after:!h-4 after:!top-auto after:bottom-0 after:bg-action-primary-default after:!rounded-l-none overflow-hidden after:translate-x-[-100%] active:opacity-80 transform-gpu active:scale-[0.995]"
+      class="lg:w-350 w-full h-114 rounded-lg p-20 grid gap-y-10 transition-all relative isolate overflow-hidden active:opacity-80 transform-gpu active:scale-[0.995]"
       :class="{
         'bg-surface-selected-default': active,
-        'progress-anim': showProgress && active,
+        'progress-anim fill-after after:z-1 after:!h-4 after:!top-auto after:bottom-0 after:bg-action-primary-default after:!rounded-l-none after:translate-x-[-100%]':
+          showProgress && active,
         paused: paused || !isIntersecting,
       }"
       @click="onClick"
