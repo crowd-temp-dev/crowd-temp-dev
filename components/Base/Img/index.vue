@@ -101,7 +101,9 @@ export default defineComponent({
           class="fill-icon-default w-[1.25em] h-[1.25em] group-hover:opacity-0"
         />
 
-        <div class="absolute inset-0 z-1 hidden group-hover:flex justify-center items-center">
+        <div
+          class="absolute inset-0 z-1 hidden group-hover:flex justify-center items-center"
+        >
           <Tooltip
             v-slot="{ events }"
             label="Reload"
@@ -129,7 +131,7 @@ export default defineComponent({
     :fetchpriority="fetchpriority"
     v-bind="$attrs"
     v-on="$listeners"
-    @load.native="$emit('load')"
-    @error.native="$emit('error')"
+    @load.native="$emit('load:success')"
+    @error.native="$emit('load:error')"
   />
 </template>

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
 import ViewBox from './ViewBox/index.vue'
 import List from './List/index.vue'
 
@@ -18,8 +18,10 @@ export default defineComponent({
       get() {
         return currentItem.value
       },
-      set(val: number) {
+      async set(val: number) {
         imageLoaded.value = false
+
+        await nextTick()
 
         currentItem.value = val
       },
@@ -40,6 +42,7 @@ export default defineComponent({
       <ViewBox
         :current-item="getCurrentItem"
         @image-hovered="(evt) => (imageHovered = evt)"
+        @image-loaded="imageLoaded = true"
       />
 
       <List
