@@ -2,12 +2,11 @@
 import { defineComponent } from '@vue/composition-api'
 import StickyNoteWrapper from './StickyNoteWrapper/index.vue'
 import Button from '~/components/Base/Button/index.vue'
-import TextField from '~/components/Base/TextField/index.vue'
 import VHTML from '~/components/Base/VHTML/index.vue'
 
 export default defineComponent({
   name: 'LandingPageHero',
-  components: { Button, StickyNoteWrapper, TextField, VHTML },
+  components: { Button, StickyNoteWrapper, VHTML },
   setup() {
     const em = (text: string) =>
       `<em class='not-italic text-base-primary'>${text}</em>`
@@ -22,8 +21,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="text-center relative pt-108 w-full">
-    <div class="landing-page-title md:w-[775px] mb-24 mx-auto text-center">
+  <section class="text-center relative pt-108 w-full mb-110">
+    <div class="landing-page-title !leading-[54px] !text-[42px] md:w-[775px] mb-24 mx-auto text-center">
       <VHTML tag="h2" :text="title" />
     </div>
 
@@ -32,19 +31,9 @@ export default defineComponent({
       loyalty by collecting useful insights anytime, anywhere.
     </h3>
 
-    <div
-      class="flex justify-center space-y-12 md:space-y-0 md:space-x-12 md:grid-cols-2 mb-32"
-    >
-      <TextField
-        class="lg:min-w-[288px] min-w-full min-h-[48px]"
-        placeholder="Enter your email address"
-        height="48px"
-      />
-
-      <Button primary size="large" to="/auth/sign-up">
-        Try our beta for free
-      </Button>
-    </div>
+    <Button primary size="large" to="/auth/sign-up">
+      Try our beta for free
+    </Button>
 
     <StickyNoteWrapper />
   </section>

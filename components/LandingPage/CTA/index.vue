@@ -9,19 +9,15 @@
       class="w-[228.37px] md:w-399 h-[124.48px] md:h-[224.48px]"
     />
 
-    <h2 class="landing-page-title px-8 mt-24 mb-16 md:mb-24">
+    <h2 class="landing-page-title px-8 mt-24 mb-8">
       Start building great products
     </h2>
 
-    <div
-      class="flex flex-col md:flex-row space-y-22 md:space-y-0 md:space-x-22"
-    >
-      <Button to="/auth/sign-up" primary size="large">
-        Get started for free
-      </Button>
+    <p class="mb-25 font-sf-pro-display text-display-small">
+      Feel free to reach out to us if you need any support or have any questions
+    </p>
 
-      <Button to="#" size="large"> Checkout our FAQ </Button>
-    </div>
+    <Button to="#" size="large"> Contact our support team </Button>
   </section>
 </template>
 

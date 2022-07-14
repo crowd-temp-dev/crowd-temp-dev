@@ -1,19 +1,25 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import Slider from './Slider/index.vue'
+import Dropdown from './Dropdown/index.vue'
 import Button from '~/components/Base/Button/index.vue'
-import Dropdown from '~/components/Base/Dropdown/index.vue'
-import Spinner from '~/components/Base/Spinner/index.vue'
 import { UserData } from '~/server-middleware/types'
+
+import type { OnboardingVideoState } from '~/store/onboarding-videos'
 
 export default defineComponent({
   name: 'AppOnboard',
-  components: { Slider, Button, Dropdown, Spinner },
-  setup(_, { root: { $user } }) {
-
+  components: { Slider, Button, Dropdown },
+  setup(_, { root: { $user, $store } }) {
     const onboardStep = ref(0)
 
     const dismissing = ref(false)
+
+    const state = computed(() => {
+      return $store.state['onboarding-videos'] as OnboardingVideoState
+    })
+
+    const rating = computed(() => state.value.items)
 
     const increaseStep = () => {
       onboardStep.value = Math.min(onboardStep.value + 1, 4)
@@ -27,13 +33,37 @@ export default defineComponent({
       dismissing.value = true
 
       await $user.update({
-        showDashboardGuide: false
+        showDashboardGuide: false,
       } as UserData)
 
       dismissing.value = true
     }
 
-    return { onboardStep, increaseStep, decreaseStep, dismissGuide, dismissing }
+    const getRating = async () => {
+      await $store.dispatch('onboarding-videos/getItems')
+    }
+
+    getRating()
+
+    const rate = async (
+      key: 'main' | `video${'1' | '2' | '3' | '4'}`,
+      value: boolean
+    ) => {
+      await $store.dispatch('onboarding-videos/rateItem', {
+        [key]: value,
+      })
+    }
+
+    return {
+      onboardStep,
+      dismissing,
+      rating,
+      increaseStep,
+      decreaseStep,
+      dismissGuide,
+      getRating,
+      rate,
+    }
   },
 })
 </script>
@@ -48,66 +78,11 @@ export default defineComponent({
     >
       <span class="flex-grow"> Welcome to crowd </span>
 
-      <Dropdown :offset="[4, -2]">
-        <template #default="{ events, active }">
-          <button
-            tabindex="0"
-            type="button"
-            class="outline-none ring-offset-2 focus:ring-2 focus:ring-action-primary-default rounded-full transition-colors duration-[250ms]"
-            :class="{
-              'ring-2 ring-action-primary-default bg-background-selected':
-                active,
-            }"
-            v-on="events"
-          >
-            <div class="relative flex-centered">
-              <PIcon
-                source="HorizontalDotsMinor"
-                class="shrink-0 text-icon-default fill-icon"
-                :class="{ invisible: dismissing }"
-              />
-
-              <span
-                class="absolute inset-0 !animate-spin text-icon-default flex-centered"
-              >
-                <Spinner v-if="dismissing" />
-              </span>
-            </div>
-          </button>
-        </template>
-
-        <template #content="{ events }">
-          <menu class="py-8">
-            <div class="dropdown-item">
-              Was this helpful?
-
-              <div class="flex-centered ml-16">
-                <span
-                  v-for="i in 2"
-                  :key="i"
-                  role="menuitem"
-                  class="pseudo-focus flex-centered h-40 w-40 rounded-full pseudo-focus:bg-action-primary-default"
-                  v-on="events"
-                >
-                  <PIcon
-                    :source="i === 1 ? 'ThumbsUpMinor' : 'ThumbsDownMinor'"
-                    class="fill-icon-default"
-                  />
-                </span>
-              </div>
-            </div>
-
-            <div
-              role="menuitem"
-              class="dropdown-item pseudo-focus"
-              v-on="events"
-              @click="dismissGuide"
-            >
-              Dismiss welcome guide
-            </div>
-          </menu>
-        </template>
-      </Dropdown>
+      <Dropdown
+        path="main"
+        dismiss-title="Dismiss welcome guide"
+        @on-dismiss="dismissGuide"
+      />
     </h3>
 
     <p class="my-20 px-20">

@@ -37,6 +37,8 @@ module.exports = {
       addVariant('lock-html-scroll-self', [':root[data-overlay-active]&'])
       addVariant('windows-os-self', [':root[data-os="windows"]&'])
       addVariant('mac-os-self', [':root[data-os="mac"] &'])
+
+      addVariant('pseudo-focus', ['&[data-pseudo-focus=true]'])
     }),
     require('@tailwindcss/aspect-ratio'),
   ],

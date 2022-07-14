@@ -36,7 +36,7 @@ export default defineComponent({
 
 <style lang="postcss">
 .landing-page-title {
-  @apply font-semibold text-[24px] md:text-[42px] leading-[28px] md:leading-[52.5px] text-center font-sf-pro-display;
+  @apply font-semibold text-[24px] md:text-[32px] leading-[28px] md:leading-[52.5px] text-center font-sf-pro-display;
 }
 
 .landing-page-subtitle {

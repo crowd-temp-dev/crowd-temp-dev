@@ -5,6 +5,7 @@ import createTest from './create-test/create-test'
 import answerTest from './answer-test'
 import listTest from './list-test'
 import privacyAndPolicies from './privacy-and-policies'
+import onboardingVideos from './onboarding-videos'
 
 export interface RootState {
   app: ReturnType<typeof app['state']>
@@ -25,6 +26,7 @@ export default {
     'answer-test': answerTest,
     'list-test': listTest,
     'privacy-and-policies': privacyAndPolicies,
+    'onboarding-videos': onboardingVideos,
   },
   strict: false,
 }

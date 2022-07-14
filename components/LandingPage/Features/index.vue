@@ -1,18 +1,20 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import FeatureGroup from './FeatureItemGroup/index.vue'
-import Button from '~/components/Base/Button/index.vue'
 
 export default defineComponent({
   name: 'LandingPageFeatures',
-  components: { Button, FeatureGroup },
+  components: { FeatureGroup },
   setup() {},
 })
 </script>
 
 <template>
-  <section class="mt-100 grid justify-items-center">
-    <h2 id="features" class="mx-auto max-w-[750px] landing-page-title mb-24 !text-[32px]">
+  <section class="mt-100 grid justify-items-center mb-160">
+    <h2
+      id="features"
+      class="mx-auto max-w-[750px] landing-page-title mb-24 !text-[32px]"
+    >
       Variety of testing methods to choose from
     </h2>
 
@@ -22,7 +24,5 @@ export default defineComponent({
     </h3>
 
     <FeatureGroup />
-
-    <Button primary size="large" to="#"> Start with a test now </Button>
   </section>
 </template>

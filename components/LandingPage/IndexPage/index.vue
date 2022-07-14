@@ -5,11 +5,14 @@ import {
   onMounted,
   watch,
 } from '@vue/composition-api'
-import UseCasesFooter from '../UseCases/UseCasesFooter/index.vue'
+import UseCasesFooter from '../UseCases/Footer/index.vue'
+import Presentation from '../UseCases/Presentation/index.vue'
+import FavoriteTools from '../UseCases/FavoriteTools/index.vue'
+import TempPricing from '../TempPricing/index.vue'
+import FeaturesExtension from '../Features/FeaturesExtension/index.vue'
 import Hero from '~/components/LandingPage/Hero/index.vue'
 import Features from '~/components/LandingPage/Features/index.vue'
-import ExtraFeatures from '~/components/LandingPage/ExtraFeatures/index.vue'
-import Feedback from '~/components/LandingPage/Feedback/index.vue'
+// import Feedback from '~/components/LandingPage/Feedback/index.vue'
 // import Pricing from '~/components/LandingPage/Pricing/index.vue'
 import CTA from '~/components/LandingPage/CTA/index.vue'
 import Footer from '~/components/LandingPage/Footer/index.vue'
@@ -20,11 +23,14 @@ export default defineComponent({
   components: {
     Hero,
     Features,
-    ExtraFeatures,
-    Feedback,
+    // Feedback,
     CTA,
     Footer,
     UseCasesFooter,
+    Presentation,
+    FavoriteTools,
+    FeaturesExtension,
+    TempPricing,
   },
   setup(_, { root }) {
     const hash = computed(() => root.$route.hash)
@@ -50,13 +56,21 @@ export default defineComponent({
     >
       <Hero />
 
+      <div class="max-w-[1230px] mx-auto w-full">
+        <Presentation />
+
+        <FavoriteTools />
+      </div>
+
       <UseCasesFooter />
 
       <Features />
 
-      <ExtraFeatures />
+      <FeaturesExtension class="max-w-[1230px] mx-auto" />
 
-      <Feedback />
+      <TempPricing />
+
+      <!-- <Feedback /> -->
 
       <!-- <Pricing /> -->
 

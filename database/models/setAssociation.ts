@@ -17,6 +17,7 @@ import { FollowUpQuestion } from './CreateTests/FollowUpQuestions'
 import { TemporaryEmail } from './User/TemporaryEmail'
 import { File } from './File/File'
 import { TestAnswer } from './AnswerTest/Answers'
+import { OnboardingVideo } from './OnboardingVideo'
 
 type Table = ModelStatic<Model>
 
@@ -44,6 +45,12 @@ export default function () {
 
     // a user has 1 slot for TemporaryEmail
     User.hasOne(TemporaryEmail, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+    })
+
+    // a user has 1 slot for OnboardingVideo
+    User.hasOne(OnboardingVideo, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
     })
@@ -102,11 +109,11 @@ export default function () {
     })
 
     TestDetail.hasMany(File, {
-      foreignKey:"createdFor"
+      foreignKey: 'createdFor',
     })
 
     // featureWith1File has 1 file
-    // featureWith1File.forEach((Feature: Table) => {      
+    // featureWith1File.forEach((Feature: Table) => {
     //   Feature.hasOne(File, {
     //     foreignKey: 'createdFor',
     //     onDelete: 'CASCADE',
@@ -115,16 +122,16 @@ export default function () {
 
     // featuresWithMultipleFiles has multiple files
     // featuresWithMultipleFiles.forEach((Feature: Table) => {
-      // Feature.hasMany(File, {
-      //   foreignKey: 'createdFor',
-      //   onDelete: 'CASCADE',
-      //   as: Feature.tableName
-      // })
+    // Feature.hasMany(File, {
+    //   foreignKey: 'createdFor',
+    //   onDelete: 'CASCADE',
+    //   as: Feature.tableName
+    // })
 
-      // File.hasMany(Feature, {
-      //   foreignKey: 'id',
-      //   onDelete: 'CASCADE',
-      // })
+    // File.hasMany(Feature, {
+    //   foreignKey: 'id',
+    //   onDelete: 'CASCADE',
+    // })
     // })
 
     // each test Feature here has many FollowUpQuestion

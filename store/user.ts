@@ -28,6 +28,7 @@ export interface UserInfo {
   name?: string
   email: string | null
   provider: User['provider'] | null
+  showDashboardGuide?: boolean
 }
 
 export interface UserState {
