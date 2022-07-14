@@ -14,6 +14,8 @@ export default defineComponent({
 
     const imageLoaded = ref(false)
 
+    const imageHovered = ref(false)
+
     const getCurrentItem = computed({
       get() {
         return currentItem.value
@@ -26,8 +28,6 @@ export default defineComponent({
         currentItem.value = val
       },
     })
-
-    const imageHovered = ref(false)
 
     return { currentItem, imageHovered, getCurrentItem, imageLoaded }
   },

@@ -1,6 +1,7 @@
 <script lang="ts">
-import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import Item from './Item/index.vue'
+import { oneFrame, sleep } from '~/utils'
 
 interface ItemType {
   title: string
@@ -67,7 +68,7 @@ export default defineComponent({
 
         active.value += 1
 
-        await nextTick()
+        await sleep(oneFrame)
 
         if (active.value > items.length - 1) {
           active.value = 0
