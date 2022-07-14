@@ -11,6 +11,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['image-hovered', 'image-loaded'],
 })
 </script>
 
@@ -45,6 +46,7 @@ export default defineComponent({
             <Img
               :src="`static/png/landing-page/use-cases/presentation/view/home`"
               :alt="`Home view`"
+              @load:success="$emit('image-loaded')"
             />
           </div>
         </FadeTransition>
