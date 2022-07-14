@@ -61,7 +61,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <Intersection v-slot="{ isIntersecting }">
+  <Intersection v-slot="{ isIntersecting }" :config="{ rootMargin: '-32px' }">
     <li
       class="lg:w-350 w-full h-114 rounded-lg p-20 grid gap-y-10 transition-all relative isolate overflow-hidden active:opacity-80 transform-gpu active:scale-[0.995]"
       :class="{
