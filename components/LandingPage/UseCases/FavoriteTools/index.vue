@@ -1,13 +1,39 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
+import Tooltip from '~/components/Base/Tooltip/index.vue'
 
-type Icon = 'figma' | 'in-vision' | 'adobe' | 'sketch' | 'marvel'
+type Icon = {
+  title: 'figma' | 'in-vision' | 'adobe' | 'sketch' | 'marvel'
+  label: 'Figma' | 'InVision' | 'Adobe' | 'Sketch' | 'Marvel'
+}
 
 export default defineComponent({
   name: 'LandinPageUseCasesFavoriteTools',
-  setup() {
-    const icons: Icon[] = ['figma', 'adobe', 'in-vision', 'sketch', 'marvel']
+  components: { Tooltip },
 
+  setup() {
+    const icons: Icon[] = [
+      {
+        title: 'figma',
+        label: 'Figma',
+      },
+      {
+        title: 'adobe',
+        label: 'Adobe',
+      },
+      {
+        title: 'in-vision',
+        label: 'InVision',
+      },
+      {
+        title: 'sketch',
+        label: 'Sketch',
+      },
+      {
+        title: 'marvel',
+        label: 'Marvel',
+      },
+    ]
     return { icons }
   },
 })
@@ -26,8 +52,15 @@ export default defineComponent({
     </p>
 
     <ul class="flex space-x-30 w-fit mx-auto">
-      <li v-for="icon in icons" :key="icon" class="h-50 w-fit">
-        <Img :src="`/static/png/icon/${icon}`" :alt="`${icon} icon`" />
+      <li v-for="(item, i) in icons" :key="i" class="h-50 w-fit">
+        <Tooltip v-slot="{ events }" :label="item.label">
+          <span v-on="events">
+            <Img
+              :src="`/static/png/icon/${item.title}`"
+              :alt="`${item.title} icon`"
+            />
+          </span>
+        </Tooltip>
       </li>
     </ul>
   </section>
