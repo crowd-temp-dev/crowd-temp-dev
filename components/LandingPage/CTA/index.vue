@@ -1,6 +1,6 @@
 <template>
   <section class="w-750 mx-auto grid justify-items-center mb-100">
-    <span id="contact" class="sr-only">Contact us</span>
+    <h2 id="contact" class="sr-only">Contact us</h2>
     <Img
       src="static/png/landing-page/cta/poster-vector"
       alt="Vector image of a person sitting and drinking a hot drink"
@@ -9,9 +9,9 @@
       class="w-[228.37px] md:w-399 h-[124.48px] md:h-[224.48px]"
     />
 
-    <h2 class="landing-page-title px-8 mt-24 mb-8">
+    <h3 class="landing-page-title px-8 mt-24 mb-8">
       Start building great products
-    </h2>
+    </h3>
 
     <p class="mb-25 font-sf-pro-display text-display-small">
       Feel free to reach out to us if you need any support or have any questions

@@ -36,9 +36,9 @@ export default defineComponent({
         {{ title }}
       </h4>
 
-      <h5 class="text-body mt-8">
+      <p class="text-body mt-8">
         {{ content.subtitle }}
-      </h5>
+      </p>
     </div>
   </li>
 </template>

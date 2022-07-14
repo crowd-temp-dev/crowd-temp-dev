@@ -66,9 +66,9 @@ export default defineComponent({
           {{ item.title }}
         </h4>
 
-        <h5>
+        <p>
           {{ item.subtitle }}
-        </h5>
+        </p>
       </li>
     </ul>
   </section>

@@ -26,10 +26,10 @@ export default defineComponent({
       <VHTML tag="h2" :text="title" />
     </div>
 
-    <h3 class="landing-page-subtitle mb-34 mx-14 md:mx-auto !max-w-[620px]">
+    <p class="landing-page-subtitle mb-34 mx-14 md:mx-auto !max-w-[620px]">
       Make informed decisions, drive product growth and increase customer
       loyalty by collecting useful insights anytime, anywhere.
-    </h3>
+    </p>
 
     <Button primary size="large" to="/auth/sign-up">
       Try our beta for free
