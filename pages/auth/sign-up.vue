@@ -128,7 +128,9 @@ export default defineComponent({
       <template #header>
         <p>
           Already have an account?
-          <NuxtLink to="login" class="text-action-primary-default"
+          <NuxtLink
+            to="login"
+            class="text-action-primary-default transition-opacity active:opacity-70"
             >Login</NuxtLink
           >
         </p>

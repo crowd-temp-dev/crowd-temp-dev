@@ -101,7 +101,9 @@ export default defineComponent({
       <template #header>
         <p>
           Don't have an account?
-          <NuxtLink to="sign-up" class="text-action-primary-default"
+          <NuxtLink
+            to="sign-up"
+            class="text-action-primary-default transition-opacity active:opacity-70"
             >Signup</NuxtLink
           >
         </p>
@@ -152,7 +154,7 @@ export default defineComponent({
 
         <NuxtLink
           v-if="!$breakpoint.isMobile"
-          class="text-action-primary-default font-normal"
+          class="text-action-primary-default font-normal transition-opacity active:opacity-70"
           to="/auth/forgot-password"
           >Forgot password?</NuxtLink
         >
@@ -182,7 +184,7 @@ export default defineComponent({
 
         <NuxtLink
           v-if="$breakpoint.isMobile"
-          class="text-action-primary-default font-normal"
+          class="text-action-primary-default font-normal transition-opacity active:opacity-70"
           to="#"
           >Forgot password?</NuxtLink
         >
