@@ -353,7 +353,7 @@ export default defineComponent({
       enter-delay="64ms"
       enter-duration="1ms"
       restore-focus
-      leave-duration="1ms"
+      leave-duration="100ms"
       :loop-tabbing="false"
       :disabled="disabled"
       :offset="[0, 5]"
@@ -426,7 +426,7 @@ export default defineComponent({
       </template>
 
       <template #default>
-        <ul
+        <menu
           ref="contentRef"
           :data-value="modelSync"
           class="p-4 shadow-3 rounded-lg bg-surface-default overflow-y-auto"
@@ -468,7 +468,7 @@ export default defineComponent({
               {{ option.title }}
             </span>
           </li>
-        </ul>
+        </menu>
       </template>
     </ComboBox>
   </div>

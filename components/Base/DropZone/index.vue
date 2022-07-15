@@ -112,10 +112,20 @@ export default defineComponent({
           if (file.size >= minSize && file.size <= maxSize) {
             files.push(file)
           } else {
+            const small = file.size < minSize 
+
             root.$pToast.open({
               error: true,
-              message: `File size must be between ${_props.minSize} and ${_props.maxSize}`,
+              message: `File too ${small ? 'small' : 'large'}`,
               duration: 4000,
+            })
+
+            sleep(1000).then(() => {
+              root.$pToast.open({
+                error: true,
+                message: `File size must be between ${_props.minSize} and ${_props.maxSize}`,
+                duration: 4000,
+              })
             })
           }
         }

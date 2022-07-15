@@ -33,9 +33,9 @@ export default function (router: Router) {
             })
 
             if (file) {
-              await cloudinary.api.delete_resources([user.avatar])
-
               await file.destroy({ transaction })
+              
+              cloudinary.api.delete_resources([user.avatar])
             }
           }
 

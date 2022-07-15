@@ -195,6 +195,8 @@ export default defineComponent({
                       plain
                       accept="image/*"
                       class="sr-only"
+                      max-size="2mb"
+                      min-size="100kb"
                       @on-change="fileUploaded"
                     />
                     <PIcon

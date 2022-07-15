@@ -22,7 +22,9 @@ export default defineComponent({
 
 <template>
   <section class="text-center relative pt-108 w-full mb-110">
-    <div class="landing-page-title !leading-[54px] !text-[42px] md:w-[775px] mb-24 mx-auto text-center">
+    <div
+      class="landing-page-title !leading-[54px] !text-[42px] md:w-[775px] mb-24 mx-auto text-center"
+    >
       <VHTML tag="h2" :text="title" />
     </div>
 

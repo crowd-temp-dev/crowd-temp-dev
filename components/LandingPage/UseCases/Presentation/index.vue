@@ -38,7 +38,7 @@ export default defineComponent({
   <section id="use-cases" class="mb-162">
     <h2 class="sr-only">Use cases</h2>
 
-    <div class="flex space-x-30">
+    <div class="flex space-x-30 mx-auto w-full justify-between">
       <ViewBox
         :current-item="getCurrentItem"
         @image-hovered="(evt) => (imageHovered = evt)"

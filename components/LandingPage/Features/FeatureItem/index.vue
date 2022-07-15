@@ -23,7 +23,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <li class="FeatureItem">
+  <li class="FeatureItem" v-bind="$attrs">
     <div
       class="color-frame"
       :style="{

@@ -69,6 +69,8 @@ export default defineComponent({
             hide-icon
             disable-preview
             accept="image/*"
+            max-size="2mb"
+            min-size="100kb"
             outline
             class="mt-24"
             @on-change="fileUploaded"

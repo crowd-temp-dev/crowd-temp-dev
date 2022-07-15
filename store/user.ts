@@ -15,7 +15,7 @@ import {
 import { showToasts } from '~/utils/showToast'
 import { LoginForm } from '~/server-middleware/routes/user/login'
 import { ApiResponse } from '~/types'
-import { formBody, sleep } from '~/utils'
+import { formBody, nextFrame, sleep } from '~/utils'
 import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
@@ -132,10 +132,6 @@ const actions: ActionTree<UserState, RootState> = {
       return {}
     }
 
-    commit('setLoggingOut')
-
-    commit('setLoading')
-
     const { app } = this.$router
 
     const { $axios, $pToast, $nuxt, $fullscreenLoading } = app
@@ -146,6 +142,12 @@ const actions: ActionTree<UserState, RootState> = {
       message: 'Logging out...',
       id: alertId,
     })
+
+    await nextFrame()
+
+    commit('setLoggingOut')
+
+    commit('setLoading')
 
     const { message, error, status } = await Logout($axios, null)
 

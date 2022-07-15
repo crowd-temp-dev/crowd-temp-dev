@@ -373,7 +373,7 @@ export default defineComponent({
 
 .fade-transition-enter .content.content.scale,
 .fade-transition-leave-to .content.content.scale {
-  @apply scale-[0.95];
+  @apply scale-[0.9];
 }
 
 .fade-transition-enter-active .content.content.slide-y,

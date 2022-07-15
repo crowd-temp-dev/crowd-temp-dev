@@ -23,6 +23,10 @@ export default defineComponent({
     },
     once: Boolean,
     disabled: Boolean,
+    thresholds: {
+      type: [Number, String],
+      default: undefined,
+    },
   },
   emits: ['once-intersected', 'update:entry'],
 
@@ -72,10 +76,20 @@ export default defineComponent({
         ...props.value.config,
       }
 
+      const thresholds = Number(_props.thresholds)
+
       const options = {
         ...initialOptions,
-        threshold: /string|number/i.test(typeof initialOptions.threshold)
-          ? initialOptions.threshold
+        threshold: thresholds
+          ? [
+              ...Array.from(
+                {
+                  length: thresholds,
+                },
+                (_, i) => i / thresholds
+              ),
+              1,
+            ]
           : initialOptions.threshold,
       }
 
@@ -95,6 +109,8 @@ export default defineComponent({
         entry.value = _entry
 
         emit('update:entry', _entry)
+
+        console.log(_entry)
 
         if (props.value.once) {
           if (_entry.isIntersecting) {

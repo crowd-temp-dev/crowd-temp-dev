@@ -52,7 +52,7 @@ export default defineComponent({
       We've cracked the code of getting awesome insights for product teams.
     </h3>
 
-    <ul class="w-fit grid grid-cols-3 gap-30 max-w-[1230px] mx-auto mb-100 justify-items-center">
+    <ul class="w-fit grid grid-cols-3 gap-30 max-w-[1110px] mx-auto mb-100 justify-items-center">
       <li
         v-for="(item, i) in items"
         :key="i"
@@ -61,7 +61,7 @@ export default defineComponent({
         <Img :src="item.image" alt="Vector image" class="min-h-[160px]" />
 
         <h4
-          class="font-sf-pro-display text-display-large-sm font-semibold my-24"
+          class="font-sf-pro-display text-display-large-sm text-[22px] font-semibold my-24"
         >
           {{ item.title }}
         </h4>

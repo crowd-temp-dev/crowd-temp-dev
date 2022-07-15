@@ -56,7 +56,7 @@ export default defineComponent({
     >
       <Hero />
 
-      <div class="max-w-[1230px] mx-auto w-full">
+      <div class="max-w-[1110px] mx-auto w-full">
         <Presentation />
 
         <FavoriteTools />
@@ -66,7 +66,7 @@ export default defineComponent({
 
       <Features />
 
-      <FeaturesExtension class="max-w-[1230px] mx-auto" />
+      <FeaturesExtension class="max-w-[1110px] mx-auto" />
 
       <TempPricing />
 

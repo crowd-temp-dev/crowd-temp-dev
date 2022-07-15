@@ -86,7 +86,7 @@ export default defineComponent({
     }"
   >
     <div
-      class="max-w-[1120px] flex items-center justify-between mx-auto md:h-58 md:pt-0"
+      class="max-w-[1110px] flex items-center justify-between mx-auto md:h-58 md:pt-0"
       :class="{
         // make header sticky for auth pages
         'h-60 px-10': mobileAuthPage,
