@@ -58,7 +58,7 @@ export default defineComponent({
         :key="i"
         class="max-w-[356px] shadow-2 rounded-lg bg-surface-default pt-40 pb-80 px-20"
       >
-        <Img :src="item.image" alt="Vector image" />
+        <Img :src="item.image" alt="Vector image" class="min-h-[160px]" />
 
         <h4
           class="font-sf-pro-display text-display-large-sm font-semibold my-24"
