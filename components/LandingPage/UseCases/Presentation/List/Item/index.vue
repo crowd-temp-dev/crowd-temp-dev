@@ -47,11 +47,12 @@ export default defineComponent({
       await nextFrame()
       showProgress.value = _props.startAnimation
     }
-    const onAnimationend = (evt: AnimationEvent) => {
+    const onAnimationend = async (evt: AnimationEvent) => {
       if (
         evt.pseudoElement === '::after' &&
         evt.animationName.startsWith('progress-anim')
       ) {
+        await nextFrame()
         emit('progress-done')
       }
     }
