@@ -109,7 +109,12 @@ export default defineComponent({
               {{ link.title }}
             </Button>
 
-            <NuxtLink v-else :to="link.to" @click.native="link.onClick">
+            <NuxtLink
+              v-else
+              :to="link.to"
+              class="transition-opacity active:opacity-70"
+              @click.native="link.onClick"
+            >
               {{ link.title }}
             </NuxtLink>
           </li>
