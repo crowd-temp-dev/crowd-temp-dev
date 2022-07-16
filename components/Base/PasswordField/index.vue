@@ -51,7 +51,8 @@ export default defineComponent({
       </label>
     </slot>
 
-    <div
+    <label
+      :for="id"
       class="flex items-center w-full relative rounded h-36 border border-[#c9cccf] bg-surface-default border-t-[#aeb4b9] transition-shadow focus-within:ring-2 ring-offset-1 ring-action-primary-default duration-100"
     >
       <input
@@ -67,10 +68,12 @@ export default defineComponent({
       <PIcon
         :source="showPassword ? 'HideMinor' : 'ViewMinor'"
         class="fill-icon-default absolute right-[0.9rem] w-20 h-20 transition-opacity opacity-80 can-hover:hover:opacity-100 can-hover:active:opacity-70 active:opacity-70"
-        :class="{ '!opacity-0 pointer-events-none': !modelSync && !showPassword }"
+        :class="{
+          '!opacity-0 pointer-events-none': !modelSync && !showPassword,
+        }"
         @click="showPassword = !showPassword"
       />
-    </div>
+    </label>
 
     <p v-if="helpText" class="text-[#999fa4] mt-4">
       {{ helpText }}
