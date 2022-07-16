@@ -1,6 +1,7 @@
 import { MutationTree, ActionTree } from 'vuex'
 import { nextTick } from '@vue/composition-api'
-import welcomeScreen from './welcomeScreen'
+import { createTestAlertDialogId } from '../detail'
+import welcomeScreen, { defaultWelcomeScreen } from './welcomeScreen'
 import thankYouScreen from './thankYouScreen'
 import section from './section'
 import collapsed from './collapsed'
@@ -37,11 +38,7 @@ const mutations: MutationTree<TestSuiteCreateState> = {
       message: '',
     }
 
-    state.welcomeScreen = {
-      buttonText: '',
-      message: '',
-      title: '',
-    }
+    state.welcomeScreen = defaultWelcomeScreen()
 
     state.section.items = []
 
@@ -121,6 +118,9 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
                 const id = duplicate ? uuidv4() : question.id
 
                 const getFiles = (value as File[]).flat()
+
+                console.log({getFiles});
+                
 
                 getFiles.forEach((file) => {
                   formatForm.append(id, file, file.name)
@@ -221,18 +221,6 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
           statusCode: 500,
         })
       } else if (data.details.name) {
-        // await dispatch('updateDetails', {
-        //   data: data.details,
-        // })
-
-        // await dispatch('updateForm', {
-        //   path: '',
-        //   value: data.form,
-        //   override: !!Object.keys(data.form || {}).length,
-        // })
-
-        console.log({ data })
-
         commit('setEmpty', false)
 
         app.$store.commit('testSuite/detail/setData', {
@@ -264,11 +252,39 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
           commit('setShowWarning', false)
         }
       } else {
-        dispatch('resetForm')
+        if (rootState.app.alertDialog.id !== createTestAlertDialogId) {
+          dispatch('resetForm')
+        }
 
         commit('setShowWarning', false)
       }
     }
+  },
+
+  async duplicate({ dispatch, rootState }) {
+    const { app } = this.$router
+
+    if (app.$route.name !== 'create-test-:id') {
+      app.$nuxt.error({
+        message: 'Cannot duplicate test on this route!',
+        statusCode: 403,
+      })
+    }
+
+    const newId = uuidv4()
+
+    app.$store.commit('testSuite/detail/setId', newId)
+
+    await app.$nextTick()
+
+    app.$store.commit('testSuite/detail/setData', {
+      name: `${rootState.testSuite.detail.name} copy`,
+      id: newId,
+    })
+
+    await app.$nextTick()
+
+    await dispatch('submit', true)
   },
 }
 

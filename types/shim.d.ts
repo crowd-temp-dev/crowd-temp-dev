@@ -42,6 +42,7 @@ type CreateTestFormMap = {
 type GetAlertDialog = AppState['alertDialog']
 
 export interface OpenAlertArgs {
+  id: string
   title: string
   subtitle: string
   actions: GetAlertDialog['actions']

@@ -60,7 +60,7 @@ export default defineComponent({
       required: true,
     },
     modelValue: {
-      type: String,
+      type: [String, Number],
       default: undefined,
     },
     disabled: Boolean,
@@ -111,15 +111,15 @@ export default defineComponent({
 
     const modelSync = computed({
       get() {
-        if (typeof _props.modelValue === 'string') {
+        if (/string|number/.test(typeof _props.modelValue)) {
           return _props.modelValue
         }
 
         return manualModel.value
       },
       set(val: string) {
-        if (typeof val === 'string') {
-          emit('update:modelValue', val)
+        if (/string|number/.test(typeof _props.modelValue)) {
+          emit('update:modelValue', `${val}`)
         }
 
         manualModel.value = val
@@ -128,7 +128,7 @@ export default defineComponent({
 
     const getLabel = computed<string>(() => {
       const selected = _props.options.find(
-        (option) => option.value === modelSync.value
+        (option) => option.value === `${modelSync.value}`
       )
 
       return selected ? selected.label : ''
@@ -140,7 +140,7 @@ export default defineComponent({
           ({
             title: option.label,
             disabled: option.disabled,
-            selected: modelSync.value === option.value,
+            selected: `${modelSync.value}` === option.value,
             onClick: () => {
               modelSync.value = option.value
             },
@@ -207,7 +207,7 @@ export default defineComponent({
 
       const values = _props.options.map((item) => item.value)
 
-      const currentIndex = values.indexOf(modelSync.value)
+      const currentIndex = values.indexOf(`${modelSync.value}`)
 
       const nextIndex = which === 'next' ? currentIndex + 1 : currentIndex - 1
 
@@ -303,7 +303,7 @@ export default defineComponent({
     watch(
       () => props.value.options,
       (nv) => {
-        if (!nv.find((option) => option.value === modelSync.value)) {
+        if (!nv.find((option) => option.value === `${modelSync.value}`)) {
           modelSync.value = ''
         }
       }

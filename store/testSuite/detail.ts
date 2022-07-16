@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/named
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from '..'
+import { sleep, uid } from '~/utils'
 
 export interface TestSuiteDetail {
   loading: boolean
@@ -75,9 +76,86 @@ const mutations: MutationTree<TestSuiteDetail> = {
   },
 }
 
+const createTestAlertTitle = 'You have an unsaved test!'
+
+export const createTestAlertDialogId = uid()
+
 const actions: ActionTree<TestSuiteDetail, RootState> = {
-  setId({ commit }, id: string) {
-    commit('setId', id)
+  setId({ commit, state, rootState }, id: string) {
+    const { app } = this.$router
+
+    const hasUnfinishedTest =
+      !state.created &&
+      id !== state.id &&
+      !!rootState.testSuite.create.section.items.length
+
+    const setId = () => {
+      commit('setId', id)
+    }
+
+    if (hasUnfinishedTest) {
+      const alertId = {
+        id: createTestAlertDialogId,
+      }
+
+      app.$store.commit('app/updateAlertDialog', alertId)
+
+      sleep(250).then(() => {
+        if (app.$route.name === 'create-test-:id') {
+          app.$alert.open({
+            ...alertId,
+            title: createTestAlertTitle,
+            subtitle: 'Creating a new test will clear your previous progress.',
+            actions: [
+              {
+                label: 'Create new test',
+                attrs: {
+                  plain: true,
+                  destructive: true,
+                },
+                events: {
+                  click: () => {
+                    setId()
+
+                    app.$store.dispatch('testSuite/create/resetForm')
+
+                    app.$alert.close()
+                  },
+                },
+              },
+              {
+                label: 'Continue test',
+                attrs: {
+                  primary: true,
+                  autofocus: true,
+                },
+                events: {
+                  click: () => {
+                    if (app.$route.params.id !== state.id) {
+                      app.$router.replace({
+                        params: {
+                          id: state.id as string,
+                        },
+                      })
+                    }
+
+                    app.$alert.close()
+                  },
+                },
+              },
+            ],
+          })
+        } else {
+          app.$store.commit('app/updateAlertDialog', {
+            id: '',
+          })
+
+          setId()
+        }
+      })
+    } else {
+      setId()
+    }
   },
 }
 

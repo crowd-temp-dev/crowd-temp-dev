@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import SortSteps from '~/components/App/CreateTest/SortSteps/index.vue'
 import Steps from '~/components/App/CreateTest/Steps/index.vue'
 import {

@@ -37,7 +37,9 @@ export default defineComponent({
     })
 
     const emptyTestForm = computed(() => {
-      return (root.$store.state as RootState).testSuite.create.empty
+      const state = (root.$store.state as RootState).testSuite
+
+      return !state.detail.created && !state.create.section.items.length
     })
 
     return { testTitle, testPublished, enableEditing, testState, emptyTestForm }

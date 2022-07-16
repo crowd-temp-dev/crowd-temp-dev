@@ -112,7 +112,7 @@ export default defineComponent({
           if (file.size >= minSize && file.size <= maxSize) {
             files.push(file)
           } else {
-            const small = file.size < minSize 
+            const small = file.size < minSize
 
             root.$pToast.open({
               error: true,
@@ -322,12 +322,21 @@ export default defineComponent({
                           :id="`${rootId}-preview`"
                           class="w-full h-full flex-centered"
                         >
-                          <img
-                            v-if="file.file.type.startsWith('image/')"
-                            :src="file.src"
-                            :alt="file.name"
-                            class="w-full h-full object-contain"
-                          />
+                          <template v-if="file.file.type.startsWith('image/')">
+                            <Img
+                              v-if="file.src.startsWith('uploads/')"
+                              :src="file.src"
+                              alt="Server image"
+                              class="w-full h-full object-contain"
+                            />
+
+                            <img
+                              v-else
+                              :src="file.src"
+                              :alt="file.name"
+                              class="w-full h-full object-contain"
+                            />
+                          </template>
                           <PIcon
                             v-else
                             source="NoteMajor"
@@ -356,15 +365,15 @@ export default defineComponent({
                     </template>
 
                     <template #content>
-                      <div class="grid gap-y-8">
-                        <p>
-                          <strong>Name:</strong> {{ file.alt || 'From server' }}
-                        </p>
+                      <div v-if="file.alt" class="grid gap-y-8">
+                        <p><strong>Name:</strong> {{ file.alt }}</p>
 
                         <p><strong>Type:</strong> {{ file.file.type }}</p>
 
                         <p><strong>Size:</strong> {{ file.size }}</p>
                       </div>
+
+                      <p v-else>From server</p>
                     </template>
                   </Tooltip>
                 </div>
@@ -431,12 +440,21 @@ export default defineComponent({
               :class="{ 'opacity-0 duration-[250ms]': !active }"
               @click.stop
             >
-              <img
-                v-if="getFiles[0]"
-                :src="(getFiles[0] || {}).src"
-                :alt="(getFiles[0] || {}).alt"
-                class="w-full h-full block rounded object-contain"
-              />
+              <template v-if="getFiles[0]">
+                <Img
+                  v-if="(getFiles[0] || {}).src.startsWith('uploads/')"
+                  :src="(getFiles[0] || {}).src"
+                  alt="Server image"
+                  class="w-full h-full block rounded object-contain"
+                />
+
+                <img
+                  v-else
+                  :src="(getFiles[0] || {}).src"
+                  :alt="(getFiles[0] || {}).alt"
+                  class="w-full h-full block rounded object-contain"
+                />
+              </template>
             </div>
           </div>
         </div>
@@ -480,10 +498,10 @@ export default defineComponent({
                     </template>
 
                     <template #content>
-                      <div class="grid gap-y-8">
+                      <div v-if="(getFiles[0] || {}).alt" class="grid gap-y-8">
                         <p>
                           <strong>Name:</strong>
-                          {{ (getFiles[0] || {}).alt || 'From server' }}
+                          {{ (getFiles[0] || {}).alt }}
                         </p>
 
                         <p>
@@ -495,6 +513,8 @@ export default defineComponent({
                           <strong>Size:</strong> {{ (getFiles[0] || {}).size }}
                         </p>
                       </div>
+
+                      <p v-else>From server</p>
                     </template>
                   </Tooltip>
 

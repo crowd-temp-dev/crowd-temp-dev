@@ -59,15 +59,12 @@ export default defineComponent({
             toggleFavourite: async () => {
               const { number, alpha } = qNumberAndAlpha.value
 
-              await root.$store.dispatch(
-                'create-test/view-result/updateAnser',
-                {
-                  followUpAlpha: alpha,
-                  qIndex: Number(number),
-                  userIndex: index,
-                  values: { favourite: !answer.favourite },
-                } as UpdateAnswerPayload
-              )
+              await root.$store.dispatch('testSuite/viewResult/updateAnser', {
+                followUpAlpha: alpha,
+                qIndex: Number(number),
+                userIndex: index,
+                values: { favourite: !answer.favourite },
+              } as UpdateAnswerPayload)
             },
           }
         })

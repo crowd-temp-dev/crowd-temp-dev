@@ -75,7 +75,7 @@ export default defineComponent({
     const onDragEnd = (evt: { newIndex: number }) => {
       if (!testIndexMatches.value) {
         nextTick(() => {
-          $store.commit('createTest/UPDATE_ALL_TEST_INDEX', dragTitles.value)
+          // $store.commit('createTest/UPDATE_ALL_TEST_INDEX', dragTitles.value)
 
           nextTick(() => {
             emit(

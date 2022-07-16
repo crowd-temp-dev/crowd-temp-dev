@@ -57,9 +57,9 @@ export default defineComponent({
         showHelperDirtied.value = true
 
         if (nv) {
-          sleep(250).then(() => {
+          sleep(250).then(() => {            
             helper.value &&
-              scrollMain(helper.value.offsetTop - layoutSizing.allSizes)
+              scrollMain(helper.value.offsetTop - layoutSizing.layoutHeader - layoutSizing.layoutPadding)
           })
         }
       }
@@ -99,7 +99,7 @@ export default defineComponent({
 
       showHelper.value = false
 
-      await sleep(50)
+      await sleep(150)
 
       const newElement = document.getElementById(
         newTest.id
@@ -108,7 +108,7 @@ export default defineComponent({
       if (newElement) {
         newElement.focus({ preventScroll: true })
 
-        scrollMain(newElement.offsetTop - layoutSizing.allSizes)
+        scrollMain(newElement.offsetTop - layoutSizing.layoutHeader - layoutSizing.layoutPadding)
       }
     }
 
@@ -200,7 +200,7 @@ export default defineComponent({
         <div v-if="testQuestionsLength < 50" class="relative shrink-0 mx-10">
           <Button
             primary
-            :class="{ 'pointer-events-auto': showWarningBanner }"
+            :class="{ 'pointer-events-auto': !showWarningBanner }"
             :disabled="testSubmitting"
             @click="showHelper = true"
           >

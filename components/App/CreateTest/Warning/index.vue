@@ -44,11 +44,11 @@ export default defineComponent({
     })
 
     const duplicateTest = async () => {
-      await root.$store.dispatch('create-test/duplicate')
+      await root.$store.dispatch('testSuite/create/duplicate')
     }
 
     const continueTest = () => {
-      root.$store.commit('create-test/setShowWarning', false)
+      root.$store.commit('testSuite/create/setShowWarning', false)
     }
 
     return {

@@ -4,6 +4,7 @@ export interface AppState {
   dialogs: string[]
   fullscreenLoadingMessage: null | string
   alertDialog: {
+    id: string
     key: string
     active: boolean
     title: string
@@ -23,6 +24,7 @@ export default function state(): AppState {
     dialogs: [],
     fullscreenLoadingMessage: null,
     alertDialog: {
+      id: '',
       key: '',
       active: false,
       title: '',

@@ -34,6 +34,14 @@ const alertDialog: Plugin = function ({ store }, inject) {
             store.commit('app/updateAlertDialog', {
               active: false,
             } as AppState['alertDialog'])
+
+            sleep(250).then(() => {
+              if (!(store.state.app as AppState).alertDialog.active) {
+                store.commit('app/updateAlertDialog', {
+                  id: '',
+                })
+              }
+            })
           }
         }
 
