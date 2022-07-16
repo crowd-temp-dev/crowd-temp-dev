@@ -24,7 +24,7 @@ export default defineComponent({
       @click.native="scrollToTop"
     >
       <Img
-        src="static/logo"
+        src="static/logo.png"
         alt="App logo"
         :width="22.26"
         :height="16"

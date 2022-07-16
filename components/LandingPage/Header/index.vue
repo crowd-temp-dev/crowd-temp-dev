@@ -81,7 +81,7 @@ export default defineComponent({
     :class="{
       // make header sticky for auth pages
       'shadow-2 sticky top-0 bg-surface-default': mobileAuthPage,
-      'md:not-supports-backdrop-filter:bg-surface-default md:supports-backdrop-filter:bg-surface-default/80 md:supports-backdrop-filter:backdrop-blur-xl':
+      'not-supports-backdrop-filter:bg-surface-default supports-backdrop-filter:bg-surface-default/80 supports-backdrop-filter:backdrop-blur-xl':
         $route.name !== 'privacy-and-policy',
     }"
   >

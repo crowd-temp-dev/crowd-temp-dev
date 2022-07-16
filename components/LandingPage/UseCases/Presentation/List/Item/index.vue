@@ -73,7 +73,7 @@ export default defineComponent({
     :disabled="$breakpoint.isMobile"
   >
     <li
-      class="lg:w-350 w-full lg:h-114 rounded-lg lg:p-20 grid gap-y-10 transition-all relative isolate active:opacity-80 transform-gpu active:scale-[0.995] mb-24 lg:mb-0 lg:overflow-hidden"
+      class="lg:w-350 w-full lg:h-114 rounded-lg lg:p-20 grid gap-y-10 transition-all relative isolate lg:active:opacity-80 transform-gpu lg:active:scale-[0.995] mb-24 lg:mb-0 lg:overflow-hidden"
       :class="{
         'bg-surface-selected-default': active && !$breakpoint.isMobile,
         'progress-anim fill-after after:z-1 after:!h-4 after:!top-auto after:bottom-0 after:bg-action-primary-default after:!rounded-l-none after:translate-x-[-100%]':
