@@ -1,12 +1,12 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import { UpdateAnswerPayload } from '~/store/create-test/view-result'
 import { getAlphabetIndex } from '~/utils'
 import Id from '~/components/Base/Id/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { RootState } from '~/store'
+import { UpdateAnswerPayload } from '~/store/testSuite/viewResult'
 
 type Numbering = `${number}${string}`
 

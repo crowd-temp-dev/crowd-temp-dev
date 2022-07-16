@@ -9,7 +9,6 @@ import {
   createTestWarningDuplicateId,
 } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
-import type { TestIndex } from '~/store/createTest/state'
 import eventKey from '~/utils/eventKey'
 import { RootState } from '~/store'
 
@@ -60,7 +59,8 @@ export default defineComponent({
       } else return {}
     })
 
-    const updateStepsKey = (section: TestIndex) => {
+    // TODO: SET TYPE
+    const updateStepsKey = (section: any) => {
       if (section) {
         stepsKey.value = performance.now()
 

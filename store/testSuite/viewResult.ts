@@ -1,33 +1,12 @@
 // eslint-disable-next-line import/named
 import { MutationTree, ActionTree } from 'vuex'
 import { RootState } from '..'
+import { CreateTestForm } from '.'
 import { GetViewResult, UpdateResultAnswer } from '~/services/createTest'
 import { showToasts } from '~/utils/showToast'
-import { CreateTestFormQuestion } from '~/types/form'
 import { CreateTestTypes } from '~/types'
 import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
 
-export interface CreateTestForm {
-  testDetails: {
-    name: string
-    description: string
-  }
-
-  welcomeScreen: {
-    title: string
-    message: string
-    buttonText: string
-  }
-
-  thankYouScreen: {
-    title: string
-    message: string
-  }
-
-  [key: `question-${number}`]: CreateTestFormQuestion
-
-  empty?: boolean
-}
 
 export interface QuestionAnswer {
   id: string

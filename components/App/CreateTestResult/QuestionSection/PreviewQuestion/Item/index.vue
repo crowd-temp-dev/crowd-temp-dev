@@ -1,8 +1,8 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from '@vue/composition-api'
-import { ViewResultState } from '~/store/create-test/view-result'
 import { capitalize, getAlphabets } from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { TestSuiteViewResultState } from '~/store/testSuite/viewResult'
 
 export default defineComponent({
   name: 'AppCreateTestResultPreviewQuestionItem',
@@ -14,7 +14,7 @@ export default defineComponent({
       required: true,
     },
     question: {
-      type: Object as PropType<ViewResultState['questions']['question-1']>,
+      type: Object as PropType<TestSuiteViewResultState['questions']['question-1']>,
       required: true,
     },
   },

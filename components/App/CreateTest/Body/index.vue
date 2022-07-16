@@ -64,7 +64,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import Button from '~/components/Base/Button/index.vue'
-import { CreateTestState } from '~/store/createTest/state'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 
 type Step = {
@@ -81,9 +80,9 @@ export default defineComponent({
   components: { Button, FadeTransition },
   setup(_, { root }) {
     const showBanner = ref(false)
-
     const steps = computed(() => {
-      const vuexState = root.$store.state.createTest as CreateTestState
+      // TODO: SET TYPE AND VUEX!
+      const vuexState = {} as any
 
       const setActiveDisabledSelectAndDone = (index: 1 | 2 | 3) => {
         return {

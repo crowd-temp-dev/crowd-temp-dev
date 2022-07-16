@@ -1,7 +1,6 @@
 import { ServiceHandler } from './type'
 import { validateStatus } from './utils'
 import { CreateTestRes } from '~/server-middleware/routes/create-test/createTest'
-import { ViewResultState } from '~/store/create-test/view-result'
 import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
 import { GetRecruitRes } from '~/server-middleware/routes/create-test/getRecruit'
 import { PublishTestRes } from '~/server-middleware/routes/create-test/publishTest'
@@ -10,6 +9,7 @@ import {
   UpdateTestDetailRes,
 } from '~/server-middleware/routes/create-test/updateTestDetail'
 import { GetCreateTestRes } from '~/server-middleware/routes/create-test/getCreateTest'
+import { TestSuiteViewResultState } from '~/store/testSuite/viewResult'
 
 export const CreateTest: ServiceHandler<
   Record<string, any>,
@@ -42,9 +42,9 @@ export const GetRecruit: ServiceHandler<string, GetRecruitRes> = async (
 export const GetViewResult: ServiceHandler<
   string,
   {
-    responses: ViewResultState['responses']
-    questions: ViewResultState['questions']
-    answers: ViewResultState['answers']
+    responses: TestSuiteViewResultState['responses']
+    questions: TestSuiteViewResultState['questions']
+    answers: TestSuiteViewResultState['answers']
   }
 > = async (axios, id) => {
   return await axios.$get(`/create-test/view-result/${id}`, {

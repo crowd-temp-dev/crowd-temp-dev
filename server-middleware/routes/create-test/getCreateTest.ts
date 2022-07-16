@@ -7,7 +7,7 @@ import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
-import { CreateTestForm } from '~/store/create-test/create-test'
+import { CreateTestForm } from '~/store/testSuite'
 
 export interface GetCreateTestRes {
   form: CreateTestForm
