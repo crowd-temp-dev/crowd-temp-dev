@@ -67,7 +67,7 @@ export default defineComponent({
       <PIcon
         :source="showPassword ? 'HideMinor' : 'ViewMinor'"
         class="fill-icon-default absolute right-[0.9rem] w-20 h-20 transition-opacity opacity-80 can-hover:hover:opacity-100 can-hover:active:opacity-70 active:opacity-70"
-        :class="{ '!opacity-0': !modelSync || showPassword }"
+        :class="{ '!opacity-0': !modelSync && !showPassword }"
         @click="showPassword = !showPassword"
       />
     </div>
