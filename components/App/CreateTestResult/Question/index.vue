@@ -6,11 +6,11 @@ import LinearScale from './LinearScale/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
 import SearchField from '~/components/Base/SearchField/index.vue'
-import { ViewResultState } from '~/store/create-test/view-result'
 import { capitalize, getAlphabetIndex } from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Id from '~/components/Base/Id/index.vue'
 import type { RenderFunction } from '~/types'
+import { RootState } from '~/store'
 
 type Numbering = `${number}${string}`
 
@@ -32,7 +32,7 @@ export default defineComponent({
     const starred = ref(false)
 
     const viewResult = computed(() => {
-      return root.$store.state['create-test']['view-result'] as ViewResultState
+      return (root.$store.state as RootState).testSuite.viewResult
     })
 
     const qNumberAndAlpha = computed(() => {

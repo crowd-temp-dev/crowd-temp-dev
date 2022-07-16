@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import { Plugin } from '@nuxt/types'
-import { CreateTestState } from '~/store/create-test/create-test'
-import { CreateTestForm } from '~/types/shim'
 import { oneFrame, setClientOs, sleep } from '~/utils'
 
-const init: Plugin = function ({ app, store, $axios, $user }, inject) {
+const init: Plugin = function ({ app, store, $axios, $user }) {
   if (process.client) {
     window.history.scrollRestoration = 'auto'
 
@@ -42,31 +40,6 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
 
       overlayEl.$mount(`#${id}`)
     })
-
-    const createTestFormProxy = new Proxy(
-      {},
-      {
-        get(_, path: keyof CreateTestForm) {
-          if (path === 'questionsLength') {
-            return store.getters['create-test/questionsLength']
-          }
-
-          if (path === 'questions') {
-            return store.getters['create-test/questions']
-          }
-
-          const createTestState = store.state['create-test'] as CreateTestState
-
-          if (path === 'warn') {
-            return createTestState.showWarning
-          }
-
-          return createTestState.form[path]
-        },
-      }
-    )
-
-    inject('createTestForm', createTestFormProxy)
   }
 
   $axios.onResponseError(({ response }) => {

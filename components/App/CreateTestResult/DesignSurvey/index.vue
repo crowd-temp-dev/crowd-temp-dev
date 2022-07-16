@@ -4,7 +4,7 @@ import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
 import viewResultTestType from '~/mixins/view-result-test-type'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
-import { ViewResultState } from '~/store/create-test/view-result'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestResultDesignSurvey',
@@ -18,9 +18,8 @@ export default defineComponent({
     })
 
     const mediaFile = computed(() => {
-      const file = (
-        root.$store.state['create-test']['view-result'] as ViewResultState
-      ).questions[`question-${props.value.numbering}`].file
+      const file = (root.$store.state as RootState).testSuite.viewResult
+        .questions[`question-${props.value.numbering}`].file
 
       return {
         src: `uploads/${file}`,

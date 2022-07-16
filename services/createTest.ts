@@ -1,11 +1,15 @@
 import { ServiceHandler } from './type'
 import { validateStatus } from './utils'
 import { CreateTestRes } from '~/server-middleware/routes/create-test/createTest'
-import { CreateTestForm } from '~/types/form'
-import { CreateTestState } from '~/store/create-test/create-test'
 import { ViewResultState } from '~/store/create-test/view-result'
 import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
-import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
+import { GetRecruitRes } from '~/server-middleware/routes/create-test/getRecruit'
+import { PublishTestRes } from '~/server-middleware/routes/create-test/publishTest'
+import {
+  UpdateTestDetailForm,
+  UpdateTestDetailRes,
+} from '~/server-middleware/routes/create-test/updateTestDetail'
+import { GetCreateTestRes } from '~/server-middleware/routes/create-test/getCreateTest'
 
 export const CreateTest: ServiceHandler<
   Record<string, any>,
@@ -15,25 +19,17 @@ export const CreateTest: ServiceHandler<
 }
 
 // get test for /create-test/?:id
-export const GetCreateTest: ServiceHandler<
-  string,
-  {
-    form: QuestionModelValue
-    details: {
-      name: string
-      published: boolean
-      responses?: number
-      participants?: number
-    }
-  }
-> = async (axios, id) => {
+export const GetCreateTest: ServiceHandler<string, GetCreateTestRes> = async (
+  axios,
+  id
+) => {
   return await axios.$get(`/create-test/${id}`, {
     ...validateStatus,
   })
 }
 
 // get test for /create-test/recruit/?:id
-export const GetRecruit: ServiceHandler<string, CreateTestForm> = async (
+export const GetRecruit: ServiceHandler<string, GetRecruitRes> = async (
   axios,
   id
 ) => {
@@ -68,17 +64,17 @@ export const UpdateResultAnswer: ServiceHandler<
 }
 
 // publish test
-export const PublishTest: ServiceHandler<
-  string,
-  CreateTestState['details']
-> = async (axios, id) => {
+export const PublishTest: ServiceHandler<string, PublishTestRes> = async (
+  axios,
+  id
+) => {
   return await axios.$post('/create-test/publish', { id }, validateStatus)
 }
 
 // update test detail
 export const UpdateTestDetail: ServiceHandler<
-  CreateTestState['details'],
-  CreateTestState['details']
+  UpdateTestDetailForm,
+  UpdateTestDetailRes
 > = async (axios, payload) => {
   return await axios.$patch('/create-test/updateDetail', payload, {
     ...validateStatus,

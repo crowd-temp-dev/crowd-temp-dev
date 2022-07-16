@@ -19,7 +19,7 @@ export default defineComponent({
 
   emits: ['on-submit'],
 
-  setup(_props, { emit, root: { $createTestForm, $store } }) {
+  setup(_props, { emit }) {
     const onSubmit = (payload: OnSubmitArgs<Record<string, any>>) => {
       emit('on-submit', payload)
 
@@ -50,14 +50,14 @@ export default defineComponent({
 
     onMounted(() => {
       // @ts-ignore
-      if (!$createTestForm[_props.name] && _props.initialValue) {
-        $store.dispatch('create-test/updateForm', {
-          path: _props.name,
-          value: {
-            ..._props.initialValue,
-          },
-        })
-      }
+      // if (!$createTestForm[_props.name] && _props.initialValue) {
+      //   $store.dispatch('create-test/updateForm', {
+      //     path: _props.name,
+      //     value: {
+      //       ..._props.initialValue,
+      //     },
+      //   })
+      // }
     })
 
     return { onSubmit }
@@ -73,7 +73,7 @@ export default defineComponent({
         setup: (fieldName) => {
           return {
             ...slotProps.fieldIdAndError(`${name}_${fieldName}`),
-            modelValue: ($createTestForm[name] || {})[fieldName],
+            modelValue: 'NOPE',
             updateModelValue: (val) => {
               $store.dispatch('create-test/updateForm', {
                 path: `${name}.${fieldName}`,
@@ -95,6 +95,12 @@ export default defineComponent({
       }"
     />
 
-    <input v-if="!hideSubmit" type="submit" value="Submit" tabindex="-1" class="sr-only" />
+    <input
+      v-if="!hideSubmit"
+      type="submit"
+      value="Submit"
+      tabindex="-1"
+      class="sr-only"
+    />
   </FormLayout>
 </template>

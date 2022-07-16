@@ -6,8 +6,8 @@ import { scrollMain, layoutSizing, sleep, getTestFeatureTitle } from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { VueElement } from '~/types'
-import { CreateTestState } from '~/store/create-test/create-test'
 import { TestSuiteState } from '~/store/testSuite'
+import { RootState } from '~/store'
 
 type StaticTestSection = 'Test detail' | 'Welcome screen' | 'Thank you screen'
 
@@ -144,7 +144,7 @@ export default defineComponent({
       focusOnAddNewBlockBtnProcessing.value = false
     }
 
-    const toggleSectionCollapse = (id: string) => {      
+    const toggleSectionCollapse = (id: string) => {
       const collapseBtn = document.getElementById(`collapse-${id}`)
 
       if (collapseBtn) {
@@ -153,13 +153,18 @@ export default defineComponent({
     }
 
     const showWarning = computed(() => {
-      return ($store.state['create-test'] as CreateTestState).showWarning
+      return ($store.state as RootState).testSuite.create.showWarning
+    })
+
+    const testSubmitting = computed(() => {
+      return ($store.state as RootState).testSuite.create.submitting
     })
 
     return {
       dragTitles,
       staticTitles,
       showWarning,
+      testSubmitting,
       nextStep,
       onDragEnd,
       scrollToSection,
@@ -260,8 +265,8 @@ export default defineComponent({
           primary
           :disabled="
             !dragTitles.length ||
-            $store.state['create-test'].submitting ||
-            $createTestForm.warn
+            testSubmitting ||
+            showWarning
           "
           @click="nextStep"
         >

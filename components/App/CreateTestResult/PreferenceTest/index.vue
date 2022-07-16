@@ -3,7 +3,7 @@ import { computed, defineComponent } from '@vue/composition-api'
 import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
 import viewResultTestType from '~/mixins/view-result-test-type'
-import { ViewResultState } from '~/store/create-test/view-result'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestResultPreferenceTest',
@@ -13,7 +13,7 @@ export default defineComponent({
     const props = computed(() => _props as Record<string, any>)
 
     const viewResult = computed(() => {
-      return root.$store.state['create-test']['view-result'] as ViewResultState
+      return (root.$store.state as RootState).testSuite.viewResult
     })
 
     const currentQuestion = computed(() => {

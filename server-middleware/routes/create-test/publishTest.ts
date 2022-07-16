@@ -7,6 +7,13 @@ import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { uid } from '../../../utils'
 
+export interface PublishTestRes {
+  published: boolean
+  shareLink: string
+  stopAcceptingResponse: boolean
+  unlimitedInvites: boolean
+}
+
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 

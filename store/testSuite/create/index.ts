@@ -6,12 +6,14 @@ import section from './section'
 import collapsed from './collapsed'
 import { RootState } from '~/store'
 import { formBody, pingAddNewBlockBtn, sleep, uuidv4 } from '~/utils'
-import { CreateTest } from '~/services/createTest'
+import { CreateTest, GetCreateTest } from '~/services/createTest'
 import { showToasts } from '~/utils/showToast'
 
 export interface TestSuiteCreateState {
   submitting: boolean
   loading: boolean
+  showWarning: boolean
+  empty: boolean
   welcomeScreen?: ReturnType<typeof welcomeScreen['state']>
   thankYouScreen?: ReturnType<typeof thankYouScreen['state']>
   section?: ReturnType<typeof section['state']>
@@ -21,6 +23,8 @@ export interface TestSuiteCreateState {
 const state = (): TestSuiteCreateState => ({
   loading: false,
   submitting: false,
+  showWarning: false,
+  empty: true,
 })
 
 const mutations: MutationTree<TestSuiteCreateState> = {
@@ -43,11 +47,22 @@ const mutations: MutationTree<TestSuiteCreateState> = {
 
     state.collapsed.items = []
   },
+  setShowWarning(state, val) {
+    state.showWarning = val
+  },
+  setEmpty(state, val: boolean) {
+    state.empty = val
+  },
+  populateQuestions(state, val: typeof state.section.items) {
+    state.section.items = val
+  },
 }
 
 const actions: ActionTree<TestSuiteCreateState, RootState> = {
   async resetForm({ commit }) {
     commit('resetForm')
+
+    commit('setEmpty', true)
 
     const { app } = this.$router
 
@@ -152,7 +167,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
 
       const { data, error, message } = await CreateTest(app.$axios, formatForm)
 
-      await sleep(performance.now() - submitTime > 1000 ? 0 : 500)
+      await sleep(performance.now() - submitTime >= 1000 ? 0 : 500)
 
       commit('setSubmitting', false)
 
@@ -189,6 +204,70 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
       return { data, error, message }
     } else {
       return { error: { message: { content: 'Client only!' } } }
+    }
+  },
+
+  async fetch({ dispatch, commit, rootState }) {
+    const { id } = rootState.testSuite.detail
+
+    if (id) {
+      const { app } = this.$router
+
+      const { data, error } = await GetCreateTest(app.$axios, id)
+
+      if (error) {
+        app.$nuxt.error({
+          message: 'Cannot create test. Try again',
+          statusCode: 500,
+        })
+      } else if (data.details.name) {
+        // await dispatch('updateDetails', {
+        //   data: data.details,
+        // })
+
+        // await dispatch('updateForm', {
+        //   path: '',
+        //   value: data.form,
+        //   override: !!Object.keys(data.form || {}).length,
+        // })
+
+        console.log({ data })
+
+        commit('setEmpty', false)
+
+        app.$store.commit('testSuite/detail/setData', {
+          ...data.details,
+          description: data.form.testDetails?.description || '',
+        })
+
+        app.$store.commit(
+          'testSuite/create/welcomeScreen/setData',
+          data.form.welcomeScreen || {}
+        )
+
+        app.$store.commit(
+          'testSuite/create/thankYouScreen/setData',
+          data.form.thankYouScreen || {}
+        )
+
+        const questions = Object.entries(data.form)
+          .filter(([key]) => {
+            return /^question-\d+$/.test(key)
+          })
+          .map(([_, value]) => value)
+
+        commit('populateQuestions', questions)
+
+        if (data.details.participants) {
+          commit('setShowWarning', true)
+        } else {
+          commit('setShowWarning', false)
+        }
+      } else {
+        dispatch('resetForm')
+
+        commit('setShowWarning', false)
+      }
     }
   },
 }

@@ -1,14 +1,12 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import {
-  UpdateAnswerPayload,
-  ViewResultState,
-} from '~/store/create-test/view-result'
+import { UpdateAnswerPayload } from '~/store/create-test/view-result'
 import { getAlphabetIndex } from '~/utils'
 import Id from '~/components/Base/Id/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { RootState } from '~/store'
 
 type Numbering = `${number}${string}`
 
@@ -28,7 +26,7 @@ export default defineComponent({
   },
   setup(_props, { root }) {
     const viewResult = computed(() => {
-      return root.$store.state['create-test']['view-result'] as ViewResultState
+      return (root.$store.state as RootState).testSuite.viewResult
     })
 
     const qNumberAndAlpha = computed(() => {

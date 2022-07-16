@@ -11,10 +11,10 @@ import PreferenceTest from '@/components/App/CreateTestResult/PreferenceTest/ind
 import CardSorting from '@/components/App/CreateTestResult/CardSorting/index.vue'
 
 import { dynamicPageTransition } from '~/utils/pageTransition'
-import type { ViewResultState } from '~/store/create-test/view-result'
 import { splitPath } from '~/utils'
 import Spinner from '~/components/Base/Spinner/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestRecruitPage',
@@ -36,7 +36,7 @@ export default defineComponent({
     const splitFrom = splitPath(from?.path || '')
 
     if (splitFrom[0] === 'create-test') {
-      return 'page-transition-slide-right'
+      return 'page-transition-slide-left'
     }
 
     return dynamicPageTransition({
@@ -47,7 +47,7 @@ export default defineComponent({
 
   setup(_, { root }) {
     const result = computed(
-      () => root.$store.state['create-test']['view-result'] as ViewResultState
+      () => (root.$store.state as RootState).testSuite.viewResult
     )
 
     const fetchingResult = computed(() => {
@@ -72,9 +72,9 @@ export default defineComponent({
     })
 
     root.$store
-      .dispatch('create-test/setId', root.$route.params.id)
+      .dispatch('testSuite/detail/setId', root.$route.params.id)
       .then(() => {
-        root.$store.dispatch('create-test/view-result/getResult')
+        root.$store.dispatch('testSuite/viewResult/fetch')
       })
 
     return { result, fetchingResult, resultAnswers }

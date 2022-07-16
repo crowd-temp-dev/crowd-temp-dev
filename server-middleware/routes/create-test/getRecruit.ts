@@ -7,6 +7,17 @@ import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 
+export interface GetRecruitRes {
+  created?: boolean
+  name: string
+  participants: number
+  published: boolean
+  responses: number
+  shareLink: string
+  stopAcceptingResponse: boolean
+  unlimitedInvites: boolean
+}
+
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.params
 

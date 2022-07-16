@@ -4,7 +4,7 @@ import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
 import PreviewURL from '../../CreateTest/PreviewURL/index.vue'
 import viewResultTestType from '~/mixins/view-result-test-type'
-import { ViewResultState } from '~/store/create-test/view-result'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestResultWebsiteEvaluation',
@@ -18,9 +18,9 @@ export default defineComponent({
     })
 
     const currentQuestion = computed(() => {
-      return (
-        root.$store.state['create-test']['view-result'] as ViewResultState
-      ).questions[`question-${props.value.numbering}`]
+      return (root.$store.state as RootState).testSuite.viewResult.questions[
+        `question-${props.value.numbering}`
+      ]
     })
 
     return { currentQuestion, sectionTitle }

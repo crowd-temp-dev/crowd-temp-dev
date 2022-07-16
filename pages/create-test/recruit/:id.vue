@@ -5,8 +5,8 @@ import Button from '@/components/Base/Button/index.vue'
 import FadeTransition from '@/components/Base/FadeTransition/index.vue'
 import { generateShareLink, splitPath } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
-import { CreateTestState } from '~/store/create-test/create-test'
 import copyText from '~/utils/copyText'
+import { RootState } from '~/store'
 
 interface Feature {
   title: string
@@ -24,10 +24,10 @@ export default defineComponent({
     const splitFrom = splitPath(from?.path || '')
 
     if (splitFrom[0] === 'create-test') {
-      if (splitFrom[1]) {
-        return 'page-transition-slide-left'
+      if (splitFrom[1] === 'view-result') {
+        return 'page-transition-slide-right'
       }
-      return 'page-transition-slide-right'
+      return 'page-transition-slide-left'
     }
 
     return dynamicPageTransition({
@@ -38,11 +38,11 @@ export default defineComponent({
 
   setup(_, { root }) {
     const testState = computed(() => {
-      return root.$store.state['create-test'] as CreateTestState
+      return (root.$store.state as RootState).testSuite
     })
 
     const testDetails = computed(() => {
-      return testState.value.details
+      return testState.value.recruit
     })
 
     const updateFeatureSwitch = async (
@@ -51,7 +51,7 @@ export default defineComponent({
     ) => {
       features.value[index].loading = true
 
-      await root.$store.dispatch('create-test/updateTestDetails', value)
+      await root.$store.dispatch('testSuite/recruit/update', value)
 
       features.value[index].loading = false
 
@@ -107,16 +107,24 @@ export default defineComponent({
       },
     ])
 
-    const getShareLink = computed(() => {
-      if (!testDetails.value.shareLink) {
+    const getFullShareLink = computed(() => {
+      if (!testState.value.detail.shareLink) {
         return ''
       }
 
-      return generateShareLink(testDetails.value.shareLink)
+      return generateShareLink(testState.value.detail.shareLink)
     })
 
+    const testPublished = computed(() => testState.value.detail.published)
+
+    const testId = computed(() => testState.value.detail.id)
+
+    const fetching = computed(() => testState.value.recruit.loading)
+
+    const testResponses = computed(() => testState.value.detail.responses)
+
     const copyLink = async () => {
-      if (!getShareLink.value) {
+      if (!getFullShareLink.value) {
         root.$nuxt.error({
           message: 'Oops! an error occured',
           statusCode: 500,
@@ -124,7 +132,7 @@ export default defineComponent({
       }
 
       await copyText({
-        text: getShareLink.value,
+        text: getFullShareLink.value,
         onError: () => {
           root.$pToast.open({
             message: 'Error copying',
@@ -144,7 +152,11 @@ export default defineComponent({
       testDetails,
       testState,
       featureState,
-      getShareLink,
+      testId,
+      getFullShareLink,
+      testPublished,
+      fetching,
+      testResponses,
       copyLink,
       updateFeatureSwitch,
     }
@@ -152,8 +164,8 @@ export default defineComponent({
 
   fetch({ store, route }) {
     nextTick(() => {
-      store.dispatch('create-test/setId', route.params.id).then(() => {
-        store.dispatch('create-test/getRecruit')
+      store.dispatch('testSuite/detail/setId', route.params.id).then(() => {
+        store.dispatch('testSuite/recruit/fetch')
       })
     })
   },
@@ -163,7 +175,7 @@ export default defineComponent({
 <template>
   <div class="mt-32 pb-112 px-64">
     <div
-      v-if="testState.loading"
+      v-if="fetching"
       class="flex-centered h-full w-full text-text-subdued text-display-large min-h-[300px]"
     >
       <Spinner />
@@ -177,25 +189,25 @@ export default defineComponent({
         Share with your audience
       </h3>
 
-      <h4 class="text-center mt-8" :class="{ 'mb-20': !testDetails.published }">
+      <h4 class="text-center mt-8" :class="{ 'mb-20': !testPublished }">
         Get a unique test link and share to your audience
       </h4>
 
       <FadeTransition>
         <div
-          v-if="testDetails.published"
+          v-if="testPublished"
           class="grid justify-center justify-items-center mb-20"
         >
           <h5 class="text-text-subdued text-[13px] leading-[20px] my-10">
-            You have {{ testDetails.responses || 0 }} response{{
-              testDetails.responses > 1 ? 's' : ''
+            You have {{ testResponses || 0 }} response{{
+              testResponses > 1 ? 's' : ''
             }}
           </h5>
 
           <div class="flex items-center space-x-12">
             <TextField
               class="max-w-[328px]"
-              :value="getShareLink"
+              :value="getFullShareLink"
               readonly
               select-on-mount
             />
@@ -207,23 +219,20 @@ export default defineComponent({
 
       <FadeTransition>
         <ul
-          :key="`${testDetails.published}-ul`"
+          :key="`${testPublished}-ul`"
           class="mx-auto grid space-y-8 mb-24"
           :style="{ '--fade-leave-duration': '1ms' }"
         >
           <template v-for="(feature, i) in features">
-            <li
-              v-if="testDetails.published ? true : i !== 1"
-              :key="feature.title"
-            >
+            <li v-if="testPublished ? true : i !== 1" :key="feature.title">
               <LabelSwitch
                 :model-value="featureState[i] || false"
                 class="w-full grid grid-flow-col"
                 :class="{
-                  'justify-between': testDetails.published,
-                  'justify-center': !testDetails.published,
+                  'justify-between': testPublished,
+                  'justify-center': !testPublished,
                 }"
-                :show-switch="testDetails.published"
+                :show-switch="testPublished"
                 :label="feature.title"
                 :disabled="feature.locked"
                 :loading="feature.loading"
@@ -255,9 +264,9 @@ export default defineComponent({
       <div class="flex justify-center">
         <FadeTransition>
           <Button
-            v-if="testDetails.published"
+            v-if="testPublished"
             primary
-            :to="`/create-test/view-result/${testDetails.id}`"
+            :to="`/create-test/view-result/${testId}`"
           >
             View Results
           </Button>
@@ -266,7 +275,7 @@ export default defineComponent({
             v-else
             primary
             :loading="testState.publishing"
-            @click="$store.dispatch('create-test/publish')"
+            @click="$store.dispatch('testSuite/recruit/publish')"
           >
             Get sharable link
           </Button>
@@ -275,7 +284,7 @@ export default defineComponent({
 
       <div class="flex justify-center">
         <FadeTransition>
-          <p v-if="testDetails.published" class="flex items-center mt-40">
+          <p v-if="testPublished" class="flex items-center mt-40">
             <PIcon source="InfoMinor" class="fill-icon-highlight mr-10" />
 
             Learn more about

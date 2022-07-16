@@ -10,8 +10,8 @@ import {
 } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import type { TestIndex } from '~/store/createTest/state'
-import { CreateTestState } from '~/store/create-test/create-test'
 import eventKey from '~/utils/eventKey'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestIndexPage',
@@ -21,7 +21,7 @@ export default defineComponent({
     const splitFrom = splitPath(from?.path || '')
 
     if (splitFrom[0] === 'create-test') {
-      return 'page-transition-slide-left'
+      return 'page-transition-slide-right'
     }
 
     return dynamicPageTransition({
@@ -34,7 +34,7 @@ export default defineComponent({
     const stepsKey = ref(performance.now())
 
     const showWarning = computed(() => {
-      return (root.$store.state['create-test'] as CreateTestState).showWarning
+      return (root.$store.state as RootState).testSuite.create.showWarning
     })
 
     const stopTabbing = computed(() => {
@@ -80,12 +80,10 @@ export default defineComponent({
     return { stepsKey, showWarning, stopTabbing, updateStepsKey }
   },
 
-  async fetch({ store, route }) {
-    store.commit('testSuite/detail/setId', route.params.id)
-
-    await nextTick()
-
-    store.dispatch('create-test/getCreateTest')
+  fetch({ store, route }) {
+    store.dispatch('testSuite/detail/setId', route.params.id).then(() => {
+      store.dispatch('testSuite/create/fetch')
+    })
   },
 })
 </script>

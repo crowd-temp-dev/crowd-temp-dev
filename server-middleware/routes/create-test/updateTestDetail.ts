@@ -14,6 +14,14 @@ export interface UpdateTestDetailForm {
   favourite: boolean
 }
 
+export interface UpdateTestDetailRes {
+  favourite: boolean
+  published: boolean
+  shareLink: string
+  stopAcceptingResponse: boolean
+  unlimitedInvites: boolean
+}
+
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
@@ -88,7 +96,7 @@ export default function (router: Router) {
                 shareLink: testDetail.shareLink,
                 stopAcceptingResponse: testDetail.stopAcceptingResponse,
                 unlimitedInvites: testDetail.unlimitedInvites,
-                favourite: testDetail.favourite
+                favourite: testDetail.favourite,
               },
               message: {
                 content: 'Updated!',

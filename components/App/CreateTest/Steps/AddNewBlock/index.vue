@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import TrapFocus from 'ui-trap-focus'
 import Button from '@/components/Base/Button/index.vue'
 import {
@@ -12,6 +12,7 @@ import {
 import eventKey from '~/utils/eventKey'
 import { FeatureContent } from '~/types'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestStepsAddNewBlock',
@@ -37,6 +38,18 @@ export default defineComponent({
     const showHelperDirtied = ref(false)
 
     const pingBtn = ref(false)
+
+    const testQuestionsLength = computed(() => {
+      return (store.state as RootState).testSuite.create.section.items.length
+    })
+
+    const showWarningBanner = computed(() => {
+      return (store.state as RootState).testSuite.create.showWarning
+    })
+
+    const testSubmitting = computed(() => {
+      return (store.state as RootState).testSuite.create.submitting
+    })
 
     watch(
       () => showHelper.value,
@@ -113,6 +126,9 @@ export default defineComponent({
       showHelperDirtied,
       pingBtn,
       helper,
+      testQuestionsLength,
+      showWarningBanner,
+      testSubmitting,
       arrowFocus,
       createTest,
       togglePingBtn,
@@ -181,14 +197,11 @@ export default defineComponent({
       }"
     >
       <FadeTransition>
-        <div
-          v-if="$createTestForm.questions.length < 50"
-          class="relative shrink-0 mx-10"
-        >
+        <div v-if="testQuestionsLength < 50" class="relative shrink-0 mx-10">
           <Button
             primary
-            :class="{ 'pointer-events-auto': !$createTestForm.warn }"
-            :disabled="$store.state['create-test'].submitting"
+            :class="{ 'pointer-events-auto': showWarningBanner }"
+            :disabled="testSubmitting"
             @click="showHelper = true"
           >
             Add new block

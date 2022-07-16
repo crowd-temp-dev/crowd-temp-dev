@@ -3,9 +3,9 @@ import { computed, defineComponent } from '@vue/composition-api'
 import { Layout } from '~/types'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import Button from '~/components/Base/Button/index.vue'
-import { CreateTestState } from '~/store/create-test/create-test'
 import { createTestWarningDuplicateId } from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppBillingPage',
@@ -17,20 +17,22 @@ export default defineComponent({
       from,
     }),
   setup(_, { root }) {
+    const state = computed(() => {
+      return (root.$store.state as RootState).testSuite
+    })
+
     const showWarning = computed(() => {
       return (
-        root.$route.name === 'create-test-:id' &&
-        (root.$store.state['create-test'] as CreateTestState).showWarning
+        root.$route.name === 'create-test-:id' && state.value.create.showWarning
       )
     })
 
     const duplicating = computed(() => {
-      return (root.$store.state['create-test'] as CreateTestState).submitting
+      return state.value.create.submitting
     })
 
     const responses = computed(() => {
-      return (root.$store.state['create-test'] as CreateTestState).details
-        .responses
+      return state.value.detail.responses
     })
 
     const message = computed(() => {

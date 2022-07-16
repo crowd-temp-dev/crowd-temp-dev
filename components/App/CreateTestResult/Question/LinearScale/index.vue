@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import { ViewResultState } from '~/store/create-test/view-result'
 import { getAlphabetIndex } from '~/utils'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
+import { RootState } from '~/store'
 
 type Numbering = `${number}${string}`
 
@@ -19,7 +19,7 @@ export default defineComponent({
 
   setup(_props, { root }) {
     const viewResult = computed(() => {
-      return root.$store.state['create-test']['view-result'] as ViewResultState
+      return (root.$store.state as RootState).testSuite.viewResult
     })
     const qNumberAndAlpha = computed(() => {
       const number = _props.numbering.replace(/[a-z]+$/, '')

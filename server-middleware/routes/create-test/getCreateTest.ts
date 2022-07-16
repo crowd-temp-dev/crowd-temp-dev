@@ -7,6 +7,17 @@ import { authenticate } from '../../utils/middleware'
 import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
 import { getFullTest } from '../../../database/models/CreateTests/utils'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
+import { CreateTestForm } from '~/store/create-test/create-test'
+
+export interface GetCreateTestRes {
+  form: CreateTestForm
+  details: {
+    published: boolean
+    created: boolean
+    name: string
+    participants: number
+  }
+}
 
 const formValidation: RequestHandler = (req, res, next) => {
   const body = req.params

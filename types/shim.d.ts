@@ -65,7 +65,6 @@ declare module 'vue/types/vue' {
     $fullscreenLoading: FullscreenLoading
     $user: User
     $cookies: NuxtCookies
-    $createTestForm: CreateTestForm
     $alert: AlertDialog
   }
 }
@@ -76,7 +75,6 @@ declare module '@nuxt/types' {
     $user: User
     $pToast: PToast
     $cookies: NuxtCookies
-    $createTestForm: CreateTestForm
     $alert: AlertDialog
   }
 }

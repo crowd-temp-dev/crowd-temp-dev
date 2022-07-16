@@ -4,9 +4,9 @@ import { Layout } from '~/types'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
-import { CreateTestState } from '~/store/create-test/create-test'
 import { createTestWarningDuplicateId } from '~/utils'
 import Warning from '~/components/App/CreateTest/Warning/index.vue'
+import { RootState } from '~/store'
 
 type Step = {
   title: 'Create test' | 'Recruit' | 'View Results'
@@ -14,7 +14,7 @@ type Step = {
   active: boolean
   done: boolean
   disabled: Boolean
-  select: Function
+  to: string
 }
 
 export default defineComponent({
@@ -34,9 +34,9 @@ export default defineComponent({
 
       const routeName = root.$route.name
 
-      const testState = root.$store.state['create-test'] as CreateTestState
+      const testState = (root.$store.state as RootState).testSuite
 
-      const testId = testState.details.id
+      const testId = testState.detail.id
 
       const createTestRouteName = 'create-test-:id'
 
@@ -44,9 +44,9 @@ export default defineComponent({
 
       const viewResultRouteName = 'create-test-view-result-:id'
 
-      const testCreated = 'published' in testState.details
+      const testCreated = testState.detail.created
 
-      const testPublished = testState.details.published
+      const testPublished = testState.detail.published
 
       return [
         {
@@ -54,7 +54,7 @@ export default defineComponent({
           icon: 'CirclePlusMinor',
           active: routeName === createTestRouteName,
           done: /^\/create-test\/(?:recruit|view-result)\/?/.test(routePath),
-          select: () => root.$router.push(`/create-test/${testId}/`),
+          to: `/create-test/${testId}/`,
         },
         {
           title: 'Recruit',
@@ -62,7 +62,7 @@ export default defineComponent({
           active: routeName === recruitRouteName,
           done: /^\/create-test\/view-result\/?/.test(routePath) || testCreated,
           disabled: routeName === createTestRouteName,
-          select: () => root.$router.push(`/create-test/recruit/${testId}`),
+          to: `/create-test/recruit/${testId}`,
         },
         {
           title: 'View Results',
@@ -70,7 +70,7 @@ export default defineComponent({
           active: routeName === viewResultRouteName,
           done: testPublished,
           disabled: [createTestRouteName, recruitRouteName].includes(routeName),
-          select: () => root.$router.push(`/create-test/view-result/${testId}`),
+          to: `/create-test/view-result/${testId}`,
         },
       ] as Step[]
     })
@@ -78,7 +78,7 @@ export default defineComponent({
     const showWarning = computed(() => {
       return (
         root.$route.name === 'create-test-:id' &&
-        (root.$store.state['create-test'] as CreateTestState).showWarning
+        (root.$store.state as RootState).testSuite.create.showWarning
       )
     })
 
@@ -108,7 +108,7 @@ export default defineComponent({
                 'pointer-events-none': !step.done || step.active,
                 'text-text-default': step.done && !step.active,
               }"
-              @click="step.select"
+              :to="step.to"
             >
               <div class="flex items-center">
                 <PIcon
@@ -135,7 +135,7 @@ export default defineComponent({
 
     <FadeTransition>
       <div
-        :key="$store.state['create-test'].details.id"
+        :key="$store.state.testSuite.detail.id"
         class="isolate max-w-app mx-auto px-32 lg:px-0 min-h-[calc(100%-56px)]"
       >
         <NuxtChild />

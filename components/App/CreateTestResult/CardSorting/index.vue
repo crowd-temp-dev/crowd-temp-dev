@@ -4,7 +4,7 @@ import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
 import Item from './Item/index.vue'
 import viewResultTestType from '~/mixins/view-result-test-type'
-import { ViewResultState } from '~/store/create-test/view-result'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestResultCardSorting',
@@ -14,14 +14,14 @@ export default defineComponent({
     const props = computed(() => _props as Record<string, any>)
 
     const viewResult = computed(
-      () => root.$store.state['create-test']['view-result'] as ViewResultState
+      () => (root.$store.state as RootState).testSuite.viewResult
     )
 
     const currentQuestion = computed(() => {
       return viewResult.value.questions[`question-${props.value.numbering}`]
     })
 
-    const usersThatSortedCards = computed(() => {      
+    const usersThatSortedCards = computed(() => {
       return viewResult.value.answers.filter((user) => {
         return Object.values(user.answers).find((x) => 'cardSorting' in x)
       })
@@ -57,7 +57,9 @@ export default defineComponent({
               return {
                 title: cardTitle,
                 repeated,
-                agreement: Math.round((repeated / usersThatSortedCards.value.length) * 100),
+                agreement: Math.round(
+                  (repeated / usersThatSortedCards.value.length) * 100
+                ),
               }
             }
           )

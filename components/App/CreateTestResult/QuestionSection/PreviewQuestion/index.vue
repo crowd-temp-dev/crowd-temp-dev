@@ -2,7 +2,7 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import DialogButton from '../../../../Base/DialogButton/index.vue'
 import Item from './Item/index.vue'
-import { CreateTestState } from '~/store/create-test/create-test'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestResultPreviewQuestion',
@@ -25,9 +25,8 @@ export default defineComponent({
         return []
       }
 
-      const getQuestion = ($store.state['create-test'] as CreateTestState)[
-        'view-result'
-      ].questions[`question-${index}`]
+      const getQuestion = ($store.state as RootState).testSuite.viewResult
+        .questions[`question-${index}`]
 
       return getQuestion
     })

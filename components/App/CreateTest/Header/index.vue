@@ -5,6 +5,7 @@ import EditableText from '~/components/Base/EditableText/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import Skeleton from '~/components/Base/Skeleton/index.vue'
 import { TestSuiteState } from '~/store/testSuite'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppCreateTestHeader',
@@ -35,7 +36,11 @@ export default defineComponent({
       return root.$route.name === 'create-test-:id'
     })
 
-    return { testTitle, testPublished, enableEditing, testState }
+    const emptyTestForm = computed(() => {
+      return (root.$store.state as RootState).testSuite.create.empty
+    })
+
+    return { testTitle, testPublished, enableEditing, testState, emptyTestForm }
   },
 })
 </script>
@@ -55,7 +60,7 @@ export default defineComponent({
         class="ml-16 mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
       >
         <Skeleton
-          :loading="testState.pageLoading"
+          :loading="!testTitle"
           loading-class="h-36 w-120 rounded bg-surface-neutral-default"
         >
           <Tooltip
@@ -75,7 +80,7 @@ export default defineComponent({
       </h2>
 
       <Skeleton
-        :loading="testState.pageLoading"
+        :loading="!testTitle"
         loading-class="h-24 w-56 rounded-full bg-surface-neutral-default"
       >
         <Transition
@@ -85,7 +90,7 @@ export default defineComponent({
         >
           <PBadge
             v-if="
-              ($route.name === 'create-test-:id' && !$createTestForm.empty) ||
+              ($route.name === 'create-test-:id' && !emptyTestForm) ||
               $route.name === 'create-test-recruit-:id' ||
               $route.name === 'create-test-view-result-:id'
             "

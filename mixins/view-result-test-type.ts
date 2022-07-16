@@ -1,5 +1,5 @@
 import { computed, defineComponent } from '@vue/composition-api'
-import { ViewResultState } from '~/store/create-test/view-result'
+import { RootState } from '~/store'
 import { getAlphabets } from '~/utils'
 
 export default defineComponent({
@@ -11,9 +11,9 @@ export default defineComponent({
   },
   setup(_props, { root }) {
     const followUpQuestions = computed(() => {
-      return (
-        root.$store.state['create-test']['view-result'] as ViewResultState
-      ).questions[`question-${_props.numbering}`].followUpQuestions
+      return (root.$store.state as RootState).testSuite.viewResult.questions[
+        `question-${_props.numbering}`
+      ].followUpQuestions
     })
 
     return { followUpQuestions, getAlphabets }

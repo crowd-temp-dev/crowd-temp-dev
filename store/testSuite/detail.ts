@@ -10,16 +10,24 @@ export interface TestSuiteDetail {
   published: boolean
   description: string
   created: boolean
+  participants: number
+  responses: number
+  shareLink: string
+  favourite: boolean
 }
 
 const state = (): TestSuiteDetail => ({
   loading: false,
   error: false,
   id: null,
-  name: 'New Test',
+  name: '',
   published: null,
   description: null,
   created: false,
+  participants: null,
+  responses: null,
+  shareLink: null,
+  favourite: null,
 })
 
 const mutations: MutationTree<TestSuiteDetail> = {
@@ -35,10 +43,14 @@ const mutations: MutationTree<TestSuiteDetail> = {
   setData(
     state,
     payload: {
-      published: boolean
-      name: string
-      description: string
-      created: boolean
+      published?: boolean
+      name?: string
+      description?: string
+      created?: boolean
+      participants?: number
+      responses?: number
+      shareLink?: string
+      favourite?: boolean
     }
   ) {
     const {
@@ -46,16 +58,28 @@ const mutations: MutationTree<TestSuiteDetail> = {
       description = state.description,
       name = state.name,
       created = state.created,
+      responses = state.responses,
+      participants = state.participants,
+      shareLink = state.shareLink,
+      favourite = state.favourite,
     } = payload
 
     state.description = description
     state.name = name
     state.published = published
     state.created = created
+    state.responses = responses
+    state.participants = participants
+    state.shareLink = shareLink
+    state.favourite = favourite
   },
 }
 
-const actions: ActionTree<TestSuiteDetail, RootState> = {}
+const actions: ActionTree<TestSuiteDetail, RootState> = {
+  setId({ commit }, id: string) {
+    commit('setId', id)
+  },
+}
 
 const getters: GetterTree<TestSuiteDetail, RootState> = {}
 
