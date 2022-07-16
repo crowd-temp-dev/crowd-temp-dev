@@ -80,7 +80,7 @@ export default defineComponent({
     class="lg:shadow-2 lg:sticky lg:top-0 z-10 bg-surface-default px-8 md:px-20"
     :class="{
       // make header sticky for auth pages
-      'shadow-2 sticky top-0 bg-surface-default': mobileAuthPage,
+      'shadow-2 sticky top-0 z-10 bg-surface-default': mobileAuthPage,
       'lg:not-supports-backdrop-filter:bg-surface-default lg:supports-backdrop-filter:bg-surface-default/80 lg:supports-backdrop-filter:backdrop-blur-xl':
         $route.name !== 'privacy-and-policy',
     }"
