@@ -79,7 +79,7 @@ export default defineComponent({
     }
 
     const itemClick = (index: number) => {
-      if ($breakpoint.isMobile) {
+      if (!$breakpoint.isLaptop) {
         active.value === index ? (active.value = null) : (active.value = index)
       } else {
         active.value = index
