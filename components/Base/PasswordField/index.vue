@@ -29,11 +29,16 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    error: {
+      type: String,
+      default: undefined,
+    },
     label: {
       type: String,
       default: 'Password',
     },
     required: Boolean,
+    readonly: Boolean,
   },
   setup() {
     const showPassword = ref(false)
@@ -79,9 +84,7 @@ export default defineComponent({
       {{ helpText }}
     </p>
 
-    <PInlineError v-if="error">
-      {{ error }}
-    </PInlineError>
+    <PInlineError v-if="error" class="mt-4" :field-id="id" :message="error" />
   </div>
 </template>
 
