@@ -30,7 +30,7 @@ export default defineComponent({
     const onClick = async (evt: PointerEvent) => {
       showProgress.value = false
 
-      if (!$breakpoint.isMobile) {
+      if ($breakpoint.isLaptop) {
         const viewBox = document.getElementById('presentation-view-box')
 
         if (viewBox) {
@@ -70,43 +70,43 @@ export default defineComponent({
   <Intersection
     v-slot="{ isIntersecting }"
     :config="{ rootMargin: '-32px' }"
-    :disabled="$breakpoint.isMobile"
+    :disabled="!$breakpoint.isLaptop"
   >
     <li
       class="lg:w-350 w-full lg:h-114 rounded-lg lg:p-20 grid gap-y-10 transition-all relative isolate lg:active:opacity-80 transform-gpu lg:active:scale-[0.995] mb-24 lg:mb-0 lg:overflow-hidden"
       :class="{
-        'bg-surface-selected-default': active && !$breakpoint.isMobile,
+        'bg-surface-selected-default': active && $breakpoint.isLaptop,
         'progress-anim fill-after after:z-1 after:!h-4 after:!top-auto after:bottom-0 after:bg-action-primary-default after:!rounded-l-none after:translate-x-[-100%]':
-          showProgress && active && !$breakpoint.isMobile,
+          showProgress && active && $breakpoint.isLaptop,
         paused: paused || !isIntersecting,
       }"
       @animationend="onAnimationend"
-      v-on="$breakpoint.isMobile ? undefined : { click: onClick }"
+      v-on="!$breakpoint.isLaptop ? undefined : { click: onClick }"
     >
       <h3
         class="text-heading font-semibold cursor-default flex items-center justify-between w-full"
         :class="{
-          'active:opacity-70 transition-opacity': $breakpoint.isMobile,
+          'active:opacity-70 transition-opacity': !$breakpoint.isLaptop,
         }"
-        v-on="$breakpoint.isMobile ? { click: onClick } : undefined"
+        v-on="!$breakpoint.isLaptop ? { click: onClick } : undefined"
       >
         <span class="grow">
           {{ title }}
         </span>
 
         <PIcon
-          v-if="$breakpoint.isMobile"
+          v-if="!$breakpoint.isLaptop"
           :source="active ? 'ChevronUpMinor' : 'ChevronDownMinor'"
           class="shrink-0 inline"
         />
       </h3>
 
-      <p v-if="$breakpoint.isMobile ? active : true" class="cursor-default">
+      <p v-if="!$breakpoint.isLaptop ? active : true" class="cursor-default">
         {{ subtitle }}
       </p>
 
       <div
-        v-if="$breakpoint.isMobile && active"
+        v-if="!$breakpoint.isLaptop && active"
         class="max-w-[calc(100vw-16px)]"
       >
         <slot />

@@ -54,7 +54,7 @@ export default defineComponent({
         },
       ]
 
-      if ($breakpoint.isMobile) {
+      if (!$breakpoint.isLaptop) {
         return [
           {
             icons: value.slice(0, 3),
@@ -73,7 +73,7 @@ export default defineComponent({
 
 <template>
   <section class="mb-80 lg:mb-160 grid justify-center text-center">
-    <div class="max-w-[274px] lg:max-w-[initial]">
+    <div class="max-w-[274px] sm:max-w-[500px] lg:max-w-[initial]">
       <h2
         class="font-sf-pro-display leading-[28px] lg:leading-[32px] text-[22px] lg:text-[32px] font-semibold mb-16"
       >
@@ -89,7 +89,7 @@ export default defineComponent({
       class="grid gap-y-30 lg:gap-y-0 lg:flex lg:space-x-30 w-fit mx-auto justify-center"
     >
       <template v-for="(item, i) in icons">
-        <template v-if="$breakpoint.isMobile">
+        <template v-if="!$breakpoint.isLaptop">
           <div :key="`${i}`" class="flex items-center space-x-30">
             <div
               v-for="(icon, iconIndex) in item.icons"

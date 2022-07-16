@@ -53,7 +53,7 @@ export default defineComponent({
     </h3>
 
     <ul
-      class="w-fit grid lg:grid-cols-3 gap-30 max-w-screen lg:max-w-[1110px] mx-auto mb-100 justify-items-center px-10 md:px-0"
+      class="w-fit grid lg:grid-cols-3 gap-30 max-w-screen sm:max-w-[500px] lg:max-w-[1110px] mx-auto mb-100 justify-items-center px-10 md:px-0"
     >
       <li
         v-for="(item, i) in items"

@@ -21,7 +21,7 @@ export default defineComponent({
 
 <template>
   <section class="mb-80 lg:mb-162 w-full">
-    <div class="max-w-[274px] lg:max-w-[initial] text-center mx-auto">
+    <div class="max-w-[274px] sm:max-w-[500px] lg:max-w-[initial] text-center mx-auto">
       <h2
         class="font-sf-pro-display text-[22px] lg:text-[32px] font-semibold leading-[28px] lg:leading-[52.5px] mb-8 lg:mb-24 text-center"
       >
@@ -35,7 +35,7 @@ export default defineComponent({
     </div>
 
     <div
-      class="flex flex-wrap lg:flex-nowrap lg:space-x-34 justify-between max-w-[1100px] mx-auto"
+      class="flex flex-wrap lg:flex-nowrap lg:space-x-34 justify-between sm:max-w-[500px] lg:max-w-[1100px] mx-auto"
     >
       <div class="pt-24 lg:pt-40">
         <ul class="grid gap-y-20 px-20 lg:px-0">
@@ -60,7 +60,7 @@ export default defineComponent({
           </p>
 
           <Img
-            v-if="!$breakpoint.isMobile"
+            v-if="$breakpoint.isLaptop"
             src="static/png/landing-page/features-extension/arrow.png"
             alt="Scribble arrow vector"
             class="absolute right-[-50px] top-0 w-74 h-74"
@@ -68,7 +68,7 @@ export default defineComponent({
         </div>
       </div>
 
-      <div class="px-10 lg:px-0">
+      <div class="px-10 lg:px-0 w-full lg:w-[initial]">
         <div
           class="h-240 lg:h-[582px] lg:w-[730px] w-full rounded-[12px] lg:rounded-[29.14px] pl-[18.9px] lg:pl-46 pt-[22.6px] lg:pt-55"
           :style="{
@@ -80,7 +80,7 @@ export default defineComponent({
             <Img
               src="static/png/landing-page/use-cases/presentation/view/home"
               alt="Home"
-              class="lg:max-w-[505px] w-[69.1%] lg:w-[initial]"
+              class="lg:max-w-[505px] w-[207.53px] h-[148px] lg:h-[initial] lg:w-[initial]"
             />
           </div>
         </div>

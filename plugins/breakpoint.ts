@@ -29,6 +29,8 @@ const breakpointPlugin: Plugin = function ({ store }, inject) {
       breakpointState.state = {
         ...br,
         isMobile: /^(?:xxs|xs|sm)$/.test(br.is || ''),
+        isTablet: /^(?:md)$/.test(br.is || ''),
+        isLaptop: /^(?:lg|xl|xxl)$/.test(br.is || ''),
       }
     }
 

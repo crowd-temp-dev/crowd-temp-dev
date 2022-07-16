@@ -103,7 +103,7 @@ export default defineComponent({
       @click="itemClick(i)"
       @progress-done="onProgressDone(i)"
     >
-      <ViewBox v-if="$breakpoint.isMobile" :current-item="i" />
+      <ViewBox v-if="!$breakpoint.isLaptop" :current-item="i" />
     </Item>
   </ul>
 </template>

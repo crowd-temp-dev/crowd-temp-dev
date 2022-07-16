@@ -57,7 +57,8 @@
 .page-transition-fade-leave-active,
 .page-transition-slide-up-leave-active,
 .page-transition-slide-down-leave-active {
-  transition: 100ms opacity;
+  @apply md:duration-100 duration-[1ms];
+  transition-property: opacity;
 }
 
 .page-transition-slide-left-leave-to,
@@ -91,8 +92,9 @@
 .page-transition-fade-enter-active,
 .page-transition-slide-down-enter-active,
 .page-transition-slide-up-enter-active {
+  @apply md:duration-[250ms] duration-[1ms];
   will-change: transform, opacity;
-  transition: 250ms ease;
+  transition-timing-function: ease;
   transition-property: opacity, transform;
 }
 

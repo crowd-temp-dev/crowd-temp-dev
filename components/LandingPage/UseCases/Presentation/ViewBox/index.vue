@@ -25,13 +25,13 @@ export default defineComponent({
     v-slot="{ intersectionRatio, boundingClientRect, isIntersecting }"
     thresholds="100"
     :config="{ rootMargin: '-58px 0px 0px 0px' }"
-    :disabled="$breakpoint.isMobile"
+    :disabled="!$breakpoint.isLaptop"
   >
     <div
       id="presentation-view-box"
       class="h-[584px] w-full max-w-[715px] rounded-[9.05px] lg:rounded-[22px] relative isolate"
       :style="
-        $breakpoint.isMobile
+        !$breakpoint.isLaptop
           ? {
               width: 'calc(100% - 5.76px)',
               height: '240px',
@@ -44,8 +44,8 @@ export default defineComponent({
         class="pseudo bg-surface-selected-pressed -z-1 rounded-[inherit] h-[inherit] w-[inherit]"
         :style="{
           transform:
-            (boundingClientRect || {}).top < 58 || $breakpoint.isMobile
-              ? `${$breakpoint.isMobile ? '' : 'translate3d(-16px,-16px,0)'}`
+            (boundingClientRect || {}).top < 58 || !$breakpoint.isLaptop
+              ? `${!$breakpoint.isLaptop ? '' : 'translate3d(-16px,-16px,0)'}`
               : `translate3d(${stepper(-16, 0, intersectionRatio)}px,${stepper(
                   -16,
                   0,
@@ -57,7 +57,7 @@ export default defineComponent({
             (boundingClientRect || {}).top > 58
               ? 'transform'
               : undefined,
-          width: $breakpoint.isMobile ? 'calc(100% - 5.76px)' : undefined,
+          width: !$breakpoint.isLaptop ? 'calc(100% - 5.76px)' : undefined,
         }"
       />
 
@@ -69,21 +69,21 @@ export default defineComponent({
           filter: `drop-shadow(0.5px 1px 1px rgb(0, 0, 0, 0.035)) drop-shadow(-3px -1px 3px hsl(215, 26%, 60%, ${stepper(
             0.075,
             0,
-            (boundingClientRect || {}).top < 58 || $breakpoint.isMobile
-              ? $breakpoint.isMobile
+            (boundingClientRect || {}).top < 58 || !$breakpoint.isLaptop
+              ? !$breakpoint.isLaptop
                 ? 0.5
                 : 1
               : intersectionRatio
           )})) drop-shadow(-4px -3px 4px hsl(215, 46%, 75%, ${stepper(
             0.025,
             0,
-            (boundingClientRect || {}).top < 58 || $breakpoint.isMobile
-              ? $breakpoint.isMobile
+            (boundingClientRect || {}).top < 58 || !$breakpoint.isLaptop
+              ? !$breakpoint.isLaptop
                 ? 0.5
                 : 1
               : intersectionRatio
           )}))`,
-          transform: $breakpoint.isMobile
+          transform: !$breakpoint.isLaptop
             ? 'translate3d(5.76px,5.76px,0)'
             : undefined,
         }"
@@ -96,7 +96,7 @@ export default defineComponent({
               :key="currentItem"
               class="w-full h-full"
               v-on="
-                $breakpoint.isMobile
+                !$breakpoint.isLaptop
                   ? undefined
                   : {
                       mouseenter: () => $emit('image-hovered', true),

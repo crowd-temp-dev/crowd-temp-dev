@@ -38,6 +38,8 @@ export type BreakpointOutput = {
   is?: Breakpoints
   orientation?: 'portrait' | 'landscape' | ''
   isMobile?: boolean
+  isTablet?: boolean
+  isLaptop?: boolean
 }
 
 export interface HTMLAttrs {

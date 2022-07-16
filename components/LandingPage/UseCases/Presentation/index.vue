@@ -38,9 +38,9 @@ export default defineComponent({
   <section id="use-cases" class="mb-80 lg:mb-162 px-10 md:px-0">
     <h2 class="sr-only">Use cases</h2>
 
-    <div class="flex space-x-30 mx-auto w-full justify-between">
+    <div class="flex space-x-30 mx-auto w-full justify-between max-w-[500px] lg:max-w-[initial]">
       <ViewBox
-        v-if="!$breakpoint.isMobile"
+        v-if="$breakpoint.isLaptop"
         :current-item="getCurrentItem"
         @image-hovered="(evt) => (imageHovered = evt)"
         @image-loaded="imageLoaded = true"
