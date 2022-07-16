@@ -12,7 +12,7 @@ export default defineComponent({
 
   setup() {
     const img = (title: string) =>
-      `/static/png/landing-page/use-cases/footer/${title}`
+      `/static/png/landing-page/use-cases/footer/${title}.png`
     const items: Item[] = [
       {
         image: img('1'),
@@ -39,29 +39,35 @@ export default defineComponent({
 </script>
 
 <template>
-  <section
-    class="bg-surface-subdued "
-  >
+  <section class="bg-surface-subdued">
     <h2
-      class="font-sf-pro-display font-semibold text-[36px] leading-[32px] px-16 text-center mt-100 mb-16"
+      class="font-sf-pro-display font-semibold text-[22px] lg:text-[36px] leading-[28px] lg:leading-[32px] px-16 text-center mt-100 mb-16"
     >
       Built for all kinds of teams
     </h2>
 
-    <h3 class="font-sf-pro-display text-display-small px-16 text-center mb-32">
+    <h3
+      class="font-sf-pro-display text-[16px] leading-[25.5px] lg:text-display-small px-16 text-center mb-32"
+    >
       We've cracked the code of getting awesome insights for product teams.
     </h3>
 
-    <ul class="w-fit grid grid-cols-3 gap-30 max-w-[1110px] mx-auto mb-100 justify-items-center">
+    <ul
+      class="w-fit grid lg:grid-cols-3 gap-30 max-w-screen lg:max-w-[1110px] mx-auto mb-100 justify-items-center px-10 md:px-0"
+    >
       <li
         v-for="(item, i) in items"
         :key="i"
-        class="max-w-[356px] shadow-2 rounded-lg bg-surface-default pt-40 pb-80 px-20"
+        class="lg:max-w-[356px] shadow-2 rounded-lg bg-surface-default pt-32 lg:pt-40 pb-40 lg:pb-80 px-20"
       >
-        <Img :src="item.image" alt="Vector image" class="min-h-[160px]" />
+        <Img
+          :src="item.image"
+          alt="Vector image"
+          class="min-h-[87px] w-[104.68px] lg:h-122 lg:w-150"
+        />
 
         <h4
-          class="font-sf-pro-display text-display-large-sm text-[22px] font-semibold my-24"
+          class="font-sf-pro-display text-display-small lg:text-display-large-sm lg:text-[22px] font-semibold my-8 lg:my-24"
         >
           {{ item.title }}
         </h4>

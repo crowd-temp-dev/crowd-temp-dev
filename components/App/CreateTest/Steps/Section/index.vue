@@ -120,6 +120,7 @@ export default defineComponent({
     <section
       :id="id"
       :tabindex="id ? '0' : undefined"
+      class="outline-none"
       :style="{ '--fade-leave-duration': '150ms' }"
     >
       <Form

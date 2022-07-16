@@ -15,10 +15,19 @@ import { Signup } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 import { showServerAuthMessage } from '~/utils'
 import { googleOAuthUrl } from '~/utils/oauth/google'
+import GoogleIcon from '~/components/Base/Icon/GoogleIcon.vue'
+import TwitterIcon from '~/components/Base/Icon/TwitterIcon.vue'
 
 export default defineComponent({
   name: 'SignUpPage',
-  components: { Auth, Button, ConfirmPasswordField, PasswordField },
+  components: {
+    Auth,
+    Button,
+    ConfirmPasswordField,
+    PasswordField,
+    GoogleIcon,
+    TwitterIcon,
+  },
 
   transition: (to, from) =>
     dynamicPageTransition({
@@ -144,13 +153,7 @@ export default defineComponent({
           :href="getGoogleOAuthUrl"
         >
           <div class="flex items-center">
-            <Img
-              src="static/png/icon/google"
-              alt="Google logo"
-              :width="19"
-              :height="19"
-              class="w-19 h-19 mr-4"
-            />
+            <GoogleIcon class="w-19 h-19 mr-4" />
 
             Sign up with Google
           </div>
@@ -161,13 +164,7 @@ export default defineComponent({
           :full-width="$breakpoint.isMobile"
         >
           <div class="flex items-center">
-            <Img
-              src="static/png/icon/twitter"
-              alt="Twitter logo"
-              :width="19"
-              :height="19"
-              class="w-19 h-19 mr-4"
-            />
+            <TwitterIcon class="w-19 h-19 mr-4" />
 
             Sign up with Twitter
           </div>
@@ -220,20 +217,35 @@ export default defineComponent({
           v-bind="fieldIdAndError('confirmPassword')"
         />
 
-        <div class="flex items-center space-x-4">
-          <Checkbox
-            required
-            v-bind="fieldIdAndError('agreed')"
-            label="I agree to Crowd's"
-          />
+        <div>
+          <div class="flex items-start space-x-8">
+            <Checkbox
+              :id="fieldIdAndError('agreed').id"
+              required
+              label-hidden
+            />
 
-          <NuxtLink
-            to="/privacy-and-policy"
-            class="text-action-primary-default hover:underline"
-            target="_blank"
-          >
-            terms and privacy policies
-          </NuxtLink>
+            <span>
+              <label :for="fieldIdAndError('agreed').id">
+                I agree to Crowd's
+              </label>
+
+              <NuxtLink
+                to="/privacy-and-policy"
+                class="text-action-primary-default hover:underline"
+                target="_blank"
+              >
+                terms and privacy policies
+              </NuxtLink>
+            </span>
+          </div>
+
+          <PInlineError
+            v-if="fieldIdAndError('agreed').error"
+            :field-id="fieldIdAndError('agreed').id"
+            :message="fieldIdAndError('agreed').error"
+            class="mt-4"
+          />
         </div>
 
         <Checkbox

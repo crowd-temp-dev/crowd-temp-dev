@@ -1,5 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
+import ViewBox from '../ViewBox/index.vue'
 import Item from './Item/index.vue'
 import { oneFrame, sleep } from '~/utils'
 
@@ -10,7 +11,7 @@ interface ItemType {
 
 export default defineComponent({
   name: 'LandinPageUseCasesList',
-  components: { Item },
+  components: { Item, ViewBox },
   model: {
     prop: 'modelValue',
     event: 'update:modelValue',
@@ -22,7 +23,7 @@ export default defineComponent({
     },
     imageHovered: Boolean,
   },
-  setup(_props, { emit }) {
+  setup(_props, { emit, root: { $breakpoint } }) {
     const cycled = ref(false)
 
     const active = computed({
@@ -77,13 +78,21 @@ export default defineComponent({
       }
     }
 
-    return { active, cycled, items, onProgressDone }
+    const itemClick = (index: number) => {
+      if ($breakpoint.isMobile) {
+        active.value === index ? (active.value = null) : (active.value = index)
+      } else {
+        active.value = index
+      }
+    }
+
+    return { active, cycled, items, onProgressDone, itemClick }
   },
 })
 </script>
 
 <template>
-  <ul>
+  <ul class="max-w-[100%] lg:max-w-[initial] w-full lg:w-[initial]">
     <Item
       v-for="(item, i) in items"
       :key="`${i}${active === i}`"
@@ -91,8 +100,10 @@ export default defineComponent({
       :active="active === i"
       :start-animation="!cycled"
       :paused="imageHovered"
-      @click="active = i"
+      @click="itemClick(i)"
       @progress-done="onProgressDone(i)"
-    />
+    >
+      <ViewBox v-if="$breakpoint.isMobile" :current-item="i" />
+    </Item>
   </ul>
 </template>

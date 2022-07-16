@@ -33,7 +33,7 @@ export default defineComponent({
     :config="{ rootMargin: '-58px 0px 0px 0px' }"
   >
     <ul
-      class="md:h-[537px] md:w-[837.97px] mx-auto mt-24 md:mt-32 mb-36 md:mb-32 grid gap-y-10 md:flex md:flex-wrap justify-between px-8 md:px-4 isolate"
+      class="md:h-[537px] md:w-[837.97px] mx-auto mt-24 md:mt-32 grid gap-y-10 md:flex md:flex-wrap justify-between px-12 md:px-4 isolate"
     >
       <FeatureItem
         v-for="(item, i) in items"

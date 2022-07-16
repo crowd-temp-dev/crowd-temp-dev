@@ -20,20 +20,29 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="mb-162 w-full">
-    <h2
-      class="font-sf-pro-display text-[32px] font-semibold leading-[52.5px] mb-24 text-center"
-    >
-      Building great products is easier than ever
-    </h2>
+  <section class="mb-80 lg:mb-162 w-full">
+    <div class="max-w-[274px] lg:max-w-[initial] text-center mx-auto">
+      <h2
+        class="font-sf-pro-display text-[22px] lg:text-[32px] font-semibold leading-[28px] lg:leading-[52.5px] mb-8 lg:mb-24 text-center"
+      >
+        Building great products is easier than ever
+      </h2>
 
-    <div class="flex space-x-34 justify-between max-w-[1100px] mx-auto">
-      <div class="pt-40">
-        <ul class="grid gap-y-20">
+      <h3 class="lg:sr-only font-sf-pro-display text-[16px] leading-[25.5px]">
+        We've built a suite of solutions to help tackle different product
+        insight scenarios!
+      </h3>
+    </div>
+
+    <div
+      class="flex flex-wrap lg:flex-nowrap lg:space-x-34 justify-between max-w-[1100px] mx-auto"
+    >
+      <div class="pt-24 lg:pt-40">
+        <ul class="grid gap-y-20 px-20 lg:px-0">
           <li
             v-for="(feature, i) in features"
             :key="i"
-            class="flex space-x-10 text-display-small font-sf-pro-display items-center"
+            class="flex space-x-10 text-display-small-sm lg:text-display-small font-sf-pro-display items-center"
           >
             <FeatureExtensionCheck />
 
@@ -44,9 +53,14 @@ export default defineComponent({
         </ul>
 
         <div class="relative">
-          <p class="uppercase text-sub-heading mt-20 font-semibold">And more...</p>
+          <p
+            class="uppercase text-sub-heading mt-20 font-semibold px-20 lg:px-0 mb-24 lg:mb-0"
+          >
+            And more...
+          </p>
 
           <Img
+            v-if="!$breakpoint.isMobile"
             src="static/png/landing-page/features-extension/arrow.png"
             alt="Scribble arrow vector"
             class="absolute right-[-50px] top-0"
@@ -54,18 +68,21 @@ export default defineComponent({
         </div>
       </div>
 
-      <div
-        class="h-[582px] lg:w-[730px] w-full rounded-[29.14px] pl-46 pt-55"
-        :style="{
-          'background-image':
-            'linear-gradient(124.19deg, #F0F6FF 0%, #FBFBFB 100%)',
-        }"
-      >
-        <div>
-          <Img
-            src="static/png/landing-page/use-cases/presentation/view/home"
-            alt="Home"
-          />
+      <div class="px-10 lg:px-0">
+        <div
+          class="h-240 lg:h-[582px] lg:w-[730px] w-full rounded-[12px] lg:rounded-[29.14px] pl-[18.9px] lg:pl-46 pt-[22.6px] lg:pt-55"
+          :style="{
+            'background-image':
+              'linear-gradient(124.19deg, #F0F6FF 0%, #FBFBFB 100%)',
+          }"
+        >
+          <div>
+            <Img
+              src="static/png/landing-page/use-cases/presentation/view/home"
+              alt="Home"
+              class="lg:max-w-[505px] w-[69.1%] lg:w-[initial]"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -1,3 +1,61 @@
+<script lang="ts">
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import Button from '~/components/Base/Button/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+
+type Step = {
+  title: 'Create test' | 'Recruit' | 'View Results'
+  icon: 'CirclePlusMinor' | 'CustomerPlusMajor'
+  active: boolean
+  done: boolean
+  disabled: Boolean
+  select: Function
+}
+
+export default defineComponent({
+  name: 'AppCreateTestBody',
+  components: { Button, FadeTransition },
+  setup(_, { root }) {
+    const showBanner = ref(false)
+    const steps = computed(() => {
+      // TODO: SET TYPE AND VUEX!
+      const vuexState = {} as any
+
+      const setActiveDisabledSelectAndDone = (index: 1 | 2 | 3) => {
+        return {
+          active: root.$route.query.step === `${index}`,
+          done: vuexState.progress.done.includes(index),
+          disabled:
+            !vuexState.progress.done.includes(index) &&
+            root.$route.query.step !== `${index}`,
+          select: () => root.$store.commit('createTest/EDITING', index),
+        }
+      }
+
+      return [
+        {
+          title: 'Create test',
+          icon: 'CirclePlusMinor',
+          ...setActiveDisabledSelectAndDone(1),
+        },
+        {
+          title: 'Recruit',
+          icon: 'CustomerPlusMajor',
+          ...setActiveDisabledSelectAndDone(2),
+        },
+        {
+          title: 'View Results',
+          icon: 'CirclePlusMinor',
+          ...setActiveDisabledSelectAndDone(3),
+        },
+      ] as Step[]
+    })
+
+    return { steps, showBanner }
+  },
+})
+</script>
+
 <template>
   <div class="isolate">
     <div class="app-page-header !h-56 !relative !z-1 !justify-center">
@@ -60,63 +118,3 @@
     <slot />
   </div>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
-import Button from '~/components/Base/Button/index.vue'
-import FadeTransition from '~/components/Base/FadeTransition/index.vue'
-
-type Step = {
-  title: 'Create test' | 'Recruit' | 'View Results'
-  icon: 'CirclePlusMinor' | 'CustomerPlusMajor'
-  active: boolean
-  done: boolean
-  disabled: Boolean
-  select: Function
-}
-
-export default defineComponent({
-  name: 'AppCreateTestBody',
-  components: { Button, FadeTransition },
-  setup(_, { root }) {
-    const showBanner = ref(false)
-    const steps = computed(() => {
-      // TODO: SET TYPE AND VUEX!
-      const vuexState = {} as any
-
-      const setActiveDisabledSelectAndDone = (index: 1 | 2 | 3) => {
-        return {
-          active: root.$route.query.step === `${index}`,
-          done: vuexState.progress.done.includes(index),
-          disabled:
-            !vuexState.progress.done.includes(index) &&
-            root.$route.query.step !== `${index}`,
-          select: () => root.$store.commit('createTest/EDITING', index),
-        }
-      }
-
-      return [
-        {
-          title: 'Create test',
-          icon: 'CirclePlusMinor',
-          ...setActiveDisabledSelectAndDone(1),
-        },
-        {
-          title: 'Recruit',
-          icon: 'CustomerPlusMajor',
-          ...setActiveDisabledSelectAndDone(2),
-        },
-        {
-          title: 'View Results',
-          icon: 'CirclePlusMinor',
-          ...setActiveDisabledSelectAndDone(3),
-        },
-      ] as Step[]
-    })
-
-    return { steps, showBanner }
-  },
-})
-</script>
-
-<style scoped></style>

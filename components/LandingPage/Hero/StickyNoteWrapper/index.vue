@@ -30,7 +30,7 @@ export default defineComponent({
       class="!absolute pointer-events-auto"
       :class="{
         'top-0 left-[calc(50%--14px)] md:left-[calc(50%-24px)]': i === 0,
-        'left-38 md:left-0 top-52 md:top-[225.97px]': i === 1,
+        'left-72 md:left-0 top-52 md:top-[225.97px]': i === 1,
         '-right-16 xl-right-0 top-[174.92px]': i === 2,
       }"
     />

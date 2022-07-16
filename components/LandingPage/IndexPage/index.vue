@@ -52,7 +52,7 @@ export default defineComponent({
 <template>
   <div>
     <main
-      class="grid items-center justify-center isolate min-h-screen h-fit mt-24 xs:mt-44 md:mt-60 grid-cols-1 px-8 md:px-0"
+      class="grid items-center justify-center isolate min-h-screen h-fit mt-24 xs:mt-44 md:mt-60 grid-cols-1"
     >
       <Hero />
 

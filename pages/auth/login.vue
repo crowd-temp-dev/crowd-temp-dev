@@ -12,10 +12,12 @@ import {
 import { LoginPayload } from '~/store/user'
 import { googleOAuthUrl } from '~/utils/oauth/google'
 import { showServerAuthMessage } from '~/utils'
+import TwitterIcon from '~/components/Base/Icon/TwitterIcon.vue'
+import GoogleIcon from '~/components/Base/Icon/GoogleIcon.vue'
 
 export default defineComponent({
   name: 'LoginPage',
-  components: { Auth, Button, PasswordField },
+  components: { Auth, Button, PasswordField, TwitterIcon, GoogleIcon },
 
   transition: (to, from) =>
     dynamicPageTransition({
@@ -117,13 +119,7 @@ export default defineComponent({
           :autofocus="focusOn === 'google'"
         >
           <div class="flex items-center">
-            <Img
-              src="static/png/icon/google"
-              alt="Google logo"
-              :width="19"
-              :height="19"
-              class="w-19 h-19 mr-4"
-            />
+            <GoogleIcon class="w-19 h-19 mr-4" />
 
             Login with Google
           </div>
@@ -134,13 +130,7 @@ export default defineComponent({
           :full-width="$breakpoint.isMobile"
         >
           <div class="flex items-center">
-            <Img
-              src="static/png/icon/twitter"
-              alt="Twitter logo"
-              :width="19"
-              :height="19"
-              class="w-19 h-19 mr-4"
-            />
+            <TwitterIcon class="w-19 h-19 mr-4" />
 
             Login with Twitter
           </div>

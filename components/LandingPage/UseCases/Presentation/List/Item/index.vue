@@ -6,7 +6,6 @@ import Intersection from '~/components/Base/Intersection/index.vue'
 export default defineComponent({
   name: 'LandinPageUseCasesListItem',
   components: { Intersection },
-
   props: {
     active: Boolean,
     paused: Boolean,
@@ -22,27 +21,33 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    modelValue: Boolean,
   },
   emits: ['progress-done'],
-  setup(_props, { emit }) {
+  setup(_props, { emit, root: { $breakpoint } }) {
     const showProgress = ref(_props.startAnimation)
+
     const onClick = async (evt: PointerEvent) => {
       showProgress.value = false
-      const viewBox = document.getElementById('presentation-view-box')
 
-      if (viewBox) {
-        const header = document.getElementById('landing-page-header')
+      if (!$breakpoint.isMobile) {
+        const viewBox = document.getElementById('presentation-view-box')
 
-        const headerHeight = header ? header.clientHeight : 58
+        if (viewBox) {
+          const header = document.getElementById('landing-page-header')
 
-        window.scrollTo({
-          top:
-            viewBox.offsetTop -
-            headerHeight -
-            48 /** 48 = backdrop is 16, margin is 32 **/,
-          behavior: 'smooth',
-        })
+          const headerHeight = header ? header.clientHeight : 58
+
+          window.scrollTo({
+            top:
+              viewBox.offsetTop -
+              headerHeight -
+              48 /** 48 = backdrop is 16, margin is 32 **/,
+            behavior: 'smooth',
+          })
+        }
       }
+
       emit('click', evt)
       await nextFrame()
       showProgress.value = _props.startAnimation
@@ -62,25 +67,50 @@ export default defineComponent({
 </script>
 
 <template>
-  <Intersection v-slot="{ isIntersecting }" :config="{ rootMargin: '-32px' }">
+  <Intersection
+    v-slot="{ isIntersecting }"
+    :config="{ rootMargin: '-32px' }"
+    :disabled="$breakpoint.isMobile"
+  >
     <li
-      class="lg:w-350 w-full h-114 rounded-lg p-20 grid gap-y-10 transition-all relative isolate overflow-hidden active:opacity-80 transform-gpu active:scale-[0.995]"
+      class="lg:w-350 w-full lg:h-114 rounded-lg lg:p-20 grid gap-y-10 transition-all relative isolate active:opacity-80 transform-gpu active:scale-[0.995] mb-24 lg:mb-0 lg:overflow-hidden"
       :class="{
-        'bg-surface-selected-default': active,
+        'bg-surface-selected-default': active && !$breakpoint.isMobile,
         'progress-anim fill-after after:z-1 after:!h-4 after:!top-auto after:bottom-0 after:bg-action-primary-default after:!rounded-l-none after:translate-x-[-100%]':
-          showProgress && active,
+          showProgress && active && !$breakpoint.isMobile,
         paused: paused || !isIntersecting,
       }"
-      @click="onClick"
       @animationend="onAnimationend"
+      v-on="$breakpoint.isMobile ? undefined : { click: onClick }"
     >
-      <h3 class="text-heading font-semibold cursor-default">
-        {{ title }}
+      <h3
+        class="text-heading font-semibold cursor-default flex items-center justify-between w-full"
+        :class="{
+          'active:opacity-70 transition-opacity': $breakpoint.isMobile,
+        }"
+        v-on="$breakpoint.isMobile ? { click: onClick } : undefined"
+      >
+        <span class="grow">
+          {{ title }}
+        </span>
+
+        <PIcon
+          v-if="$breakpoint.isMobile"
+          :source="active ? 'ChevronUpMinor' : 'ChevronDownMinor'"
+          class="shrink-0 inline"
+        />
       </h3>
 
-      <p class="cursor-default">
+      <p v-if="$breakpoint.isMobile ? active : true" class="cursor-default">
         {{ subtitle }}
       </p>
+
+      <div
+        v-if="$breakpoint.isMobile && active"
+        class="max-w-[calc(100vw-16px)]"
+      >
+        <slot />
+      </div>
     </li>
   </Intersection>
 </template>

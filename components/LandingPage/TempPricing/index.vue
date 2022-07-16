@@ -22,10 +22,10 @@ export default defineComponent({
 <template>
   <section
     id="pricing"
-    class="mb-160 bg-[#1A1C1D] rounded-lg p-40 grid justify-center max-w-[914px] mx-auto text-center"
+    class="mb-80 lg:mb-160 bg-[#1A1C1D] lg:rounded-lg py-40 px-20 lg:px-40 grid justify-center max-w-[914px] mx-auto text-center"
   >
     <h2
-      class="font-sf-pro-display text-[32px] leading-[52.5px] font-semibold text-surface-default mb-8"
+      class="font-sf-pro-display text-[22px] lg:text-[32px] leading-[52.5px] font-semibold text-surface-default mb-8"
     >
       Affordable pricing
     </h2>
@@ -33,7 +33,7 @@ export default defineComponent({
     <VHTML
       :text="content"
       tag="p"
-      class="font-sf-pro-display text-display-small mb-32 text-surface-default"
+      class="font-sf-pro-display text-display-small-sm lg:text-display-small mb-32 text-surface-default"
     />
 
     <Button

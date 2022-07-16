@@ -18,14 +18,17 @@ export default defineComponent({
 </script>
 
 <template>
-  <footer class="h-78 pt-24 pb-40 bg-surface-default shadow-2">
+  <footer class="md:h-78 pt-24 pb-40 bg-surface-default shadow-2">
     <section
-      class="max-w-[100rem] mx-auto flex justify-center md:justify-between items-start"
+      class="max-w-[100rem] flex-wrap md:flex-nowrap mx-auto flex items-center justify-center md:justify-between lg:items-start"
     >
       <h2
-        class="text-[20.07px] leading-[20.57px] font-medium hidden md:flex items-center"
+        class="order-2 md:order-1 mt-20 md:mt-0 text-[20.07px] leading-[20.57px] font-medium flex items-center flex-wrap md:flex-nowrap"
       >
-        <span class="transition-opacity active:opacity-70" @click="scrollToTop">
+        <span
+          class="transition-opacity active:opacity-70 mx-auto md:mx-[initial] shrink-0 mb-10 md:mb-0"
+          @click="scrollToTop"
+        >
           <NuxtLink to="/" class="inline-flex items-center">
             <Img
               src="static/logo"
@@ -39,7 +42,7 @@ export default defineComponent({
           </NuxtLink>
         </span>
 
-        <span class="text-button ml-10">
+        <span class="text-button ml-10 w-full text-center">
           Built with ❤️ by
           <a
             href="https://www.unbugqa.com"
@@ -51,7 +54,7 @@ export default defineComponent({
         </span>
       </h2>
 
-      <p>Follow us on</p>
+      <p class="order-1 lg:order-[initial] w-full text-center">Follow us on</p>
     </section>
   </footer>
 </template>

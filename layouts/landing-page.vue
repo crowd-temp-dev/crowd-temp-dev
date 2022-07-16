@@ -24,6 +24,7 @@ export default defineComponent({
         'hide-ui': !mounted,
       },
     ]"
+    @touchstart.passive="() => {}"
   >
     <Header />
     <NuxtChild />

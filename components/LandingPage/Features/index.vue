@@ -10,10 +10,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="mt-100 grid justify-items-center mb-160">
+  <section class="mt-80 lg:mt-100 grid justify-items-center lg:mb-160 mb-80">
     <h2
       id="features"
-      class="mx-auto max-w-[750px] landing-page-title mb-24 !text-[32px]"
+      class="mx-auto max-w-[750px] landing-page-title mb-8 lg:mb-24 !text-[22px] lg:!text-[32px]"
     >
       Variety of testing methods to choose from
     </h2>
