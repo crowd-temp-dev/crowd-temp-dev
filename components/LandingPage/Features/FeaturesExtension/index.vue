@@ -63,7 +63,7 @@ export default defineComponent({
             v-if="!$breakpoint.isMobile"
             src="static/png/landing-page/features-extension/arrow.png"
             alt="Scribble arrow vector"
-            class="absolute right-[-50px] top-0"
+            class="absolute right-[-50px] top-0 w-74 h-74"
           />
         </div>
       </div>
