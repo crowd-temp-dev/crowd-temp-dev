@@ -32,6 +32,7 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Website evaluation`"
     :store-index="rootNumber"
   >
@@ -42,12 +43,20 @@ export default defineComponent({
 
     <div class="grid gap-y-20 mt-0 mb-20">
       <div>
-        <div class="flex space-x-10 items-end">
+        <div
+          class="flex space-x-10"
+          :class="[
+            fieldIdAndError(`${state.id}-link`).error
+              ? 'items-center'
+              : 'items-end',
+          ]"
+        >
           <TextField
             v-model="state.websiteLink"
             label="Website link"
             required
             class="grow"
+            v-bind="fieldIdAndError(`${state.id}-link`)"
           />
 
           <Tooltip
@@ -58,7 +67,7 @@ export default defineComponent({
               disablePreview ? 'Enter a valid url' : 'Accept checkbox below'
             "
           >
-            <span v-on="{...events, click: open}">
+            <span v-on="{ ...events, click: open }">
               <PreviewURL
                 :disable-button="disablePreview"
                 :readonly="!acceptUrlShareTerms"
@@ -98,6 +107,7 @@ export default defineComponent({
       v-model="state.followUpQuestions"
       :question-id="state.id"
       :root-number="rootNumber"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

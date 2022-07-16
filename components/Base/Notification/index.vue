@@ -57,18 +57,18 @@ export default defineComponent({
 
 <template>
   <div
-    class="relative"
+    class="relative flex"
     :class="{ 'border-b border-background-default': divide }"
   >
     <div
-      class="w-4 h-full rounded-l-lg shrink-0 absolute left-0 top-0"
+      class="w-4 h-full rounded-l-lg shrink-0 top-0"
       :class="{
         'bg-action-primary-disabled': read,
         'bg-action-primary-default': !read,
       }"
     />
 
-    <div class="p-20 ml-4 bg-surface-default">
+    <div class="p-20 bg-surface-default">
       <div class="flex items-center justify-between mb-4">
         <span
           class="rounded-[10px] h-24 flex-centered px-8"

@@ -29,6 +29,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    idAndError: {
+      type: Function,
+      required: true,
+    },
   },
   setup(_props, { emit }) {
     const id = ref(uid())
@@ -122,7 +126,10 @@ export default defineComponent({
         <PIcon
           source="DragHandleMinor"
           class="fill-icon-default w-16 h-16 shrink-0 drag-handle transition-opacity"
-          :class="{ 'pointer-events-none opacity-20': modelSync.length < 2 }"
+          :class="{
+            'pointer-events-none opacity-20': modelSync.length < 2,
+            'mb-[calc(20px+0.4rem)] mt-0': idAndError(`${id}-${i}`).error,
+          }"
         />
 
         <TextField
@@ -130,12 +137,16 @@ export default defineComponent({
           class="flex-grow ml-14 mr-12 drag-handle"
           type="text"
           required
+          v-bind="idAndError(`${id}-${i}`)"
         />
 
         <PIcon
           source="DeleteMinor"
           class="fill-icon-default w-16 h-16 shrink-0"
-          :class="{ 'pointer-events-none opacity-20': modelSync.length < 3 }"
+          :class="{
+            'pointer-events-none opacity-20': modelSync.length < 3,
+            'mb-[calc(20px+0.4rem)] mt-0': idAndError(`${id}-${i}`).error,
+          }"
           @click="removeField(field)"
         />
       </li>

@@ -28,14 +28,6 @@ export default defineComponent({
   name: 'AppNotesPage',
   components: { SearchField, NoteSection },
   layout: 'app' as Layout,
-  // transition(_, from) {
-  //   if (from) {
-  //     return ['create-test', 'index'].includes(from.name || '')
-  //       ? 'page-transition-slide-down'
-  //       : 'page-transition-slide-up'
-  //   }
-  //   return 'page-transition-fade'
-  // },
   transition: (to, from) =>
     dynamicPageTransition({
       to,
@@ -44,7 +36,7 @@ export default defineComponent({
         !from ||
         splitPath(to.path).length === splitPath(from?.path || '').length,
     }),
-  setup() {},
+  setup() { },
 
   // TODO!!!
   head: {

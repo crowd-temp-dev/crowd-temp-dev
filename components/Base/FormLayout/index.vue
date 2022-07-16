@@ -111,13 +111,12 @@ export default defineComponent({
             Object.getOwnPropertyDescriptors(form.elements)
           ).filter(
             (x) =>
-              !/^\d/.test(x) &&
-              !!(
+              (
                 form.elements.namedItem(x) as
                   | HTMLInputElement
                   | HTMLSelectElement
                   | HTMLTextAreaElement
-              ).validationMessage
+              )?.validationMessage
           )
 
           if (keyedElements[0] && setError) {
@@ -127,7 +126,7 @@ export default defineComponent({
                   | HTMLInputElement
                   | HTMLSelectElement
                   | HTMLTextAreaElement
-              ).validationMessage,
+              )?.validationMessage,
             }
           } else {
             firstInputError.value = {}

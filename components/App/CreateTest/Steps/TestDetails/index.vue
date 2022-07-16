@@ -1,70 +1,66 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import Form from '../Form/index.vue'
 import Section from '../Section/index.vue'
-import { CreateTestState } from '~/store/create-test/create-test'
+import Id from '~/components/Base/Id/index.vue'
+import { TestSuiteState } from '~/store/testSuite'
 
 export default defineComponent({
   name: 'AppCreateTestStepsTestDetails',
-  components: { Section, Form },
+  components: { Section, Id },
   setup(_, { root: { $store } }) {
-    const testTitle = computed({
-      get() {
-        return ($store.state['create-test'] as CreateTestState).form.testDetails
-          .name
-      },
-      set(val: string) {
-        if (typeof val === 'string') {
-          $store.dispatch('create-test/updateForm', {
-            path: 'testDetails.name',
-            value: val,
-          })
+    const modelSync = computed(() => {
+      const storeValue = ($store.state.testSuite as TestSuiteState).detail
+
+      return new Proxy(
+        {},
+        {
+          get(_, path: keyof typeof storeValue) {
+            return storeValue[path] || ''
+          },
+          set(_, path: keyof typeof storeValue, value: any) {
+            $store.commit('testSuite/detail/setData', {
+              [path]: value,
+            })
+
+            return true
+          },
         }
-      },
+      )
     })
 
-    return { testTitle }
+    return { modelSync }
   },
 })
 </script>
 
 <template>
-  <Section
-    id="create-test-test-detail"
-    title="Test Details"
-    hide-add-new-block
-    is-static
-  >
-    <Form
-      v-slot="{ setup }"
-      class="mt-0"
-      name="testDetails"
-      :initial-value="{
-        name: 'New Test',
-        description: '',
-      }"
+  <Id id="create-test-test-detail" v-slot="{ id }">
+    <Section
+      :id="id"
+      v-slot="{ fieldIdAndError }"
+      title="Test Details"
+      hide-add-new-block
+      is-static
     >
-      <TextField
-        v-bind="{
-          modelValue: $store.state['create-test'].details.name,
-          updateModelValue: (val) => {
-            $store.dispatch('create-test/updateDetails', {
-              data: {
-                name: val,
-              },
-            })
-          },
-        }"
-        label="Test name"
-        placeholder="New Test"
-        required
-      />
-      <TextField
-        v-bind="setup('description')"
-        label="Description"
-        help-text="Enter a short description of your test"
-        required
-      />
-    </Form>
-  </Section>
+      <div class="grid gap-y-20">
+        <TextField
+          v-bind="fieldIdAndError(`${id}-name`)"
+          label="Test name"
+          placeholder="New Test"
+          required
+          :model-value="modelSync.name"
+          @update:modelValue="(e) => (modelSync.name = e)"
+        />
+
+        <TextField
+          v-bind="fieldIdAndError(`${id}-description`)"
+          label="Description"
+          help-text="Enter a short description of your test"
+          required
+          :model-value="modelSync.description"
+          @update:modelValue="(e) => (modelSync.description = e)"
+        />
+      </div>
+    </Section>
+  </Id>
 </template>

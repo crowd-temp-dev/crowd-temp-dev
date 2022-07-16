@@ -14,6 +14,7 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Preference Test`"
     :store-index="rootNumber"
   >
@@ -39,6 +40,7 @@ export default defineComponent({
       v-model="state.followUpQuestions"
       :question-id="state.id"
       :root-number="rootNumber"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

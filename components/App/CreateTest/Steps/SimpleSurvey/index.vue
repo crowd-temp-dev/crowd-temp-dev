@@ -14,6 +14,7 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{fieldIdAndError}"
     :title="`${rootNumber}. Simple survey`"
     :store-index="rootNumber"
   >
@@ -25,6 +26,7 @@ export default defineComponent({
       :question-id="state.id"
       :root-number="rootNumber"
       :min-length="1"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

@@ -1,6 +1,6 @@
 <script lang="ts">
 /* eslint-disable vue/no-unused-components */
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, computed } from '@vue/composition-api'
 import PrototypeEvaluation from './PrototypeEvaluation/index.vue'
 import WebsiteEvaluation from './WebsiteEvaluation/index.vue'
 import FiveSecondsTest from './FiveSecondsTest/index.vue'
@@ -16,6 +16,8 @@ import TestDetails from './TestDetails/index.vue'
 import ClickTest from './ClickTest/index.vue'
 import Form from './Form/index.vue'
 import { HTMLFormInput, OnSubmit } from '~/types'
+import { TestSuiteState } from '~/store/testSuite'
+import { pingAddNewBlockBtn, sleep } from '~/utils'
 
 export default defineComponent({
   name: 'AppCreateTestSteps',
@@ -36,10 +38,24 @@ export default defineComponent({
     Form,
   },
   setup(_, { root: { $store } }) {
-    const onSubmit: OnSubmit<Record<string, any>> = () => {
-      if ($store.state['create-test'].submitting) {
+    const onSubmit: OnSubmit<Record<string, any>> = async () => {
+      const state = ($store.state.testSuite as TestSuiteState).create
+
+      if (state.submitting) {
         return
       }
+
+      if (!state.section.items.length) {
+        pingAddNewBlockBtn()
+
+        return
+      }
+
+      const collapsedSections = !!state.collapsed.items.length
+
+      $store.commit('testSuite/create/collapsed/reset')
+
+      await sleep(collapsedSections ? 200 : 0)
 
       // get all forms
       const allForms: HTMLFormElement[] = Array.from(
@@ -51,7 +67,7 @@ export default defineComponent({
       if (allForms.length) {
         // loop through all forms, and submit the invalid forms, so the can be scrolled into view
         // The last index, which is this form should then submit vuex values
-        allForms.forEach((form, index) => {
+        allForms.every((form, index) => {
           const formElements = Array.from(form.elements) as HTMLFormInput[]
 
           if (index < allForms.length - 1) {
@@ -62,48 +78,56 @@ export default defineComponent({
                   cancelable: true,
                 })
               )
+
+            return form.checkValidity()
           } else {
             // disable fields
-            allForms.forEach((form) => {
-              form.classList.add('opacity-70', 'grayscale')
+            // allForms.forEach((form) => {
+            //   form.classList.add('opacity-70', 'grayscale')
+            // })
+
+            formElements.forEach((element) => {
+              element.dataset.previousDisabled = String(
+                element.disabled ? 1 : 0
+              )
+              ;(element as HTMLFormInput).disabled = true
+            })
+
+            // submit
+            $store.dispatch('testSuite/create/submit').then(() => {
+              // enable fields
+              // allForms.forEach((form) => {
+              //   form.classList.remove('opacity-70', 'grayscale')
+              // })
 
               formElements.forEach((element) => {
                 element.dataset.previousDisabled = String(
                   element.disabled ? 1 : 0
                 )
-                ;(element as HTMLFormInput).disabled = true
+
+                const disabled = Boolean(
+                  Number(element.dataset.previousDisabled) === 1
+                )
+
+                ;(element as HTMLFormInput).disabled = disabled
+
+                disabled && element.removeAttribute('disabled')
+
+                delete element.dataset.previousDisabled
               })
             })
 
-            // submit
-            $store.dispatch('create-test/submit').then(() => {
-              // enable fields
-              allForms.forEach((form) => {
-                form.classList.remove('opacity-70', 'grayscale')
-
-                formElements.forEach((element) => {
-                  element.dataset.previousDisabled = String(
-                    element.disabled ? 1 : 0
-                  )
-
-                  const disabled = Boolean(
-                    Number(element.dataset.previousDisabled) === 1
-                  )
-
-                  ;(element as HTMLFormInput).disabled = disabled
-
-                  disabled && element.removeAttribute('disabled')
-
-                  delete element.dataset.previousDisabled
-                })
-              })
-            })
+            return true
           }
         })
       }
     }
 
-    return { onSubmit }
+    const questions = computed(() => {
+      return ($store.state.testSuite as TestSuiteState).create.section.items
+    })
+
+    return { onSubmit, questions }
   },
 })
 </script>
@@ -113,10 +137,10 @@ export default defineComponent({
     <TestDetails />
     <WelcomeScreen />
 
-    <template v-if="$createTestForm.questionsLength">
+    <template v-if="questions.length">
       <Component
         :is="type"
-        v-for="({ type, id }, i) in $createTestForm.questions"
+        v-for="({ type, id }, i) in questions"
         v-bind="{
           rootNumber: i + 1,
           id,

@@ -39,14 +39,15 @@ export default defineComponent({
   watch: {
     'state.fileType'() {
       this.state.file = []
-    }
-  }
+    },
+  },
 })
 </script>
 
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Design Survey`"
     :store-index="rootNumber"
   >
@@ -86,6 +87,7 @@ Max file size 5MB for images and 100MB for video/audio"
       v-model="state.followUpQuestions"
       :question-id="state.id"
       :root-number="rootNumber"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

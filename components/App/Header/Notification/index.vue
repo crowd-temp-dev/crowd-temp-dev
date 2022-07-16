@@ -137,7 +137,7 @@ export default defineComponent({
 
     <template #default>
       <div
-        class="rounded-lg shadow-5 overflow-y-auto max-h-[calc(100vh-72px)] max-w-[540px] isolate animate-[slide-y_0.35s_var(--ease-back-out)]"
+        class="rounded-lg overflow-y-auto max-h-[calc(100vh-72px)] max-w-[540px] isolate animate-[slide-y_0.35s_var(--ease-back-out)] drop-shadow-xl grid"
         :style="{ '--slide-x-from': '10px' }"
       >
         <template v-if="list.length">
@@ -154,7 +154,7 @@ export default defineComponent({
           ></Notification>
 
           <div
-            class="h-44 flex-centered not-supports-backdrop-filter:bg-surface-default supports-backdrop-filter:bg-surface-default/80 supports-backdrop-filter:backdrop-blur-[80px] sticky bottom-0 border-t border-background-default z-1"
+            class="h-44 flex-centered bg-surface-default sticky bottom-0 border-t border-background-default z-1 rounded-b-lg"
           >
             <NuxtLink
               to="/notification"

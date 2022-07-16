@@ -3,34 +3,32 @@ import { defineComponent, computed } from '@vue/composition-api'
 import Button from '~/components/Base/Button/index.vue'
 import EditableText from '~/components/Base/EditableText/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
-import { CreateTestState } from '~/store/create-test/create-test'
 import Skeleton from '~/components/Base/Skeleton/index.vue'
+import { TestSuiteState } from '~/store/testSuite'
 
 export default defineComponent({
   name: 'AppCreateTestHeader',
   components: { Button, EditableText, Tooltip, Skeleton },
   setup(_, { root }) {
     const testState = computed(
-      () => root.$store.state['create-test'] as CreateTestState
+      () => root.$store.state.testSuite as TestSuiteState
     )
 
     const testTitle = computed({
       get() {
-        return testState.value.details.name
+        return testState.value.detail.name
       },
       set(val: string) {
         if (typeof val === 'string') {
-          root.$store.dispatch('create-test/updateDetails', {
-            data: {
-              name: val,
-            },
+          root.$store.commit('testSuite/detail/setData', {
+            name: val,
           })
         }
       },
     })
 
     const testPublished = computed(() => {
-      return root.$store.state['create-test'].details.published
+      return testState.value.detail.published
     })
 
     const enableEditing = computed(() => {
@@ -66,9 +64,10 @@ export default defineComponent({
             :disabled="!enableEditing"
           >
             <EditableText
-              v-model="testTitle"
               fallback="New Test"
               :disabled="!enableEditing"
+              :model-value="testTitle"
+              @update:modelValue="(e) => (testTitle = e)"
               v-on="events"
             />
           </Tooltip>

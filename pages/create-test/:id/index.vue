@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
 import SortSteps from '~/components/App/CreateTest/SortSteps/index.vue'
 import Steps from '~/components/App/CreateTest/Steps/index.vue'
 import {
@@ -80,10 +80,12 @@ export default defineComponent({
     return { stepsKey, showWarning, stopTabbing, updateStepsKey }
   },
 
-  fetch({ store, route }) {
-    store.dispatch('create-test/setId', route.params.id).then(() => {
-      store.dispatch('create-test/getCreateTest')
-    })
+  async fetch({ store, route }) {
+    store.commit('testSuite/detail/setId', route.params.id)
+
+    await nextTick()
+
+    store.dispatch('create-test/getCreateTest')
   },
 })
 </script>

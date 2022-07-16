@@ -4,29 +4,27 @@ import Section from '../Section/index.vue'
 import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import Select from '~/components/Base/Select/index.vue'
 import createTest from '~/mixins/createTest'
-import {fiveSecondsTestDurations} from '~/utils'
+import { fiveSecondsTestDurations } from '~/utils'
 
 export default defineComponent({
   name: 'AppCreateTestStepsFiveSecondsTest',
   components: { Section, Select, FollowUpQuestion },
   mixins: [createTest],
   setup() {
-    const delayOptions = fiveSecondsTestDurations.map(
-      (milliseconds) => {
-        const isMinute = Number(milliseconds) >= 60000
+    const delayOptions = fiveSecondsTestDurations.map((milliseconds) => {
+      const isMinute = Number(milliseconds) >= 60000
 
-        const getMinute = Math.round(Number(milliseconds) / 60000)
+      const getMinute = Math.round(Number(milliseconds) / 60000)
 
-        const seconds = Number(milliseconds) / 1000
+      const seconds = Number(milliseconds) / 1000
 
-        return {
-          label: `${isMinute ? getMinute : seconds} ${
-            isMinute ? `minute${getMinute > 1 ? 's' : ''}` : 'seconds'
-          }`,
-          value: String(milliseconds),
-        }
+      return {
+        label: `${isMinute ? getMinute : seconds} ${
+          isMinute ? `minute${getMinute > 1 ? 's' : ''}` : 'seconds'
+        }`,
+        value: String(milliseconds),
       }
-    )
+    })
 
     return {
       delayOptions,
@@ -38,6 +36,7 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Five second test`"
     :store-index="rootNumber"
   >
@@ -70,6 +69,7 @@ Max file size 5MB for images and 100MB for video/audio"
       v-model="state.followUpQuestions"
       :question-id="state.id"
       :root-number="rootNumber"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

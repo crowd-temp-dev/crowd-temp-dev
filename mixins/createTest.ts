@@ -1,4 +1,5 @@
 import { computed, defineComponent } from '@vue/composition-api'
+import { TestSuiteState } from '~/store/testSuite'
 
 export default defineComponent({
   name: 'CreateTestMixin',
@@ -13,20 +14,18 @@ export default defineComponent({
     },
   },
   setup(_props, { root: { $store } }) {
-    const stateKey = computed(() =>
-      Object.keys($store.state['create-test'].form).find(
-        (key) => ($store.state['create-test'].form[key] || {}).id === _props.id
-      )
-    )
+    const stateKey = computed(() => _props.rootNumber - 1)
 
     const state = computed({
       get() {
-        return $store.state['create-test'].form[stateKey.value || '']
+        return ($store.state.testSuite as TestSuiteState).create.section.items[
+          stateKey.value
+        ]
       },
       set(val) {
-        $store.dispatch('create-test/updateForm', {
-          path: stateKey.value,
-          value: val,
+        $store.commit('testSuite/create/section/update', {
+          index: stateKey.value,
+          data: val,
         })
       },
     })

@@ -15,6 +15,7 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Card Sorting`"
     :store-index="rootNumber"
   >
@@ -29,6 +30,7 @@ export default defineComponent({
       help-text="Add an instruction for click test e.g where would you click to sign up"
       class="my-20"
       required
+      v-bind="fieldIdAndError(`${state.id}-task`)"
     />
 
     <SortableSection
@@ -36,6 +38,7 @@ export default defineComponent({
       action-text="Add new card"
       title="Cards"
       tooltip-content="Add cards of different topics to be organized into their supposed category.<br>Eg Phone, Shoes, Salad, etc"
+      :id-and-error="fieldIdAndError"
     />
 
     <SortableSection
@@ -43,6 +46,7 @@ export default defineComponent({
       action-text="Add new category"
       title="Categories"
       tooltip-content="Add different categories to hold where each card belongs.<br>Eg Gadget, Clothing, Food, etc"
+      :id-and-error="fieldIdAndError"
     />
 
     <FollowUpQuestion
@@ -51,6 +55,7 @@ export default defineComponent({
       :root-number="rootNumber"
       class="mt-[-20px]"
       :min-length="0"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

@@ -24,6 +24,10 @@ export default defineComponent({
       type: Object as () => QuestionModelValue['choices'],
       required: true,
     },
+    idAndError: {
+      type: Function,
+      required: true,
+    },
   },
   setup(_props, { emit }) {
     const props = computed(() => _props)
@@ -105,6 +109,7 @@ export default defineComponent({
           class="cursor-grab active:cursor-grabbing transition-opacity inline-block"
           :class="{
             'pointer-events-none opacity-20': modelSync.options.length < 2,
+            'mb-[calc(20px+0.4rem)] mt-0': idAndError(`${id}-${i}`).error,
           }"
         >
           <PIcon
@@ -118,6 +123,7 @@ export default defineComponent({
           class="mr-12 ml-14 flex-grow shrink-0"
           type="text"
           required
+          v-bind="idAndError(`${id}-${i}`)"
         />
 
         <PIcon
@@ -126,6 +132,7 @@ export default defineComponent({
           :class="{
             'pointer-events-none opacity-20':
               modelSync.options.length < minLength + 1,
+            'mb-[calc(20px+0.4rem)] mt-0': idAndError(`${id}-${i}`).error,
           }"
           @click="removeChoice(i)"
         />

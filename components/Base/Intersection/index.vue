@@ -110,8 +110,6 @@ export default defineComponent({
 
         emit('update:entry', _entry)
 
-        console.log(_entry)
-
         if (props.value.once) {
           if (_entry.isIntersecting) {
             disconnect()

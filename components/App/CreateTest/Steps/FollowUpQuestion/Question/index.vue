@@ -13,6 +13,7 @@ import Choices from './Choices/index.vue'
 import Select from '~/components/Base/Select/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
+import { TestSuiteState } from '~/store/testSuite'
 
 const selectOptions = [
   { label: 'Short text', value: 'short-text' },
@@ -38,6 +39,10 @@ export default defineComponent({
     event: 'update:modelValue',
   },
   props: {
+    id: {
+      type: String,
+      default: undefined,
+    },
     disableDelete: Boolean,
     questionTitle: {
       type: String,
@@ -57,9 +62,13 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    idAndError: {
+      type: Function,
+      required: true,
+    },
   },
   emits: ['on-delete', 'on-duplicate'],
-  setup(_props, { emit, root: { $createTestForm } }) {
+  setup(_props, { emit, root: { $store } }) {
     const modelSync = computed({
       get() {
         return _props.modelValue as QuestionModelValue
@@ -80,16 +89,17 @@ export default defineComponent({
     )
 
     const disableConditionalLogic = computed(() => {
-      const question = $createTestForm.questions.find(
-        (x) => x.id === _props.questionId
-      )
+      const question = (
+        $store.state.testSuite as TestSuiteState
+      ).create.section.items.find((x) => x.id === _props.questionId)
 
       if (question) {
         const tooShort = (question.followUpQuestions?.length || 0) < 2
 
-        const followUpQuestionIndex = question.followUpQuestions.findIndex(
-          (x) => x.id === modelSync.value.id
-        ) + 1
+        const followUpQuestionIndex =
+          question.followUpQuestions.findIndex(
+            (x) => x.id === modelSync.value.id
+          ) + 1
 
         return (
           tooShort ||
@@ -220,6 +230,7 @@ export default defineComponent({
             :multiline="modelSync.type === 'long-text'"
             :min-height="36"
             required
+            v-bind="idAndError(`${id}-title`)"
           />
 
           <Select
@@ -305,6 +316,7 @@ export default defineComponent({
                 }
               : {}
           "
+          :id-and-error="idAndError"
         />
         <LinearScale
           v-else-if="isLinearScale && modelSync.linearScale"

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, nextTick, ref, watch } from '@vue/composition-api'
+import { defineComponent, ref, watch } from '@vue/composition-api'
 import TrapFocus from 'ui-trap-focus'
 import Button from '@/components/Base/Button/index.vue'
 import {
@@ -79,28 +79,12 @@ export default defineComponent({
 
       const newTest = newTestConstructor(createTestComponent)
 
-      const questionsValues = Object.entries(store.state['create-test'].form)
-        .filter((entry) => {
-          return /^question-\d+$/.test(entry[0])
-        })
-        .map((entry) => entry[1])
-
-      const newIndex = _props.sectionIndex || 0
-
-      const newQuestionsEntries = [
-        ...questionsValues.slice(0, newIndex),
-        newTest,
-        ...questionsValues.slice(newIndex),
-      ].map((value, index) => [`question-${index + 1}`, value])
-
-      store.dispatch('create-test/updateForm', {
-        value: Object.fromEntries(newQuestionsEntries),
-        path: '',
+      store.commit('testSuite/create/section/add', {
+        data: newTest,
+        index: _props.sectionIndex,
       })
 
       showHelper.value = false
-
-      await nextTick()
 
       await sleep(50)
 

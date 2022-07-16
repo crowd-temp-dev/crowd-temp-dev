@@ -3,6 +3,7 @@ import { computed, defineComponent } from '@vue/composition-api'
 import { QuestionModelValue } from '../type'
 import Id from '~/components/Base/Id/index.vue'
 import { getAlphabets } from '~/utils'
+import { TestSuiteState } from '~/store/testSuite'
 
 const actionOptions: {
   value: QuestionModelValue['conditionals']['action']
@@ -39,7 +40,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(_props, { emit, root: { $createTestForm } }) {
+  setup(_props, { emit, root: { $store } }) {
     const modelSync = computed({
       get() {
         return _props.modelValue
@@ -52,15 +53,16 @@ export default defineComponent({
     const actionName = computed(() => modelSync.value.action)
 
     const questions = computed(() => {
-      const question = $createTestForm.questions.find(
-        (x) => x.id === _props.questionId
-      )
+      const state = ($store.state.testSuite as TestSuiteState).create.section
+        .items
+
+      const question = state.find((x) => x.id === _props.questionId)
 
       if (!question) {
         return []
       }
 
-      const questionIndex = $createTestForm.questions.indexOf(question) + 1
+      const questionIndex = state.indexOf(question) + 1
 
       if (!questionIndex) {
         return []

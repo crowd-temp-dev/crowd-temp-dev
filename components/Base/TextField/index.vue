@@ -46,10 +46,10 @@ export default defineComponent({
         return this.manualModel as string
       },
 
-      set(val: string) {
+      set(val: string) {        
         if (typeof val === 'string' && !this.disabled) {
           if (typeof this.modelValue === 'string') {
-            this.$emit('update:modelValue', val)
+            this.$emit('update:modelValue', val)            
 
             if (typeof this.updateModelValue === 'function') {
               this.updateModelValue(val)

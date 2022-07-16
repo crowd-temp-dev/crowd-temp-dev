@@ -62,12 +62,19 @@ export default defineComponent({
     </p>
 
     <div>
-      <div class="flex items-end space-x-8">
+      <div
+        class="flex space-x-8 items-end"
+      >
         <Select
           v-model="state.prototypeProvider"
           :options="prototypeProviders"
           label="Prototype link"
           class="shrink-0 min-w-[105px]"
+          :class="
+            fieldIdAndError(`${state.id}-link`).error
+              ? 'mb-[calc(20px+0.4rem)]'
+              : ''
+          "
           required
         />
 
@@ -99,6 +106,7 @@ export default defineComponent({
       v-model="state.followUpQuestions"
       :question-id="state.id"
       :root-number="rootNumber"
+      :id-and-error="fieldIdAndError"
     />
   </Section>
 </template>

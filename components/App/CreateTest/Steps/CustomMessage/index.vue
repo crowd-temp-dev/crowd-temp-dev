@@ -13,6 +13,7 @@ export default defineComponent({
 <template>
   <Section
     :id="id"
+    v-slot="{ fieldIdAndError }"
     :title="`${rootNumber}. Custom message`"
     :store-index="rootNumber"
   >
@@ -21,7 +22,12 @@ export default defineComponent({
     </p>
 
     <div class="grid gap-y-20">
-      <TextField v-model="state.title" label="Title" required />
+      <TextField
+        v-model="state.title"
+        label="Title"
+        required
+        v-bind="fieldIdAndError(`${state.id}-title`)"
+      />
 
       <TextField
         v-model="state.message"
@@ -29,6 +35,7 @@ export default defineComponent({
         label="Your message or instructions"
         :min-height="72"
         required
+        v-bind="fieldIdAndError(`${state.id}-message`)"
       />
     </div>
   </Section>

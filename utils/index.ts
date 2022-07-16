@@ -434,11 +434,8 @@ export const fiveSecondsTestDurations: FiveSecondsTestDurations[] = [
  * @description
  * Returns a new test with dynamic properties according to the type of test to create
  * @param {CreateTestComponent} type
- * @returns {CreateTestFormQuestion}
  * **/
-export const newTestConstructor = (
-  type: CreateTestComponent
-): CreateTestFormQuestion => {
+export const newTestConstructor = (type: CreateTestComponent) => {
   const addPaths = (
     condition: boolean,
     paths: Record<string, any>

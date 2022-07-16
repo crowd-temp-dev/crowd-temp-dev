@@ -6,8 +6,8 @@ import { scrollMain, layoutSizing, sleep, getTestFeatureTitle } from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { VueElement } from '~/types'
-import { CreateTestFormQuestion } from '~/types/form'
 import { CreateTestState } from '~/store/create-test/create-test'
+import { TestSuiteState } from '~/store/testSuite'
 
 type StaticTestSection = 'Test detail' | 'Welcome screen' | 'Thank you screen'
 
@@ -20,19 +20,14 @@ export default defineComponent({
   name: 'AppCreateTestSortSteps',
   components: { Button, SmootDrag, FadeTransition, Tooltip },
   emits: ['shuffled'],
-  setup(_, { root: { $store, $createTestForm }, emit }) {
+  setup(_, { root: { $store }, emit }) {
     const dragTitles = computed({
       get() {
-        return $createTestForm.questions
+        return ($store.state.testSuite as TestSuiteState).create.section.items
       },
-      set(val: CreateTestFormQuestion[]) {
+      set(val: TestSuiteState['create']['section']['items']) {
         if (Array.isArray(val)) {
-          $store.dispatch('create-test/updateForm', {
-            path: '',
-            value: Object.fromEntries(
-              val.map((question, index) => [`question-${index + 1}`, question])
-            ),
-          })
+          $store.commit('testSuite/create/section/updateAll', val)
         }
       },
     })
@@ -149,7 +144,7 @@ export default defineComponent({
       focusOnAddNewBlockBtnProcessing.value = false
     }
 
-    const toggleSectionCollapse = (id: string) => {
+    const toggleSectionCollapse = (id: string) => {      
       const collapseBtn = document.getElementById(`collapse-${id}`)
 
       if (collapseBtn) {
@@ -276,6 +271,7 @@ export default defineComponent({
         <FadeTransition>
           <Button
             v-if="!dragTitles.length"
+            id="focus-on-add-new-block"
             plain
             class="h-56 w-full"
             @click="focusOnAddNewBlockBtn"

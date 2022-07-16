@@ -8,10 +8,17 @@ import { isLoggedInMiddleware } from '~/utils/layout'
 import layouts from '~/mixins/layouts'
 import { VueElement } from '~/types'
 import AlertDialog from '~/components/Base/AlertDialog/index.vue'
+import { TestSuiteState } from '~/store/testSuite'
 
 export default defineComponent({
   name: 'AppLayout',
-  components: { SmallDevice, Header, Navigation, PageHeader, AlertDialog },
+  components: {
+    SmallDevice,
+    Header,
+    Navigation,
+    PageHeader,
+    AlertDialog,
+  },
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
   setup(_, { root }) {
@@ -48,6 +55,13 @@ export default defineComponent({
       }
     })
 
+    const creatingTest = computed(() => {
+      return (
+        (root.$store.state.testSuite as TestSuiteState).create.submitting &&
+        root.$route.name === 'create-test-:id'
+      )
+    })
+
     // scroll main element to top
     watch(
       () => root.$route.fullPath,
@@ -81,7 +95,14 @@ export default defineComponent({
       }
     }
 
-    return { main, dialogs, tooltips, transitionClasses, closeAllTooltips }
+    return {
+      main,
+      dialogs,
+      tooltips,
+      transitionClasses,
+      creatingTest,
+      closeAllTooltips,
+    }
   },
 
   head() {
@@ -129,15 +150,34 @@ export default defineComponent({
 
         <main
           ref="main"
-          class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4"
+          class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4 relative"
           :class="{
             'overflow-y-auto': !dialogs.length,
             'overflow-hidden': dialogs.length,
           }"
         >
-          <PageHeader />
+          <PageHeader
+            :inert="creatingTest || undefined"
+            :class="{ 'blur-[4px]': creatingTest }"
+          />
 
-          <NuxtChild />
+          <NuxtChild
+            :inert="creatingTest || undefined"
+            :class="{ 'blur-[4px]': creatingTest }"
+          />
+
+          <div
+            v-if="creatingTest"
+            class="fixed z-10 right-0 bottom-0 w-[calc(100%-240px)] top-0 bg-black/80 flex-centered"
+          >
+            <div>
+              <h2
+                class="font-sf-pro-display font-semibold text-white text-display-medium animate-pulse"
+              >
+                Submitting...
+              </h2>
+            </div>
+          </div>
         </main>
       </div>
     </Transition>

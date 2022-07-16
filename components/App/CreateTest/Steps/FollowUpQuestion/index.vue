@@ -36,6 +36,10 @@ export default defineComponent({
       type: [String, Number] as unknown as () => LikeNumber,
       default: 1,
     },
+    idAndError: {
+      type: Function,
+      required: true,
+    },
   },
   setup(_props, { emit }) {
     const id = ref(uid())
@@ -63,7 +67,7 @@ export default defineComponent({
 
       requestAnimationFrame(() => {
         const newInput = document.querySelector(
-          `#${id.value}-${modelSync.value.length - 1} input`
+          `#${id.value}-${modelSync.value.length - 1}-title`
         ) as HTMLInputElement
 
         if (newInput) {
@@ -93,7 +97,7 @@ export default defineComponent({
 
       requestAnimationFrame(() => {
         const newInput = document.querySelector(
-          `#${id.value}-${index + 1} input`
+          `#${id.value}-${index + 1}-title`
         ) as HTMLInputElement
 
         if (newInput) {
@@ -156,6 +160,7 @@ export default defineComponent({
           :disable-drag="modelSync.length < 2"
           :disable-delete="modelSync.length <= Number(minLength)"
           :min-length="minLength"
+          :id-and-error="idAndError"
           @on-delete="removeQuestion(i)"
           @on-duplicate="duplicate(i)"
         />

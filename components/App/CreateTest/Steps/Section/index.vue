@@ -1,14 +1,13 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 import AddNewBlock from '../AddNewBlock/index.vue'
 import Form from '../Form/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Dropdown from '~/components/Base/Dropdown/index.vue'
-import { TestIndex } from '~/store/createTest/state'
 import { layoutSizing, scrollMain, sleep, uuidv4 } from '~/utils'
-import { CreateTestState } from '~/store/create-test/create-test'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
+import { TestSuiteState } from '~/store/testSuite'
 
 export default defineComponent({
   name: 'AppCreateTestStepsSection',
@@ -38,54 +37,34 @@ export default defineComponent({
   },
 
   setup(_props, { root }) {
-    const testIndex = computed(
-      () =>
-        root.$store.state.createTest.testIndex[_props.storeIndex - 1] ||
-        ({} as TestIndex)
-    )
-
-    const manualExpanded = ref(true)
-
     const expanded = computed(() => {
-      const storeState = testIndex.value.expanded
+      const collapsed = (root.$store.state.testSuite as TestSuiteState).create
+        .collapsed.items
 
-      return typeof storeState === 'undefined'
-        ? manualExpanded.value
-        : storeState
+      return !collapsed.includes(_props.id)
     })
 
     const toggleExpand = (val: boolean) => {
-      if (testIndex.value.id) {
-        root.$store.commit('createTest/UPDATE_TEST_INDEX', {
-          id: testIndex.value.id,
-          value: {
-            ...testIndex.value,
-            expanded: val,
-          },
-        })
+      if (val) {
+        root.$store.commit('testSuite/create/collapsed/remove', _props.id)
+      } else {
+        root.$store.commit('testSuite/create/collapsed/add', _props.id)
       }
-
-      manualExpanded.value = val
     }
 
     const removeSection = () => {
       sleep(200).then(() => {
-        root.$store.dispatch('create-test/updateForm', {
-          path: '',
-          value: Object.fromEntries(
-            Object.entries(
-              (root.$store.state['create-test'] as CreateTestState).form
-            ).filter((entry) => entry[1].id !== _props.id)
-          ),
-          override: true,
-        })
+        root.$store.commit(
+          'testSuite/create/section/remove',
+          _props.storeIndex - 1
+        )
       })
     }
 
     const duplicateSection = async () => {
-      let newTest = root.$createTestForm.questions.find(
-        (x) => x.id === _props.id
-      )
+      let newTest = (
+        root.$store.state.testSuite as TestSuiteState
+      ).create.section.items.find((x) => x.id === _props.id)
 
       if (newTest) {
         newTest = {
@@ -97,25 +76,9 @@ export default defineComponent({
           })),
         }
 
-        const questionsValues = Object.entries(
-          root.$store.state['create-test'].form
-        )
-          .filter((entry) => {
-            return /^question-\d+$/.test(entry[0])
-          })
-          .map((entry) => entry[1])
-
-        const newIndex = _props.storeIndex || 0
-
-        const newQuestionsEntries = [
-          ...questionsValues.slice(0, newIndex),
-          newTest,
-          ...questionsValues.slice(newIndex),
-        ].map((value, index) => [`question-${index + 1}`, value])
-
-        root.$store.dispatch('create-test/updateForm', {
-          value: Object.fromEntries(newQuestionsEntries),
-          path: '',
+        root.$store.commit('testSuite/create/section/add', {
+          index: _props.storeIndex - 1,
+          data: newTest,
         })
 
         await sleep(32)
@@ -275,11 +238,9 @@ export default defineComponent({
           </div>
         </div>
 
-        <FadeTransition :duration="{ leave: 1, enter: 150 }">
-          <div v-if="expanded">
-            <slot v-bind="formProps" />
-          </div>
-        </FadeTransition>
+        <div v-if="expanded">
+          <slot v-bind="formProps" />
+        </div>
       </Form>
 
       <AddNewBlock
