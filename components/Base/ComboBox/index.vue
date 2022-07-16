@@ -87,6 +87,10 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    backdropClass: {
+      type: String,
+      default: undefined,
+    },
   },
   emits: ['update:modelValue', 'active:true', 'active:false'],
   setup(_props, { emit, root: { $store } }) {
@@ -117,6 +121,8 @@ export default defineComponent({
     const previousFocus = ref<HTMLElement | null>(null)
 
     const popperInstance = ref<PopperInstance | null>(null)
+
+    const entered = ref(false)
 
     const indexInDialogs = computed(() => {
       return dialogs.value.indexOf(id.value)
@@ -407,6 +413,8 @@ export default defineComponent({
           contentRef.value.focus()
         }
       }
+
+      entered.value = true
     }
 
     const onAfterEnter = () => {
@@ -421,6 +429,8 @@ export default defineComponent({
 
         previousFocus.value = null
       }
+
+      entered.value = false
     }
 
     const onAfterLeave = () => {
@@ -515,7 +525,14 @@ export default defineComponent({
             '--fade-leave-delay': leaveDelay,
           }"
         >
-          <div v-if="blockClick" class="absolute inset-0 -z-1" @click="close" />
+          <FadeTransition :duration="backdropClass ? undefined : 0">
+            <div
+              v-if="blockClick"
+              class="absolute inset-0 -z-1"
+              :class="backdropClass"
+              @click="close"
+            />
+          </FadeTransition>
 
           <div
             ref="contentRef"

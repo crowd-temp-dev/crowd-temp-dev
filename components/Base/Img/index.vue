@@ -110,7 +110,7 @@ export default defineComponent({
             title=""
             trigger-class="flex-centered"
           >
-            <button class="outline-none" v-on="events" @click="reload">
+            <button class="outline-none" v-on="events" @click.stop="reload">
               <PIcon
                 source="RefreshMajor"
                 class="fill-icon-default w-[1.25em] h-[1.25em] cursor-pointer"
@@ -131,7 +131,17 @@ export default defineComponent({
     :fetchpriority="fetchpriority"
     v-bind="$attrs"
     v-on="$listeners"
-    @load.native="$emit('load:success')"
-    @error.native="$emit('load:error')"
+    @load.native="
+      () => {
+        $emit('load:success')
+        $emit('load')
+      }
+    "
+    @error.native="
+      () => {
+        $emit('load:error')
+        $emit('error')
+      }
+    "
   />
 </template>

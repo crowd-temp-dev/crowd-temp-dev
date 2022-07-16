@@ -107,9 +107,10 @@ export default defineComponent({
     trap-tab-focus
     restore-focus
     :disabled="$route.path === '/notification'"
+    backdrop-class="bg-black/5"
   >
     <template #trigger="{ active, toggle }">
-      <Tooltip v-slot="{ events }" label="Notifications">
+      <Tooltip v-slot="{ events }" label="Notifications" open-delay="500">
         <Button
           slot="activator"
           plain-action

@@ -18,9 +18,16 @@ export default defineComponent({
 
     const frameTypes = [{ label: 'No frame', value: 'no-frame' }]
 
-    const prototypeProviders = [{ label: 'Figma', value: 'figma' }] as {
-      label: String
-      value: PrototypeEvaluation['prototypeProvider']
+    const prototypeProviders = [
+      { label: 'Figma', value: 'figma' },
+      { label: 'Adobe', value: 'adobe', disabled: true },
+      { label: 'InVision', value: 'invision', disabled: true },
+      { label: 'Sketch', value: 'sketch', disabled: true },
+      { label: 'Marvel', value: 'marvel', disabled: true },
+    ] as {
+      label: string
+      value: PrototypeEvaluation['prototypeProvider'] | string
+      disabled?: boolean
     }[]
 
     const validateLink = (
@@ -62,9 +69,7 @@ export default defineComponent({
     </p>
 
     <div>
-      <div
-        class="flex space-x-8 items-end"
-      >
+      <div class="flex space-x-8 items-end">
         <Select
           v-model="state.prototypeProvider"
           :options="prototypeProviders"

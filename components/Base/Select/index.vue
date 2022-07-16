@@ -205,16 +205,16 @@ export default defineComponent({
         return
       }
 
-      const values = _props.options.map((item) => item.value)
+      const values = _props.options
 
-      const currentIndex = values.indexOf(`${modelSync.value}`)
+      const currentIndex = values.findIndex((option) => option.value === `${modelSync.value}`)
 
       const nextIndex = which === 'next' ? currentIndex + 1 : currentIndex - 1
 
       const nextValue = values[nextIndex]
 
-      if (nextValue) {
-        modelSync.value = nextValue
+      if (nextValue && !nextValue.disabled) {
+        modelSync.value = nextValue.value
       }
     }
 

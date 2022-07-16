@@ -55,7 +55,12 @@ export default defineComponent({
 
 <template>
   <Dropdown v-slot="dropdown" :option="dropdownList">
-    <Tooltip v-slot="tooltip" label="Profile" :disabled="dropdown.active">
+    <Tooltip
+      v-slot="tooltip"
+      label="Profile"
+      :disabled="dropdown.active"
+      open-delay="500"
+    >
       <Button
         plain-action
         class="w-48 h-40 p-0 shrink-0"

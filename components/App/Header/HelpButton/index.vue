@@ -70,7 +70,12 @@ export default defineComponent({
 <template>
   <Dropdown :option="dropdownList">
     <template #default="dropdown">
-      <Tooltip v-slot="tooltip" label="Help" :disabled="dropdown.active">
+      <Tooltip
+        v-slot="tooltip"
+        label="Help"
+        :disabled="dropdown.active"
+        open-delay="500"
+      >
         <Button
           plain-action
           class="w-40 h-40 p-0 shrink-0"
