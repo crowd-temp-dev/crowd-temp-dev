@@ -60,11 +60,10 @@ export default defineComponent({
       },
     ])
 
-    const { $route, $breakpoint } = root
-
     const mobileAuthPage = computed(
       () =>
-        /^\/auth\/(?:login|sign-up)/.test($route.path) && $breakpoint.isMobile
+        /^\/auth\/(?:login|sign-up)/.test(root.$route.path) &&
+        root.$breakpoint.isMobile
     )
     return {
       links,
