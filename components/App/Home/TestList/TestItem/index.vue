@@ -6,10 +6,11 @@ import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { LikeNumber } from '~/types'
 import CopyText from '~/components/Base/CopyText/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
+import Dropdown, { DropdownOption } from '~/components/Base/Dropdown/index.vue'
 
 export default defineComponent({
   name: 'AppHomeTestListTestItem',
-  components: { Button, Tooltip, CopyText, Spinner },
+  components: { Button, Tooltip, CopyText, Spinner, Dropdown },
   props: {
     favourite: Boolean,
     id: {
@@ -74,6 +75,23 @@ export default defineComponent({
 
     const isDraft = computed(() => _props.progress.startsWith('Draft:'))
 
+    const dropdownOptions = computed<DropdownOption[]>(() => {
+      return [
+        {
+          onClick: () => {},
+          title: 'Rename',
+        },
+        {
+          onClick: () => {},
+          title: 'Duplicate',
+        },
+        {
+          onClick: () => {},
+          title: 'Delete',
+        },
+      ]
+    })
+
     const formatDate = (val: string) => {
       const date = new Date(val)
 
@@ -94,8 +112,9 @@ export default defineComponent({
     return {
       statusIcon,
       isDraft,
-      formatDate,
       responseDisabled,
+      dropdownOptions,
+      formatDate,
     }
   },
 })
@@ -247,7 +266,19 @@ export default defineComponent({
     </div>
 
     <div>
-      <PIcon source="HorizontalDotsMinor" class="fill-icon-default" />
+      <Dropdown
+        v-slot="{ events, active }"
+        :option="dropdownOptions"
+        :offset="[0, 0]"
+      >
+        <button
+          class="outline-none rounded w-20 h-20 ring-offset-1 focus-visible:ring-2 ring-action-primary-default"
+          :class="{ 'ring-2': active }"
+          v-on="events"
+        >
+          <PIcon source="HorizontalDotsMinor" class="fill-icon-default" />
+        </button>
+      </Dropdown>
     </div>
   </li>
 </template>

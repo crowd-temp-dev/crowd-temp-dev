@@ -34,7 +34,7 @@ export default defineComponent({
     },
     value: {
       type: String,
-      default: undefined,
+      required: true,
     },
   },
   setup(_props, { emit }) {

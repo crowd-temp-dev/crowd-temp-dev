@@ -3,10 +3,11 @@ import { defineComponent, computed } from '@vue/composition-api'
 import Section from '../Section/index.vue'
 import Id from '~/components/Base/Id/index.vue'
 import { TestSuiteState } from '~/store/testSuite'
+import RadioGroup from '~/components/Base/RadioGroup/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestStepsTestDetails',
-  components: { Section, Id },
+  components: { Section, Id, RadioGroup },
   setup(_, { root: { $store } }) {
     const modelSync = computed(() => {
       const storeValue = ($store.state.testSuite as TestSuiteState).detail
@@ -28,7 +29,9 @@ export default defineComponent({
       )
     })
 
-    return { modelSync }
+    const deviceTypes = ['All devices', 'Desktop only', 'Mobile only']
+
+    return { modelSync, deviceTypes }
   },
 })
 </script>
@@ -60,6 +63,20 @@ export default defineComponent({
           :model-value="modelSync.description"
           @update:modelValue="(e) => (modelSync.description = e)"
         />
+
+        <RadioGroup v-bind="fieldIdAndError(`${id}-deviceType`)" required>
+          <p class="mb-10">Allow test participation on</p>
+
+          <div class="grid justify-start gap-12 grid-flow-col">
+            <Radio
+              v-for="(item, i) in deviceTypes"
+              :key="i"
+              :label="item"
+              name="deviceType"
+              :value="item"
+            />
+          </div>
+        </RadioGroup>
       </div>
     </Section>
   </Id>

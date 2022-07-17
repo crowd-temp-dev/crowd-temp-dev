@@ -180,7 +180,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
               },
             })
           } else {
-            this.$router.push(`/create-test/recruit/${detail.id}`)
+            this.$router.push(`/dashboard/create-test/recruit/${detail.id}`)
           }
 
           dispatch('resetForm')

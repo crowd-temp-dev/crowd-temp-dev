@@ -11,7 +11,7 @@ import { createPopper } from '@popperjs/core'
 import UiTrapFocus from 'ui-trap-focus'
 import type { Instance as PopperInstance, Placement } from '@popperjs/core'
 import FadeTransition from '../FadeTransition/index.vue'
-import { oneFrame, sleep, uid } from '~/utils'
+import { nextFrame, oneFrame, sleep, uid } from '~/utils'
 import eventKey from '~/utils/eventKey'
 import type { Duration } from '~/types'
 
@@ -200,6 +200,10 @@ export default defineComponent({
 
         if (_props.useTriggerWidth) {
           await sleep(oneFrame)
+
+          popperInstance.value?.update()
+        } else {
+          await nextFrame()
 
           popperInstance.value?.update()
         }

@@ -61,7 +61,6 @@ export default defineComponent({
 
     <RadioGroup
       v-bind="fieldIdAndError('useCases')"
-      role="radiogroup"
       required
       content-class="grid grid-flow-col justify-start gap-32"
     >

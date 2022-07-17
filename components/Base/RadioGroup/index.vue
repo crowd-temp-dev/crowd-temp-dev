@@ -104,7 +104,25 @@ export default defineComponent({
       }
     }
 
-    return { root, value, onArrowKeysPress, clearOtherInputs }
+    const focusOnFirstInput = () => {
+      if (root.value) {
+        const input: HTMLInputElement = root.value.querySelector(
+          `input:not(#${_props.id}):not([disabled])`
+        )
+
+        if (input) {
+          input.focus()
+        }
+      }
+    }
+
+    return {
+      root,
+      value,
+      onArrowKeysPress,
+      clearOtherInputs,
+      focusOnFirstInput,
+    }
   },
 })
 </script>
@@ -112,6 +130,7 @@ export default defineComponent({
 <template>
   <div
     ref="root"
+    :value="value"
     role="radiogroup"
     @keydown="onArrowKeysPress"
     @click="clearOtherInputs"
@@ -125,7 +144,8 @@ export default defineComponent({
         :value="value"
         data-pseudo-input="true"
         class="sr-only absolute position-center"
-        required
+        :required="required"
+        @focus="focusOnFirstInput"
       />
     </div>
 
