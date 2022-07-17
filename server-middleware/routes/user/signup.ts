@@ -119,7 +119,11 @@ export default function (router: Router) {
 
               if (sendConfirmation.accepted) {
                 sendSuccess(res, {
-                  data: user.get(),
+                  data: {
+                    id: user.id,
+                    name: `${user.firstName} ${user.lastName}`,
+                    email: user.email,
+                  },
                   message: {
                     type: 'success',
                     content: 'Confirm account!',

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, nextTick, onMounted, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
 import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -38,7 +38,7 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: { $pToast, $axios, $cookies, $nuxt } }) {
+  setup(_, { root: { $pToast, $axios, $cookies, $nuxt, $store, $router } }) {
     const focusOn = ref($cookies.get('signup_focus'))
 
     const email = ref('')
@@ -57,7 +57,6 @@ export default defineComponent({
       formValues,
       formFields,
       toggleLoading,
-      refreshForm,
     }) => {
       $pToast.clear()
 
@@ -80,13 +79,14 @@ export default defineComponent({
       if (data) {
         window.scrollTo({
           top: 0,
-          behavior: 'smooth',
         })
 
-        requestAnimationFrame(() => {
-          refreshForm()
+        requestAnimationFrame(async() => {
+          $store.commit('user/setPublic', data)
 
-          email.value = ''
+          await nextTick()
+
+          $router.push('/auth/confirm-email')
         })
       }
 

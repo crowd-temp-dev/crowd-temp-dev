@@ -32,6 +32,9 @@ export interface UserInfo {
 }
 
 export interface UserState {
+  id: string
+  name: string
+  email: string
   info: UserInfo | null
   loading: boolean
   loggingOut: boolean
@@ -43,6 +46,9 @@ export interface LoginPayload extends LoginForm {
 }
 
 const state = (): UserState => ({
+  id: null,
+  name: null,
+  email: null,
   info: null,
   loading: false,
   loggingOut: false,
@@ -50,7 +56,13 @@ const state = (): UserState => ({
 })
 
 const mutations: MutationTree<UserState> = {
-  update(state: UserState, payload: User) {
+  setPublic(state, payload: UserState) {
+    state.id = payload.id || null
+    state.name = payload.name || null
+    state.email = payload.email || null
+  },
+
+  update(state, payload: User) {
     if (payload) {
       const userData = {
         ...(payload || {}),
@@ -71,15 +83,15 @@ const mutations: MutationTree<UserState> = {
     state.loggingOut = false
   },
 
-  setLoading(state: UserState, val?: boolean) {
+  setLoading(state, val?: boolean) {
     state.loading = typeof val === 'boolean' ? val : true
   },
 
-  setLoggingOut(state: UserState, val?: boolean) {
+  setLoggingOut(state, val?: boolean) {
     state.loggingOut = typeof val === 'boolean' ? val : true
   },
 
-  setAvatarLoading(state: UserState, val?: boolean) {
+  setAvatarLoading(state, val?: boolean) {
     state.avatarLoading = typeof val === 'boolean' ? val : true
   },
 }

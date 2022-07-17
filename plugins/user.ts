@@ -49,6 +49,18 @@ const userPlugin: Plugin = function ({ store }, inject) {
           await store.dispatch('user/updateAvatar', payload)
       }
 
+      if (path === 'id' && store.state.user.id) {
+        return store.state.user.id as string
+      }
+
+      if (path === 'name' && store.state.user.name) {
+        return store.state.user.name as string
+      }
+
+      if (path === 'email' && store.state.user.email) {
+        return store.state.user.email as string
+      }
+
       if (!userState) {
         return null
       }

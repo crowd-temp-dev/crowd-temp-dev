@@ -1,7 +1,12 @@
 import { Middleware } from '@nuxt/types'
-import {validate} from 'uuid'
+import { validate } from 'uuid'
 
-const redirectAuthPage: Middleware = function ({ redirect, route, error }) {
+const redirectAuthPage: Middleware = function ({
+  redirect,
+  error,
+  route,
+  $user,
+}) {
   //   if client is on /auth/?, and trying to access /auth/[sign-in|sign-up|forgot-password|reset-password], allow, else redirect to sign-up
 
   const paths = route.path.split('/').filter(Boolean)
@@ -18,6 +23,7 @@ const redirectAuthPage: Middleware = function ({ redirect, route, error }) {
       'sign-up',
       'forgot-password',
       'reset-password',
+      'confirm-email',
     ]
 
     if (!validAuthPages.includes(paths[1])) {
@@ -28,15 +34,21 @@ const redirectAuthPage: Middleware = function ({ redirect, route, error }) {
     if (paths[1] === 'reset-password') {
       if (!route.query.token) {
         error({
-          message: "Unauthorized route!",
+          message: 'Unauthorized route!',
           statusCode: 401,
         })
-      }
-      else if (!validate(route.query.token as string)) {
+      } else if (!validate(route.query.token as string)) {
         error({
           message: 'Invalid token!',
           statusCode: 401,
         })
+      }
+    }
+
+    // check confirm-email page. Make sure $user has id
+    if (paths[1] === 'confirm-email') {
+      if (!$user.id) {
+        redirect('/auth/sign-up')
       }
     }
   }
