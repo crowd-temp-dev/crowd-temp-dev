@@ -1,11 +1,3 @@
-<template>
-  <div
-    class="bg-surface-default relative max-w-app mx-auto rounded-lg shadow-2 p-20"
-  >
-    <Pricing settings-page price-tier="Free" />
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import { Layout } from '~/types'
@@ -45,4 +37,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss"></style>
+<template>
+  <div
+    class="bg-surface-default relative max-w-app mx-auto rounded-lg shadow-2 p-20"
+  >
+    <Pricing settings-page price-tier="Free" />
+  </div>
+</template>

@@ -33,7 +33,7 @@ export default defineComponent({
     })
 
     const enableEditing = computed(() => {
-      return root.$route.name === 'create-test-:id'
+      return root.$route.name === 'dashboard-create-test-:id'
     })
 
     const emptyTestForm = computed(() => {
@@ -54,7 +54,7 @@ export default defineComponent({
         <Button
           icon="ArrowLeftMinor"
           aria-label="To home page"
-          to="/"
+          to="/dashboard"
           v-on="events"
         />
       </Tooltip>
@@ -92,9 +92,9 @@ export default defineComponent({
         >
           <PBadge
             v-if="
-              ($route.name === 'create-test-:id' && !emptyTestForm) ||
-              $route.name === 'create-test-recruit-:id' ||
-              $route.name === 'create-test-view-result-:id'
+              ($route.name === 'dashboard-create-test-:id' && !emptyTestForm) ||
+              $route.name === 'dashboard-create-test-recruit-:id' ||
+              $route.name === 'dashboard-create-test-view-result-:id'
             "
             class="origin-left transition-[opacity,transform]"
             :class="[

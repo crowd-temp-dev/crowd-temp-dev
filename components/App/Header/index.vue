@@ -1,19 +1,3 @@
-<template>
-  <header class="Header">
-    <HeaderLogo />
-
-    <Search />
-
-    <div class="fill-icon-default flex space-x-10 shrink-0">
-      <Notification />
-
-      <HelpButton />
-
-      <ProfileButton />
-    </div>
-  </header>
-</template>
-
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import Search from './Search/index.vue'
@@ -21,10 +5,18 @@ import HelpButton from './HelpButton/index.vue'
 import ProfileButton from './ProfileButton/index.vue'
 import Notification from './Notification/index.vue'
 import HeaderLogo from '~/components/Base/HeaderLogo/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 
 export default defineComponent({
   name: 'AppHeader',
-  components: { HeaderLogo, Search, ProfileButton, HelpButton, Notification },
+  components: {
+    HeaderLogo,
+    Search,
+    ProfileButton,
+    HelpButton,
+    Notification,
+    FadeTransition,
+  },
   setup() {
     const searchField = ref('')
 
@@ -32,6 +24,26 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <FadeTransition :duration="{ leave: 100 }">
+    <header :key="$user.setupDone" class="Header">
+      <HeaderLogo />
+
+      <template v-if="$user.setupDone">
+        <Search />
+
+        <div class="fill-icon-default flex space-x-10 shrink-0">
+          <Notification />
+
+          <HelpButton />
+
+          <ProfileButton />
+        </div>
+      </template>
+    </header>
+  </FadeTransition>
+</template>
 
 <style scoped lang="postcss">
 .Header {

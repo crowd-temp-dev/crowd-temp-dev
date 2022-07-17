@@ -5,9 +5,25 @@ import { sleep } from '~/utils'
 
 export default defineComponent({
   name: 'BaseRadioGroup',
-  props: {},
-  setup() {
+  props: {
+    required: Boolean,
+    error: {
+      type: String,
+      default: undefined,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+    contentClass: {
+      type: String,
+      default: undefined,
+    },
+  },
+  setup(_props) {
     const root = ref<HTMLElement | null>(null)
+
+    const value = ref()
 
     const debounceTimeout = ref<NodeJS.Timeout>()
 
@@ -23,21 +39,17 @@ export default defineComponent({
       debounceTimeout.value = setTimeout(() => {
         if (root.value) {
           const inputs: HTMLInputElement[] = Array.from(
-            root.value.querySelectorAll('input')
+            root.value.querySelectorAll(`input:not(#${_props.id})`)
           )
 
           inputs.forEach((input) => {
             input.checked = false
-
-            input.value = 'false'
           })
 
           const currentInput = inputs.find((input) => input.isSameNode(exempt))
 
           if (currentInput) {
             currentInput.checked = true
-
-            currentInput.value = 'true'
 
             currentInput.focus()
           }
@@ -84,24 +96,39 @@ export default defineComponent({
           const input = label.querySelector('input') as HTMLInputElement | null
 
           if (input) {
+            value.value = input.value || input.name
+
             clearInputs(input)
           }
         }
       }
     }
 
-    return { root, onArrowKeysPress, clearOtherInputs }
+    return { root, value, onArrowKeysPress, clearOtherInputs }
   },
 })
 </script>
 
 <template>
-  <label
+  <div
     ref="root"
     role="radiogroup"
     @keydown="onArrowKeysPress"
     @click="clearOtherInputs"
   >
-    <slot />
-  </label>
+    <div class="relative" :class="contentClass">
+      <slot />
+
+      <input
+        :id="id"
+        tabindex="-1"
+        :value="value"
+        data-pseudo-input="true"
+        class="sr-only absolute position-center"
+        required
+      />
+    </div>
+
+    <PInlineError v-if="error" class="mt-4" :field-id="id" :message="error" />
+  </div>
 </template>

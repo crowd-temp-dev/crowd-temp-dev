@@ -22,29 +22,29 @@ export default defineComponent({
       {
         icon: 'HomeMajor',
         title: 'Home',
-        active: /^\/$|^(?:\/create-test\/?|\/notification\/?)/.test(
+        active: /^\/dashboard$|^(?:\/dashboard\/create-test\/?|\/notification\/?)/.test(
           root.$route.path
         ),
-        to: '/',
+        to: '/dashboard',
       },
       {
         icon: 'OrdersMajor',
         title: 'Notes',
         badge: '0',
-        to: '/notes',
-        active: /^\/notes\/?/.test(root.$route.path),
+        to: '/dashboard/notes',
+        active: /^\/dashboard\/notes\/?/.test(root.$route.path),
       },
       {
         icon: 'ReceiptMajor',
         title: 'Billing',
-        to: '/settings/billing',
-        active: /^\/settings\/billing\/?/.test(root.$route.path),
+        to: '/dashboard/settings/billing',
+        active: /^\/dashboard\/settings\/billing\/?/.test(root.$route.path),
       },
       {
         icon: 'SettingsMajor',
         title: 'Settings',
-        to: '/settings',
-        active: /^\/settings\/?/.test(root.$route.path),
+        to: '/dashboard/settings',
+        active: /^\/dashboard\/settings\/?/.test(root.$route.path),
       },
     ])
 

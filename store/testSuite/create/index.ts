@@ -264,7 +264,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
   async duplicate({ dispatch, rootState }) {
     const { app } = this.$router
 
-    if (app.$route.name !== 'create-test-:id') {
+    if (app.$route.name !== 'dashboard-create-test-:id') {
       app.$nuxt.error({
         message: 'Cannot duplicate test on this route!',
         statusCode: 403,

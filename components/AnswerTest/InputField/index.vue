@@ -244,8 +244,9 @@ export default defineComponent({
             >
               <Radio
                 :label="choice"
-                v-bind="fieldIdAndError(id)"
                 :disabled="showOther"
+                name="choices"
+                v-bind="fieldIdAndError(id)"
               />
             </Id>
           </RadioGroup>

@@ -106,7 +106,7 @@ export default defineComponent({
     block-click
     trap-tab-focus
     restore-focus
-    :disabled="$route.path === '/notification'"
+    :disabled="$route.path === '/dashboard/notification'"
     backdrop-class="bg-black/5"
   >
     <template #trigger="{ active, toggle }">
@@ -116,7 +116,7 @@ export default defineComponent({
           plain-action
           class="w-48 h-40 p-0 shrink-0"
           :class="{ 'bg-background-selected': active }"
-          :disabled="$route.path === '/notification'"
+          :disabled="$route.path === '/dashboard/notification'"
           @click="
             () => {
               toggle()
@@ -158,9 +158,9 @@ export default defineComponent({
             class="h-44 flex-centered bg-surface-default sticky bottom-0 border-t border-background-default z-1 rounded-b-lg"
           >
             <NuxtLink
-              to="/notification"
+              to="/dashboard/notification"
               class="text-action-primary-default focus:underline outline-action-primary-default px-2 rounded-[6px]"
-              @keydown.native.space="$router.push('/notification')"
+              @keydown.native.space="$router.push('/dashboard/notification')"
             >
               See all
             </NuxtLink>

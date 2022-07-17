@@ -23,7 +23,7 @@ export default defineComponent({
 
     const showWarning = computed(() => {
       return (
-        root.$route.name === 'create-test-:id' && state.value.create.showWarning
+        root.$route.name === 'dashboard-create-test-:id' && state.value.create.showWarning
       )
     })
 

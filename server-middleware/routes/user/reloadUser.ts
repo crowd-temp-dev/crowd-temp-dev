@@ -31,11 +31,11 @@ export default function (router: Router) {
     // at this point, a user exists in the res.
     // Sha check if it doesnt and send error;
 
-    const user = res.get('$user')
+    const user = res.get('$user')    
 
     if (user) {
       try {
-        const data = JSON.parse(user) as User
+        const data = JSON.parse(user) as User        
 
         sendSuccess(res, {
           data,

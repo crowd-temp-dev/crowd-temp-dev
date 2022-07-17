@@ -1,8 +1,8 @@
 import { NuxtCookies } from 'cookie-universal-nuxt'
 import { CreateTestFormQuestion } from './form'
 import { BreakpointOutput, FullscreenLoading, User } from '.'
-import { CreateTestState } from '~/store/create-test/create-test'
 import { AppState } from '~/store/app/state'
+import { TestSuiteCreateSectionState } from '~/store/testSuite/create/section'
 
 interface ToastArg {
   message: string
@@ -35,9 +35,10 @@ interface PToast {
   warning: ShowToast
 }
 
-type CreateTestFormMap = {
-  [key in keyof CreateTestState['form']]: CreateTestState['form'][keyof CreateTestState['form']]
-}
+type CreateTestFormMap = Record<
+  `question-${number}`,
+  TestSuiteCreateSectionState['items'][0]
+>
 
 type GetAlertDialog = AppState['alertDialog']
 

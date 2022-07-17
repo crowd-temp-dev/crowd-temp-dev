@@ -1,7 +1,42 @@
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import { Layout } from '~/types'
+import UpgradeBanner from '~/components/Base/UpgradeBanner/index.vue'
+import Section from '~/components/App/Settings/Section/index.vue'
+import Button from '~/components/Base/Button/index.vue'
+
+export default defineComponent({
+  name: 'AppSettingsCustomBrandingPage',
+  components: { UpgradeBanner, Section, Button },
+  layout: 'app' as Layout,
+  transition(_, from) {
+    if (from) {
+      if (from.path.startsWith('/settings/')) {
+        if (/^\/settings\/(?:profile|team-members)\/?/.test(from.path)) {
+          return 'page-transition-slide-left'
+        }
+        return 'page-transition-slide-right'
+      }
+    }
+    return 'page-transition-fade'
+  },
+  setup() {},
+
+  head: {
+    title: 'Custom branding settings',
+    meta: [
+      {
+        hid: 'description',
+        name: 'descrition',
+        content: 'Configure your account custom branding settings',
+      },
+    ],
+  },
+})
+</script>
+
 <template>
-  <div
-    class="max-w-app mx-auto px-32 xl:px-40 xxl:px-0 pb-112"
-  >
+  <div class="max-w-app mx-auto px-32 xl:px-40 xxl:px-0 pb-112">
     <div class="grid gap-y-32 max-w-[805px]">
       <UpgradeBanner />
 
@@ -73,42 +108,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api'
-import { Layout } from '~/types'
-import UpgradeBanner from '~/components/Base/UpgradeBanner/index.vue'
-import Section from '~/components/App/Settings/Section/index.vue'
-import Button from '~/components/Base/Button/index.vue'
-
-export default defineComponent({
-  name: 'AppSettingsCustomBrandingPage',
-  components: { UpgradeBanner, Section, Button },
-  layout: 'app' as Layout,
-  transition(_, from) {
-    if (from) {
-      if (from.path.startsWith('/settings/')) {
-        if (/^\/settings\/(?:profile|team-members)\/?/.test(from.path)) {
-          return 'page-transition-slide-left'
-        }
-        return 'page-transition-slide-right'
-      }
-    }
-    return 'page-transition-fade'
-  },
-  setup() {},
-
-  head: {
-    title: 'Custom branding settings',
-    meta: [
-      {
-        hid: 'description',
-        name: 'descrition',
-        content: 'Configure your account custom branding settings',
-      },
-    ],
-  },
-})
-</script>
-
-<style lang="postcss"></style>

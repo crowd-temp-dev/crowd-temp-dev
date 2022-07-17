@@ -25,6 +25,10 @@
   display: none;
 }
 
+.position-center {
+  @apply left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
+}
+
 .line-clamp-1,
 .line-clamp-2,
 .line-clamp-3,

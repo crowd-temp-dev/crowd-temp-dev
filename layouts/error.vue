@@ -1,25 +1,3 @@
-<template>
-  <!-- Layout for clients not signed in -->
-  <div
-    class="bg-surface-default font-sf-pro-display grid justify-center pt-100 text-center"
-    :class="{ 'hide-ui': !mounted }"
-  >
-    <h1 class="sr-only"></h1>
-
-    <h2
-      class="text-action-critical-default font-bold text-display-x-large-sm md:text-display-x-large mb-16"
-    >
-      {{ error.statusCode }}
-    </h2>
-
-    <h3 class="text-text-subdued mb-32 text-display-medium-sm md:text-medium">
-      {{ error.message }}
-    </h3>
-
-    <Button :to="homePage" primary size="large"> Back to homepage </Button>
-  </div>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
 import { NuxtError } from '@nuxt/types'
@@ -72,3 +50,24 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div
+    class="bg-surface-default font-sf-pro-display grid justify-center pt-100 text-center"
+    :class="{ 'hide-ui': !mounted }"
+  >
+    <h1 class="sr-only"></h1>
+
+    <h2
+      class="text-action-critical-default font-bold text-display-x-large-sm md:text-display-x-large mb-16"
+    >
+      {{ error.statusCode }}
+    </h2>
+
+    <h3 class="text-text-subdued mb-32 text-display-medium-sm md:text-medium">
+      {{ error.message }}
+    </h3>
+
+    <Button :to="homePage" primary size="large"> Back to homepage </Button>
+  </div>
+</template>

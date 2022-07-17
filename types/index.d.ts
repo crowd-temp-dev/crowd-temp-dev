@@ -2,6 +2,7 @@ import { VNodeData, VNodeChildrenArrayContents, VNode } from 'vue'
 import { ScopedSlot } from 'vue/types/vnode'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
+import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
 import { MessageObject, UserData } from '~/server-middleware/types'
 
 import { LoginPayload, UserInfo } from '~/store/user'
@@ -28,6 +29,7 @@ export interface User extends UserInfo {
   changePassword: (arg: ChangePasswordForm) => Promise<ApiResponse<UserInfo>>
   removeAvatar: () => Promise<ApiResponse<UserInfo>>
   updateAvatar: (payload: File[]) => Promise<ApiResponse<UserInfo>>
+  setupAccount: (payload: SetupAccountForm) => Promise<ApiResponse<UserInfo>>
 }
 
 export type DynamicObject<value> = Record<string, value>

@@ -1,21 +1,3 @@
-<template>
-  <div class="xxl:mx-auto w-full py-32 max-w-app xxl:px-0">
-    <div class="max-w-[800px] mx-32 lg:mx-auto xxl:mx-0">
-      <SearchField
-        placeholder="Search tests"
-        class="bg-surface-default mb-16 max-w-[270px] h-36"
-        outlined
-      />
-
-      <div class="grid gap-y-32">
-        <NoteSection />
-
-        <NoteSection />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import { Layout } from '~/types'
@@ -36,7 +18,7 @@ export default defineComponent({
         !from ||
         splitPath(to.path).length === splitPath(from?.path || '').length,
     }),
-  setup() { },
+  setup() {},
 
   // TODO!!!
   head: {
@@ -45,4 +27,20 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss"></style>
+<template>
+  <div class="xxl:mx-auto w-full py-32 max-w-app xxl:px-0">
+    <div class="max-w-[800px] mx-32 lg:mx-auto xxl:mx-0">
+      <SearchField
+        placeholder="Search tests"
+        class="bg-surface-default mb-16 max-w-[270px] h-36"
+        outlined
+      />
+
+      <div class="grid gap-y-32">
+        <NoteSection />
+
+        <NoteSection />
+      </div>
+    </div>
+  </div>
+</template>

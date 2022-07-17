@@ -29,10 +29,18 @@ export const notLoggedInMiddleware: Middleware = function ({
     return
   }
 
-  if ($user.loggedIn && route.path !== '/') {
-    redirect('/')
+  if ($user.loggedIn && !/^\/$|^\/auth\/account-confirmed$/.test(route.path)) {
+    redirect('/dashboard')
 
     $user.reload()
+  }
+
+  if (
+    $user.loggedIn &&
+    route.path === '/auth/account-confirmed' &&
+    $user.loginCount > 1
+  ) {
+    redirect('/dashboard')
   }
 }
 

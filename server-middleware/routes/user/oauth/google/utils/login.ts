@@ -51,7 +51,7 @@ export default async function googleLogin(req: Request, res: Response) {
           : `Welcome back ${user.firstName}!`
       )
 
-      res.redirect(302, `${process.env.CLIENT_ORIGIN}`)
+      res.redirect(302, `${process.env.CLIENT_ORIGIN}/dashboard`)
     }
   } catch (err) {
     const [message, redirectTo] = (err.message as string)

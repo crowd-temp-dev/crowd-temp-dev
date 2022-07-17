@@ -1,7 +1,3 @@
-<template>
-  <div>Billing</div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import { Layout } from '~/types'
@@ -29,4 +25,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss"></style>
+<template>
+  <div>Billing</div>
+</template>

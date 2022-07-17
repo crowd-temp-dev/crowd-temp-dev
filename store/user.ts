@@ -9,6 +9,7 @@ import {
   Logout,
   ReloadUser,
   RemoveAvatar,
+  SetupAccount,
   UpdateAvatar,
   UpdateUser,
 } from '~/services/user'
@@ -20,6 +21,7 @@ import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
+import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
 
 export interface UserInfo {
   id: string | null
@@ -29,6 +31,8 @@ export interface UserInfo {
   email: string | null
   provider: User['provider'] | null
   showDashboardGuide?: boolean
+  loginCount: number
+  setupDone: boolean
 }
 
 export interface UserState {
@@ -122,7 +126,7 @@ const actions: ActionTree<UserState, RootState> = {
 
       nextTick(() => {
         // send to home page
-        this.$router.replace('/')
+        this.$router.replace('/dashboard')
       })
 
       // clear createTest form
@@ -302,6 +306,22 @@ const actions: ActionTree<UserState, RootState> = {
     showToasts(app.$pToast, message)
 
     return { data, error, message }
+  },
+
+  async setupAccount({ commit, state }, payload: SetupAccountForm) {
+    if (state.info?.setupDone) {
+      return
+    }
+
+    const { app } = this.$router
+
+    const { data, error, message } = await SetupAccount(app.$axios, payload)
+
+    if (error) {
+      showToasts(app.$pToast, message)
+    } else if (data) {
+      commit('update', data)
+    }
   },
 }
 

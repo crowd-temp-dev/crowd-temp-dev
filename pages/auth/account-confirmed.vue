@@ -35,6 +35,7 @@ export default defineComponent({
         $nuxt,
         $store,
         $user,
+        $cookies,
       },
     }
   ) {
@@ -45,6 +46,16 @@ export default defineComponent({
     const loadingId = ref(uid())
 
     const confirmAccount = async () => {
+      if (!$route.query.token) {
+        if ($user.id) {
+          accountConfirmed.value = true
+
+          $cookies.set('remember', 1)
+        }
+
+        return
+      }
+
       $fullscreenLoading.show({
         id: loadingId.value,
         message: 'Loading...',
@@ -86,11 +97,13 @@ export default defineComponent({
 
         accountConfirmed.value = true
       }
-
-      console.log({ data, message, error })
     }
 
     const loginRoute = computed(() => {
+      if ($user.loggedIn) {
+        return '/dashboard'
+      }
+
       if ($user.email) {
         return `/auth/login?${routeQuery({
           emailAddress: $user.email,
@@ -158,8 +171,8 @@ export default defineComponent({
           Hi {{ $user.name }}, thank you for verifying your account on Crowd!
         </p>
 
-        <Button primary block size="large" :to="loginRoute">
-          Continue to login page
+        <Button primary full-width size="large" :to="loginRoute">
+          Continue to {{ $user.loggedIn ? 'dashboard' : 'login page' }}
         </Button>
       </div>
     </template>

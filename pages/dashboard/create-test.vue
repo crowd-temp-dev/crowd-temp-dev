@@ -38,11 +38,11 @@ export default defineComponent({
 
       const testId = testState.detail.id
 
-      const createTestRouteName = 'create-test-:id'
+      const createTestRouteName = 'dashboard-create-test-:id'
 
-      const recruitRouteName = 'create-test-recruit-:id'
+      const recruitRouteName = 'dashboard-create-test-recruit-:id'
 
-      const viewResultRouteName = 'create-test-view-result-:id'
+      const viewResultRouteName = 'dashboard-create-test-view-result-:id'
 
       const testCreated = testState.detail.created
 
@@ -53,16 +53,20 @@ export default defineComponent({
           title: 'Create test',
           icon: 'CirclePlusMinor',
           active: routeName === createTestRouteName,
-          done: /^\/create-test\/(?:recruit|view-result)\/?/.test(routePath),
-          to: `/create-test/${testId}/`,
+          done: /^\/dashboard\/create-test\/(?:recruit|view-result)\/?/.test(
+            routePath
+          ),
+          to: `/dashboard/create-test/${testId}/`,
         },
         {
           title: 'Recruit',
           icon: 'CustomerPlusMajor',
           active: routeName === recruitRouteName,
-          done: /^\/create-test\/view-result\/?/.test(routePath) || testCreated,
+          done:
+            /^\/dashboard\/create-test\/view-result\/?/.test(routePath) ||
+            testCreated,
           disabled: routeName === createTestRouteName,
-          to: `/create-test/recruit/${testId}`,
+          to: `/dashboard/create-test/recruit/${testId}`,
         },
         {
           title: 'View Results',
@@ -70,14 +74,14 @@ export default defineComponent({
           active: routeName === viewResultRouteName,
           done: testPublished,
           disabled: [createTestRouteName, recruitRouteName].includes(routeName),
-          to: `/create-test/view-result/${testId}`,
+          to: `/dashboard/create-test/view-result/${testId}`,
         },
       ] as Step[]
     })
 
     const showWarning = computed(() => {
       return (
-        root.$route.name === 'create-test-:id' &&
+        root.$route.name === 'dashboard-create-test-:id' &&
         (root.$store.state as RootState).testSuite.create.showWarning
       )
     })

@@ -94,7 +94,13 @@ export default defineComponent({
     >
       <HeaderLogo />
 
-      <nav v-if="!$breakpoint.isMobile">
+      <nav
+        v-if="
+          !$breakpoint.isMobile &&
+          (!$user.loggedIn ||
+            ($user.loggedIn && $route.name !== 'auth-account-confirmed'))
+        "
+      >
         <ul class="flex items-center space-x-10">
           <li
             v-for="link in links"
@@ -104,8 +110,12 @@ export default defineComponent({
                 !link.button,
             }"
           >
-            <Button v-if="link.button" :to="link.to" primary>
-              {{ link.title }}
+            <Button
+              v-if="link.button"
+              :to="$user.loggedIn ? '/dashboard' : link.to"
+              :primary="!$user.loggedIn"
+            >
+              {{ $user.loggedIn ? 'Dashboard' : link.title }}
             </Button>
 
             <NuxtLink
@@ -119,6 +129,13 @@ export default defineComponent({
           </li>
         </ul>
       </nav>
+
+      <Button
+        v-else-if="!$breakpoint.isMobile && $user.loggedIn"
+        to="/dashboard"
+      >
+        Dashboard
+      </Button>
     </div>
   </header>
 </template>

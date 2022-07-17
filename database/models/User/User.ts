@@ -33,6 +33,7 @@ export class User extends Model<
   declare provider?: UserProvider
   declare loginCount?: number
   declare avatar: CreationOptional<string>
+  declare setupDone: CreationOptional<boolean>
 }
 
 const clearInactiveSessions = (user: User) => {
@@ -144,6 +145,12 @@ export default function initUser(dbInstance: Sequelize) {
       avatar: {
         type: DataTypes.STRING(),
         allowNull: true,
+      },
+
+      setupDone: {
+        type: DataTypes.BOOLEAN(),
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {

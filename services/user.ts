@@ -8,6 +8,7 @@ import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
+import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
 
 // PascalCased function names!
 export const Signup: ServiceHandler<SignUpForm, User> = async (
@@ -153,4 +154,11 @@ export const ResendVerificationEmail: ServiceHandler<
     { id },
     validateStatus
   )
+}
+
+export const SetupAccount: ServiceHandler<SetupAccountForm, User> = async (
+  axios,
+  payload
+) => {
+  return await axios.$post('/user/setup-account', payload, validateStatus)
 }

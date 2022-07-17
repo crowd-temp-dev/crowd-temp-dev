@@ -38,13 +38,14 @@ const formValidation: RequestHandler = (req, res, next) => {
 
 export default function (router: Router) {
   return router.post('/auth/login', formValidation, async (req, res) => {
-    const { email, password } = req.body as LoginForm
-
     try {
       await DB.transaction(async (transaction) => {
+        const { email, password } = req.body as LoginForm
+
         const throwIncorrectCredentials = () => {
           throw new Error('{401} Email or password is incorrect!')
         }
+
         // find user
         const user = await User.findOne({
           where: { email: email.toLowerCase() },

@@ -76,7 +76,7 @@ export default defineComponent({
       if (data) {
         await sleep()
 
-        $router.replace('/')
+        $router.replace('/dashboard')
       }
 
       showToasts($pToast, message)

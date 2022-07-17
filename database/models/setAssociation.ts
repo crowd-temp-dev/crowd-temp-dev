@@ -18,10 +18,11 @@ import { TemporaryEmail } from './User/TemporaryEmail'
 import { File } from './File/File'
 import { TestAnswer } from './AnswerTest/Answers'
 import { OnboardingVideo } from './OnboardingVideo'
+import { UserSurvey } from './User/UserSurvey'
 
 type Table = ModelStatic<Model>
 
-let called =false
+let called = false
 
 export default function () {
   try {
@@ -64,6 +65,12 @@ export default function () {
     // a user has many files
     User.hasMany(File, {
       foreignKey: 'createdBy',
+      onDelete: 'CASCADE',
+    })
+
+    // user has 1 usersurvey
+    User.hasOne(UserSurvey, {
+      foreignKey: 'id',
       onDelete: 'CASCADE',
     })
 

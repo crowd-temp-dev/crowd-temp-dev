@@ -101,7 +101,7 @@ const actions: ActionTree<TestSuiteDetail, RootState> = {
       app.$store.commit('app/updateAlertDialog', alertId)
 
       sleep(250).then(() => {
-        if (app.$route.name === 'create-test-:id') {
+        if (app.$route.name === 'dashboard-create-test-:id') {
           app.$alert.open({
             ...alertId,
             title: createTestAlertTitle,

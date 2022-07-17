@@ -23,17 +23,17 @@ export default defineComponent({
           prependIcon: 'CustomersMajor',
           title: 'Profile settings',
           onClick: () => {
-            $router.push('/settings/profile')
+            $router.push('/dashboard/settings/profile')
           },
-          disabled: $route.fullPath === '/settings/profile',
+          disabled: $route.fullPath === '/dashboard/settings/profile',
         },
         {
           prependIcon: 'ReceiptMajor',
           title: 'Billing',
           onClick: () => {
-            $router.push('/settings/billing')
+            $router.push('/dashboard/settings/billing')
           },
-          disabled: $route.fullPath === '/settings/billing',
+          disabled: $route.fullPath === '/dashboard/settings/billing',
         },
         {
           title: 'Logout',

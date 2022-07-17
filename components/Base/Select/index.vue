@@ -16,6 +16,7 @@ import {
   pseudoFocus,
   sleep,
   oneFrame,
+  debounce,
 } from '~/utils'
 import eventKey from '~/utils/eventKey'
 
@@ -104,6 +105,8 @@ export default defineComponent({
 
     const contentRef = ref<HTMLElement | null>(null)
 
+    const textInputRef = ref<HTMLInputElement>()
+
     const searchField = ref({
       value: '',
       timeStamp: 0,
@@ -155,10 +158,6 @@ export default defineComponent({
     const onInput = (evt: InputEvent, active: boolean) => {
       timeout.value && clearTimeout(timeout.value)
 
-      if (!active) {
-        return
-      }
-
       const { timeStamp } = evt
 
       if (timeStamp - searchField.value.timeStamp >= 500) {
@@ -180,12 +179,18 @@ export default defineComponent({
               .startsWith(searchField.value.value.toLowerCase())
           )
 
-          if (matchingOption) {
+          if (matchingOption && active) {
             const foundOptionEl = document.getElementById(matchingOption.id)
 
             if (foundOptionEl) {
               pseudoFocus(foundOptionEl)
             }
+          } else if (matchingOption) {
+            console.log(matchingOption.value)
+
+            modelSync.value = matchingOption.value
+
+            emitFormChange()
           }
 
           timeout.value = setTimeout(() => {
@@ -194,6 +199,12 @@ export default defineComponent({
             timeout.value = null
           }, 750) as unknown as NodeJS.Timeout
         }
+      }
+    }
+
+    const emitFormChange = () => {
+      if (!_props.disabled && modelSync.value && textInputRef.value?.form) {
+        textInputRef.value.form.dispatchEvent(new Event('change'))
       }
     }
 
@@ -207,7 +218,9 @@ export default defineComponent({
 
       const values = _props.options
 
-      const currentIndex = values.findIndex((option) => option.value === `${modelSync.value}`)
+      const currentIndex = values.findIndex(
+        (option) => option.value === `${modelSync.value}`
+      )
 
       const nextIndex = which === 'next' ? currentIndex + 1 : currentIndex - 1
 
@@ -215,6 +228,8 @@ export default defineComponent({
 
       if (nextValue && !nextValue.disabled) {
         modelSync.value = nextValue.value
+
+        emitFormChange()
       }
     }
 
@@ -261,7 +276,7 @@ export default defineComponent({
           searchField.value.value = ''
         }
       } else {
-        if (key === 'space') {
+        if (key === 'space' && !searchField.value.value) {
           return open()
         }
 
@@ -300,11 +315,19 @@ export default defineComponent({
       })
     }
 
+    const closeOnBlur = (close: () => void) => {
+      debounce(emitFormChange, 100)
+
+      close()
+    }
+
     watch(
       () => props.value.options,
       (nv) => {
         if (!nv.find((option) => option.value === `${modelSync.value}`)) {
           modelSync.value = ''
+
+          emitFormChange()
         }
       }
     )
@@ -317,6 +340,7 @@ export default defineComponent({
 
     return {
       modelSync,
+      textInputRef,
       getId,
       dropdownOptions,
       getLabel,
@@ -328,6 +352,7 @@ export default defineComponent({
       labelOnKeydown,
       scrollToSelected,
       pseudoFocusOnMouseEnter,
+      closeOnBlur,
     }
   },
 })
@@ -398,14 +423,21 @@ export default defineComponent({
 
               <input
                 :id="getId"
+                ref="textInputRef"
                 :placeholder="placeholder"
                 :value="modelSync"
                 :required="required || undefined"
                 autocomplete="nope"
                 class="sr-only left-[50%] top-[50%]"
                 @click="open"
-                @blur="close"
                 @input="(evt) => onInput(evt, active)"
+                v-on="
+                  active
+                    ? {
+                        blur: () => closeOnBlur(close),
+                      }
+                    : undefined
+                "
               />
             </span>
 

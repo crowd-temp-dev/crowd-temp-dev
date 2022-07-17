@@ -28,7 +28,7 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: { $user, $nuxt, $pToast, $cookies, $route, $router } }) {
+  setup(_, { root: { $user, $nuxt, $cookies, $pToast, $route, $router } }) {
     const formKey = ref(0)
 
     const focusOn = ref($cookies.get('signup_focus'))

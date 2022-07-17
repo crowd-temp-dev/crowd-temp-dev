@@ -1,48 +1,3 @@
-<template>
-  <div class="pb-88">
-    <div class="app-page-header !h-52 !relative !z-1 !justify-center mb-32">
-      <div>
-        <div
-          class="w-full max-w-[860px] grid h-full grid-rows-[1fr,auto] -mb-1"
-        >
-          <nav class="h-full">
-            <ul class="flex items-center space-x-32 h-full">
-              <li
-                v-for="link in links"
-                :key="link.title"
-                class="h-full relative isolate overflow-y-hidden transform-gpu font-semibold transition-opacity active:opacity-75"
-                :class="{
-                  'text-text-subdued ': !link.active,
-                }"
-              >
-                <NuxtLink
-                  replace
-                  :to="link.to"
-                  class="inline-flex items-center justify-center h-full w-full outline-none border-none focus-visible:underline fill-before before:-z-1 before:!h-[2px] before:!top-auto before:!bottom-0 before:bg-action-primary-default before:transition-[transform,opacity] before:transform-gpu focus-visible:before:!opacity-70 focus-visible:text-text-default transition-colors"
-                  :class="{
-                    'before:opacity-0 before:translate-y-[100%] active:before:scale-[0.95]':
-                      !link.active,
-                    'active:before:scale-[0.99]': link.active,
-                    'before:delay-[75ms]': link.active,
-                  }"
-                >
-                  {{ link.title }}
-                </NuxtLink>
-              </li>
-            </ul>
-          </nav>
-
-          <hr />
-        </div>
-      </div>
-    </div>
-
-    <div v-if="$user.loggedIn" class="isolate xxl:mx-auto xxl:max-w-app">
-      <NuxtChild />
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
 import { Layout } from '~/types'
@@ -131,3 +86,48 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div class="pb-88">
+    <div class="app-page-header !h-52 !relative !z-1 !justify-center mb-32">
+      <div>
+        <div
+          class="w-full max-w-[860px] grid h-full grid-rows-[1fr,auto] -mb-1"
+        >
+          <nav class="h-full">
+            <ul class="flex items-center space-x-32 h-full">
+              <li
+                v-for="link in links"
+                :key="link.title"
+                class="h-full relative isolate overflow-y-hidden transform-gpu font-semibold transition-opacity active:opacity-75"
+                :class="{
+                  'text-text-subdued ': !link.active,
+                }"
+              >
+                <NuxtLink
+                  replace
+                  :to="link.to"
+                  class="inline-flex items-center justify-center h-full w-full outline-none border-none focus-visible:underline fill-before before:-z-1 before:!h-[2px] before:!top-auto before:!bottom-0 before:bg-action-primary-default before:transition-[transform,opacity] before:transform-gpu focus-visible:before:!opacity-70 focus-visible:text-text-default transition-colors"
+                  :class="{
+                    'before:opacity-0 before:translate-y-[100%] active:before:scale-[0.95]':
+                      !link.active,
+                    'active:before:scale-[0.99]': link.active,
+                    'before:delay-[75ms]': link.active,
+                  }"
+                >
+                  {{ link.title }}
+                </NuxtLink>
+              </li>
+            </ul>
+          </nav>
+
+          <hr />
+        </div>
+      </div>
+    </div>
+
+    <div v-if="$user.loggedIn" class="isolate xxl:mx-auto xxl:max-w-app">
+      <NuxtChild />
+    </div>
+  </div>
+</template>

@@ -1,18 +1,6 @@
-<template>
-  <div class="px-32 lg:px-64 xxl:px-0 min-w-full">
-    <div class="grid gap-y-32 max-w-[800px]">
-      <PlanDetails />
-
-      <CardDetails />
-
-      <History />
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import CardDetails from '../../components/App/Settings/Billing/CardDetails/index.vue'
+import CardDetails from '../../../components/App/Settings/Billing/CardDetails/index.vue'
 import { Layout } from '~/types'
 import PlanDetails from '~/components/App/Settings/Billing/PlanDetails/index.vue'
 import History from '~/components/App/Settings/Billing/History/index.vue'
@@ -44,4 +32,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss"></style>
+<template>
+  <div class="px-32 lg:px-64 xxl:px-0 min-w-full">
+    <div class="grid gap-y-32 max-w-[800px]">
+      <PlanDetails />
+
+      <CardDetails />
+
+      <History />
+    </div>
+  </div>
+</template>

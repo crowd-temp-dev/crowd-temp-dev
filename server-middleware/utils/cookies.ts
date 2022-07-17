@@ -40,10 +40,6 @@ export async function setAuthCookies(arg: {
 }) {
   const { req, res, transaction, userInstance, session } = arg
 
-  if (res.headersSent) {
-    return
-  }
-
   const cookies = req.signedCookies || {}
 
   const { userId } = cookies
@@ -101,7 +97,7 @@ export async function setAuthCookies(arg: {
               ...user.get(),
             })
           )
-        )
+        )        
       } catch (err) {}
     } else clearAuthCookies(res)
   } else clearAuthCookies(res)

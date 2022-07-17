@@ -69,14 +69,23 @@ export default defineComponent({
             | HTMLSelectElement
 
           if (field) {
+            const isRadio = field instanceof RadioNodeList
+
             const value =
               field.type === 'number'
                 ? (field as HTMLInputElement).valueAsNumber
                 : ['checkbox', 'radio', 'switch'].includes(field.type)
-                ? (field as HTMLInputElement).checked
+                ? isRadio
+                  ? field.value
+                  : (field as HTMLInputElement).checked
                 : field.value
 
-            output[key] = value
+            const pseudoInput =
+              field instanceof HTMLElement && field.dataset.pseudoInput
+
+            if (!pseudoInput) {
+              output[key] = value
+            }
 
             formFields[key] = field
           }

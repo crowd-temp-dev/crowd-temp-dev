@@ -1,34 +1,10 @@
-<template>
-  <div
-    class="grid grid-cols-[1fr,auto] grid-flow-col gap-x-32 max-w-app mx-auto px-32 xl:px-64 xxl:px-0 min-w-full"
-  >
-    <!-- main content -->
-    <div class="grid gap-y-32">
-      <PersonalInfo />
-
-      <EmailPreference />
-
-      <ChangePassword />
-
-      <DeleteAccount />
-
-      <p v-if="provider" class="text-center text-text-subdued mt-20">
-        Account managed by {{ provider }}
-      </p>
-    </div>
-
-    <!-- aside -->
-    <Photo />
-  </div>
-</template>
-
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
-import Photo from '../../components/App/Settings/Profile/Photo/index.vue'
-import EmailPreference from '../../components/App/Settings/Profile/EmailPreference/index.vue'
-import PersonalInfo from '../../components/App/Settings/Profile/PersonalInfo/index.vue'
-import ChangePassword from '../../components/App/Settings/Profile/ChangePassword/index.vue'
-import DeleteAccount from '../../components/App/Settings/Profile/DeleteAccount/index.vue'
+import Photo from '../../../components/App/Settings/Profile/Photo/index.vue'
+import EmailPreference from '../../../components/App/Settings/Profile/EmailPreference/index.vue'
+import PersonalInfo from '../../../components/App/Settings/Profile/PersonalInfo/index.vue'
+import ChangePassword from '../../../components/App/Settings/Profile/ChangePassword/index.vue'
+import DeleteAccount from '../../../components/App/Settings/Profile/DeleteAccount/index.vue'
 import { Layout } from '~/types'
 
 export default defineComponent({
@@ -79,4 +55,26 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<template>
+  <div
+    class="grid grid-cols-[1fr,auto] grid-flow-col gap-x-32 max-w-app mx-auto px-32 xl:px-64 xxl:px-0 min-w-full"
+  >
+    <!-- main content -->
+    <div class="grid gap-y-32">
+      <PersonalInfo />
+
+      <EmailPreference />
+
+      <ChangePassword />
+
+      <DeleteAccount />
+
+      <p v-if="provider" class="text-center text-text-subdued mt-20">
+        Account managed by {{ provider }}
+      </p>
+    </div>
+
+    <!-- aside -->
+    <Photo />
+  </div>
+</template>

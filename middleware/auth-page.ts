@@ -1,7 +1,7 @@
 import { Middleware } from '@nuxt/types'
 import { validate } from 'uuid'
 
-const redirectAuthPage: Middleware = function ({
+const redirectAuthPage: Middleware = async function ({
   redirect,
   error,
   route,
@@ -55,7 +55,11 @@ const redirectAuthPage: Middleware = function ({
 
     if (paths[1] === 'account-confirmed' && !$user.id) {
       if (!route.query.token) {
-        redirect('/auth/signup')
+        const { error } = await $user.reload()
+
+        if (error) {
+          redirect('/auth/signup')
+        }
       } else if (!route.query.token || !validate(route.query.token as string)) {
         error({
           message: 'Invalid token!',

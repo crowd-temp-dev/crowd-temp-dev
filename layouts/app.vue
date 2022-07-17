@@ -8,7 +8,9 @@ import { isLoggedInMiddleware } from '~/utils/layout'
 import layouts from '~/mixins/layouts'
 import { VueElement } from '~/types'
 import AlertDialog from '~/components/Base/AlertDialog/index.vue'
-import { TestSuiteState } from '~/store/testSuite'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import Form from '~/components/App/SetupProfile/Form/index.vue'
+import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppLayout',
@@ -18,6 +20,8 @@ export default defineComponent({
     Navigation,
     PageHeader,
     AlertDialog,
+    FadeTransition,
+    Form,
   },
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
@@ -56,10 +60,7 @@ export default defineComponent({
     })
 
     const creatingTest = computed(() => {
-      return (
-        (root.$store.state.testSuite as TestSuiteState).create.submitting &&
-        root.$route.name === 'create-test-:id'
-      )
+      return (root.$store.state as RootState).testSuite.create.submitting
     })
 
     // scroll main element to top
@@ -139,47 +140,50 @@ export default defineComponent({
       <!-- Layout for clients signed in -->
       <SmallDevice v-if="$breakpoint.isMobile" />
 
-      <div
-        v-else
-        role="document"
-        class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen overflow-hidden max-h-screen"
-      >
-        <Header />
-
-        <Navigation />
-
-        <main
-          ref="main"
-          class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4 relative"
-          :class="{
-            'overflow-y-auto': !dialogs.length,
-            'overflow-hidden': dialogs.length,
-          }"
+      <FadeTransition v-else :duration="{ leave: 100 }">
+        <div
+          :key="$user.setupDone"
+          role="document"
+          class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen overflow-hidden max-h-screen"
         >
-          <PageHeader
-            :inert="creatingTest || undefined"
-            :class="{ 'blur-[4px]': creatingTest }"
-          />
+          <Header />
 
-          <NuxtChild
-            :inert="creatingTest || undefined"
-            :class="{ 'blur-[4px]': creatingTest }"
-          />
+          <template v-if="$user.setupDone">
+            <Navigation />
 
-          <div
-            v-if="creatingTest"
-            class="fixed z-10 right-0 bottom-0 w-[calc(100%-240px)] top-0 bg-black/80 flex-centered"
+            <main
+              ref="main"
+              class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4 relative"
+              :class="{
+                'overflow-y-auto': !dialogs.length,
+                'overflow-hidden': dialogs.length,
+              }"
+            >
+              <PageHeader
+                :inert="creatingTest || undefined"
+                :class="{ 'blur-[4px]': creatingTest }"
+              />
+
+              <NuxtChild
+                :inert="creatingTest || undefined"
+                :class="{ 'blur-[4px]': creatingTest }"
+              />
+            </main>
+          </template>
+
+          <main
+            v-else
+            ref="main"
+            class="h-full max-h-full grid justify-items-center py-120 w-screen overflow-x-hidden isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4"
+            :class="{
+              'overflow-y-auto': !dialogs.length,
+              'overflow-hidden': dialogs.length,
+            }"
           >
-            <div>
-              <h2
-                class="font-sf-pro-display font-semibold text-white text-display-medium animate-pulse"
-              >
-                Submitting...
-              </h2>
-            </div>
-          </div>
-        </main>
-      </div>
+            <Form />
+          </main>
+        </div>
+      </FadeTransition>
     </Transition>
 
     <AlertDialog

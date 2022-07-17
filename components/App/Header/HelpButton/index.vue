@@ -31,14 +31,14 @@ export default defineComponent({
           prependIcon: 'CategoriesMajor',
           title: 'Help desk',
           onClick: () => {
-            $router.push('/settings/profile')
+            $router.push('/dashboard/settings/profile')
           },
         },
         {
           prependIcon: 'DesktopMajor',
           title: 'Video Tutorials',
           onClick: () => {
-            $router.push('/settings/billing')
+            $router.push('/dashboard/settings/billing')
           },
         },
         {

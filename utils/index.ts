@@ -82,7 +82,7 @@ export const features: Feature = {
 export const getFeature = (feature: CreateTestTypes) => {
   const formatPath = feature
     .replace(/[A-Z]/g, (x) => ` ${x}`.toLowerCase())
-    .replace(/^ [a-z]/, (x) => x[1].toUpperCase())  
+    .replace(/^ [a-z]/, (x) => x[1].toUpperCase())
 
   return features[formatPath]
 }
@@ -852,3 +852,64 @@ export const capitalize = (string: string) => {
 }
 
 export const createTestWarningDuplicateId = uid()
+
+export const debounce = (cb: () => void, delay: number) => {
+  let debounceTimer: NodeJS.Timeout
+
+  return function () {
+    const context = this
+    const args = arguments
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => cb.apply(context, args), delay)
+  }
+}
+
+export const userWorkRole = [
+  'UX Researcher',
+  'UX Designer',
+  'Product Designer',
+  'Product Manager',
+  'Scrum Master',
+  'Marketer',
+  'Software Engineer',
+  'Success Manager',
+  'Support',
+  'Teacher',
+  'Students',
+  'Others',
+]
+
+export const userCompanySize = [
+  {
+    label: '2 to 20',
+    value: '2-20',
+  },
+  {
+    label: '20 to 50',
+    value: '20-50',
+  },
+  {
+    label: '50 to 100',
+    value: '50-100',
+  },
+  {
+    label: '100 to 200',
+    value: '100-200',
+  },
+  {
+    label: 'More than 200',
+    value: '>200',
+  },
+]
+
+export const userReferrer = [
+  'Friend/Referral',
+  'Google Search',
+  'Linkedin',
+  'Facebook',
+  'Instagram',
+  'Twitter',
+  'Product Hunt',
+  'Online News',
+  'Others',
+]

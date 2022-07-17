@@ -35,7 +35,7 @@ export const authenticate: RequestHandler = async function (req, res, next) {
     await DB.transaction(async (transaction) => {
       // find user;
       const user = await User.findByPk(userId, { transaction })
-
+      
       if (user) {
         // check if session is active;
         const currentSession = user.session[session]

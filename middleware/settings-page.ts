@@ -5,7 +5,7 @@ const redirectSettingsPage: Middleware = function ({ redirect, route }) {
 
   const paths = route.path.split('/').filter(Boolean)
 
-  if (paths[0] === 'settings') {
+  if (paths[0] === 'dashboard' && paths[1] === 'settings') {
     // check if the second path is valid
     const validSettingsTabs = [
       'profile',
@@ -15,8 +15,8 @@ const redirectSettingsPage: Middleware = function ({ redirect, route }) {
       'plans',
     ]
 
-    if (!validSettingsTabs.includes(paths[1])) {
-      redirect(200, '/settings/profile')
+    if (!validSettingsTabs.includes(paths[2])) {
+      redirect(200, '/dashboard/settings/profile')
     }
   }
 }

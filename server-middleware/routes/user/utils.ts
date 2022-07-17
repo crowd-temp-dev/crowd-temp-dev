@@ -18,6 +18,10 @@ export async function loginUser(arg: {
 
   const actionToken = uuidv4()
 
+  if (!user.confirmed) {
+    throw new Error('{401} Account not verified!')
+  }
+
   await user.update({
     action: {
       ...user.action,
