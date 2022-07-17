@@ -13,7 +13,7 @@ export default defineComponent({
       items: [
         'Simple survey',
         'Card sorting',
-        'Design Survey',
+        'Design survey',
         'Five second test',
         'Website evaluation',
         'Prototype evaluation',

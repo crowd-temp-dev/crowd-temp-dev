@@ -27,7 +27,7 @@ export default defineComponent({
     <div
       class="color-frame"
       :style="{
-        '--bg': content.color,
+        '--bg': (content).color,
       }"
     />
 
