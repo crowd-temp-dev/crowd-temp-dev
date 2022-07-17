@@ -8,7 +8,7 @@ import { ThankYouScreen } from './CreateTests/ThankYouScreen'
 import { CardSorting } from './CreateTests/CardSorting'
 import { CustomMessage } from './CreateTests/CustomMessage'
 import { DesignSurvey } from './CreateTests/DesignSurvey'
-import { FiveSecondsTest } from './CreateTests/FiveSecondsTest'
+import { FiveSecondTest } from './CreateTests/FiveSecondTest'
 import { PreferenceTest } from './CreateTests/PreferenceTest'
 import { SimpleSurvey } from './CreateTests/SimpleSurvey'
 import { WebsiteEvaluation } from './CreateTests/WebsiteEvaluation'
@@ -85,7 +85,7 @@ export default function () {
       onDelete: 'CASCADE',
     })
 
-    const featureWith1File = [FiveSecondsTest, DesignSurvey]
+    const featureWith1File = [FiveSecondTest, DesignSurvey]
 
     const featuresWithMultipleFiles = [PreferenceTest]
 

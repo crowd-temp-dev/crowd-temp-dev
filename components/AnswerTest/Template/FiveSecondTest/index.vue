@@ -10,7 +10,7 @@ import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Spinner from '~/components/Base/Spinner/index.vue'
 
 export default defineComponent({
-  name: 'AnswerTestTemplateFiveSecondsTest',
+  name: 'AnswerTestTemplateFiveSecondTest',
   components: {
     InputField,
     AnswerTestPageTransition,

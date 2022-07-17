@@ -16,7 +16,7 @@ const details = {
     subtitle:
       "For this section you'd be asked a couple of questions, some of this questions might have media files (image, video or audio) attached which will show on the left section of your view. To get started click on <strong>“continue”</strong>.",
   },
-  FiveSecondsTest: {
+  FiveSecondTest: {
     title: '⏳Five Second Test',
     subtitle:
       "For this section you'd be shown an image for a specified duration in seconds, kindly pay attention to the image and answer the follow-up questions.",

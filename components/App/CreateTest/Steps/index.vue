@@ -3,7 +3,7 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import PrototypeEvaluation from './PrototypeEvaluation/index.vue'
 import WebsiteEvaluation from './WebsiteEvaluation/index.vue'
-import FiveSecondsTest from './FiveSecondsTest/index.vue'
+import FiveSecondTest from './FiveSecondTest/index.vue'
 import PreferenceTest from './PreferenceTest/index.vue'
 import ThankYouScreen from './ThankYouScreen/index.vue'
 import CustomMessage from './CustomMessage/index.vue'
@@ -26,7 +26,7 @@ export default defineComponent({
     WelcomeScreen,
     DesignSurvey,
     PreferenceTest,
-    FiveSecondsTest,
+    FiveSecondTest,
     PrototypeEvaluation,
     SimpleSurvey,
     ClickTest,

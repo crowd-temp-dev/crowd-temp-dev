@@ -144,7 +144,7 @@ export default defineComponent({
       </template>
     </ul>
 
-    <div
+    <!-- <div
       aria-hidden="true"
       class="absolute h-[calc(100%-16px)] w-[calc(100%-16px)] max-w-app left-8 top-8 flex items-center justify-between opacity-0 delay-300 duration-300 group-hover:opacity-100 transition-opacity pointer-events-none"
     >
@@ -168,7 +168,7 @@ export default defineComponent({
           class="size-icon text-[32px] fill-icon fill-icon-default"
         />
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 

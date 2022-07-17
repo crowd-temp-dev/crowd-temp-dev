@@ -7,7 +7,7 @@ import DialogButton from '~/components/Base/DialogButton/index.vue'
 import { RootState } from '~/store'
 
 export default defineComponent({
-  name: 'AppCreateTestResultFiveSecondsTest',
+  name: 'AppCreateTestResultFiveSecondTest',
   components: { Question, QuestionSection, DialogButton },
   mixins: [viewResultTestType],
   setup(_props, { root }) {

@@ -2,10 +2,12 @@ import {
   ComponentInstance,
   computed,
   defineComponent,
+  nextTick,
   onMounted,
   ref,
   watch,
 } from '@vue/composition-api'
+import { sleep } from '~/utils'
 
 export default defineComponent({
   model: {
@@ -41,8 +43,8 @@ export default defineComponent({
     },
     validate: {
       type: Function,
-      default:undefined
-    }
+      default: undefined,
+    },
   },
   setup(_props) {
     const root = ref(null)
@@ -90,8 +92,10 @@ export default defineComponent({
       }
     }
 
-    const autofocus = () => {
-      if (props.value.autofocus) {
+    const autofocus = async () => {
+      await sleep()
+
+      if (props.value.autofocus) {        
         const input = getInput()
 
         if (input) {
@@ -111,11 +115,13 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      autofocus()
+      nextTick(() => {
+        autofocus()
 
-      setInputAttrs()
+        setInputAttrs()
 
-      triggerSelect()
+        triggerSelect()
+      })
     })
 
     watch(() => props.value.required, setInputAttrs)
@@ -127,18 +133,21 @@ export default defineComponent({
     return { root }
   },
   watch: {
-    'modelValue'(val) {      
+    modelValue(val) {
       if (typeof this.validate === 'function') {
         const validateValue = this.validate(val)
 
-        const errorMessage = typeof validateValue === 'string' ? validateValue : ''
+        const errorMessage =
+          typeof validateValue === 'string' ? validateValue : ''
 
-        const input = (this.root as unknown as ComponentInstance).$el.querySelector('input');
+        const input = (
+          this.root as unknown as ComponentInstance
+        ).$el.querySelector('input')
 
         if (input) {
           input.setCustomValidity(errorMessage)
         }
       }
-    }
-  }
+    },
+  },
 })

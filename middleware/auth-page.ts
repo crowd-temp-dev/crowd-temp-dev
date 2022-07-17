@@ -24,6 +24,7 @@ const redirectAuthPage: Middleware = function ({
       'forgot-password',
       'reset-password',
       'confirm-email',
+      'account-confirmed',
     ]
 
     if (!validAuthPages.includes(paths[1])) {
@@ -49,6 +50,17 @@ const redirectAuthPage: Middleware = function ({
     if (paths[1] === 'confirm-email') {
       if (!$user.id) {
         redirect('/auth/sign-up')
+      }
+    }
+
+    if (paths[1] === 'account-confirmed' && !$user.id) {
+      if (!route.query.token) {
+        redirect('/auth/signup')
+      } else if (!route.query.token || !validate(route.query.token as string)) {
+        error({
+          message: 'Invalid token!',
+          statusCode: 400,
+        })
       }
     }
   }

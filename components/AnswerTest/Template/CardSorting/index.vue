@@ -10,7 +10,7 @@ import { scrollMain } from '~/utils'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 
 export default defineComponent({
-  name: 'AnswerTestTemplateFiveSecondsTest',
+  name: 'AnswerTestTemplateFiveSecondTest',
   components: {
     InputField,
     AnswerTestPageTransition,

@@ -1,22 +1,8 @@
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from '@vue/composition-api'
+import { defineComponent, onBeforeUnmount, ref } from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
-import { OnSubmit } from '~/types'
-import {
-  disableFormFields,
-  enableFormFields,
-} from '~/components/Base/FormLayout/utils'
-import { SignUpForm } from '~/server-middleware/routes/user/signup'
-import { Signup } from '~/services/user'
+import { ResendVerificationEmail } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
-import { showServerAuthMessage } from '~/utils'
-import { googleOAuthUrl } from '~/utils/oauth/google'
 
 export default defineComponent({
   name: 'ConfirmEmailPage',
@@ -31,85 +17,34 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: { $pToast, $axios, $cookies, $nuxt, $store } }) {
-    const user = ref<Vue['$user']>()
+  setup(_, { root: { $store, $axios, $user, $pToast, $router } }) {
+    const resending = ref(false)
 
-    const focusOn = ref($cookies.get('signup_focus'))
+    const resendEmail = async () => {
+      if (!$user.id) {
+        $router.replace('/auth/sign-up')
 
-    const email = ref('')
+        return
+      }
 
-    const password = ref('')
+      resending.value = true
 
-    const confirmPassword = ref('')
+      $pToast.open({
+        message: 'Resending email...',
+      })
 
-    const formKey = ref(0)
-
-    const getGoogleOAuthUrl = computed(() => {
-      return googleOAuthUrl($nuxt.context.env)
-    })
-
-    const attemptSignup: OnSubmit<SignUpForm> = async ({
-      formValues,
-      formFields,
-      toggleLoading,
-      refreshForm,
-    }) => {
-      $pToast.clear()
-
-      // disable form elements
-      disableFormFields<SignUpForm>(formFields)
-
-      toggleLoading?.(true)
-
-      const { message, data } = await Signup($axios, formValues)
+      const { message } = await ResendVerificationEmail($axios, $user.id)
 
       showToasts($pToast, message)
 
-      // enable form elements
-      enableFormFields<SignUpForm>(formFields)
-
-      password.value = ''
-
-      confirmPassword.value = ''
-
-      if (data) {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-
-        requestAnimationFrame(() => {
-          refreshForm()
-
-          email.value = ''
-        })
-      }
-
-      // enable form elements
-      formFields && enableFormFields<SignUpForm>(formFields)
-
-      toggleLoading?.(false)
+      resending.value = false
     }
-
-    // show server error
-    onMounted(() => {
-      showServerAuthMessage('signup', $pToast, $cookies)
-    })
 
     onBeforeUnmount(() => {
       $store.commit('user/setPublic', {})
     })
 
-    return {
-      user,
-      email,
-      focusOn,
-      password,
-      formKey,
-      confirmPassword,
-      getGoogleOAuthUrl,
-      attemptSignup,
-    }
+    return { resending, resendEmail }
   },
 
   head: {
@@ -150,12 +85,15 @@ export default defineComponent({
           spam inbox or
           <label
             :for="id"
-            class="text-action-primary-default can-hover:hover:text-action-primary-hovered can-hover:hover:underline active:opacity-70 transition-opacity cursor-pointer"
+            class="text-action-primary-default can-hover:hover:text-action-primary-hovered can-hover:hover:underline active:opacity-70 transition-opacity cursor-pointer inline-flex"
+            :class="{ 'grayscale opacity-70 pointer-events-none': resending }"
           >
             resend email.
           </label>
 
-          <button :id="id" class="sr-only">resend email</button>
+          <button :id="id" class="sr-only" @click="resendEmail">
+            resend email
+          </button>
         </p>
       </Id>
     </div>

@@ -2,7 +2,13 @@
 import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
 import SmootDrag from '@/components/Base/SmoothDrag/index.vue'
 import Button from '~/components/Base/Button/index.vue'
-import { scrollMain, layoutSizing, sleep, getTestFeatureTitle } from '~/utils'
+import {
+  scrollMain,
+  layoutSizing,
+  sleep,
+  getTestFeatureTitle,
+  getFeature,
+} from '~/utils'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { VueElement } from '~/types'
@@ -171,6 +177,7 @@ export default defineComponent({
       focusOnAddNewBlockBtn,
       toggleSectionCollapse,
       getTestFeatureTitle,
+      getFeature,
     }
   },
 })
@@ -197,7 +204,7 @@ export default defineComponent({
               >
                 <Tooltip v-slot="{ events }" label="Toggle expand">
                   <div
-                    class="w-28 h-28 mr-4 shrink-0 bg-decorative-surface-five rounded-full"
+                    class="w-28 h-28 mr-4 shrink-0 bg-surface-depressed rounded-full"
                     @click="toggleSectionCollapse(staticTitle.id)"
                     v-on="events"
                   />
@@ -224,7 +231,11 @@ export default defineComponent({
                 >
                   <Tooltip v-slot="{ events }" label="Toggle expand">
                     <div
-                      class="w-28 h-28 mr-4 shrink-0 bg-decorative-surface-five rounded-full"
+                      class="w-28 h-28 mr-4 shrink-0 rounded-full"
+                      :style="{
+                        'background-color':
+                          (getFeature(item.type) || {}).color || '#000',
+                      }"
                       @click="toggleSectionCollapse(item.id)"
                       v-on="events"
                     />
@@ -256,34 +267,32 @@ export default defineComponent({
           </template>
         </div>
 
-        <Button full-width class="mb-20 bg-action-secondary-default">
-          Preview
-        </Button>
-
-        <Button
-          full-width
-          primary
-          :disabled="
-            !dragTitles.length ||
-            testSubmitting ||
-            showWarning
-          "
-          @click="nextStep"
-        >
-          Save and continue
-        </Button>
-
-        <FadeTransition>
-          <Button
-            v-if="!dragTitles.length"
-            id="focus-on-add-new-block"
-            plain
-            class="h-56 w-full"
-            @click="focusOnAddNewBlockBtn"
-          >
-            Add a test to continue
+        <div class="grid">
+          <Button full-width class="mb-20 bg-action-secondary-default">
+            Preview
           </Button>
-        </FadeTransition>
+
+          <Button
+            full-width
+            primary
+            :disabled="!dragTitles.length || testSubmitting || showWarning"
+            @click="nextStep"
+          >
+            Save and continue
+          </Button>
+
+          <FadeTransition>
+            <Button
+              v-if="!dragTitles.length"
+              id="focus-on-add-new-block"
+              plain
+              class="h-56 w-full"
+              @click="focusOnAddNewBlockBtn"
+            >
+              Add a test to continue
+            </Button>
+          </FadeTransition>
+        </div>
       </div>
     </aside>
   </div>

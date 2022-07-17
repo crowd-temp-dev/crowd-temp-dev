@@ -105,12 +105,12 @@ export const formSchema = {
     followUpQuestions,
   } as Record<keyof CreateTestForm['DesignSurvey']['0'], any>),
 
-  FiveSecondsTest: Joi.object({
+  FiveSecondTest: Joi.object({
     id: uuidv4.required(),
     duration: Joi.number().integer().min(5000).max(60000).required(),
     file: Joi.number().integer().min(1).max(1).required(),
     followUpQuestions,
-  } as Record<keyof CreateTestForm['FiveSecondsTest']['0'], any>),
+  } as Record<keyof CreateTestForm['FiveSecondTest']['0'], any>),
 
   WebsiteEvaluation: Joi.object({
     id: uuidv4.required(),

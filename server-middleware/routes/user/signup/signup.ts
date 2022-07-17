@@ -1,13 +1,16 @@
 import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
-import { user as userValidation } from '../../utils/validation'
-import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
-import DB from '../../../database'
-import { User } from '../../../database/models/User/User'
-import { hashPassword } from '../../../database/utils'
-import { UserToken } from '../../../database/models/User/UserToken'
-import mailer from '../../email'
-import { apiActionQuery } from '../../utils'
+import { user as userValidation } from '../../../utils/validation'
+import {
+  sendError,
+  sendFormattedError,
+  sendSuccess,
+} from '../../../utils/sendRes'
+import DB from '../../../../database'
+import { User } from '../../../../database/models/User/User'
+import { hashPassword } from '../../../../database/utils'
+import { UserToken } from '../../../../database/models/User/UserToken'
+import { sendVerificationEmail } from './utils'
 
 export interface SignUpForm {
   firstName: string
@@ -63,10 +66,6 @@ export default function (router: Router) {
 
         const email = _email.toLowerCase().trim()
 
-        // const throwErrorCreatingAccount = () => {
-        //   throw new Error(`{409} Error creating account`)
-        // }
-
         // check to see that the email isnt taken.
         const sendRes = async (user: User) => {
           // clear any previous token
@@ -91,31 +90,10 @@ export default function (router: Router) {
             const getToken = confirmAccount.get().id as string
 
             try {
-              const sendConfirmation = await mailer.sendMail({
-                from: 'UnbugQA',
-                to: email,
-                subject: 'Confirm your Crowd Testing account',
-                html: `<div>
-                      <p>
-                        Hi ${
-                          user.firstName
-                        }! Please click the link below to confirm your account.
-                      </p>
-                      <p>
-                        <strong>
-                          <a href="${
-                            process.env.CLIENT_ORIGIN
-                          }/action?${apiActionQuery({
-                  key: 'confirm_account',
-                  token: getToken,
-                  id: user.id,
-                })}">
-                            Confirm account
-                          </a>
-                        </strong>
-                      </p>
-                    </div>`,
-              })
+              const sendConfirmation = await sendVerificationEmail(
+                user,
+                getToken
+              )
 
               if (sendConfirmation.accepted) {
                 sendSuccess(res, {
@@ -124,11 +102,11 @@ export default function (router: Router) {
                     name: `${user.firstName} ${user.lastName}`,
                     email: user.email,
                   },
-                  message: {
-                    type: 'success',
-                    content: 'Confirm account!',
-                    duration: 5000,
-                  },
+                  // message: {
+                  //   type: 'success',
+                  //   content: 'Confirm account!',
+                  //   duration: 5000,
+                  // },
                 })
               }
             } catch (err) {

@@ -20,6 +20,8 @@ export default defineComponent({
     destructive: Boolean,
     loading: Boolean,
     readonly: Boolean,
+    block: Boolean,
+    fullWidth: Boolean,
   },
 
   setup(_props) {

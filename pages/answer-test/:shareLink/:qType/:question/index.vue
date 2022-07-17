@@ -3,7 +3,7 @@ import { defineComponent, computed } from '@vue/composition-api'
 import { CreateTestComponent, Layout } from '~/types'
 import SimpleSurvey from '~/components/AnswerTest/Template/SimpleSurvey/index.vue'
 import DesignSurvey from '~/components/AnswerTest/Template/DesignSurvey/index.vue'
-import FiveSecondsTest from '~/components/AnswerTest/Template/FiveSecondsTest/index.vue'
+import FiveSecondTest from '~/components/AnswerTest/Template/FiveSecondTest/index.vue'
 import PreferenceTest from '~/components/AnswerTest/Template/PreferenceTest/index.vue'
 import CardSorting from '~/components/AnswerTest/Template/CardSorting/index.vue'
 import WebsiteEvaluation from '~/components/AnswerTest/Template/WebsiteEvaluation/index.vue'
@@ -16,7 +16,7 @@ export default defineComponent({
   components: {
     SimpleSurvey,
     DesignSurvey,
-    FiveSecondsTest,
+    FiveSecondTest,
     PreferenceTest,
     CardSorting,
     WebsiteEvaluation,

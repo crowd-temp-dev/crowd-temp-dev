@@ -290,7 +290,12 @@ export default defineComponent({
 
 <template>
   <div :id="id">
-    <div ref="triggerRef" class="w-full h-full" :class="triggerClass">
+    <div
+      ref="triggerRef"
+      :title="modelSync ? '' : undefined"
+      class="w-full h-full"
+      :class="triggerClass"
+    >
       <slot v-bind="payload" />
     </div>
 

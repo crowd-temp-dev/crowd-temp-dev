@@ -28,7 +28,7 @@ export default defineComponent({
       ),
     }),
 
-  setup(_, { root: { $user, $nuxt, $pToast, $cookies } }) {
+  setup(_, { root: { $user, $nuxt, $pToast, $cookies, $route, $router } }) {
     const formKey = ref(0)
 
     const focusOn = ref($cookies.get('signup_focus'))
@@ -36,6 +36,26 @@ export default defineComponent({
     const password = ref('Qwerty$2')
 
     const rememberCheckbox = ref(true)
+
+    const initialEmailAddress = ref('fakeuser@unbug.crowd')
+
+    if ($route.query.emailAddress || $route.query.focusOn) {
+      if ($route.query.emailAddress) {
+        initialEmailAddress.value = $route.query.emailAddress as string
+      }
+
+      if ($route.query.focusOn) {
+        focusOn.value = $route.query.focusOn
+      }
+
+      $router.replace({
+        query: {
+          ...$route.query,
+          emailAddress: undefined,
+          focusOn: undefined,
+        },
+      })
+    }
 
     const attemptLogin: OnSubmit<LoginPayload> = async ({
       formValues,
@@ -74,6 +94,7 @@ export default defineComponent({
       rememberCheckbox,
       getGoogleOAuthUrl,
       focusOn,
+      initialEmailAddress,
       attemptLogin,
     }
   },
@@ -161,8 +182,8 @@ export default defineComponent({
           type="email"
           v-bind="fieldIdAndError('email')"
           required
-          :autofocus="!$breakpoint.isMobile"
-          value="fakeuser@unbug.crowd"
+          :autofocus="!$breakpoint.isMobile && !focusOn"
+          :value="initialEmailAddress"
         />
 
         <PasswordField
@@ -170,6 +191,7 @@ export default defineComponent({
           help-text="At least 8 characters with a min of one special character, one uppercase and one number."
           v-bind="fieldIdAndError('password')"
           required
+          :autofocus="focusOn === 'password'"
         />
 
         <NuxtLink

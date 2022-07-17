@@ -3,7 +3,7 @@ import { nextTick } from '@vue/composition-api'
 import {
   CancelEmailChange,
   ChangeEmail,
-  ConfirmAccount,
+  // ConfirmAccount,
   LogoutAllSessions,
 } from '../services/user'
 
@@ -11,9 +11,10 @@ import type {
   ApiAction,
   ApiResponse,
   CreateTestComponent,
+  CreateTestTypes,
   Feature,
   FeatureTitle,
-  FiveSecondsTestDurations,
+  FiveSecondTestDurations,
   HTMLAttrs,
   VueElement,
 } from '~/types'
@@ -37,7 +38,7 @@ export const features: Feature = {
       'Card sorting helps you plan and evaluate the information architecture of your website.',
     createTestComponent: 'CardSorting',
   },
-  'Design Survey': {
+  'Design survey': {
     color: '#91E0D6',
     subtitle:
       'Ask the questions that matter to you with option to see a media file while answering.',
@@ -47,7 +48,7 @@ export const features: Feature = {
     color: '#FFC96B',
     subtitle:
       'Participants are shown an image for a short time before answering questions.',
-    createTestComponent: 'FiveSecondsTest',
+    createTestComponent: 'FiveSecondTest',
   },
   'Website evaluation': {
     color: '#D2A0E3',
@@ -72,6 +73,18 @@ export const features: Feature = {
       'Want to add special instructions before a test type? Add it here.',
     createTestComponent: 'CustomMessage',
   },
+}
+
+/**
+ * @description
+ * Returns feature object using a feature type
+ * **/
+export const getFeature = (feature: CreateTestTypes) => {
+  const formatPath = feature
+    .replace(/[A-Z]/g, (x) => ` ${x}`.toLowerCase())
+    .replace(/^ [a-z]/, (x) => x[1].toUpperCase())  
+
+  return features[formatPath]
 }
 
 export const nextFrame = () =>
@@ -397,8 +410,8 @@ export const getTestFeatureTitle = (
     case 'CardSorting':
       return 'Card sorting'
     case 'DesignSurvey':
-      return 'Design Survey'
-    case 'FiveSecondsTest':
+      return 'Design survey'
+    case 'FiveSecondTest':
       return 'Five second test'
     case 'PrototypeEvaluation':
       return 'Prototype evaluation'
@@ -425,7 +438,7 @@ export const getAlphabetIndex = (letter: string): number => {
   return alphabets.indexOf(letter)
 }
 
-export const fiveSecondsTestDurations: FiveSecondsTestDurations[] = [
+export const fiveSecondTestDurations: FiveSecondTestDurations[] = [
   5000, 10000, 15000, 20000, 25000, 30000, 45000, 60000,
 ]
 
@@ -458,8 +471,8 @@ export const newTestConstructor = (type: CreateTestComponent) => {
       file: [],
     }),
 
-    ...addPaths(type === 'FiveSecondsTest', {
-      duration: String(Number(fiveSecondsTestDurations[0])),
+    ...addPaths(type === 'FiveSecondTest', {
+      duration: String(Number(fiveSecondTestDurations[0])),
       file: [],
     }),
 
@@ -588,21 +601,21 @@ export const actionRoutes: Record<
     message: 'Ending all sessions...',
     redirect: '/',
   },
-  confirm_account: {
-    async request(arg) {
-      const res = await ConfirmAccount(this.$axios, {
-        token: arg.token,
-      })
+  // confirm_account: {
+  //   async request(arg) {
+  //     const res = await ConfirmAccount(this.$axios, {
+  //       token: arg.token,
+  //     })
 
-      if (res.data) {
-        await this.$user.reload()
-      }
+  //     if (res.data) {
+  //       await this.$user.reload()
+  //     }
 
-      return res
-    },
-    message: 'Confirming account...',
-    redirect: '/',
-  },
+  //     return res
+  //   },
+  //   message: 'Confirming account...',
+  //   redirect: '/',
+  // },
   cancel_email_change: {
     async request(arg) {
       return await CancelEmailChange(this.$axios, {

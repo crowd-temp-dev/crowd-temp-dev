@@ -21,7 +21,7 @@ export class PreferenceTest extends Model<
   declare fileURLs: string[]
 }
 
-export default function initFiveSecondsTest(DB: Sequelize) {
+export default function initPreferenceTest(DB: Sequelize) {
   PreferenceTest.init(
     {
       id: {

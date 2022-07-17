@@ -1,7 +1,7 @@
 import { validateStatus } from './utils'
 import { ServiceHandler } from './type'
 import { LoginForm } from '~/server-middleware/routes/user/login'
-import { SignUpForm } from '~/server-middleware/routes/user/signup'
+import { SignUpForm } from '~/server-middleware/routes/user/signup/signup'
 import { ForgotPasswordForm } from '~/server-middleware/routes/user/forgot-password'
 import { ResetPasswordForm } from '~/server-middleware/routes/user/reset-password'
 import { UserData } from '~/server-middleware/types'
@@ -17,7 +17,7 @@ export const Signup: ServiceHandler<SignUpForm, User> = async (
   return await axios.$post('/auth/signup', payload, validateStatus)
 }
 
-export const ConfirmAccount: ServiceHandler<{ token: string }, any> = async (
+export const ConfirmAccount: ServiceHandler<{ token: string }, User> = async (
   axios,
   payload
 ) => {
@@ -139,4 +139,18 @@ export const UpdateAvatar: ServiceHandler<Record<string, any>, User> = async (
   payload
 ) => {
   return await axios.$patch('/auth/update/avatar', payload, validateStatus)
+}
+
+export const ResendVerificationEmail: ServiceHandler<
+  string,
+  {
+    id: string
+    email: string
+  }
+> = async (axios, id) => {
+  return await axios.$post(
+    '/auth/resendVerificationEmail',
+    { id },
+    validateStatus
+  )
 }

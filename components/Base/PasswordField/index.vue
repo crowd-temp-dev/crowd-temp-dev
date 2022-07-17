@@ -1,21 +1,25 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
-import modelSync from '~/mixins/modelSync'
-import { passwordRegExpString } from '~/utils'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch,
+} from '@vue/composition-api'
+import { passwordRegExpString, sleep } from '~/utils'
 
 export default defineComponent({
   name: 'BasePasswordField',
   components: {},
-  mixins: [
-    modelSync(
-      {
-        type: String,
-        default: undefined,
-      },
-      (val, _props) => typeof val === 'string' && !_props.disabled
-    ),
-  ],
+  model: {
+    prop: 'modelValue',
+    event: 'update:modelValue',
+  },
   props: {
+    modelValue: {
+      type: String,
+      default: '',
+    },
     id: {
       type: String,
       required: true,
@@ -39,11 +43,41 @@ export default defineComponent({
     },
     required: Boolean,
     readonly: Boolean,
+    autofocus: Boolean,
   },
-  setup() {
+  setup(_props, { emit }) {
     const showPassword = ref(false)
 
-    return { showPassword }
+    const inputRef = ref<HTMLInputElement>()
+
+    const props = computed(() => _props)
+
+    const modelSync = computed({
+      get() {
+        return _props.modelValue
+      },
+      set(val: string) {
+        emit('update:modelValue', val)
+      },
+    })
+
+    const autofocus = async () => {
+      await sleep()
+
+      if (props.value.autofocus) {                
+        const input = inputRef.value
+
+        if (input) {
+          input.focus()
+        }
+      }
+    }
+
+    watch(() => props.value.autofocus, autofocus)
+
+    onMounted(autofocus)
+
+    return { showPassword, modelSync, inputRef }
   },
 })
 </script>
@@ -62,9 +96,11 @@ export default defineComponent({
     >
       <input
         :id="id"
+        ref="inputRef"
         v-model="modelSync"
         :type="showPassword ? 'text' : 'password'"
         :required="required"
+        :disabled="disabled || undefined"
         :pattern="pattern"
         :readonly="readonly || undefined"
         class="input w-full h-full outline-none rounded-[inherit] pr-[calc(20px+1.8rem)] pl-[1.2rem] py-[0.5rem]"
@@ -75,6 +111,7 @@ export default defineComponent({
         class="fill-icon-default absolute right-[0.9rem] w-20 h-20 transition-opacity opacity-80 can-hover:hover:opacity-100 can-hover:active:opacity-70 active:opacity-70"
         :class="{
           '!opacity-0 pointer-events-none': !modelSync && !showPassword,
+          'pointer-events-none': (disabled || $attrs.disabled) && !showPassword,
         }"
         @click="showPassword = !showPassword"
       />

@@ -12,7 +12,6 @@ import { WebsiteEvaluation } from '../../../database/models/CreateTests/WebsiteE
 import { PrototypeEvaluation } from '../../../database/models/CreateTests/PrototypeEvaluation'
 import { PreferenceTest } from '../../../database/models/CreateTests/PreferenceTest'
 import { CustomMessage } from '../../../database/models/CreateTests/CustomMessage'
-import { FiveSecondsTest } from '../../../database/models/CreateTests/FiveSecondsTest'
 import { DesignSurvey } from '../../../database/models/CreateTests/DesignSurvey'
 import { FollowUpQuestion } from '../../../database/models/CreateTests/FollowUpQuestions'
 import { WelcomeScreen } from '../../../database/models/CreateTests/WelcomeScreen'
@@ -20,6 +19,7 @@ import { ThankYouScreen } from '../../../database/models/CreateTests/ThankYouScr
 import { uuidv4 } from '../../utils/validation'
 import { uuidv4 as getUuid } from '../../../utils'
 import { uploadFile } from '../fileManager/utils'
+import { FiveSecondTest } from '../../../database/models/CreateTests/FiveSecondTest'
 import { formSchema } from './utils'
 import { CreateTestForm } from '~/types/form'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
@@ -134,7 +134,7 @@ export default function (router: Router) {
           CardSorting: cardSorting,
           CustomMessage: customMessage,
           DesignSurvey: designSurvey,
-          FiveSecondsTest: fiveSecondsTest,
+          FiveSecondTest: fiveSecondTest,
           PreferenceTest: preferenceTest,
           PrototypeEvaluation: prototypeEvaluation,
           SimpleSurvey: simpleSurvey,
@@ -302,16 +302,16 @@ export default function (router: Router) {
             }
           }
 
-          if (fiveSecondsTest) {
+          if (fiveSecondTest) {
             let key: QuestionIndex
-            let newFiveSecondsTest: FiveSecondsTest
+            let newFiveSecondTest: FiveSecondTest
 
-            for (key in fiveSecondsTest) {
-              const section = fiveSecondsTest[key]
+            for (key in fiveSecondTest) {
+              const section = fiveSecondTest[key]
 
               const fileNames = getFileNames()
 
-              newFiveSecondsTest = await FiveSecondsTest.create(
+              newFiveSecondTest = await FiveSecondTest.create(
                 {
                   createdBy: user.id,
                   index: Number(key),
@@ -319,20 +319,20 @@ export default function (router: Router) {
                   id: section.id,
                   duration: Number(
                     section.duration
-                  ) as FiveSecondsTest['duration'],
+                  ) as FiveSecondTest['duration'],
                   fileURL: fileNames[0],
                 },
                 { transaction }
               )
 
               await saveFollowUpQuestions(section.followUpQuestions, {
-                FiveSecondsTestId: newFiveSecondsTest.id,
+                FiveSecondTestId: newFiveSecondTest.id,
               })
 
               await uploadFile({
                 req,
                 config: {
-                  path: `/user/${userId}/tests/FiveSecondsTest/${section.id}/`,
+                  path: `/user/${userId}/tests/FiveSecondTest/${section.id}/`,
                   keys: [section.id],
                   fileNames,
                 },

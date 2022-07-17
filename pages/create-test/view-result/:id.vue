@@ -4,7 +4,7 @@ import Notes from '@/components/App/CreateTestResult/Notes/index.vue'
 import Summary from '@/components/App/CreateTestResult/Summary/index.vue'
 import DesignSurvey from '@/components/App/CreateTestResult/DesignSurvey/index.vue'
 import SimpleSurvey from '@/components/App/CreateTestResult/SimpleSurvey/index.vue'
-import FiveSecondsTest from '@/components/App/CreateTestResult/FiveSecondsTest/index.vue'
+import FiveSecondTest from '@/components/App/CreateTestResult/FiveSecondTest/index.vue'
 import WebsiteEvaluation from '@/components/App/CreateTestResult/WebsiteEvaluation/index.vue'
 import PrototypeEvaluation from '@/components/App/CreateTestResult/PrototypeEvaluation/index.vue'
 import PreferenceTest from '@/components/App/CreateTestResult/PreferenceTest/index.vue'
@@ -25,7 +25,7 @@ export default defineComponent({
     FadeTransition,
     DesignSurvey,
     SimpleSurvey,
-    FiveSecondsTest,
+    FiveSecondTest,
     WebsiteEvaluation,
     PrototypeEvaluation,
     PreferenceTest,

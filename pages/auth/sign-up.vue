@@ -1,5 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  ref,
+} from '@vue/composition-api'
 import { dynamicPageTransition } from '@/utils/pageTransition'
 import Auth from '~/components/LandingPage/Auth/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -10,7 +16,7 @@ import {
   disableFormFields,
   enableFormFields,
 } from '~/components/Base/FormLayout/utils'
-import { SignUpForm } from '~/server-middleware/routes/user/signup'
+import { SignUpForm } from '~/server-middleware/routes/user/signup/signup'
 import { Signup } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 import { showServerAuthMessage } from '~/utils'
@@ -81,7 +87,7 @@ export default defineComponent({
           top: 0,
         })
 
-        requestAnimationFrame(async() => {
+        requestAnimationFrame(async () => {
           $store.commit('user/setPublic', data)
 
           await nextTick()
@@ -226,7 +232,7 @@ export default defineComponent({
             />
 
             <span>
-              <label :for="fieldIdAndError('agreed').id">
+              <label :for="fieldIdAndError('agreed').id" class="cursor-pointer">
                 I agree to Crowd's
               </label>
 

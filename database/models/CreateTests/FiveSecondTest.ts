@@ -9,22 +9,22 @@ import {
   Sequelize,
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
-import { FiveSecondsTestDurations } from '~/types'
+import { FiveSecondTestDurations } from '~/types'
 
-export class FiveSecondsTest extends Model<
-  InferAttributes<FiveSecondsTest>,
-  InferCreationAttributes<FiveSecondsTest>
+export class FiveSecondTest extends Model<
+  InferAttributes<FiveSecondTest>,
+  InferCreationAttributes<FiveSecondTest>
 > {
   declare id: CreationOptional<string>
   declare testId: string
   declare createdBy: string
   declare index: number
-  declare duration: FiveSecondsTestDurations
+  declare duration: FiveSecondTestDurations
   declare fileURL: string
 }
 
-export default function initFiveSecondsTest(DB: Sequelize) {
-  FiveSecondsTest.init(
+export default function initFiveSecondTest(DB: Sequelize) {
+  FiveSecondTest.init(
     {
       id: {
         ...Uuidv4,
@@ -63,5 +63,5 @@ export default function initFiveSecondsTest(DB: Sequelize) {
     }
   )
 
-  return FiveSecondsTest
+  return FiveSecondTest
 }

@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/named
 import { MutationTree } from 'vuex'
-import { CreateTestComponent, FiveSecondsTestDurations } from '~/types'
+import { CreateTestComponent, FiveSecondTestDurations } from '~/types'
 import { CreateTestFormQuestion } from '~/types/form'
 
 export interface TestSuiteCreateSectionItem {
@@ -15,7 +15,7 @@ export interface TestSuiteCreateSectionItem {
   fileType?: 'image' | 'video'
   frameType?: 'no-frame'
 
-  duration?: FiveSecondsTestDurations[]
+  duration?: FiveSecondTestDurations[]
 
   websiteLink?: string
 

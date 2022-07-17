@@ -4,14 +4,14 @@ import Section from '../Section/index.vue'
 import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import Select from '~/components/Base/Select/index.vue'
 import createTest from '~/mixins/createTest'
-import { fiveSecondsTestDurations } from '~/utils'
+import { fiveSecondTestDurations } from '~/utils'
 
 export default defineComponent({
-  name: 'AppCreateTestStepsFiveSecondsTest',
+  name: 'AppCreateTestStepsFiveSecondTest',
   components: { Section, Select, FollowUpQuestion },
   mixins: [createTest],
   setup() {
-    const delayOptions = fiveSecondsTestDurations.map((milliseconds) => {
+    const delayOptions = fiveSecondTestDurations.map((milliseconds) => {
       const isMinute = Number(milliseconds) >= 60000
 
       const getMinute = Math.round(Number(milliseconds) / 60000)

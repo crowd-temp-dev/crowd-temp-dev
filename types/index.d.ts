@@ -57,7 +57,7 @@ export type Layout = 'landing-page' | 'app' | 'error' | 'answer-test' | 'action'
 export type FeatureTitle =
   | 'Simple survey'
   | 'Card sorting'
-  | 'Design Survey'
+  | 'Design survey'
   | 'Five second test'
   | 'Website evaluation'
   | 'Prototype evaluation'
@@ -67,7 +67,7 @@ export type FeatureTitle =
 export type CreateTestTypes =
   | 'DesignSurvey'
   | 'PreferenceTest'
-  | 'FiveSecondsTest'
+  | 'FiveSecondTest'
   | 'PrototypeEvaluation'
   | 'WebsiteEvaluation'
   | 'SimpleSurvey'
@@ -121,11 +121,10 @@ export interface VueElement extends HTMLElement {
 
 export type ApiAction =
   | 'end_all_sessions'
-  | 'confirm_account'
   | 'change_email'
   | 'cancel_email_change'
 
-export type FiveSecondsTestDurations =
+export type FiveSecondTestDurations =
   | 5000
   | 10000
   | 15000

@@ -1,4 +1,4 @@
-import { CreateTestComponent, FiveSecondsTestDurations } from '.'
+import { CreateTestComponent, FiveSecondTestDurations } from '.'
 import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
 import { DesignSurveyFileType, DesignSurveyFrameType } from '~/database/type'
 
@@ -44,9 +44,9 @@ export interface CreateTestForm {
     followUpQuestions: QuestionModelValue[]
   }>
 
-  FiveSecondsTest: Question<{
+  FiveSecondTest: Question<{
     id: string
-    duration: FiveSecondsTestDurations | `${FiveSecondsTestDurations}`
+    duration: FiveSecondTestDurations | `${FiveSecondTestDurations}`
     file: [File]
     followUpQuestions: QuestionModelValue[]
   }>

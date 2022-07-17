@@ -29,7 +29,7 @@ export class FollowUpQuestion extends Model<
   declare PrototypeEvaluationId: CreationOptional<string>
   declare WebsiteEvaluationId: CreationOptional<string>
   declare DesignSurveyId: CreationOptional<string>
-  declare FiveSecondsTestId: CreationOptional<string>
+  declare FiveSecondTestId: CreationOptional<string>
   declare PreferenceTestId: CreationOptional<string>
 }
 
@@ -82,7 +82,7 @@ export default function initFollowUpQuestion(DB: Sequelize) {
       SimpleSurveyId: defineQuestion(),
       CardSortingId: defineQuestion(),
       DesignSurveyId: defineQuestion(),
-      FiveSecondsTestId: defineQuestion(),
+      FiveSecondTestId: defineQuestion(),
       PreferenceTestId: defineQuestion(),
       PrototypeEvaluationId: defineQuestion(),
       WebsiteEvaluationId: defineQuestion(),

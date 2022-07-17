@@ -4,7 +4,7 @@ import { FollowUpQuestion } from './FollowUpQuestions'
 import { SimpleSurvey } from './SimpleSurvey'
 import { CardSorting } from './CardSorting'
 import { CustomMessage } from './CustomMessage'
-import { FiveSecondsTest } from './FiveSecondsTest'
+import { FiveSecondTest } from './FiveSecondTest'
 import { PreferenceTest } from './PreferenceTest'
 import { PrototypeEvaluation } from './PrototypeEvaluation'
 import { WebsiteEvaluation } from './WebsiteEvaluation'
@@ -22,7 +22,7 @@ type TestModel =
   | DesignSurvey
   | CardSorting
   | CustomMessage
-  | FiveSecondsTest
+  | FiveSecondTest
   | PreferenceTest
   | PrototypeEvaluation
   | WebsiteEvaluation
@@ -199,9 +199,9 @@ export async function getFullTest(
       },
     ])
 
-    const fiveSecondsTest = await getSection(
-      FiveSecondsTest,
-      'FiveSecondsTest',
+    const fiveSecondTest = await getSection(
+      FiveSecondTest,
+      'FiveSecondTest',
       [
         'duration',
         {
@@ -249,7 +249,7 @@ export async function getFullTest(
       ...designSurvey,
       ...cardSorting,
       ...customMessage,
-      ...fiveSecondsTest,
+      ...fiveSecondTest,
       ...preferenceTest,
       ...prototypeEvaluation,
       ...websiteEvaluation,
@@ -290,7 +290,7 @@ export async function getFullTest(
             indexes.push(`confirm-${qIndexLetters[0] || fallbackQNumber}`)
           }
 
-          if (/FiveSecondsTest|CardSorting/.test(questionType)) {
+          if (/FiveSecondTest|CardSorting/.test(questionType)) {
             indexes.push(`${qIndexLetters[0] || fallbackQNumber}-instruction`)
           }
 
