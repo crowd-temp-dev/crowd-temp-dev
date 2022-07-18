@@ -83,6 +83,7 @@ export default defineComponent({
 
 <template>
   <section
+    v-if="ratingLength + 1"
     class="bg-surface-default py-20 rounded-lg shadow-card mb-32 overflow-hidden"
     :class="{ 'pointer-events-none': dismissing }"
   >
