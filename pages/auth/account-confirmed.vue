@@ -168,7 +168,8 @@ export default defineComponent({
 
       <div class="max-w-[450px] md:max-w-[558px] mx-auto text-center w-full">
         <p class="mb-20 text-heading">
-          Hi {{ $user.name }}, thank you for verifying your account on Crowd!
+          Hi {{ $user.name }}, thank you for
+          {{ $user.loggedIn ? 'creating' : 'verifying' }} your account on Crowd!
         </p>
 
         <Button primary full-width size="large" :to="loginRoute">
