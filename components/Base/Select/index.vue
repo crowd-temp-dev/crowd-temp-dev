@@ -197,7 +197,7 @@ export default defineComponent({
             searchField.value.value = ''
 
             timeout.value = null
-          }, 750) as unknown as NodeJS.Timeout
+          }, 650) as unknown as NodeJS.Timeout
         }
       }
     }

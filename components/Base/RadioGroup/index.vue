@@ -42,14 +42,20 @@ export default defineComponent({
             root.value.querySelectorAll(`input:not(#${_props.id})`)
           )
 
+          const currentInput = inputs.find((input) => input.isSameNode(exempt))
+
           inputs.forEach((input) => {
             input.checked = false
-          })
 
-          const currentInput = inputs.find((input) => input.isSameNode(exempt))
+            if (input !== currentInput) {
+              input.dispatchEvent(new Event('change'))
+            }
+          })
 
           if (currentInput) {
             currentInput.checked = true
+
+            currentInput.dispatchEvent(new Event('change'))
 
             currentInput.focus()
           }
@@ -138,15 +144,18 @@ export default defineComponent({
     <div class="relative" :class="contentClass">
       <slot />
 
-      <input
-        :id="id"
-        tabindex="-1"
-        :value="value"
-        data-pseudo-input="true"
-        class="sr-only absolute position-center"
-        :required="required"
-        @focus="focusOnFirstInput"
-      />
+      <label :for="id" class="sr-only absolute position-center">
+        <input
+          :id="id"
+          tabindex="-1"
+          :value="value"
+          data-pseudo-input
+          :required="required"
+          @focus="focusOnFirstInput"
+        />
+
+        Radio group
+      </label>
     </div>
 
     <PInlineError v-if="error" class="mt-4" :field-id="id" :message="error" />

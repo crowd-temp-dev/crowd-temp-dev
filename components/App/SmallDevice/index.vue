@@ -48,7 +48,7 @@ export default defineComponent({
       >
         <Button primary size="large"> Switch to desktop view </Button>
 
-        <Button size="large"> Back to homepage </Button>
+        <Button size="large" to="/"> Back to homepage </Button>
       </div>
     </main>
   </div>

@@ -80,10 +80,10 @@ export default defineComponent({
                   : (field as HTMLInputElement).checked
                 : field.value
 
-            const pseudoInput =
-              field instanceof HTMLElement && field.dataset.pseudoInput
+            const pseudoField =
+              field instanceof HTMLElement && 'pseudoInput' in field.dataset
 
-            if (!pseudoInput) {
+            if (!pseudoField) {
               output[key] = value
             }
 
@@ -118,15 +118,17 @@ export default defineComponent({
           // and it has an error message
           const keyedElements = Object.keys(
             Object.getOwnPropertyDescriptors(form.elements)
-          ).filter(
-            (x) =>
-              (
-                form.elements.namedItem(x) as
-                  | HTMLInputElement
-                  | HTMLSelectElement
-                  | HTMLTextAreaElement
-              )?.validationMessage
-          )
+          ).filter((x) => {
+            const field = form.elements.namedItem(x) as
+              | HTMLInputElement
+              | HTMLSelectElement
+              | HTMLTextAreaElement
+
+            const skipField =
+              field instanceof HTMLElement && field.type === 'radio'
+
+            return !skipField && field?.validationMessage
+          })
 
           if (keyedElements[0] && setError) {
             firstInputError.value = {

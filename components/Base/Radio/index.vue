@@ -65,44 +65,41 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
-    <!-- <PRadioButton
-      v-bind="$attrs"
-      :id="id"
-      ref="root"
-      :checked="modelSync"
-      :disabled="disabled"
-      :label="label"
-      :help-text="helpText"
-      class="root"
-      v-on="$listeners"
-      @change="modelSync = !modelSync"
+  <Id v-slot="idProps">
+    <label
+      :for="id || idProps.id"
+      class="relative flex items-center cursor-pointer group"
     >
-    </PRadioButton> -->
-
-    <label :for="id" class="relative flex items-center cursor-pointer">
-      <span class="flex-centered relative">
+      <span
+        class="relative rounded-full w-18 h-18 border inline-flex fill-before before:!w-10 before:!h-10 before:!inset-[auto] before:bg-action-primary-default items-center justify-center before:scale-0 before:transition-transform before:transform-gpu lg:transition-all bg-surface-default group-focus-within:border-action-primary-pressed group-focus-within:border-2"
+        :class="{
+          'border-interactive-default !border-2 before:scale-100': modelSync,
+          'border-border-default': !modelSync,
+        }"
+      >
         <input
-          :id="id"
+          :id="id || idProps.id"
           type="radio"
           :checked="modelSync"
+          data-pseudo-input
           :value="value"
           :name="name"
           :required="required"
           class="sr-only peer position-center absolute"
-          @change="modelSync = !modelSync"
-        />
-
-        <span
-          class="rounded-full w-18 h-18 border inline-flex border-border-default peer-checked:border-interactive-default peer-checked:border-2 relative fill-before before:!w-10 before:!h-10 before:!inset-[auto] before:bg-action-primary-default items-center justify-center before:scale-0 before:transition-transform before:transform-gpu peer-checked:before:scale-100 lg:transition-all peer-focus:border-action-primary-pressed peer-focus:border-2 bg-surface-default"
+          @change="modelSync = $event.target.checked"
         />
       </span>
 
       <slot name="label">
-        <span v-if="label" class="ml-8"> {{ label }} </span>
+        <span
+          v-if="label"
+          class="ml-8 transition-opacity group-active:opacity-70"
+        >
+          {{ label }}
+        </span>
       </slot>
     </label>
-  </div>
+  </Id>
 </template>
 
 <style scoped lang="postcss">

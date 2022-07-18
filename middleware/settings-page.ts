@@ -1,6 +1,10 @@
 import { Middleware } from '@nuxt/types'
 
-const redirectSettingsPage: Middleware = function ({ redirect, route }) {
+const redirectSettingsPage: Middleware = function ({ redirect, route, $user }) {
+  if (!$user.setupDone) {
+    return
+  }
+
   //   if client is on /settings/?, and trying to access /settings/['profile' | 'team-members' | 'custom-branding' | 'billing'], allow, else redirect to sign-up
 
   const paths = route.path.split('/').filter(Boolean)
