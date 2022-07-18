@@ -40,7 +40,7 @@ export default async function googleSignUp(req: Request, res: Response) {
           confirmed: true,
           confirmedAt: Date.now(),
           firstName: googleUserData.given_name,
-          lastName: googleUserData.family_name,
+          lastName: googleUserData.family_name || '',
           password: '',
           provider: 'google',
           role: 'tester',
@@ -82,7 +82,7 @@ export default async function googleSignUp(req: Request, res: Response) {
         transaction: loginTransaction,
       })
 
-      await loginTransaction.commit()      
+      await loginTransaction.commit()
 
       res.redirect(302, `${process.env.CLIENT_ORIGIN}/auth/account-confirmed`)
     }

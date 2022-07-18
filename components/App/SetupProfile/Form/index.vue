@@ -4,6 +4,10 @@ import RadioGroup from '~/components/Base/RadioGroup/index.vue'
 import { OnSubmit } from '~/types'
 import { userWorkRole, userCompanySize, userReferrer } from '~/utils'
 import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
+import {
+  disableFormFields,
+  enableFormFields,
+} from '~/components/Base/FormLayout/utils'
 
 interface Select {
   label: string
@@ -33,12 +37,17 @@ export default defineComponent({
     const onSubmit: OnSubmit<SetupAccountForm> = async ({
       formValues,
       toggleLoading,
+      formFields,
     }) => {
-      toggleLoading(true)      
+      toggleLoading(true)
+
+      disableFormFields(formFields)
 
       await $user.setupAccount(formValues)
 
       toggleLoading(false)
+
+      enableFormFields(formFields)
     }
 
     return { useCases, roles, companySize, referrers, onSubmit }
