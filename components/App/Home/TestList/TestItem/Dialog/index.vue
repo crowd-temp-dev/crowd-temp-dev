@@ -95,7 +95,7 @@ export default defineComponent({
             will be deleted. This action cannot be undone.
           </p>
 
-          <Checkbox v-bind="idAndError('dontWarn')" label="Don't warn again" />
+          <Checkbox v-bind="idAndError('dontWarn')" label="Don't warn me again" />
         </template>
       </FormLayout>
     </template>

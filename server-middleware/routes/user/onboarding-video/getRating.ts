@@ -21,18 +21,23 @@ export default function (router: Router) {
             transaction,
           })
 
-          const { main, video1, video2, video3, video4, video5 } =
-            rating?.get() || {
-              main: -1,
-              video1: -1,
-              video2: -1,
-              video3: -1,
-              video4: -1,
-              video5: -1,
-            }
-          
-          console.log(rating?.get());
-          
+          const {
+            main,
+            video1,
+            video2,
+            video3,
+            video4,
+            video5,
+            hiddenIndexes,
+          } = rating?.get() || {
+            main: -1,
+            video1: -1,
+            video2: -1,
+            video3: -1,
+            video4: -1,
+            video5: -1,
+            hiddenIndexes: [],
+          }
 
           sendSuccess(res, {
             data: {
@@ -42,6 +47,7 @@ export default function (router: Router) {
               video3,
               video4,
               video5,
+              hiddenIndexes,
             },
           })
         })

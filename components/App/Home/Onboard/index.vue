@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref, watch } from '@vue/composition-api'
 import Slider from './Slider/index.vue'
 import Dropdown from './Dropdown/index.vue'
 import Button from '~/components/Base/Button/index.vue'
@@ -21,8 +21,13 @@ export default defineComponent({
 
     const rating = computed(() => state.value.items)
 
+    const ratingLength = computed(
+      () =>
+        Object.keys(rating.value).length - state.value.hiddenIndexes.length - 2
+    )
+
     const increaseStep = () => {
-      onboardStep.value = Math.min(onboardStep.value + 1, 4)
+      onboardStep.value = Math.min(onboardStep.value + 1, ratingLength.value)
     }
 
     const decreaseStep = () => {
@@ -45,6 +50,13 @@ export default defineComponent({
 
     getRating()
 
+    watch(
+      () => ratingLength.value,
+      () => {
+        onboardStep.value = 0
+      }
+    )
+
     const rate = async (
       key: 'main' | `video${'1' | '2' | '3' | '4'}`,
       value: boolean
@@ -58,6 +70,7 @@ export default defineComponent({
       onboardStep,
       dismissing,
       rating,
+      ratingLength,
       increaseStep,
       decreaseStep,
       dismissGuide,
@@ -94,6 +107,7 @@ export default defineComponent({
     <Slider v-model="onboardStep" />
 
     <div
+      :key="ratingLength"
       class="px-20"
       @keydown.prevent.up="increaseStep"
       @keydown.prevent.right="increaseStep"
@@ -109,7 +123,7 @@ export default defineComponent({
 
         <Button
           icon="ChevronRightMinor"
-          :disabled="onboardStep >= 4"
+          :disabled="onboardStep >= ratingLength"
           @click="increaseStep"
         />
       </PButtonGroup>

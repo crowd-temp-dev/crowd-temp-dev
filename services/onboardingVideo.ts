@@ -25,3 +25,10 @@ export const RateOnboardingVideo: ServiceHandler<
 > = async (axios, payload) => {
   return await axios.$post('/onboardingVideoRating', payload, validateStatus)
 }
+
+export const DismissOnboardingVideo: ServiceHandler<
+  number,
+  OnboardingVideo
+> = async (axios, index) => {
+  return await axios.$post('hideOnboardingVideoItem', { index }, validateStatus)
+}

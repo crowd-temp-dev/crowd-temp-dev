@@ -49,12 +49,13 @@ export default defineComponent({
     })
 
     const rating = computed(() => {
-      return Object.fromEntries(
-        Object.entries(state.value.items)
-      )
+      return Object.fromEntries(Object.entries(state.value.items))
     })
 
-    const ratingLength = computed(()=> Object.keys(rating.value).length -2)
+    const ratingLength = computed(
+      () =>
+        Object.keys(rating.value).length - state.value.hiddenIndexes.length - 2
+    )
 
     const translateXClass = computed<TranslateXClass>(() => {
       switch (modelSync.value) {
@@ -81,12 +82,27 @@ export default defineComponent({
       {
         icon: 'ChevronRightMinor',
         callback: () =>
-          (modelSync.value = Math.min(modelSync.value + 1, ratingLength.value) as Step),
+          (modelSync.value = Math.min(
+            modelSync.value + 1,
+            ratingLength.value
+          ) as Step),
         disabled: modelSync.value >= ratingLength.value,
       },
     ])
 
-    return { modelSync, translateXClass, pedals, rating, ratingLength }
+    const onDismiss = async (index: number) => {
+      await $store.dispatch('onboarding-videos/dismissItem', index)
+    }
+
+    return {
+      state,
+      modelSync,
+      translateXClass,
+      pedals,
+      rating,
+      ratingLength,
+      onDismiss,
+    }
   },
 })
 </script>
@@ -99,7 +115,7 @@ export default defineComponent({
     >
       <template v-for="i in 5">
         <li
-          v-if="rating[`video${i}`] > -2"
+          v-if="!state.hiddenIndexes.includes(i)"
           :key="i"
           class="h-182 w-[580px] shadow-2 rounded-lg flex shrink-0"
         >
@@ -128,9 +144,7 @@ export default defineComponent({
             >
               <span class="flex-grow"> Getting started with Crowd </span>
 
-              <Dropdown
-                :path="`video${i}`"
-              />
+              <Dropdown :path="`video${i}`" @on-dismiss="onDismiss(i)" />
             </h4>
 
             <p class="text-[#212B36] my-20">

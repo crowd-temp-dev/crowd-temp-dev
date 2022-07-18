@@ -13,12 +13,7 @@ const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
-    main: Joi.number().min(-2).max(1),
-    video1: Joi.number().min(-2).max(1),
-    video2: Joi.number().min(-2).max(1),
-    video3: Joi.number().min(-2).max(1),
-    video4: Joi.number().min(-2).max(1),
-    video5: Joi.number().min(-2).max(1),
+    index: Joi.number().integer().min(1).max(5).required(),
   })
 
   const validate = schema.validate(body)
@@ -38,7 +33,7 @@ const formValidation: RequestHandler = (req, res, next) => {
 
 export default function (router: Router) {
   return router.post(
-    '/onboardingVideoRating',
+    '/hideOnboardingVideoItem',
     formValidation,
     authenticate,
     async (req, res) => {
@@ -57,17 +52,19 @@ export default function (router: Router) {
             transaction,
           })
 
+          const { index } = req.body
+
           if (!rating) {
             rating = await OnboardingVideo.create(
               {
                 userId,
-                ...req.body,
+                hiddenIndexes: [index],
               },
               { transaction }
             )
           } else {
             await rating.update({
-              ...req.body,
+              hiddenIndexes: [...rating.hiddenIndexes, index as number],
             })
           }
 

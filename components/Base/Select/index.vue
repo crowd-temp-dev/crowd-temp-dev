@@ -396,7 +396,7 @@ export default defineComponent({
           <label
             :id="triggerRefSelector"
             :for="getId"
-            class="rounded h-36 flex items-center justify-between transition-all bg-surface-default border border-[#BABFC3] shadow-1 pl-[1.2rem] pr-[0.8rem] cursor-pointer active:scale-[0.995] hover:bg-surface-hovered active:bg-surface-pressed focus-within:ring-2 ring-offset-1 ring-action-primary-default"
+            class="rounded h-36 flex items-center justify-between transition-all bg-surface-default border border-[#BABFC3] shadow-1 pl-[1.2rem] pr-[0.8rem] cursor-pointer active:scale-[0.995] lg:active:scale-[0.9975] hover:bg-surface-hovered active:bg-surface-pressed focus-within:ring-2 ring-offset-1 ring-action-primary-default"
             :class="[
               contentClass,
               {
@@ -508,7 +508,7 @@ export default defineComponent({
 
 <style scoped lang="postcss">
 .pseudo-focus[data-pseudo-focus]:not([data-disabled]) {
-  @apply !bg-action-primary-hovered !text-white active:scale-[0.9925] transition-transform transform-gpu;
+  @apply !bg-action-primary-hovered !text-white active:scale-[0.995] transition-transform transform-gpu;
 }
 
 .pseudo-focus[data-pseudo-focus][data-selected]:not([data-disabled]) {

@@ -4,6 +4,7 @@ import { RootState } from '.'
 import { GetAllTestsResItem } from '~/server-middleware/routes/test-cRUD/getAllTests'
 
 import {
+  DismissOnboardingVideo,
   GetOnboardingVideoRating,
   RateOnboardingVideo,
 } from '~/services/onboardingVideo'
@@ -22,6 +23,7 @@ export interface OnboardingVideoState {
     video3: number
     video4: number
   }
+  hiddenIndexes: number[]
 }
 
 const state = (): OnboardingVideoState => ({
@@ -34,6 +36,7 @@ const state = (): OnboardingVideoState => ({
     video3: null,
     video4: null,
   },
+  hiddenIndexes: [],
 })
 
 const mutations: MutationTree<OnboardingVideoState> = {
@@ -44,13 +47,20 @@ const mutations: MutationTree<OnboardingVideoState> = {
     state.error = val
   },
   setItem(state, payload: OnboardingVideoState['items']) {
-    state.items = {
-      ...state.items,
-      ...payload,
+    const items = { ...payload } as Record<string, any>
+
+    if (items.hiddenIndexes instanceof Array) {
+      state.hiddenIndexes = [...items.hiddenIndexes]
+
+      delete items.hiddenIndexes
+    } else {
+      state.hiddenIndexes = []
     }
 
-    console.log({ payload })
-    
+    state.items = {
+      ...state.items,
+      ...items,
+    }
 
     state.error = false
     state.loading = false
@@ -64,6 +74,7 @@ const actions: ActionTree<OnboardingVideoState, RootState> = {
     const { app } = this.$router
 
     const { data, error } = await GetOnboardingVideoRating(app.$axios, null)
+    console.log({ data })
 
     if (error) {
       commit('setError')
@@ -86,6 +97,17 @@ const actions: ActionTree<OnboardingVideoState, RootState> = {
       ...state.items,
       [key]: value,
     })
+
+    if (error) {
+      commit('setError')
+    } else {
+      commit('setItem', data)
+    }
+  },
+  async dismissItem({ commit }, index: number) {
+    const { app } = this.$router
+
+    const { data, error } = await DismissOnboardingVideo(app.$axios, index)
 
     if (error) {
       commit('setError')

@@ -19,6 +19,7 @@ export class OnboardingVideo extends Model<
   declare video3: number
   declare video4: number
   declare video5: number
+  declare hiddenIndexes: number[]
 }
 
 const videoConfig = {
@@ -45,6 +46,10 @@ export default function initDesignSurvey(DB: Sequelize) {
       video3: videoConfig,
       video4: videoConfig,
       video5: videoConfig,
+      hiddenIndexes: {
+        type: DataTypes.ARRAY(DataTypes.REAL()),
+        defaultValue: () => [],
+      },
     },
     {
       sequelize: DB,
