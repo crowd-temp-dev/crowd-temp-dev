@@ -77,7 +77,7 @@ const userPlugin: Plugin = function ({ store }, inject) {
       }
 
       if (path === 'name') {
-        return `${userState.firstName} ${userState.lastName}`
+        return `${userState.firstName} ${userState.lastName}`.trim()
       }
 
       if (path === 'initials') {

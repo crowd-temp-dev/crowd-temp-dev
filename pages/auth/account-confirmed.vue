@@ -84,7 +84,7 @@ export default defineComponent({
         $store.commit('user/setPublic', {
           id: data.id,
           email: data.email,
-          name: `${data.firstName} ${data.lastName}`,
+          name: `${data.firstName} ${data.lastName}`.trim(),
         })
 
         $route.query.token &&
