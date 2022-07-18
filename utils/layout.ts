@@ -6,15 +6,14 @@ export const isLoggedInMiddleware: Middleware = function ({
   $user,
   route,
 }) {
-  // free passage for people answering test
-  if (route.name?.startsWith('answer-test')) {
-    return
-  }
-
   if (!$user.loggedIn && route.path !== '/auth/login') {
     redirect('/auth/login')
   } else {
     $user.reload()
+
+    if (!$user.setupDone && route.path !== '/dashboard') {
+      redirect('/dashboard')
+    }
   }
 }
 
