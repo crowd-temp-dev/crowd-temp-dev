@@ -10,7 +10,7 @@ type ScreenSizes = { [key in Breakpoints]: `${number}${'px' | ''}` }
 const screenSizes: ScreenSizes = {
   xxs: '0px',
   xs: '325px',
-  s: '400px',
+  sl: '400px',
   sm: '600px',
   md: '1080px',
   lg: '1264px',
@@ -29,7 +29,7 @@ const breakpointPlugin: Plugin = function ({ store }, inject) {
     const updateBreakpoint = (br: BreakpointOutput) => {
       breakpointState.state = {
         ...br,
-        isMobile: /^(?:xxs|xs|s|sm)$/.test(br.is || ''),
+        isMobile: /^(?:xxs|xs|sl|sm)$/.test(br.is || ''),
         isTablet: /^(?:md)$/.test(br.is || ''),
         isLaptop: /^(?:lg|xl|xxl)$/.test(br.is || ''),
       }

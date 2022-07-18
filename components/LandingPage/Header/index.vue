@@ -60,14 +60,15 @@ export default defineComponent({
       },
     ])
 
-    const sAndUpAuthPage = computed(
+    const mobileAuthPage = computed(
       () =>
         /^\/auth\/(?:login|sign-up)/.test(root.$route.path) &&
-        root.$breakpoint.isMobile
+        root.$breakpoint.isMobile &&
+        !/^(?:xxs|xs)$/.test(root.$breakpoint.is)
     )
     return {
       links,
-      sAndUpAuthPage,
+      mobileAuthPage,
     }
   },
 })
@@ -76,11 +77,11 @@ export default defineComponent({
 <template>
   <header
     id="landing-page-header"
-    class="s:shadow-2 xl:sticky s:top-0 z-10 bg-surface-default px-8 md:px-20"
+    class="sl:shadow-2 sl:sticky sl:top-0 z-10 bg-surface-default px-8 md:px-20 sl:h-56 md:h-[initial]"
     :class="{
       // make header sticky for auth pages
-      'shadow-2 sticky top-0 z-10 bg-surface-default': sAndUpAuthPage,
-      's:not-supports-backdrop-filter:bg-surface-default s:supports-backdrop-filter:bg-surface-default/80 s:supports-backdrop-filter:backdrop-blur-xl':
+      'shadow-2 sticky top-0 z-10 bg-surface-default': mobileAuthPage,
+      'sl:not-supports-backdrop-filter:bg-surface-default sl:supports-backdrop-filter:bg-surface-default/80 sl:supports-backdrop-filter:backdrop-blur-xl':
         $route.name !== 'privacy-and-policy',
     }"
   >
@@ -88,8 +89,8 @@ export default defineComponent({
       class="max-w-[1110px] flex items-center justify-between mx-auto md:h-58 md:pt-0"
       :class="{
         // make header sticky for auth pages
-        'h-60 px-10': sAndUpAuthPage,
-        'pt-22': !sAndUpAuthPage,
+        'h-60 px-10': mobileAuthPage,
+        'pt-22': !mobileAuthPage,
       }"
     >
       <HeaderLogo />
