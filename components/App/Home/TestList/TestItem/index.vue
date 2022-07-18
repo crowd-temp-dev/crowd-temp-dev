@@ -1,6 +1,7 @@
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
 import type { TestItemStatus } from '../type'
+import Dialog from './Dialog/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
 import { LikeNumber } from '~/types'
@@ -10,7 +11,7 @@ import Dropdown, { DropdownOption } from '~/components/Base/Dropdown/index.vue'
 
 export default defineComponent({
   name: 'AppHomeTestListTestItem',
-  components: { Button, Tooltip, CopyText, Spinner, Dropdown },
+  components: { Button, Tooltip, CopyText, Spinner, Dropdown, Dialog },
   props: {
     favourite: Boolean,
     id: {
@@ -51,11 +52,17 @@ export default defineComponent({
       type: Function,
       required: true,
     },
-    loading: Boolean,
+    loadingFavourite: Boolean,
+    loadingRename: Boolean,
+    loadingDelete: Boolean,
   },
   emits: [],
 
-  setup(_props) {
+  setup(_props, { root: { $store, $user } }) {
+    const dialogType = ref<'delete' | 'rename'>(null)
+
+    const showDialog = ref(false)
+
     const responseDisabled = computed(() => {
       return _props.progress === 'Completed' || _props.stopAcceptingResponse
     })
@@ -76,9 +83,19 @@ export default defineComponent({
     const isDraft = computed(() => _props.progress.startsWith('Draft:'))
 
     const dropdownOptions = computed<DropdownOption[]>(() => {
+      const openDialog = async (type: typeof dialogType.value) => {
+        dialogType.value = type
+
+        await nextTick()
+
+        showDialog.value = true
+      }
+
       return [
         {
-          onClick: () => {},
+          onClick: () => {
+            openDialog('rename')
+          },
           title: 'Rename',
         },
         {
@@ -86,7 +103,15 @@ export default defineComponent({
           title: 'Duplicate',
         },
         {
-          onClick: () => {},
+          onClick: async () => {
+            if ($user.deleteTestWarn) {
+              openDialog('delete')
+            } else {
+              await $store.dispatch('list-test/deleteTest', {
+                id: _props.id,
+              })
+            }
+          },
           title: 'Delete',
         },
       ]
@@ -114,6 +139,8 @@ export default defineComponent({
       isDraft,
       responseDisabled,
       dropdownOptions,
+      showDialog,
+      dialogType,
       formatDate,
     }
   },
@@ -131,7 +158,7 @@ export default defineComponent({
         label="Toggle favourite"
         placement="left"
         open-delay="500"
-        :disabled="loading"
+        :disabled="loadingFavourite"
       >
         <Button
           plain
@@ -148,7 +175,7 @@ export default defineComponent({
         >
           <div class="w-20 h-20 flex-centered">
             <PIcon
-              v-if="!loading"
+              v-if="!loadingFavourite"
               :source="favourite ? 'StarFilledMinor' : 'StarOutlineMinor'"
               class="fill-icon"
             />
@@ -269,16 +296,37 @@ export default defineComponent({
       <Dropdown
         v-slot="{ events, active }"
         :option="dropdownOptions"
-        :offset="[0, 0]"
+        :offset="[6, 4]"
+        content-class="min-w-[120px]"
       >
         <button
-          class="outline-none rounded w-20 h-20 ring-offset-1 focus-visible:ring-2 ring-action-primary-default"
+          :id="`action-${id}`"
+          class="outline-none transition-opacity active:opacity-70 flex-centered rounded w-20 h-20 ring-offset-1 focus-visible:ring-2 ring-action-primary-default"
           :class="{ 'ring-2': active }"
           v-on="events"
         >
-          <PIcon source="HorizontalDotsMinor" class="fill-icon-default" />
+          <Spinner
+            v-if="(loadingRename || loadingDelete) && showDialog"
+            class="text-icon-default"
+          />
+
+          <PIcon
+            v-else
+            source="HorizontalDotsMinor"
+            class="fill-icon-default"
+          />
         </button>
       </Dropdown>
+
+      <Dialog
+        v-if="dialogType"
+        v-model="showDialog"
+        :test-name="name"
+        :test-id="id"
+        :type="dialogType"
+        :loading-rename="loadingRename"
+        :loading-delete="loadingDelete"
+      />
     </div>
   </li>
 </template>

@@ -206,7 +206,7 @@ export default defineComponent({
         >
           <TestItem
             v-for="(item, i) in filteredTestList"
-            :key="i"
+            :key="item.id + i"
             v-bind="item"
           />
         </TransitionGroup>

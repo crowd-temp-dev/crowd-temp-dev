@@ -33,6 +33,7 @@ export interface UserInfo {
   showDashboardGuide?: boolean
   loginCount: number
   setupDone: boolean
+  deleteTestWarn: boolean
 }
 
 export interface UserState {

@@ -5,19 +5,10 @@ import Id from '~/components/Base/Id/index.vue'
 import { getAlphabets } from '~/utils'
 import { TestSuiteState } from '~/store/testSuite'
 
-const actionOptions: {
+interface ActionOption {
   value: QuestionModelValue['conditionals']['action']
   label: string
-}[] = [
-  {
-    label: 'Go to',
-    value: 'goto',
-  },
-  {
-    label: 'Show',
-    value: 'show',
-  },
-]
+}
 
 export default defineComponent({
   name: 'AppCreateTestFollowUpQuestionsQuestionConditionalLogic',
@@ -29,6 +20,10 @@ export default defineComponent({
   props: {
     modelValue: {
       type: Object as () => QuestionModelValue['conditionals'],
+      required: true,
+    },
+    actionOptions: {
+      type: Array as () => ActionOption[],
       required: true,
     },
     questionId: {
@@ -88,7 +83,7 @@ export default defineComponent({
         .filter(Boolean)
     })
 
-    return { modelSync, actionOptions, actionName, questions }
+    return { modelSync, actionName, questions }
   },
 })
 </script>

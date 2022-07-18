@@ -126,6 +126,7 @@ export default defineComponent({
 
 <template>
   <div
+    :key="$store.state.app.globalKey"
     :class="{ 'hide-ui': !mounted }"
     v-on="
       tooltips.length
@@ -174,7 +175,7 @@ export default defineComponent({
           <main
             v-else
             ref="main"
-            class="h-full max-h-full grid justify-items-center py-120 w-screen overflow-x-hidden isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4"
+            class="h-full max-h-full grid justify-items-center pt-[5%] pb-120 w-screen overflow-x-hidden isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4"
             :class="{
               'overflow-y-auto': !dialogs.length,
               'overflow-hidden': dialogs.length,

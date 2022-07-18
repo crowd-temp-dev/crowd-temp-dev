@@ -88,22 +88,61 @@ export default defineComponent({
       () => modelSync.value.type === 'linear-scale'
     )
 
+    const question = computed(() => {
+      return (
+        $store.state.testSuite as TestSuiteState
+      ).create.section.items.find((x) => x.id === _props.questionId)
+    })
+
+    const followUpQuestionIndex = computed(() => {
+      const getQuestion = question.value
+
+      if (getQuestion) {
+        return getQuestion.followUpQuestions.findIndex(
+          (x) => x.id === modelSync.value.id
+        )
+      }
+
+      return null
+    })
+
+    const gotoConditionalLogic = computed(() => {
+      return (
+        followUpQuestionIndex.value>=
+        question.value.followUpQuestions.length-1
+      )
+    })
+
+    const showConditionalLogic = computed(() => {
+      return followUpQuestionIndex.value
+    })
+
+    const conditionalLogiOptions = computed(() => {
+      const isShow = modelSync.value.conditionals?.action === 'show'
+
+      return [
+        {
+          label: 'Go to',
+          value: 'goto',
+          disabled: !(!isShow && gotoConditionalLogic),
+        },
+        {
+          label: 'Show',
+          value: 'show',
+          disabled: !showConditionalLogic.value,
+        },
+      ]
+    })
+
     const disableConditionalLogic = computed(() => {
       const question = (
         $store.state.testSuite as TestSuiteState
       ).create.section.items.find((x) => x.id === _props.questionId)
 
       if (question) {
-        const tooShort = (question.followUpQuestions?.length || 0) < 2
-
-        const followUpQuestionIndex =
-          question.followUpQuestions.findIndex(
-            (x) => x.id === modelSync.value.id
-          ) + 1
-
         return (
-          tooShort ||
-          followUpQuestionIndex >= question.followUpQuestions.length - 1
+          (question.followUpQuestions?.length || 0) < 2 ||
+          (followUpQuestionIndex.value < 3 && !followUpQuestionIndex.value)
         )
       }
 
@@ -193,12 +232,34 @@ export default defineComponent({
       }
     )
 
+    const onConditionalLogic = async (evt: boolean) => {
+      if (evt && !disableConditionalLogic.value) {
+        await nextTick()
+
+        const firstAction =
+          showConditionalLogic.value && !gotoConditionalLogic.value
+            ? 'show'
+            : 'goto'
+
+        //      followUpQuestionIndex.value + 2 >=
+        // question.value.followUpQuestions.length
+
+        console.log(
+          firstAction,
+          followUpQuestionIndex.value - 2 >=
+            question.value.followUpQuestions.length
+        )
+      }
+    }
+
     return {
       selectOptions,
       showChoices,
       modelSync,
       disableConditionalLogic,
       isLinearScale,
+      conditionalLogiOptions,
+      onConditionalLogic,
     }
   },
 })
@@ -249,6 +310,7 @@ export default defineComponent({
             :tooltip="
               disableConditionalLogic ? 'Add another question' : undefined
             "
+            @on-change="onConditionalLogic"
           />
 
           <div class="flex items-center space-x-26">
@@ -296,6 +358,7 @@ export default defineComponent({
         v-model="modelSync.conditionals"
         :follow-up-question-id="modelSync.id"
         :question-id="questionId"
+        :action-options="conditionalLogiOptions"
       />
     </FadeTransition>
 

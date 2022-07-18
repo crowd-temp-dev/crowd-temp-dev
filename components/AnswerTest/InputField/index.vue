@@ -236,19 +236,16 @@ export default defineComponent({
           <RadioGroup
             v-if="currentQuestion.type === 'multi-choice'"
             class="grid gap-y-2"
+            v-bind="fieldIdAndError('choices')"
           >
-            <Id
+            <Radio
               v-for="(choice, i) in currentQuestion.choices.options"
               :key="i"
-              v-slot="{ id }"
-            >
-              <Radio
-                :label="choice"
-                :disabled="showOther"
-                name="choices"
-                v-bind="fieldIdAndError(id)"
-              />
-            </Id>
+              :label="choice"
+              :disabled="showOther"
+              name="choices"
+              :value="choice"
+            />
           </RadioGroup>
 
           <div v-else class="grid gap-y-8">

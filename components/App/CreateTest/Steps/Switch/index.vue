@@ -31,6 +31,7 @@ export default defineComponent({
     },
     loading: Boolean,
   },
+  emits: ['on-change'],
   setup(_props, { emit }) {
     const manualModelValue = ref(false)
 
@@ -44,6 +45,8 @@ export default defineComponent({
       set(val: boolean) {
         if (typeof val === 'boolean') {
           emit('update:modelValue', val)
+
+          emit('on-change', val)
           manualModelValue.value = val
         }
       },

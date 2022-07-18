@@ -81,6 +81,10 @@ export default defineComponent({
       type: String as () => DrawerFrom,
       default: 'right',
     },
+    leaveFocus: {
+      type: String,
+      default: undefined,
+    },
   },
 
   setup(_props, { emit, slots, root }) {
@@ -169,21 +173,29 @@ export default defineComponent({
       })
     }
 
-    const afterLeave = (el: HTMLElement) => {
+    const afterLeave = async (el: HTMLElement) => {
       emit('afterLeave', el)
+
+      if (_props.leaveFocus) {
+        const leaveFocus = document.querySelector(
+          _props.leaveFocus
+        ) as HTMLElement
+
+        if (leaveFocus) {
+          previousActive.value = leaveFocus
+
+          await nextTick()
+        }
+      }
 
       const validPreviousActive =
         previousActive.value instanceof HTMLElement &&
         document.contains(previousActive.value)
 
-      if (previousActive.value && validPreviousActive) {
+      if (validPreviousActive) {
         previousActive.value.focus()
       }
     }
-
-    const canShowFooter = computed(
-      () => _props.showFooter && slots.footer?.() && slots.footer?.().length
-    )
 
     const closeDialog = () => {
       if (_props.isAlert) {
@@ -194,6 +206,32 @@ export default defineComponent({
         modelSync.value = false
       }
     }
+
+    const toggle = (val?: boolean) => {
+      const active = typeof val === 'boolean' ? val : !modelSync
+
+      if (active) {
+        modelSync.value = true
+      } else {
+        closeDialog()
+      }
+    }
+
+    const payload = computed(() => {
+      return {
+        close: closeDialog,
+        toggle,
+        open: () => toggle(true),
+        active: modelSync.value,
+      }
+    })
+
+    const canShowFooter = computed(
+      () =>
+        _props.showFooter &&
+        slots.footer?.(payload.value) &&
+        slots.footer?.(payload.value).length
+    )
 
     onBeforeMount(() => {
       if (modelSync.value) {
@@ -213,6 +251,7 @@ export default defineComponent({
       beforeEnter,
       afterLeave,
       closeDialog,
+      payload,
       canShowFooter,
       modelSync,
       indexInDialogs,
@@ -257,7 +296,7 @@ export default defineComponent({
         @click="closeDialog"
       >
         <template v-if="!plain">
-          <slot name="prefix" />
+          <slot name="prefix" v-bind="payload" />
 
           <!-- content -->
           <Transition>
@@ -298,7 +337,7 @@ export default defineComponent({
                 <p
                   class="flex-grow text-display-small-sm md:text-display-small"
                 >
-                  <slot name="header">
+                  <slot name="header" v-bind="payload">
                     {{ title }}
                   </slot>
                 </p>
@@ -329,20 +368,20 @@ export default defineComponent({
                   'p-20': !noBodyPadding,
                 }"
               >
-                <slot />
+                <slot v-bind="payload" />
               </div>
 
               <!-- content footer -->
               <div v-if="canShowFooter" class="footer">
-                <slot name="footer" />
+                <slot name="footer" v-bind="payload" />
               </div>
             </div>
           </Transition>
 
-          <slot name="suffix" />
+          <slot name="suffix" v-bind="payload" />
         </template>
 
-        <slot v-else />
+        <slot v-else v-bind="payload" />
       </div>
     </FadeTransition>
   </Teleport>
@@ -354,7 +393,7 @@ export default defineComponent({
   --fade-enter-duration: 250ms;
 }
 
-.UiDialog.as-drawer{
+.UiDialog.as-drawer {
   --fade-enter-duration: 350ms;
 }
 

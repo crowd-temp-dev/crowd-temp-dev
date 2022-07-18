@@ -69,6 +69,10 @@ export default defineComponent({
       type: String as () => Duration,
       default: undefined,
     },
+    contentClass: {
+      type: String,
+      default: undefined,
+    },
   },
   setup(_props, { emit, slots }) {
     const props = computed(() => _props)
@@ -144,6 +148,7 @@ export default defineComponent({
               {
                 staticClass:
                   'shadow-3 rounded-lg bg-surface-default fade-enter:scale-[0.95] fade-enter:opacity-0  transform-gpu transition-[transform,opacity] fade-leave-to:scale-[0.95] fade-leave-to:opacity-0 origin-[top_right]',
+                class: props.value.contentClass,
               },
               [
                 slots?.append?.(slotProps),

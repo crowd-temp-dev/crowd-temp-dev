@@ -107,7 +107,6 @@ export default defineComponent({
     trap-tab-focus
     restore-focus
     :disabled="$route.path === '/dashboard/notification'"
-    backdrop-class="bg-black/5"
   >
     <template #trigger="{ active, toggle }">
       <Tooltip v-slot="{ events }" label="Notifications" open-delay="500">

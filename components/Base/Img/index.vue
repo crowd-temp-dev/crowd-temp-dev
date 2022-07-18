@@ -113,6 +113,7 @@ export default defineComponent({
               label="Reload"
               title=""
               trigger-class="flex-centered"
+              open-delay="500"
             >
               <button
                 :id="id"

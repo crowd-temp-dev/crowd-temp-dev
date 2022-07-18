@@ -5,6 +5,7 @@ import {
   GetAllTestsRes,
 } from '~/server-middleware/routes/test-cRUD/getAllTests'
 import { routeQuery } from '~/server-middleware/utils'
+import { DeleteTestForm } from '~/server-middleware/routes/test-cRUD/deleteTest'
 
 export const GetAllTests: ServiceHandler<
   GetAllTestsForm,
@@ -13,5 +14,15 @@ export const GetAllTests: ServiceHandler<
   return await axios.$get(`get-test/getAll?${routeQuery(payload)}`, {
     ...validateStatus,
     progress: false,
+  })
+}
+
+export const DeleteTest: ServiceHandler<
+  DeleteTestForm,
+  DeleteTestForm
+> = async (axios, data) => {
+  return await axios.$delete('/deleteTest', {
+    data,
+    ...validateStatus,
   })
 }

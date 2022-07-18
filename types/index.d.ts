@@ -34,7 +34,7 @@ export interface User extends UserInfo {
 
 export type DynamicObject<value> = Record<string, value>
 
-export type Breakpoints = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export type Breakpoints = 'xxs' | 'xs' | 'sm' | 's' | 'md' | 'lg' | 'xl' | 'xxl'
 
 export type BreakpointOutput = {
   is?: Breakpoints

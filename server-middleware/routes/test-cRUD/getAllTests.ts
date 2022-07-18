@@ -31,7 +31,7 @@ export interface GetAllTestsResItem {
 export type GetAllTestsRes = GetAllTestsResItem[]
 
 const formValidation: RequestHandler = (req, res, next) => {
-  const body = req.query
+  const query = req.query
 
   const schema = Joi.object({
     favourite: Joi.boolean(),
@@ -39,7 +39,7 @@ const formValidation: RequestHandler = (req, res, next) => {
     offset: Joi.number().integer().min(0).max(100),
   } as Record<keyof GetAllTestsForm, any>)
 
-  const validate = schema.validate(body)
+  const validate = schema.validate(query)
 
   if (validate.error) {
     return sendError(res, {

@@ -660,15 +660,13 @@ export const pingAddNewBlockBtn = async () => {
         block: 'center',
       })
 
+      addNewBlockRoot.querySelector('button')?.focus({ preventScroll: true })
+
       if (typeof addNewBlockRoot.__vue__.togglePingBtn === 'function') {
         await sleep(600)
 
         addNewBlockRoot.__vue__.togglePingBtn?.()
-
-        await sleep(1000)
       }
-
-      addNewBlockRoot.querySelector('button')?.focus({ preventScroll: true })
     }
   }
 }

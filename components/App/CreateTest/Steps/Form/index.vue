@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted } from '@vue/composition-api'
+import { defineComponent } from '@vue/composition-api'
 import { OnSubmitArgs } from '~/types'
 
 export default defineComponent({
@@ -47,18 +47,6 @@ export default defineComponent({
         }
       }
     }
-
-    onMounted(() => {
-      // @ts-ignore
-      // if (!$createTestForm[_props.name] && _props.initialValue) {
-      //   $store.dispatch('create-test/updateForm', {
-      //     path: _props.name,
-      //     value: {
-      //       ..._props.initialValue,
-      //     },
-      //   })
-      // }
-    })
 
     return { onSubmit }
   },

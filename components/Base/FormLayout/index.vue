@@ -252,18 +252,21 @@ export default defineComponent({
       }
     }
 
+    const idAndError = (id: string) => fieldIdAndError(id)
+
     return {
       rootKey,
       isValid,
-      onChange,
       rootRef,
-      onSubmit,
       inputErrors,
       firstInputError,
-      fieldIdAndError,
-      toggleLoading,
       loading,
       formChanged,
+      onChange,
+      onSubmit,
+      fieldIdAndError,
+      idAndError,
+      toggleLoading,
     }
   },
 })
@@ -290,6 +293,7 @@ export default defineComponent({
           valid: isValid,
           firstInputError,
           fieldIdAndError,
+          idAndError,
           toggleLoading,
           loading,
           formChanged,

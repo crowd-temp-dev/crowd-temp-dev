@@ -9,17 +9,19 @@ import { removeUndefinedValues } from '../../../utils'
 
 export interface UpdateTestDetailForm {
   id: string
+  name?: string
   unlimitedInvites?: boolean
   stopAcceptingResponse?: boolean
-  favourite: boolean
+  favourite?: boolean
 }
 
 export interface UpdateTestDetailRes {
-  favourite: boolean
-  published: boolean
-  shareLink: string
-  stopAcceptingResponse: boolean
-  unlimitedInvites: boolean
+  favourite?: boolean
+  published?: boolean
+  shareLink?: string
+  stopAcceptingResponse?: boolean
+  unlimitedInvites?: boolean
+  name?: string
 }
 
 const formValidation: RequestHandler = (req, res, next) => {
@@ -30,7 +32,8 @@ const formValidation: RequestHandler = (req, res, next) => {
     unlimitedInvites: Joi.boolean(),
     stopAcceptingResponse: Joi.boolean(),
     favourite: Joi.boolean(),
-  })
+    name: Joi.string().min(1).max(255),
+  } as Record<keyof UpdateTestDetailForm, any>)
 
   const validate = schema.validate(body)
 
@@ -53,7 +56,7 @@ export default function (router: Router) {
     formValidation,
     authenticate,
     async (req, res) => {
-      const { id, stopAcceptingResponse, unlimitedInvites, favourite } =
+      const { id, stopAcceptingResponse, unlimitedInvites, favourite, name } =
         req.body as UpdateTestDetailForm
 
       const { userId } = req.signedCookies
@@ -74,6 +77,7 @@ export default function (router: Router) {
               stopAcceptingResponse,
               unlimitedInvites,
               favourite,
+              name,
             })
             // get values that don't require test to be published
             const updatePublishedTests =
@@ -97,6 +101,7 @@ export default function (router: Router) {
                 stopAcceptingResponse: testDetail.stopAcceptingResponse,
                 unlimitedInvites: testDetail.unlimitedInvites,
                 favourite: testDetail.favourite,
+                name: testDetail.name,
               },
               message: {
                 content: 'Updated!',

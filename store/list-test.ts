@@ -2,12 +2,15 @@
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from '.'
 import { GetAllTestsResItem } from '~/server-middleware/routes/test-cRUD/getAllTests'
-import { GetAllTests } from '~/services/listTest'
+import { DeleteTest, GetAllTests } from '~/services/listTest'
 import { showToasts } from '~/utils/showToast'
 import { UpdateTestDetail } from '~/services/createTest'
+import { DeleteTestForm } from '~/server-middleware/routes/test-cRUD/deleteTest'
 
 export interface ListTestItem extends GetAllTestsResItem {
-  loading: boolean
+  loadingFavourite: boolean
+  loadingRename: boolean
+  loadingDelete: boolean
 }
 
 export interface AnswerTestState {
@@ -49,10 +52,10 @@ const actions: ActionTree<AnswerTestState, RootState> = {
 
     const { app } = this.$router
 
-    const queryParam = app.$route.query;
+    const queryParam = app.$route.query
 
     const { data, message, error } = await GetAllTests(app.$axios, {
-      favourite: queryParam.favourite === '1'
+      favourite: queryParam.favourite === '1',
     })
 
     if (error) {
@@ -62,7 +65,9 @@ const actions: ActionTree<AnswerTestState, RootState> = {
         'setItems',
         Object.values(data).map((val) => ({
           ...val,
-          loading: false,
+          loadingFavourite: false,
+          loadingRename: false,
+          loadingDelete: false,
           shareLink: `${location.origin}/answer-test/${val.shareLink}/`,
           to: `/dashboard/create-test/${
             val.progress === 'Draft: Create'
@@ -84,15 +89,15 @@ const actions: ActionTree<AnswerTestState, RootState> = {
     const { app } = this.$router
 
     if (item) {
-      if (item.loading) {
+      if (item.loadingFavourite) {
         return
       }
 
-      // set test's loading state
+      // set test's loadingFavourite state
       commit('setItem', {
         id,
         value: {
-          loading: true,
+          loadingFavourite: true,
         },
       })
 
@@ -115,7 +120,7 @@ const actions: ActionTree<AnswerTestState, RootState> = {
       commit('setItem', {
         id,
         value: {
-          loading: false,
+          loadingFavourite: false,
         },
       })
     } else {
@@ -125,15 +130,97 @@ const actions: ActionTree<AnswerTestState, RootState> = {
       })
     }
   },
+
+  async renameTest({ commit }, payload: { id: string; name: string }) {
+    const { id, name } = payload
+
+    commit('setItem', {
+      id,
+      value: {
+        loadingRename: true,
+      },
+    })
+
+    const { app } = this.$router
+
+    const { data, error, message } = await UpdateTestDetail(app.$axios, {
+      id,
+      name,
+    })
+
+    if (data) {
+      commit('setItem', {
+        id,
+        value: {
+          name: data.name,
+        },
+      })
+    }
+
+    showToasts(app.$pToast, message)
+
+    commit('setItem', {
+      id,
+      value: {
+        loadingRename: false,
+      },
+    })
+
+    return { data, error }
+  },
+
+  async deleteTest({ commit, state }, payload: DeleteTestForm) {
+    const { id, dontWarn } = payload
+
+    commit('setItem', {
+      id,
+      value: {
+        loadingDelete: true,
+      },
+    })
+
+    const { app } = this.$router
+
+    const { data, message, error } = await DeleteTest(app.$axios, {
+      id,
+      dontWarn,
+    })
+
+    if (data) {
+      commit(
+        'setItems',
+        state.items.filter((x) => x.id !== id)
+      )
+    }
+
+    commit('setItem', {
+      id,
+      value: {
+        loadingDelete: false,
+      },
+    })
+
+    showToasts(app.$pToast, message)
+
+    if (data.dontWarn) {
+      app.$nextTick(() => {
+        app.$store.commit('user/update', {
+          deleteTestWarn: false,
+        })
+      })
+    }
+
+    return { data, message, error }
+  },
 }
 
 const getters: GetterTree<AnswerTestState, RootState> = {
   hasFavourite(state) {
-    return state.items.some(x => x.favourite)
+    return state.items.some((x) => x.favourite)
   },
   favourites(state) {
-    return state.items.filter(x => x.favourite)
-  }
+    return state.items.filter((x) => x.favourite)
+  },
 }
 
 export default {
