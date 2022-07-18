@@ -879,6 +879,10 @@ export const userWorkRole = [
 
 export const userCompanySize = [
   {
+    label: 'Just me',
+    value: '1',
+  },
+  {
     label: '2 to 20',
     value: '2-20',
   },
