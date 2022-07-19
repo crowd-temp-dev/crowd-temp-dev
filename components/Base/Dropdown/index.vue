@@ -73,6 +73,7 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    disabled: Boolean,
   },
   setup(_props, { emit, slots }) {
     const props = computed(() => _props)
@@ -110,6 +111,7 @@ export default defineComponent({
           leaveDelay: props.value.leaveDelay,
           enterDelay: props.value.enterDelay,
           loopTabbing: props.value.loopTabbing,
+          disabled: props.value.disabled,
         },
         on: {
           'update:modelValue': (val: boolean) => {

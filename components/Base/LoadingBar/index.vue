@@ -1,5 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch,
+} from '@vue/composition-api'
 import { debounce, nextFrame, sleep } from '~/utils'
 import Countdown from '~/utils/countdown'
 
@@ -14,8 +20,13 @@ export default defineComponent({
       type: Number,
       default: 100,
     },
+    state: {
+      type: String as () => 'start' | 'finish' | 'error',
+      default: undefined,
+    },
   },
-  setup(_props) {
+  emits: ['on-start', 'on-fail', 'on-finish'],
+  setup(_props, { emit }) {
     const show = ref(false)
 
     const completed = ref(false)
@@ -32,13 +43,19 @@ export default defineComponent({
       return !!(percentage.value >= 70)
     })
 
+    const state = computed(() => _props.state)
+
     const start = async () => {
       const countdown = new Countdown({
         duration: _props.duration,
-        onDone: () => {
+        onDone: async () => {
           countdownDone.value = true
 
-          percentage.value = 90
+          await sleep(300)
+
+          if (show.value) {
+            percentage.value = 90
+          }
         },
         onUpdate: (val) => {
           const percentageDone =
@@ -92,6 +109,8 @@ export default defineComponent({
 
       if (!completed.value) {
         countdown.start()
+
+        emit('on-start')
       } else {
         show.value = false
 
@@ -109,10 +128,14 @@ export default defineComponent({
       await sleep(300)
 
       show.value = false
+
+      emit('on-finish')
     }
 
     const fail = async () => {
       error.value = true
+
+      emit('on-error')
 
       await sleep(200)
 
@@ -122,6 +145,20 @@ export default defineComponent({
     const increase = (val: number) => {
       extraPercentage.value += val
     }
+
+    const autoProgress = () => {
+      if (state.value === 'start') {
+        start()
+      } else if (state.value === 'finish') {
+        finish()
+      } else if (state.value === 'error') {
+        fail()
+      }
+    }
+
+    watch(() => state.value, autoProgress)
+
+    onMounted(autoProgress)
 
     return {
       show,
@@ -157,7 +194,7 @@ export default defineComponent({
 
 <style scoped lang="postcss">
 .LoadingBar {
-  @apply fixed top-0 left-0 w-full h-2 z-[10000] isolate overflow-hidden pointer-events-none;
+  @apply fixed top-0 left-0 w-full h-[2.5px] z-[10000] isolate overflow-hidden pointer-events-none;
 }
 
 @keyframes glow {

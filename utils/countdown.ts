@@ -110,7 +110,7 @@ export default class Countdown {
 
       this.stopped = true
 
-      this.clearTimeout().onUpdate().onDone()
+      this.clearTimeout().onDone()
     }
 
     if (typeof this.onUpdate === 'function') {

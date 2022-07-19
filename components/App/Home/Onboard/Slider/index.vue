@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import Dropdown from '../Dropdown/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import { OnboardingVideoState } from '~/store/onboarding-videos'
@@ -43,6 +43,8 @@ export default defineComponent({
         }
       },
     })
+
+    const dismissing = ref(false)
 
     const state = computed(() => {
       return $store.state['onboarding-videos'] as OnboardingVideoState
@@ -91,11 +93,16 @@ export default defineComponent({
     ])
 
     const onDismiss = async (index: number) => {
+      dismissing.value = true
+
       await $store.dispatch('onboarding-videos/dismissItem', index)
+
+      dismissing.value = false
     }
 
     return {
       state,
+      dismissing,
       modelSync,
       translateXClass,
       pedals,
@@ -143,7 +150,11 @@ export default defineComponent({
             >
               <span class="flex-grow"> Getting started with Crowd </span>
 
-              <Dropdown :path="`video${i}`" @on-dismiss="onDismiss(i)" />
+              <Dropdown
+                :path="`video${i}`"
+                :dismissing="dismissing"
+                @on-dismiss="onDismiss(i)"
+              />
             </h4>
 
             <p class="text-[#212B36] my-20">

@@ -19,11 +19,10 @@ export default defineComponent({
       type: String,
       default: 'Dismiss tutorial',
     },
+    dismissing: Boolean,
   },
   setup(_props, { root: { $store } }) {
     const onboardStep = ref(0)
-
-    const dismissing = ref(false)
 
     const state = computed(() => {
       return $store.state['onboarding-videos'] as OnboardingVideoState
@@ -54,7 +53,6 @@ export default defineComponent({
 
     return {
       onboardStep,
-      dismissing,
       rating,
       increaseStep,
       decreaseStep,
@@ -65,7 +63,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <Dropdown :offset="[4, -2]">
+  <Dropdown :offset="[4, -2]" :disabled="dismissing">
     <template #default="{ events, active }">
       <button
         tabindex="0"

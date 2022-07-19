@@ -95,6 +95,7 @@ export default defineComponent({
       <Dropdown
         path="main"
         dismiss-title="Dismiss welcome guide"
+        :dismissing="dismissing"
         @on-dismiss="dismissGuide"
       />
     </h3>

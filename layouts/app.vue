@@ -11,6 +11,7 @@ import AlertDialog from '~/components/Base/AlertDialog/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Form from '~/components/App/SetupProfile/Form/index.vue'
 import { RootState } from '~/store'
+import LoadingBar from '~/components/Base/LoadingBar/index.vue'
 
 export default defineComponent({
   name: 'AppLayout',
@@ -22,6 +23,7 @@ export default defineComponent({
     AlertDialog,
     FadeTransition,
     Form,
+    LoadingBar,
   },
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
@@ -160,6 +162,11 @@ export default defineComponent({
                 'overflow-hidden': dialogs.length,
               }"
             >
+              <LoadingBar
+                :state="creatingTest ? 'start' : 'finish'"
+                class="!left-[auto] !top-[auto] !w-[calc(100%-var(--sidebar-width))]"
+              />
+
               <PageHeader
                 :inert="creatingTest || undefined"
                 :class="{ 'blur-[4px]': creatingTest }"
