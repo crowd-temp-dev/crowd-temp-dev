@@ -157,7 +157,7 @@ export default defineComponent({
 
 <style scoped lang="postcss">
 .LoadingBar {
-  @apply fixed top-0 left-0 w-full h-3 z-[10000] isolate overflow-hidden pointer-events-none;
+  @apply fixed top-0 left-0 w-full h-2 z-[10000] isolate overflow-hidden pointer-events-none;
 }
 
 @keyframes glow {
