@@ -7,7 +7,6 @@ import { showToasts } from '~/utils/showToast'
 import { CreateTestTypes } from '~/types'
 import { UpdateResultAnswerForm } from '~/server-middleware/routes/create-test/updateResultAnswer'
 
-
 export interface QuestionAnswer {
   id: string
   type: string
@@ -125,10 +124,10 @@ const actions: ActionTree<TestSuiteViewResultState, RootState> = {
 
       app.$store.commit('testSuite/create/setEmpty', false)
 
-      console.log({ data })
-
       commit('saveAnswers', data)
     }
+
+    commit('setLoading', false)
 
     await app.$nextTick()
 

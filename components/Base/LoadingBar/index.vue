@@ -2,32 +2,38 @@
 import {
   computed,
   defineComponent,
+  nextTick,
   onMounted,
   ref,
   watch,
 } from '@vue/composition-api'
-import { debounce, nextFrame, sleep } from '~/utils'
+import { Duration } from '~/types'
+import { convertToMilliSecond, debounce, nextFrame, sleep } from '~/utils'
 import Countdown from '~/utils/countdown'
+
+export type LoadingBarState = 'start' | 'finish' | 'error'
 
 export default defineComponent({
   name: 'BaseLoadingBar',
   props: {
     duration: {
-      type: Number,
-      default: 7000,
+      type: [Number, String] as unknown as () => number | Duration,
+      default: 10000,
     },
     throttle: {
-      type: Number,
+      type: [Number, String] as unknown as () => number | Duration,
       default: 100,
     },
     state: {
-      type: String as () => 'start' | 'finish' | 'error',
+      type: String as () => LoadingBarState,
       default: undefined,
     },
   },
   emits: ['on-start', 'on-fail', 'on-finish'],
   setup(_props, { emit }) {
     const show = ref(false)
+
+    const maxProgress = ref(95)
 
     const completed = ref(false)
 
@@ -45,16 +51,20 @@ export default defineComponent({
 
     const state = computed(() => _props.state)
 
+    const duration = computed(() => {
+      return convertToMilliSecond(_props.duration)
+    })
+
     const start = async () => {
       const countdown = new Countdown({
-        duration: _props.duration,
+        duration: duration.value,
         onDone: async () => {
           countdownDone.value = true
 
           await sleep(300)
 
           if (show.value) {
-            percentage.value = 90
+            percentage.value = maxProgress.value
           }
         },
         onUpdate: (val) => {
@@ -71,29 +81,34 @@ export default defineComponent({
               100
 
           const threshold =
-            percentage.value < 11
+            percentage.value < 5
               ? 0
-              : percentage.value < 21
-              ? 2
-              : percentage.value < 31
+              : percentage.value < 11
               ? 4
+              : percentage.value < 21
+              ? 8
+              : percentage.value < 31
+              ? 16
               : percentage.value < 41
-              ? 10
+              ? 20
               : percentage.value < 51
-              ? 25
-              : percentage.value < 61
-              ? 35
+              ? 16
               : percentage.value < 71
-              ? 50
+              ? 12
               : percentage.value < 81
-              ? 70
-              : 90
+              ? 8
+              : 4
 
-          debounce(() => {
-            if (percentage.value < 90 && !countdownDone.value) {
-              percentage.value = percentageDone + extraPercentage.value
-            }
-          }, threshold * 100)()
+          if (percentageDone + extraPercentage.value >= percentage.value) {
+            debounce(() => {
+              if (
+                percentage.value < maxProgress.value &&
+                !countdownDone.value
+              ) {
+                percentage.value = percentageDone + extraPercentage.value
+              }
+            }, threshold * 100)()
+          }
         },
       })
 
@@ -103,22 +118,38 @@ export default defineComponent({
 
       countdownDone.value = false
 
-      await sleep(_props.throttle)
+      completed.value = false
+
+      const throttle = convertToMilliSecond(_props.throttle)
+
+      if (throttle) {
+        await sleep(throttle)
+      }
 
       show.value = true
 
       await nextFrame()
 
       if (!completed.value) {
-        countdown.start()
-
         emit('on-start')
+
+        const startProgress = () => {
+          if (percentage.value <= 2 && show.value) {
+            percentage.value += 0.25
+
+            requestAnimationFrame(startProgress)
+          } else {
+            countdown.start()
+          }
+        }
+
+        startProgress()
       } else {
         show.value = false
 
         countdownDone.value = true
 
-        completed.value = false
+        completed.value = true
       }
     }
 
@@ -149,13 +180,15 @@ export default defineComponent({
     }
 
     const autoProgress = () => {
-      if (state.value === 'start') {
-        start()
-      } else if (state.value === 'finish') {
-        finish()
-      } else if (state.value === 'error') {
-        fail()
-      }
+      nextTick(() => {
+        if (state.value === 'start') {
+          start()
+        } else if (state.value === 'finish') {
+          finish()
+        } else if (state.value === 'error') {
+          fail()
+        }
+      })
     }
 
     watch(() => state.value, autoProgress)

@@ -14,7 +14,7 @@ const mutation: MutationTree<AppState> = {
   },
 
   addToDialogs(state, id: string) {
-    state.dialogs = [...state.dialogs, id]
+    state.dialogs = Array.from(new Set([...state.dialogs, id]))
   },
 
   removeFromDialogs(state, id: string) {

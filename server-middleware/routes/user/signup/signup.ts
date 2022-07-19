@@ -1,6 +1,9 @@
 import Joi from 'joi'
 import { RequestHandler, Router } from 'express'
-import { user as userValidation } from '../../../utils/validation'
+import {
+  sensitiveString,
+  user as userValidation,
+} from '../../../utils/validation'
 import {
   sendError,
   sendFormattedError,
@@ -26,8 +29,18 @@ const formValidation: RequestHandler = (req, res, next) => {
   const body = req.body
 
   const schema = Joi.object({
-    firstName: userValidation.name.required(),
-    lastName: userValidation.name.required(),
+    firstName: sensitiveString
+      .min(1)
+      .max(99)
+      .pattern(/^([a-zA-Z0-9\s-_]){2,255}$/)
+      .rule({ message: 'First name should be between 3 and 255 characters.' })
+      .required(),
+    lastName: sensitiveString
+      .min(1)
+      .max(99)
+      .pattern(/^([a-zA-Z0-9\s-_]){2,255}$/)
+      .rule({ message: 'Last name should be between 3 and 255 characters.' })
+      .required(),
     email: userValidation.email.required(),
     password: userValidation.password.required(),
     confirmPassword: userValidation.password

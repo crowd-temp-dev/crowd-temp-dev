@@ -45,6 +45,7 @@ const mutations: MutationTree<OnboardingVideoState> = {
   },
   setError(state, val: boolean) {
     state.error = val
+    state.loading = false
   },
   setItem(state, payload: OnboardingVideoState['items']) {
     const items = { ...payload } as Record<string, any>

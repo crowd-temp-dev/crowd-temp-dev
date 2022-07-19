@@ -4,16 +4,16 @@ export default function copyText(args: { text: string, onSuccess: () => void, on
   return new Promise((resolve) => {
     const oldBrowser = () => {
       try {
-        const psuedoInput = document.createElement('input')
-        psuedoInput.classList.add('sr-only')
-        psuedoInput.setAttribute('tabindex', '-1')
-        psuedoInput.setAttribute('aria-hidden', 'true')
-        psuedoInput.value = text
-        document.body.appendChild(psuedoInput)
-        psuedoInput.select()
+        const pseudoInput = document.createElement('input')
+        pseudoInput.classList.add('sr-only')
+        pseudoInput.setAttribute('tabindex', '-1')
+        pseudoInput.setAttribute('aria-hidden', 'true')
+        pseudoInput.value = text
+        document.body.appendChild(pseudoInput)
+        pseudoInput.select()
 
         document.execCommand('copy')
-        document.body.removeChild(psuedoInput)
+        document.body.removeChild(pseudoInput)
         onSuccess()
       } catch (e) {
         if (e) {

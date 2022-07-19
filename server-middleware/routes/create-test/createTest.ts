@@ -463,14 +463,14 @@ export default function (router: Router) {
           sendSuccess(res, {
             data: [createTest.get()],
             message: {
-              content: 'Test created!',
+              content: 'Test saved!',
               type: 'success',
             },
           })
         } else {
           await transaction.rollback()
 
-          throw new Error('Error creating test at this time.')
+          throw new Error('Error saving test at this time.')
         }
       } catch (err: any) {
         sendFormattedError(err, res)

@@ -2,6 +2,7 @@
 import {
   computed,
   defineComponent,
+  nextTick,
   onBeforeUnmount,
   onMounted,
   ref,
@@ -20,6 +21,7 @@ export interface ComboBoxPayload {
   open: () => void
   close: () => void
   active: boolean
+  popperInstance: PopperInstance
 }
 
 export default defineComponent({
@@ -112,7 +114,7 @@ export default defineComponent({
       return triggerRef.value
     })
 
-    const id = ref(uid())
+    const id = ref(`combo-${uid()}`)
 
     const props = computed(() => _props)
 
@@ -169,6 +171,8 @@ export default defineComponent({
     const contentEntered = ref(modelSync.value)
 
     const positionPopper = async () => {
+      await nextFrame()
+
       if (
         getTriggerRef.value &&
         contentRef.value &&
@@ -203,6 +207,10 @@ export default defineComponent({
 
           popperInstance.value?.update()
         } else {
+          await sleep()
+
+          popperInstance.value?.update()
+
           await nextFrame()
 
           popperInstance.value?.update()
@@ -246,6 +254,7 @@ export default defineComponent({
       open,
       close,
       active: modelSync.value,
+      popperInstance: popperInstance.value || ({ state: {} } as PopperInstance),
     }))
 
     const focusTriggerInput = () => {
@@ -326,7 +335,7 @@ export default defineComponent({
               pseudoFocusChildren[index].dataset.pseudoFocus = 'true'
 
               // @ts-ignore
-              pseudoFocusChildren[index].scrollIntoViewIfNeeded()
+              pseudoFocusChildren[index]?.scrollIntoViewIfNeeded?.()
             })
         }
       }
@@ -347,7 +356,7 @@ export default defineComponent({
       }
     }
 
-    const clickFocused = () => {
+    const clickFocused = async () => {
       if (!contentEntered.value || !modelSync.value || !contentRef.value) {
         return
       }
@@ -358,6 +367,8 @@ export default defineComponent({
 
       if (currentPseudoFocus) {
         currentPseudoFocus.click()
+
+        await sleep(150)
 
         requestAnimationFrame(close)
       }
@@ -371,15 +382,21 @@ export default defineComponent({
       })
     })
 
-    const toggleStoreDialogState = (action: 'add' | 'remove' = 'remove') => {
+    const toggleStoreDialogState = async (
+      action: 'add' | 'remove' = 'remove'
+    ) => {
+      await nextTick()
+
+      if (action === 'remove') {
+        popperInstance.value?.destroy()
+
+        popperInstance.value = null
+      }
+
       $store.commit(
         `app/${action === 'add' ? 'addToDialogs' : 'removeFromDialogs'}`,
         id.value
       )
-
-      if (action === 'remove') {
-        popperInstance.value?.destroy()
-      }
     }
 
     const onBeforeEnter = () => {

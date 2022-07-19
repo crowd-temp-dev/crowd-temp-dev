@@ -8,6 +8,8 @@ import {
 } from '@vue/composition-api'
 import TestItem from './TestItem/index.vue'
 import { TestListItem } from './type'
+import GroupBy from './GroupBy/index.vue'
+import SortBy from './SortBy/index.vue'
 import SearchField from '~/components/Base/SearchField/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
@@ -26,9 +28,21 @@ import Spinner from '~/components/Base/Spinner/index.vue'
 
 export default defineComponent({
   name: 'AppHomeTestList',
-  components: { SearchField, Button, TestItem, FadeTransition, Spinner },
+  components: {
+    SearchField,
+    Button,
+    TestItem,
+    FadeTransition,
+    Spinner,
+    GroupBy,
+    SortBy,
+  },
   setup(_, { root }) {
     const filter = ref('')
+
+    const groupBy = ref(0)
+
+    const sortBy = ref(0)
 
     const testId = ref(uuidv4())
 
@@ -100,6 +114,8 @@ export default defineComponent({
     onBeforeMount(getAllTests)
 
     return {
+      groupBy,
+      sortBy,
       testList,
       favouriteTests,
       filter,
@@ -128,9 +144,9 @@ export default defineComponent({
       />
 
       <PButtonGroup segmented class="shrink-0 ml-8 mr-12">
-        <Button disclosure="down"> All tests </Button>
+        <GroupBy v-model="groupBy" />
 
-        <Button disclosure="down"> Sort </Button>
+        <SortBy v-model="sortBy" />
       </PButtonGroup>
 
       <Button

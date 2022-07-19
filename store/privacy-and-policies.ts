@@ -55,6 +55,8 @@ const actions: ActionTree<PrivacyAndPolicyState, RootState> = {
       commit('setContent', data[0])
     }
 
+    commit('setLoading', false)
+
     return { data, error, message, status }
   },
 }

@@ -7,6 +7,9 @@ import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { createTestWarningDuplicateId } from '~/utils'
 import Warning from '~/components/App/CreateTest/Warning/index.vue'
 import { RootState } from '~/store'
+import LoadingBar, {
+  LoadingBarState,
+} from '~/components/Base/LoadingBar/index.vue'
 
 type Step = {
   title: 'Create test' | 'Recruit' | 'View Results'
@@ -19,7 +22,7 @@ type Step = {
 
 export default defineComponent({
   name: 'AppBillingPage',
-  components: { Button, FadeTransition, Warning },
+  components: { Button, FadeTransition, Warning, LoadingBar },
   layout: 'app' as Layout,
   transition: (to, from) =>
     dynamicPageTransition({
@@ -79,14 +82,44 @@ export default defineComponent({
       ] as Step[]
     })
 
+    const createTestState = computed(() => {
+      return (root.$store.state as RootState).testSuite.create
+    })
+
     const showWarning = computed(() => {
       return (
         root.$route.name === 'dashboard-create-test-:id' &&
-        (root.$store.state as RootState).testSuite.create.showWarning
+        createTestState.value.showWarning
       )
     })
 
-    return { steps, showBanner, showWarning, createTestWarningDuplicateId }
+    const progressState = computed<LoadingBarState>(() => {
+      const { submitError, submitting } = createTestState.value
+
+      if (submitError) {
+        return 'error'
+      }
+
+      if (submitting) {
+        return 'start'
+      }
+
+      return 'finish'
+    })
+
+    const onProgressDone = () => {
+      root.$store.commit('testSuite/create/setSubmitError', false)
+    }
+
+    return {
+      steps,
+      showBanner,
+      createTestState,
+      showWarning,
+      createTestWarningDuplicateId,
+      progressState,
+      onProgressDone,
+    }
   },
 
   head: {
@@ -96,7 +129,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="min-h-[calc(100%-76px)]">
+  <div class="min-h-[calc(100%-76px)] relative">
+    <LoadingBar
+      :state="progressState"
+      class="!left-[auto] !top-[auto] !w-[calc(100%-var(--sidebar-width))]"
+      duration="15s"
+      throttle="0"
+      @on-finish="onProgressDone"
+    />
+
     <!-- <header> -->
     <div class="app-page-header !h-56 !relative !z-2 !justify-center">
       <div>
@@ -133,14 +174,16 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <!-- </header> -->
 
     <Warning />
 
     <FadeTransition>
       <div
         :key="$store.state.testSuite.detail.id"
-        class="isolate max-w-app mx-auto px-32 lg:px-0 min-h-[calc(100%-56px)]"
+        class="isolate max-w-app mx-auto px-32 lg:px-0 min-h-[calc(100%-56px)] transition-opacity"
+        :class="{
+          'pointer-events-none opacity-70': createTestState.submitting,
+        }"
       >
         <NuxtChild />
       </div>

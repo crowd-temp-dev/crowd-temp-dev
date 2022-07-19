@@ -12,6 +12,7 @@ import { showToasts } from '~/utils/showToast'
 
 export interface TestSuiteCreateState {
   submitting: boolean
+  submitError: boolean
   loading: boolean
   showWarning: boolean
   empty: boolean
@@ -23,6 +24,7 @@ export interface TestSuiteCreateState {
 
 const state = (): TestSuiteCreateState => ({
   loading: false,
+  submitError: false,
   submitting: false,
   showWarning: false,
   empty: true,
@@ -31,6 +33,9 @@ const state = (): TestSuiteCreateState => ({
 const mutations: MutationTree<TestSuiteCreateState> = {
   setSubmitting(state, val: boolean) {
     state.submitting = val
+  },
+  setSubmitError(state, val: boolean) {
+    state.submitError = val
   },
   resetForm(state) {
     state.thankYouScreen = {
@@ -76,6 +81,8 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
   async submit({ commit, dispatch, state, rootState }, duplicate: boolean) {
     commit('setSubmitting', true)
 
+    commit('setSubmitError', false)
+
     const questions = state.section.items
 
     if (!questions.length) {
@@ -119,8 +126,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
 
                 const getFiles = (value as File[]).flat()
 
-                console.log({getFiles});
-                
+                console.log({ getFiles })
 
                 getFiles.forEach((file) => {
                   formatForm.append(id, file, file.name)
@@ -161,13 +167,13 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
         return {}
       }
 
-      commit('setSubmitting', true)
-
       const submitTime = performance.now()
 
       const { data, error, message } = await CreateTest(app.$axios, formatForm)
 
       await sleep(performance.now() - submitTime >= 1000 ? 0 : 500)
+
+      commit('setSubmitError', !!error)
 
       commit('setSubmitting', false)
 

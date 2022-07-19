@@ -35,25 +35,28 @@ export default defineComponent({
       return $user.provider === 'email' ? true : confirmationSent.value
     })
 
+    const sendConfirmationEmail = async () => {
+      confirmationSent.value = false
+
+      sendingConfirmation.value = true
+
+      const { data, message } = await SendDeleteEmailConfirmation($axios, null)
+
+      await sleep(oneFrame)
+
+      showToasts($pToast, message)
+
+      confirmationSent.value = !!data
+
+      sendingConfirmation.value = false
+    }
+
     const confirmOrDeleteAccount: OnSubmit<DeleteAccountForm> = async ({
       formValues,
       formFields,
     }) => {
       if (!providerConfirmed.value) {
-        sendingConfirmation.value = true
-
-        const { data, message } = await SendDeleteEmailConfirmation(
-          $axios,
-          null
-        )
-
-        await sleep(oneFrame)
-
-        showToasts($pToast, message)
-
-        confirmationSent.value = !!data
-
-        sendingConfirmation.value = false
+        sendConfirmationEmail()
       } else {
         deleting.value = true
 
@@ -90,6 +93,7 @@ export default defineComponent({
       sendingConfirmation,
       confirmOrDeleteAccount,
       resetForm,
+      sendConfirmationEmail,
     }
   },
 })
@@ -160,15 +164,22 @@ export default defineComponent({
                   Send email confirmation
                 </Button>
 
-                <TextField
-                  v-else
-                  autofocus
-                  required
-                  label="Token*"
-                  :help-text="`Confirmation token has been sent to '${$user.email}'`"
-                  pattern="^\w{6,6}$"
-                  v-bind="fieldIdAndError('token')"
-                />
+                <template v-else>
+                  <TextField
+                    autofocus
+                    required
+                    label="Token*"
+                    :help-text="`Confirmation token has been sent to '${$user.email}'`"
+                    pattern="^\w{6,6}$"
+                    v-bind="fieldIdAndError('token')"
+                  />
+
+                  <div class="text-center mt-20">
+                    <Button plain @click="sendConfirmationEmail">
+                      Resend confirmation
+                    </Button>
+                  </div>
+                </template>
               </div>
             </FadeTransition>
           </FormLayout>
@@ -183,7 +194,7 @@ export default defineComponent({
               destructive
               form="delete-account"
               class="ml-16"
-              :disabled="!confirmed || !providerConfirmed || invalidToken"
+              :disabled="!confirmed || !providerConfirmed"
               :loading="deleting"
             >
               Delete account

@@ -46,10 +46,10 @@ export default defineComponent({
         return this.manualModel as string
       },
 
-      set(val: string) {        
+      set(val: string) {
         if (typeof val === 'string' && !this.disabled) {
           if (typeof this.modelValue === 'string') {
-            this.$emit('update:modelValue', val)            
+            this.$emit('update:modelValue', val)
 
             if (typeof this.updateModelValue === 'function') {
               this.updateModelValue(val)
@@ -93,11 +93,15 @@ export default defineComponent({
     :style="{ '--height': height }"
     v-on="$listeners"
   >
+    <template #prefix> <slot name="prefix" /> </template>
+
     <template v-if="$slots.default" #label>
       <slot>
         {{ label }}
       </slot>
     </template>
+
+    <template #suffix> <slot name="suffix" /> </template>
   </PTextField>
 </template>
 

@@ -22,7 +22,7 @@ import { CreateTestFormQuestion } from '~/types/form'
 
 export const htmlAttrs: HTMLAttrs = {
   lang: 'en-us',
-  class: 'bg-surface-default text-text-default text-body-sm md:text-body',
+  class: 'bg-surface-default text-text-default',
 }
 
 export const features: Feature = {
@@ -194,7 +194,7 @@ export const pseudoFocus = (el: HTMLElement) => {
         el.dataset.pseudoFocus = 'true'
 
         // @ts-ignore
-        el.scrollIntoViewIfNeeded()
+        el?.scrollIntoViewIfNeeded?.()
       }
     }
   }

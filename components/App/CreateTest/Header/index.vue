@@ -6,10 +6,19 @@ import Tooltip from '~/components/Base/Tooltip/index.vue'
 import Skeleton from '~/components/Base/Skeleton/index.vue'
 import { TestSuiteState } from '~/store/testSuite'
 import { RootState } from '~/store'
+import DialogButton from '~/components/Base/DialogButton/index.vue'
+import Dropdown, { DropdownOption } from '~/components/Base/Dropdown/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestHeader',
-  components: { Button, EditableText, Tooltip, Skeleton },
+  components: {
+    Button,
+    EditableText,
+    Tooltip,
+    Skeleton,
+    DialogButton,
+    Dropdown,
+  },
   setup(_, { root }) {
     const testState = computed(
       () => root.$store.state.testSuite as TestSuiteState
@@ -42,7 +51,31 @@ export default defineComponent({
       return !state.detail.created && !state.create.section.items.length
     })
 
-    return { testTitle, testPublished, enableEditing, testState, emptyTestForm }
+    const moreActions = computed<DropdownOption[]>(() => {
+      return [
+        {
+          title: 'Copy preview link',
+          onClick: () => {},
+        },
+        {
+          title: 'View preview comments',
+          onClick: () => {},
+        },
+        {
+          title: 'Duplicate',
+          onClick: () => {},
+        },
+      ]
+    })
+
+    return {
+      testTitle,
+      testPublished,
+      enableEditing,
+      testState,
+      emptyTestForm,
+      moreActions,
+    }
   },
 })
 </script>
@@ -110,9 +143,28 @@ export default defineComponent({
     </div>
 
     <div class="flex items-center">
-      <Button plain-action> Duplicate </Button>
+      <DialogButton plain-action>
+        <span> Use template </span>
 
-      <Button plain-action disclosure="down"> More action </Button>
+        <template #dialog-header>
+          <div>Templates</div>
+        </template>
+
+        <template #dialog>
+          <div>Template will show here...</div>
+        </template>
+      </DialogButton>
+
+      <Dropdown
+        v-slot="{ events, active }"
+        :option="moreActions"
+        placement="bottom-start"
+        :offset="[-4, 4]"
+      >
+        <Button plain-action :disclosure="active ? 'up' : 'down'" v-on="events">
+          More action
+        </Button>
+      </Dropdown>
 
       <PButtonGroup segmented>
         <Button icon="ChevronLeftMinor" disabled />

@@ -128,18 +128,22 @@ const actions: ActionTree<UserState, RootState> = {
       nextTick(() => {
         // send to home page
         this.$router.replace('/dashboard')
+
+        nextTick(() => {
+          requestAnimationFrame(() => {
+            showToasts($pToast, message)
+          })
+        })
       })
 
       // clear createTest form
       !($store.state as RootState).testSuite.create.empty &&
         $store.commit('testSuite/create/reset')
-    }
+    } else {
+      showToasts($pToast, message)
 
-    nextTick(() => {
-      requestAnimationFrame(() => {
-        showToasts($pToast, message)
-      })
-    })
+      commit('setLoading', false)
+    }
 
     return { data, error }
   },
@@ -186,6 +190,8 @@ const actions: ActionTree<UserState, RootState> = {
 
         alert && showToasts($pToast, message)
       })
+    } else {
+      commit('setLoading', false)
     }
 
     return { message, error }
@@ -232,6 +238,8 @@ const actions: ActionTree<UserState, RootState> = {
 
     if (data) {
       commit('update', data)
+    } else {
+      commit('setLoading', false)
     }
 
     return { message, error, data }
@@ -249,6 +257,8 @@ const actions: ActionTree<UserState, RootState> = {
     }
 
     showToasts(app.$pToast, message)
+
+    commit('setLoading', false)
 
     return { message, error, data }
   },
@@ -268,7 +278,11 @@ const actions: ActionTree<UserState, RootState> = {
       await sleep(200)
 
       location.reload()
-    } else showToasts(app.$pToast, message)
+    } else {
+      showToasts(app.$pToast, message)
+
+      commit('setLoading', false)
+    }
 
     return { message, error, data }
   },

@@ -18,7 +18,7 @@ export default defineComponent({
   props: {
     modelValue: {
       type: String,
-      default: '',
+      default: undefined,
     },
     id: {
       type: String,
@@ -44,6 +44,10 @@ export default defineComponent({
     required: Boolean,
     readonly: Boolean,
     autofocus: Boolean,
+    value: {
+      type: String,
+      default: '',
+    },
   },
   setup(_props, { emit }) {
     const showPassword = ref(false)
@@ -52,19 +56,28 @@ export default defineComponent({
 
     const props = computed(() => _props)
 
+    const manualModel = ref(_props.value)
+
     const modelSync = computed({
       get() {
-        return _props.modelValue
+        if (/string|number/.test(typeof _props.modelValue)) {
+          return _props.modelValue
+        }
+        return manualModel.value
       },
       set(val: string) {
-        emit('update:modelValue', val)
+        if (/string|number/.test(typeof _props.modelValue)) {
+          emit('update:modelValue', val)
+        }
+
+        manualModel.value = val
       },
     })
 
     const autofocus = async () => {
       await sleep()
 
-      if (props.value.autofocus) {                
+      if (props.value.autofocus) {
         const input = inputRef.value
 
         if (input) {

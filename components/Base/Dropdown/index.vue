@@ -11,11 +11,12 @@ import { Duration } from '~/types'
 
 export interface DropdownOption {
   title: string
-  onClick: (evt?: PointerEvent) => void
   prependIcon?: string
   appendIcon?: string
   disabled?: boolean
   selected?: boolean
+  class?: string
+  onClick: (evt?: PointerEvent) => void
 }
 
 const scoping = { 'data-dropdown': '' }
@@ -120,27 +121,25 @@ export default defineComponent({
         },
         scopedSlots: {
           trigger: (slotProps: ComboBoxPayload) => {
-            const events = {
-              click: slotProps.toggle,
-              keydown: (evt: KeyboardEvent) => {
-                const key = eventKey(evt)
-
-                if (key === 'arrow_down') {
-                  evt.preventDefault()
-
-                  slotProps.open()
-                } else if (key === 'esc') {
-                  evt.stopPropagation()
-
-                  slotProps.close()
-                }
-              },
-              blur: slotProps.close,
-            }
-
             return slots?.default?.({
               ...slotProps,
-              events,
+              events: {
+                click: slotProps.toggle,
+                keydown: (evt: KeyboardEvent) => {
+                  const key = eventKey(evt)
+
+                  if (key === 'arrow_down') {
+                    evt.preventDefault()
+
+                    slotProps.open()
+                  } else if (key === 'esc') {
+                    evt.stopPropagation()
+
+                    slotProps.close()
+                  }
+                },
+                blur: slotProps.close,
+              },
             })
           },
 
@@ -149,8 +148,21 @@ export default defineComponent({
               'div',
               {
                 staticClass:
-                  'shadow-3 rounded-lg bg-surface-default fade-enter:scale-[0.95] fade-enter:opacity-0  transform-gpu transition-[transform,opacity] fade-leave-to:scale-[0.95] fade-leave-to:opacity-0 origin-[top_right]',
-                class: props.value.contentClass,
+                  'shadow-3 rounded-lg bg-surface-default fade-enter:scale-[0.95] fade-enter:opacity-0  transform-gpu transition-[transform,opacity] fade-leave-to:scale-[0.95] fade-leave-to:opacity-0',
+                class: [
+                  props.value.contentClass,
+                  {
+                    'origin-[top_right]':
+                      slotProps.popperInstance.state.placement === 'bottom-end',
+                    'origin-[top_left]':
+                      slotProps.popperInstance.state.placement ===
+                      'bottom-start',
+                    'origin-[bottom_right]':
+                      slotProps.popperInstance.state.placement === 'top-end',
+                    'origin-[bottom_left]':
+                      slotProps.popperInstance.state.placement === 'top-start',
+                  },
+                ],
               },
               [
                 slots?.append?.(slotProps),
@@ -188,8 +200,13 @@ export default defineComponent({
                                 role: 'menuitem',
                                 ...scoping,
                                 'data-disabled': item.disabled || undefined,
+                                'data-pseudo-focus':
+                                  item.selected && !item.disabled
+                                    ? 'true'
+                                    : undefined,
                               },
                               staticClass: 'pseudo-focus dropdown-item',
+                              class: item.class,
 
                               on: {
                                 mouseenter: pseudoFocusOnMouseEnter,

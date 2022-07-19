@@ -81,6 +81,8 @@ const actions: ActionTree<AnswerTestState, RootState> = {
         }))
       )
     }
+
+    commit('setLoading', false)
   },
 
   async toggleFavourite({ commit, state }, id: string) {

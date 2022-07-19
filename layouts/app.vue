@@ -11,7 +11,7 @@ import AlertDialog from '~/components/Base/AlertDialog/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Form from '~/components/App/SetupProfile/Form/index.vue'
 import { RootState } from '~/store'
-import LoadingBar from '~/components/Base/LoadingBar/index.vue'
+// import LoadingBar from '~/components/Base/LoadingBar/index.vue'
 
 export default defineComponent({
   name: 'AppLayout',
@@ -23,7 +23,7 @@ export default defineComponent({
     AlertDialog,
     FadeTransition,
     Form,
-    LoadingBar,
+    // LoadingBar,
   },
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
@@ -62,7 +62,10 @@ export default defineComponent({
     })
 
     const creatingTest = computed(() => {
-      return (root.$store.state as RootState).testSuite.create.submitting
+      return (
+        (root.$store.state as RootState).testSuite.create.submitting &&
+        root.$route.name === 'dashboard-create-test-:id'
+      )
     })
 
     // scroll main element to top
@@ -162,20 +165,14 @@ export default defineComponent({
                 'overflow-hidden': dialogs.length,
               }"
             >
-              <LoadingBar
+              <!-- <LoadingBar
                 :state="creatingTest ? 'start' : 'finish'"
                 class="!left-[auto] !top-[auto] !w-[calc(100%-var(--sidebar-width))]"
-              />
+              /> -->
 
-              <PageHeader
-                :inert="creatingTest || undefined"
-                :class="{ 'blur-[4px]': creatingTest }"
-              />
+              <PageHeader />
 
-              <NuxtChild
-                :inert="creatingTest || undefined"
-                :class="{ 'blur-[4px]': creatingTest }"
-              />
+              <NuxtChild :inert="creatingTest || undefined" />
             </main>
           </template>
 
