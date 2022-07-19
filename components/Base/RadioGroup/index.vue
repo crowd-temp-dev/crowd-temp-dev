@@ -92,11 +92,11 @@ export default defineComponent({
     const clearOtherInputs = (evt: PointerEvent) => {
       if (evt.target) {
         // make sure we're hitting an input that's in a label
-        let label = (evt.target as HTMLElement).closest('label')
+        const label = (evt.target as HTMLElement).closest('label')
 
-        if (!label && evt.currentTarget !== evt.target) {
-          label = (evt.target as HTMLElement).querySelector('label')
-        }
+        // if (!label && evt.currentTarget !== evt.target) {
+        //   label = (evt.target as HTMLElement).querySelector('label')
+        // }
 
         if (label) {
           const input = label.querySelector('input') as HTMLInputElement | null
@@ -144,7 +144,10 @@ export default defineComponent({
     <div class="relative" :class="contentClass">
       <slot />
 
-      <label :for="id" class="sr-only absolute position-center">
+      <label
+        :for="id"
+        class="sr-only pointer-events-none absolute position-center"
+      >
         <input
           :id="id"
           tabindex="-1"
