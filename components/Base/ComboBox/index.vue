@@ -497,7 +497,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div :id="id" data-position>
+  <div :id="id">
     <div
       ref="triggerRef"
       @keydown="arrowNavigate"

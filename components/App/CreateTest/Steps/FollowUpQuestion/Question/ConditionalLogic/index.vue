@@ -69,7 +69,11 @@ export default defineComponent({
 
       return question?.followUpQuestions
         ?.map((_, index) => {
-          if (index <= followUpQuestionIndex + 1) {
+          if (modelSync.value.action === 'goto') {
+            if (index <= followUpQuestionIndex + 1) {
+              return null
+            }
+          } else if (index >= followUpQuestionIndex) {
             return null
           }
 
@@ -101,6 +105,7 @@ export default defineComponent({
     />
 
     <Select
+      :key="(questions[0] || {}).value"
       v-model="modelSync.question"
       :label="actionName === 'show' ? 'This question if' : undefined"
       bold-label

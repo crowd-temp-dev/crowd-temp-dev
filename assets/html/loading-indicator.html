@@ -1,0 +1,44 @@
+<style>
+  @keyframes loading-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  #loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 10000;
+  }
+
+  #loading-indicator p {
+    font-family: sans-serif;
+    color: #6d7175cf;
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 28px;
+    animation: loading-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @media (min-width: 1000px) {
+    #loading-indicator p {
+      font-size: 26px;
+      line-height: 32px;
+    }
+  }
+</style>
+
+<div id="loading-indicator">
+  <p>Loading...</p>
+</div>

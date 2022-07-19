@@ -316,7 +316,7 @@ export default defineComponent({
     }
 
     const closeOnBlur = (close: () => void) => {
-      debounce(emitFormChange, 100)
+      debounce(emitFormChange, 100)()
 
       close()
     }
@@ -333,7 +333,7 @@ export default defineComponent({
     )
 
     onMounted(() => {
-      if (_props.mandatory && !modelSync.value) {
+      if ((_props.mandatory && !modelSync.value) || _props.value) {
         modelSync.value = _props.value
       }
     })

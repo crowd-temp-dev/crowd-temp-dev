@@ -108,8 +108,8 @@ export default defineComponent({
 
     const gotoConditionalLogic = computed(() => {
       return (
-        followUpQuestionIndex.value>=
-        question.value.followUpQuestions.length-1
+        followUpQuestionIndex.value + 2 <
+        question.value.followUpQuestions.length
       )
     })
 
@@ -117,14 +117,12 @@ export default defineComponent({
       return followUpQuestionIndex.value
     })
 
-    const conditionalLogiOptions = computed(() => {
-      const isShow = modelSync.value.conditionals?.action === 'show'
-
+    const conditionalLogicActions = computed(() => {
       return [
         {
           label: 'Go to',
           value: 'goto',
-          disabled: !(!isShow && gotoConditionalLogic),
+          disabled: !gotoConditionalLogic.value,
         },
         {
           label: 'Show',
@@ -140,10 +138,11 @@ export default defineComponent({
       ).create.section.items.find((x) => x.id === _props.questionId)
 
       if (question) {
-        return (
-          (question.followUpQuestions?.length || 0) < 2 ||
-          (followUpQuestionIndex.value < 3 && !followUpQuestionIndex.value)
-        )
+        const isFirst = !followUpQuestionIndex.value
+
+        const questionsLength = question.followUpQuestions?.length || 0
+
+        return questionsLength < 2 || (isFirst && questionsLength < 3)
       }
 
       return true
@@ -241,14 +240,7 @@ export default defineComponent({
             ? 'show'
             : 'goto'
 
-        //      followUpQuestionIndex.value + 2 >=
-        // question.value.followUpQuestions.length
-
-        console.log(
-          firstAction,
-          followUpQuestionIndex.value - 2 >=
-            question.value.followUpQuestions.length
-        )
+        modelSync.value.conditionals.action = firstAction
       }
     }
 
@@ -258,7 +250,7 @@ export default defineComponent({
       modelSync,
       disableConditionalLogic,
       isLinearScale,
-      conditionalLogiOptions,
+      conditionalLogicActions,
       onConditionalLogic,
     }
   },
@@ -358,7 +350,7 @@ export default defineComponent({
         v-model="modelSync.conditionals"
         :follow-up-question-id="modelSync.id"
         :question-id="questionId"
-        :action-options="conditionalLogiOptions"
+        :action-options="conditionalLogicActions"
       />
     </FadeTransition>
 

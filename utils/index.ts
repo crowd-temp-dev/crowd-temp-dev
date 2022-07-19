@@ -867,6 +867,7 @@ export const userWorkRole = [
   'UX Designer',
   'Product Designer',
   'Product Manager',
+  'Business Manager',
   'Scrum Master',
   'Marketer',
   'Software Engineer',

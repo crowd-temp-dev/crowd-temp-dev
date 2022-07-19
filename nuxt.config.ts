@@ -142,9 +142,9 @@ export default {
     middleware: ['auth-page', 'settings-page', 'create-test'],
   },
 
-  loading: {
-    color: '#267DFF',
-  },
+  loading: '~/components/Base/LoadingBar',
+
+  loadingIndicator: '~/assets/html/loading-indicator.html',
 
   server: {
     ...(process.env.NODE_ENV === 'production' ? {} : { port: 2222 }),

@@ -2,7 +2,7 @@ import { convertToMilliSecond } from '.'
 export type Duration = `${number}${'ms' | 's' | ''}` | number
 
 export default class Countdown {
-  private duration = 0
+  public duration = 0
   private onDone: () => Countdown
   private onUpdate: () => Countdown
   private timeoutId = null
@@ -110,7 +110,7 @@ export default class Countdown {
 
       this.stopped = true
 
-      this.clearTimeout().onDone()
+      this.clearTimeout().onUpdate().onDone()
     }
 
     if (typeof this.onUpdate === 'function') {

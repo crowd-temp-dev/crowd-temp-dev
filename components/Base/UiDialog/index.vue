@@ -335,7 +335,7 @@ export default defineComponent({
               <!-- content header -->
               <div v-if="showHeader" class="header">
                 <p
-                  class="flex-grow text-display-small-sm md:text-display-small"
+                  class="flex-grow text-display-small-sm md:text-display-small font-sf-pro-display"
                 >
                   <slot name="header" v-bind="payload">
                     {{ title }}

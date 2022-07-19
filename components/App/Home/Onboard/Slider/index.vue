@@ -119,7 +119,6 @@ export default defineComponent({
           :key="i"
           class="h-182 w-[580px] shadow-2 rounded-lg flex shrink-0"
         >
-          <!-- image -->
           <div
             class="relative flex items-center justify-center rounded-l-lg overflow-hidden w-fit shrink-0"
           >
