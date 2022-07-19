@@ -77,7 +77,7 @@ export default defineComponent({
 <template>
   <header
     id="landing-page-header"
-    class="sl:shadow-2 sl:sticky sl:top-0 z-10 bg-surface-default px-16 md:px-20 sl:h-56 md:h-[initial]"
+    class="sl:shadow-2 sl:sticky sl:top-0 z-10 bg-surface-default px-10 md:px-20 sl:h-56 md:h-[initial]"
     :class="{
       // make header sticky for auth pages
       'shadow-2 sticky top-0 z-10 bg-surface-default': mobileAuthPage,
@@ -89,7 +89,7 @@ export default defineComponent({
       class="max-w-[1110px] flex items-center justify-between mx-auto md:h-58 md:pt-0"
       :class="{
         // make header sticky for auth pages
-        'h-60 px-16': mobileAuthPage,
+        'h-60 px-10': mobileAuthPage,
         'pt-22': !mobileAuthPage,
       }"
     >
