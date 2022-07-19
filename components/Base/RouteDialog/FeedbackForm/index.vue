@@ -187,13 +187,18 @@ export default defineComponent({
 
 <template>
   <UiDialog
-    :key="$route.path"
+    :key="$route.path + $breakpoint.is"
     :model-value="dialogActive"
-    :title="dialogTitle"
     :body-class="$breakpoint.isMobile ? undefined : 'pb-0'"
     v-bind="mobileDialogProps"
     @on-close="removeDialogQuery"
   >
+    <template #header>
+      <span class="font-semibold lg:font-normal">
+        {{ dialogTitle }}
+      </span>
+    </template>
+
     <FormLayout
       v-slot="{ idAndError }"
       :name="`route-form-${dialogTitle}`"
