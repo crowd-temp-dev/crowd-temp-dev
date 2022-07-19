@@ -171,8 +171,6 @@ export default defineComponent({
     const contentEntered = ref(modelSync.value)
 
     const positionPopper = async () => {
-      await nextFrame()
-
       if (
         getTriggerRef.value &&
         contentRef.value &&
