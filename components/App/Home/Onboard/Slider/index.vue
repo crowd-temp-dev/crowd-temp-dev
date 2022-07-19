@@ -117,6 +117,7 @@ export default defineComponent({
 <template>
   <div class="relative isolate group">
     <ul
+      :key="ratingLength"
       class="mb-20 flex space-x-16 transition-transform transform-gpu duration-300 spring-ease"
       :class="[translateXClass]"
     >

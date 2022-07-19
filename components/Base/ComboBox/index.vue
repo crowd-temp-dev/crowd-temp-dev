@@ -385,16 +385,24 @@ export default defineComponent({
     ) => {
       await nextTick()
 
+      const toggle = (action: 'add' | 'remove') => {
+        $store.commit(
+          `app/${action === 'add' ? 'addToDialogs' : 'removeFromDialogs'}`,
+          id.value
+        )
+      }
+
       if (action === 'remove') {
         popperInstance.value?.destroy()
 
         popperInstance.value = null
+      } else {
+        toggle('remove')
+
+        await nextTick()
       }
 
-      $store.commit(
-        `app/${action === 'add' ? 'addToDialogs' : 'removeFromDialogs'}`,
-        id.value
-      )
+      toggle(action)
     }
 
     const onBeforeEnter = () => {
@@ -453,11 +461,11 @@ export default defineComponent({
     }
 
     const onAfterLeave = () => {
-      toggleStoreDialogState()
-
       popperInstance.value?.destroy()
 
       contentEntered.value = false
+
+      toggleStoreDialogState()
     }
 
     const trapTabbing = (evt: KeyboardEvent) => {
