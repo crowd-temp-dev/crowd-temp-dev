@@ -46,7 +46,7 @@ export default defineComponent({
     const countdownDone = ref(false)
 
     const glow = computed(() => {
-      return !!(percentage.value >= 70)
+      return !!(percentage.value >= 70) && !extraPercentage.value
     })
 
     const state = computed(() => _props.state)
