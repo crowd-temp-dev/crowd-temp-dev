@@ -16,6 +16,7 @@ import type {
   FeatureTitle,
   FiveSecondTestDurations,
   HTMLAttrs,
+  RouteDialog,
   VueElement,
 } from '~/types'
 import { CreateTestFormQuestion } from '~/types/form'
@@ -915,4 +916,11 @@ export const userReferrer = [
   'Product Hunt',
   'Online News',
   'Others',
+]
+
+export const validRouteDialog: RouteDialog[] = [
+  'give-feedback',
+  'request-feature',
+  'report-bug',
+  'contact-us',
 ]

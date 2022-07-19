@@ -4,11 +4,12 @@ import { NuxtError } from '@nuxt/types'
 import Button from '~/components/Base/Button/index.vue'
 import layouts from '~/mixins/layouts'
 import { AnswerTestState } from '~/store/answer-test'
+import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 
 export default defineComponent({
   name: 'DefaultLayout',
 
-  components: { Button },
+  components: { Button, FeedbackForm },
   mixins: [layouts],
 
   props: {
@@ -69,5 +70,7 @@ export default defineComponent({
     </h3>
 
     <Button :to="homePage" primary size="large"> Back to homepage </Button>
+
+    <FeedbackForm />
   </div>
 </template>

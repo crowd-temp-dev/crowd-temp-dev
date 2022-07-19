@@ -114,7 +114,7 @@ export default defineComponent({
       return triggerRef.value
     })
 
-    const id = ref(`combo-${uid()}`)
+    const id = ref(uid('combo-'))
 
     const props = computed(() => _props)
 

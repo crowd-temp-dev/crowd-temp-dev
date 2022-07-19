@@ -20,7 +20,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="min-h-screen grid pt-40 md:pt-118 justify-center md:grid-cols-[750px] pb-100 px-10 md:px-0"
+    class="min-h-screen grid pt-40 md:pt-[min(7%,112px)] xxl:pt-118 justify-center md:grid-cols-[750px] pb-100 px-10 md:px-0"
     :class="{ 'bg-sky-light': $route.name !== 'auth-account-confirmed' }"
   >
     <NuxtChild />

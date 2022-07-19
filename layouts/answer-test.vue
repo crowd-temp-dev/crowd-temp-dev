@@ -5,10 +5,11 @@ import { answerTestMiddleware } from '~/utils/layout'
 import layouts from '~/mixins/layouts'
 import { AnswerTestState } from '~/store/answer-test'
 import { answerTestLoadingId, scrollMain } from '~/utils'
+import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 
 export default defineComponent({
   name: 'AnswerTestLayout',
-  components: { HeaderLogo },
+  components: { HeaderLogo, FeedbackForm },
   mixins: [layouts],
   middleware: answerTestMiddleware,
   // transition: 'answer-page-transition',
@@ -26,9 +27,12 @@ export default defineComponent({
       })
     }
 
-    watch(() => root.$route.fullPath, () => {
-      scrollMain(0)
-    })
+    watch(
+      () => root.$route.fullPath,
+      () => {
+        scrollMain(0)
+      }
+    )
   },
 })
 </script>
@@ -53,6 +57,8 @@ export default defineComponent({
       >
         <NuxtChild />
       </main>
+
+      <FeedbackForm />
     </div>
   </div>
 </template>

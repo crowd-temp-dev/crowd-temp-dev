@@ -29,6 +29,8 @@ export default defineComponent({
       Feel free to reach out to us if you need any support or have any questions
     </p>
 
-    <Button to="#" size="large"> Contact our support team </Button>
+    <Button to="/?dialog=contact-us" replace size="large">
+      Contact our support team
+    </Button>
   </section>
 </template>

@@ -15,11 +15,20 @@ const mutation: MutationTree<AppState> = {
 
   addToDialogs(state, id: string) {
     state.dialogs = Array.from(new Set([...state.dialogs, id])).filter((id) => {
+      if (id.startsWith('dialog-')) {
+        return true
+      }
+
       const rootEl = document.getElementById(id) as Record<string, any>
 
       if (rootEl && rootEl.__vue__) {
+        if (!('payload' in rootEl.__vue__)) {
+          return true
+        }
+
         return rootEl.__vue__.payload.active
       }
+
       return false
     })
   },
@@ -28,9 +37,17 @@ const mutation: MutationTree<AppState> = {
     state.dialogs = state.dialogs
       .filter((x) => x !== id)
       .filter((id) => {
+        if (id.startsWith('dialog-')) {
+          return true
+        }
+
         const rootEl = document.getElementById(id) as Record<string, any>
 
         if (rootEl && rootEl.__vue__) {
+          if (!('payload' in rootEl.__vue__)) {
+            return true
+          }
+
           return rootEl.__vue__.payload.active
         }
         return false

@@ -58,11 +58,19 @@ export default defineComponent({
       type: Object,
       default: () => ({}),
     },
+    rootClass: {
+      type: [String, Object],
+      default: undefined,
+    },
     contentStyle: {
       type: [String, Object],
       default: undefined,
     },
     contentClass: {
+      type: [String, Object, Array],
+      default: undefined,
+    },
+    bodyClass: {
       type: [String, Object, Array],
       default: undefined,
     },
@@ -86,9 +94,9 @@ export default defineComponent({
       default: undefined,
     },
   },
-
+  emits: ['on-close'],
   setup(_props, { emit, slots, root }) {
-    const id = ref(uid())
+    const id = ref(uid('dialog-'))
 
     const contentRef = ref<HTMLElement | null>(null)
 
@@ -116,24 +124,6 @@ export default defineComponent({
     const cleanup = () => {
       root.$store.commit('app/removeFromDialogs', id.value)
     }
-
-    watch(
-      () => root.$route.fullPath,
-      () => {
-        modelSync.value = false
-      }
-    )
-
-    watch(
-      () => modelSync.value,
-      (val) => {
-        if (val) {
-          root.$store.commit('app/addToDialogs', id.value)
-        } else {
-          cleanup()
-        }
-      }
-    )
 
     const previousActive = ref<HTMLElement | null>(null)
 
@@ -198,12 +188,18 @@ export default defineComponent({
     }
 
     const closeDialog = () => {
+      if (!modelSync.value) {
+        return
+      }
+
       if (_props.isAlert) {
         if (contentRef.value) {
           contentRef.value.focus()
         }
       } else {
         modelSync.value = false
+
+        emit('on-close')
       }
     }
 
@@ -231,6 +227,24 @@ export default defineComponent({
         _props.showFooter &&
         slots.footer?.(payload.value) &&
         slots.footer?.(payload.value).length
+    )
+
+    watch(
+      () => root.$route.fullPath,
+      () => {
+        closeDialog()
+      }
+    )
+
+    watch(
+      () => modelSync.value,
+      (val) => {
+        if (val) {
+          root.$store.commit('app/addToDialogs', id.value)
+        } else {
+          cleanup()
+        }
+      }
     )
 
     onBeforeMount(() => {
@@ -288,6 +302,7 @@ export default defineComponent({
             'bg-black/50': !hideBackdrop,
             'pointer-events-none': hideBackdrop,
           },
+          rootClass,
         ]"
         :style="{
           'z-index': `${(indexInDialogs || 1) + 100}`,
@@ -328,7 +343,7 @@ export default defineComponent({
                     }
                   : {}),
               }"
-              @keydown.esc="!isAlert && (modelSync = false)"
+              @keydown.esc="!isAlert && closeDialog"
               @wheel.stop
               @click.stop
             >
@@ -353,7 +368,7 @@ export default defineComponent({
                     aria-label="Close"
                     icon="MobileCancelMajor"
                     class="fill-icon-default w-16 h-16 shrink-0"
-                    @click="modelSync = false"
+                    @click="closeDialog"
                     v-on="events"
                   />
                 </Tooltip>
@@ -362,11 +377,14 @@ export default defineComponent({
               <!-- content body -->
               <div
                 class="body"
-                :class="{
-                  'show-header': showHeader,
-                  'show-footer': canShowFooter,
-                  'p-20': !noBodyPadding,
-                }"
+                :class="[
+                  {
+                    'show-header': showHeader,
+                    'show-footer': canShowFooter,
+                    'p-20': !noBodyPadding,
+                  },
+                  bodyClass,
+                ]"
               >
                 <slot v-bind="payload" />
               </div>
@@ -449,6 +467,14 @@ export default defineComponent({
 
 .fade-transition-leave-to .content.slide-from-right {
   @apply translate-x-[40%];
+}
+
+.fade-transition-enter .content.slide-from-bottom {
+  @apply translate-y-[90%];
+}
+
+.fade-transition-leave-to .content.slide-from-bottom {
+  @apply translate-y-[40%];
 }
 
 .content {

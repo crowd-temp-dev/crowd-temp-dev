@@ -34,7 +34,15 @@ export interface User extends UserInfo {
 
 export type DynamicObject<value> = Record<string, value>
 
-export type Breakpoints = 'xxs' | 'xs' | 'sm' | 'sl' | 'md' | 'lg' | 'xl' | 'xxl'
+export type Breakpoints =
+  | 'xxs'
+  | 'xs'
+  | 'sm'
+  | 'sl'
+  | 'md'
+  | 'lg'
+  | 'xl'
+  | 'xxl'
 
 export type BreakpointOutput = {
   is?: Breakpoints
@@ -142,3 +150,9 @@ export type RenderFunction = (
 ) => VNode
 
 export type HTMLElementTagNames = keyof HTMLElementTagNameMap
+
+export type RouteDialog =
+  | 'give-feedback'
+  | 'request-feature'
+  | 'report-bug'
+  | 'contact-us'

@@ -139,7 +139,7 @@ export default {
   },
 
   router: {
-    middleware: ['auth-page', 'settings-page', 'create-test'],
+    middleware: ['auth-page', 'settings-page', 'create-test', 'route-dialog'],
   },
 
   loading: '~/components/Base/LoadingBar',

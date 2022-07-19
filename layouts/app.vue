@@ -11,6 +11,7 @@ import AlertDialog from '~/components/Base/AlertDialog/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Form from '~/components/App/SetupProfile/Form/index.vue'
 import { RootState } from '~/store'
+import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 // import LoadingBar from '~/components/Base/LoadingBar/index.vue'
 
 export default defineComponent({
@@ -23,7 +24,7 @@ export default defineComponent({
     AlertDialog,
     FadeTransition,
     Form,
-    // LoadingBar,
+    FeedbackForm,
   },
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
@@ -198,5 +199,7 @@ export default defineComponent({
       :actions="$alert.actions"
       @update:modelValue="(val) => ($alert.active = val)"
     />
+
+    <FeedbackForm />
   </div>
 </template>

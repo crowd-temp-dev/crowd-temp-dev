@@ -3,10 +3,11 @@ import { defineComponent } from '@vue/composition-api'
 import Header from '~/components/LandingPage/Header/index.vue'
 import { notLoggedInMiddleware } from '~/utils/layout'
 import layouts from '@/mixins/layouts'
+import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 
 export default defineComponent({
   name: 'LandingPageLayout',
-  components: { Header },
+  components: { Header, FeedbackForm },
 
   mixins: [layouts],
   middleware: notLoggedInMiddleware,
@@ -28,5 +29,7 @@ export default defineComponent({
   >
     <Header />
     <NuxtChild />
+
+    <FeedbackForm />
   </div>
 </template>
