@@ -71,7 +71,9 @@ export default defineComponent({
         class="outline-none ring-offset-2 focus:ring-2 focus:ring-action-primary-default rounded-full transition-colors duration-[250ms]"
         :class="{
           'ring-2 ring-action-primary-default bg-background-selected': active,
+          'pointer-events-none': dismissing,
         }"
+        :disabled="dismissing || undefined"
         v-on="events"
       >
         <div class="relative flex-centered">

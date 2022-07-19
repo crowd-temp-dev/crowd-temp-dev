@@ -99,6 +99,8 @@ export default defineComponent({
 
       percentage.value = 0
 
+      extraPercentage.value = 0
+
       countdownDone.value = false
 
       await sleep(_props.throttle)

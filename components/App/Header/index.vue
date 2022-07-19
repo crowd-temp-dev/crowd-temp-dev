@@ -30,17 +30,18 @@ export default defineComponent({
     <header :key="$user.setupDone" class="Header">
       <HeaderLogo />
 
-      <template v-if="$user.setupDone">
-        <Search />
+      <Search v-if="$user.setupDone" />
 
-        <div class="fill-icon-default flex space-x-10 shrink-0">
-          <Notification />
+      <div
+        class="fill-icon-default flex space-x-10 shrink-0 items-center"
+        :class="{ 'justify-end': !$user.setupDone }"
+      >
+        <Notification v-if="$user.setupDone" />
 
-          <HelpButton />
+        <HelpButton v-if="$user.setupDone" />
 
-          <ProfileButton />
-        </div>
-      </template>
+        <ProfileButton />
+      </div>
     </header>
   </FadeTransition>
 </template>

@@ -17,7 +17,20 @@ export default defineComponent({
   components: { Button, Dropdown, Tooltip },
   setup(_, { root }) {
     const dropdownList = computed<DropdownList[]>(() => {
-      const { $router, $route, $store } = root
+      const { $router, $route, $store, $user } = root
+
+      const logout: DropdownList = {
+        title: 'Logout',
+        prependIcon: 'ExitMajor',
+        onClick: () => {
+          $store.dispatch('user/logout')
+        },
+      }
+
+      if (!$user.setupDone) {
+        return [logout]
+      }
+
       return [
         {
           prependIcon: 'CustomersMajor',
@@ -35,13 +48,7 @@ export default defineComponent({
           },
           disabled: $route.fullPath === '/dashboard/settings/billing',
         },
-        {
-          title: 'Logout',
-          prependIcon: 'ExitMajor',
-          onClick: () => {
-            $store.dispatch('user/logout')
-          },
-        },
+        logout,
       ]
     })
 
