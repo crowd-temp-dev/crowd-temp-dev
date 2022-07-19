@@ -64,7 +64,7 @@ export default defineComponent({
   <Dropdown v-slot="dropdown" :option="dropdownList">
     <Tooltip
       v-slot="tooltip"
-      label="Profile"
+      :label="$user.setupDone ? 'Profile' : 'Logout'"
       :disabled="dropdown.active"
       open-delay="500"
     >
