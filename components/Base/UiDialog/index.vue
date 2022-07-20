@@ -420,6 +420,11 @@ export default defineComponent({
   --fade-enter-duration: 350ms;
 }
 
+.fade-transition-enter .content,
+.fade-transition-leave .content {
+  will-change: transform;
+}
+
 .fade-transition-enter-active .content,
 .fade-transition-leave-active .content {
   @apply transition-[transform,opacity] duration-[inherit];
