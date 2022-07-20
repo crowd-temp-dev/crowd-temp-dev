@@ -21,7 +21,9 @@ export default defineComponent({
 
 <template>
   <section class="mb-80 lg:mb-162 w-full">
-    <div class="max-w-[274px] sm:max-w-[500px] lg:max-w-[initial] text-center mx-auto">
+    <div
+      class="max-w-[274px] sm:max-w-[500px] lg:max-w-[initial] text-center mx-auto"
+    >
       <h2
         class="font-sf-pro-display text-[22px] lg:text-[32px] font-semibold leading-[28px] lg:leading-[52.5px] mb-8 lg:mb-24 text-center"
       >
