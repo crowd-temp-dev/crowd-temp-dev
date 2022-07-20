@@ -162,8 +162,6 @@ export default defineComponent({
           setRouteDialogState()
 
           dialogActive.value = true
-
-          console.log(appDialogRoute.value)
         }
       } else {
         dialogActive.value = false

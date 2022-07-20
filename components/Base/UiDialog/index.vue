@@ -243,7 +243,7 @@ export default defineComponent({
     watch(
       () => modelSync.value,
       (val) => {
-        if (val) {
+        if (val) {          
           root.$store.commit('app/addToDialogs', id.value)
         } else {
           root.$store.commit('app/removeFromDialogs', id.value)
@@ -283,7 +283,7 @@ export default defineComponent({
       @after-leave="afterLeave"
     >
       <div
-        v-show="modelSync"
+        v-if="modelSync"
         v-bind="$attrs"
         class="UiDialog"
         :class="[
