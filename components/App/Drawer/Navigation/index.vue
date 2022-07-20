@@ -28,7 +28,7 @@ export default defineComponent({
     const replaceRoute = ref(false)
 
     const linkGroup = computed<LinkGroup[]>(() => {
-      const routeQuery: RouteDialog = root.$route.query.dialog
+      const routeQuery = root.$route.query.dialog as RouteDialog
 
       return [
         {
