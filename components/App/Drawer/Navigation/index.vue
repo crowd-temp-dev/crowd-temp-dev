@@ -3,48 +3,97 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 import TrapFocus from 'ui-trap-focus'
 import Button from '~/components/Base/Button/index.vue'
 import { sleep, oneFrame } from '~/utils'
+import SlackIcon from '~/components/Base/Icon/SlackIcon.vue'
 
 interface Link {
-  icon: 'HomeMajor' | 'OrdersMajor' | 'ReceiptMajor' | 'SettingsMajor'
-  title: 'Home' | 'Notes' | 'Billing' | 'Settings'
+  icon: string
+  customIcon?: boolean
+  title: string
   to: string
   active?: boolean
   badge?: `${number}`
 }
 
+interface LinkGroup {
+  title?: string
+  links: Link[]
+}
+
 export default defineComponent({
   name: 'DrawerNavigation',
-  components: { Button },
+  components: { Button, SlackIcon },
   setup(_, { root }) {
     const replaceRoute = ref(false)
 
-    const links = computed<Link[]>(() => [
+    const linkGroup = computed<LinkGroup[]>(() => [
       {
-        icon: 'HomeMajor',
-        title: 'Home',
-        active: /^\/dashboard$|^(?:\/dashboard\/create-test\/?|\/notification\/?)/.test(
-          root.$route.path
-        ),
-        to: '/dashboard',
+        links: [
+          {
+            icon: 'HomeMajor',
+            title: 'Home',
+            active:
+              /^\/dashboard$|^(?:\/dashboard\/create-test\/?|\/notification\/?)/.test(
+                root.$route.path
+              ),
+            to: '/dashboard',
+          },
+          {
+            icon: 'OrdersMajor',
+            title: 'Notes',
+            badge: '0',
+            to: '/dashboard/notes',
+            active: /^\/dashboard\/notes\/?/.test(root.$route.path),
+          },
+          {
+            icon: 'AppsMajor',
+            title: 'Integrations',
+            to: '/dashboard/settings/billing',
+            active: /^\/dashboard\/settings\/billing\/?/.test(root.$route.path),
+          },
+          {
+            icon: 'DeleteMajor',
+            title: 'Trash',
+            to: '/dashboard/settings/billing',
+            active: /^\/dashboard\/settings\/billing\/?/.test(root.$route.path),
+          },
+          {
+            icon: 'SettingsMajor',
+            title: 'Settings',
+            to: '/dashboard/settings',
+            active: /^\/dashboard\/settings\/?/.test(root.$route.path),
+          },
+        ],
       },
       {
-        icon: 'OrdersMajor',
-        title: 'Notes',
-        badge: '0',
-        to: '/dashboard/notes',
-        active: /^\/dashboard\/notes\/?/.test(root.$route.path),
-      },
-      {
-        icon: 'ReceiptMajor',
-        title: 'Billing',
-        to: '/dashboard/settings/billing',
-        active: /^\/dashboard\/settings\/billing\/?/.test(root.$route.path),
-      },
-      {
-        icon: 'SettingsMajor',
-        title: 'Settings',
-        to: '/dashboard/settings',
-        active: /^\/dashboard\/settings\/?/.test(root.$route.path),
+        title: 'Beta',
+        links: [
+          {
+            icon: 'EmailNewsletterMajor',
+            title: 'Give feedback',
+            to: '?dialog=give-feedback',
+          },
+          {
+            icon: 'BugMajor',
+            title: 'Report a bug',
+            to: '?dialog=report-bug',
+          },
+          {
+            icon: 'ConfettiMajor',
+            title: 'Request a feature',
+            to: '?dialog=request-feature',
+          },
+          {
+            icon: 'EmailMajor',
+            title: 'Contact us',
+            to: '?dialog=contact-us',
+          },
+          {
+            icon: 'SlackIcon',
+            title: 'Join our Slack',
+            to: '#',
+            customIcon: true,
+          },
+        ],
       },
     ])
 
@@ -65,15 +114,19 @@ export default defineComponent({
         })
           .init(evt)
           .then(async (el) => {
-            el?.click()
+            if (el) {
+              if (el.closest('.main-section')) {
+                el.click()
+              }
 
-            await sleep(oneFrame * 2)
+              await sleep(oneFrame * 2)
 
-            el?.focus()
+              el.focus()
 
-            await sleep(oneFrame * 2)
+              await sleep(oneFrame * 2)
 
-            replaceRoute.value = false
+              replaceRoute.value = false
+            }
           })
       }
     }
@@ -87,67 +140,81 @@ export default defineComponent({
       }
     }
 
-    return { links, arrowFocus, focusOnLinkClick, replaceRoute }
+    return { linkGroup, arrowFocus, focusOnLinkClick, replaceRoute }
   },
 })
 </script>
 
 <template>
-  <nav class="DrawerNav">
-    <ul class="grid gap-y-10" @keydown="arrowFocus">
-      <li v-for="link in links" :key="link.to" class="px-8 relative">
-        <Transition name="indicator-transition" mode="out-in">
-          <div
-            v-if="link.active"
-            aria-hidden="true"
-            class="bg-action-primary-default rounded-r w-3 h-full absolute left-0 top-0"
-          />
-        </Transition>
+  <nav class="DrawerNav hide-scrollbar" @keydown="arrowFocus">
+    <template v-for="({ links, title }, i) in linkGroup">
+      <h2
+        v-if="title"
+        :key="title + i"
+        class="uppercase text-text-disabled text-center truncate text-[12px] leading-[16px] font-semibold mb-16 mt-72 xl:mt-96"
+      >
+        {{ title }}
+      </h2>
 
-        <Button
-          :to="link.to"
-          plain-action
-          full-width
-          class="link-button h-32 min-h-[32px]"
-          :class="{
-            'text-action-primary-default': link.active,
-          }"
-          @keyup.enter="(evt) => evt.currentTarget.click()"
-          @click.native="focusOnLinkClick"
+      <ul
+        :key="i"
+        class="grid gap-y-10"
+        :class="{
+          'sticky top-24 z-1 bg-surface-default pb-24 main-section': i === 0,
+        }"
+      >
+        <li
+          v-for="link in links"
+          :key="link.title"
+          class="flex-centered relative"
         >
-          <div class="flex items-center justify-between w-full">
-            <PIcon
-              :source="link.icon"
-              class="mr-18"
-              :class="{ 'fill-icon': link.active }"
+          <Transition
+            v-if="'active' in link"
+            name="indicator-transition"
+            mode="out-in"
+          >
+            <div
+              v-if="link.active"
+              aria-hidden="true"
+              class="bg-action-primary-default rounded-r w-3 h-full absolute left-0 top-0"
             />
+          </Transition>
 
-            <span class="inline-block flex-grow text-left">
-              {{ link.title }}
+          <Tooltip
+            v-slot="{ events }"
+            :label="link.title"
+            placement="right"
+            content-class="!text-body !rounded-[6px] !py-6 !px-12"
+            arrow-size="7px"
+          >
+            <span v-on="events">
+              <Button
+                :to="link.to"
+                plain-action
+                class="link-button h-32 min-h-[32px] w-40 min-w-[40px] p-0"
+                :class="{
+                  'text-action-primary-default': link.active,
+                }"
+                :icon="link.customIcon ? undefined : link.icon"
+                @keyup.enter="(evt) => evt.currentTarget.click()"
+                @keyup.space.prevent="(evt) => evt.currentTarget.click()"
+                @click.native="(evt) => i === 0 && focusOnLinkClick(evt)"
+              >
+                <Component :is="link.icon" v-if="link.customIcon" />
+              </Button>
             </span>
-
-            <span
-              v-if="link.badge"
-              class="ml-18 rounded-[9px] bg-surface-neutral-default h-18 w-18 py-1 px-5 flex items-center justify-center text-text-default"
-            >
-              {{ link.badge }}
-            </span>
-          </div>
-        </Button>
-      </li>
-    </ul>
+          </Tooltip>
+        </li>
+      </ul>
+    </template>
   </nav>
 </template>
 
 <style scoped lang="postcss">
 .DrawerNav {
-  @apply h-full row-start-2 col-start-1 col-end-2 py-24 bg-surface-default;
+  @apply h-full row-start-2 col-start-1 col-end-2 py-24 bg-surface-default max-h-full overflow-y-auto isolate overflow-x-hidden pr-[1.5px];
   box-shadow: inset -1px 0px 0px #e4e5e7;
   width: var(--sidebar-width);
-}
-
-.link-button >>> .Polaris-Button__Text {
-  width: 100%;
 }
 
 .indicator-transition-enter,

@@ -138,7 +138,7 @@ const actions: ActionTree<UserState, RootState> = {
 
       // clear createTest form
       !($store.state as RootState).testSuite.create.empty &&
-        $store.commit('testSuite/create/reset')
+        $store.commit('testSuite/create/reset', false)
     } else {
       showToasts($pToast, message)
 

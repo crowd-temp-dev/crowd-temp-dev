@@ -61,7 +61,11 @@ const mutations: MutationTree<TestSuiteCreateState> = {
 }
 
 const actions: ActionTree<TestSuiteCreateState, RootState> = {
-  async resetForm({ commit }) {
+  async resetForm({ commit, rootState }) {
+    if (!(rootState.user.info || {}).id) {
+      return
+    }
+
     commit('resetForm')
 
     commit('setEmpty', true)
@@ -75,6 +79,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
       name: 'New Test',
       description: '',
       created: false,
+      userId: rootState.user.info.id,
     })
   },
 
@@ -232,6 +237,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
         app.$store.commit('testSuite/detail/setData', {
           ...data.details,
           description: data.form.testDetails?.description || '',
+          userId: (rootState.user.info || {}).id,
         })
 
         app.$store.commit(
@@ -286,6 +292,7 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
     app.$store.commit('testSuite/detail/setData', {
       name: `${rootState.testSuite.detail.name} copy`,
       id: newId,
+      userId: (rootState.user.info || {}).id,
     })
 
     await app.$nextTick()

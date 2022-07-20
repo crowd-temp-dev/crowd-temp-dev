@@ -7,6 +7,7 @@ export interface TestSuiteDetail {
   loading: boolean
   error: boolean
   id: string
+  userId: string
   name: string
   published: boolean
   description: string
@@ -21,6 +22,7 @@ const state = (): TestSuiteDetail => ({
   loading: false,
   error: false,
   id: null,
+  userId: null,
   name: '',
   published: null,
   description: null,
@@ -44,6 +46,7 @@ const mutations: MutationTree<TestSuiteDetail> = {
   setData(
     state,
     payload: {
+      userId?: string
       published?: boolean
       name?: string
       description?: string
@@ -63,6 +66,7 @@ const mutations: MutationTree<TestSuiteDetail> = {
       participants = state.participants,
       shareLink = state.shareLink,
       favourite = state.favourite,
+      userId = state.userId,
     } = payload
 
     state.description = description
@@ -73,6 +77,7 @@ const mutations: MutationTree<TestSuiteDetail> = {
     state.participants = participants
     state.shareLink = shareLink
     state.favourite = favourite
+    state.userId = userId
   },
 }
 
@@ -85,6 +90,7 @@ const actions: ActionTree<TestSuiteDetail, RootState> = {
     const { app } = this.$router
 
     const hasUnfinishedTest =
+      (rootState.user.info || {}).id === state.id &&
       !state.created &&
       id !== state.id &&
       !!rootState.testSuite.create.section.items.length

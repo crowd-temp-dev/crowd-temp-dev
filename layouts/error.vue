@@ -71,6 +71,8 @@ export default defineComponent({
 
     <Button :to="homePage" primary size="large"> Back to homepage </Button>
 
-    <FeedbackForm />
+    <DelayMount>
+      <FeedbackForm />
+    </DelayMount>
   </div>
 </template>

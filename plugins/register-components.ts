@@ -16,6 +16,7 @@ import Spinner from '~/components/Base/Spinner/index.vue'
 import Skeleton from '~/components/Base/Skeleton/index.vue'
 import VHTML from '~/components/Base/VHTML/index.vue'
 import Avatar from '~/components/Base/Avatar/index.vue'
+import DelayMount from '~/components/Base/DelayMount/index.vue'
 
 Vue.component('TextField', TextField)
 Vue.component('Checkbox', Checkbox)
@@ -32,3 +33,4 @@ Vue.component('Spinner', Spinner)
 Vue.component('Skeleton', Skeleton)
 Vue.component('VHTML', VHTML)
 Vue.component('Avatar', Avatar)
+Vue.component('DelayMount', DelayMount)

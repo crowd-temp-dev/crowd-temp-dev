@@ -68,7 +68,7 @@ export default defineComponent({
       }"
     />
 
-    <div class="p-20 bg-surface-default">
+    <div class="p-20 bg-surface-default w-full">
       <div class="flex items-center justify-between mb-4">
         <span
           class="rounded-[10px] h-24 flex-centered px-8"

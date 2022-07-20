@@ -81,11 +81,6 @@ export default defineComponent({
 
             return form.checkValidity()
           } else {
-            // disable fields
-            // allForms.forEach((form) => {
-            //   form.classList.add('opacity-70', 'grayscale')
-            // })
-
             formElements.forEach((element) => {
               element.dataset.previousDisabled = String(
                 element.disabled ? 1 : 0
@@ -95,11 +90,6 @@ export default defineComponent({
 
             // submit
             $store.dispatch('testSuite/create/submit').then(() => {
-              // enable fields
-              // allForms.forEach((form) => {
-              //   form.classList.remove('opacity-70', 'grayscale')
-              // })
-
               formElements.forEach((element) => {
                 element.dataset.previousDisabled = String(
                   element.disabled ? 1 : 0
@@ -135,6 +125,7 @@ export default defineComponent({
 <template>
   <div id="create-test-form-wrapper" class="grid gap-y-20">
     <TestDetails />
+    
     <WelcomeScreen />
 
     <template v-if="questions.length">

@@ -48,9 +48,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    class="max-w-[933px] px-32 xl:px-64 xxl:px-0 pb-112 min-w-[min(100%,933px)]"
-  >
+  <div class="max-w-[933px] pb-112 min-w-[min(100%,933px)]">
     <div
       class="grid gap-y-32"
       :class="{

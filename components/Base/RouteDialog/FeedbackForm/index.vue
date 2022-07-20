@@ -187,7 +187,8 @@ export default defineComponent({
 
 <template>
   <UiDialog
-    :key="$route.path + $breakpoint.is"
+    v-if="$appState.mounted"
+    :key="$route.path + $breakpoint.is + $nuxt.layoutName"
     :model-value="dialogActive"
     :body-class="$breakpoint.isMobile ? undefined : 'pb-0'"
     v-bind="mobileDialogProps"

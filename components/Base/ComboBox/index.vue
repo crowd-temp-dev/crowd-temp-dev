@@ -12,7 +12,7 @@ import { createPopper } from '@popperjs/core'
 import UiTrapFocus from 'ui-trap-focus'
 import type { Instance as PopperInstance, Placement } from '@popperjs/core'
 import FadeTransition from '../FadeTransition/index.vue'
-import { nextFrame, oneFrame, sleep, uid } from '~/utils'
+import { convertToMilliSecond, nextFrame, oneFrame, sleep, uid } from '~/utils'
 import eventKey from '~/utils/eventKey'
 import type { Duration } from '~/types'
 
@@ -171,6 +171,8 @@ export default defineComponent({
     const contentEntered = ref(modelSync.value)
 
     const positionPopper = async () => {
+      await sleep(oneFrame)
+
       if (
         getTriggerRef.value &&
         contentRef.value &&
@@ -221,7 +223,7 @@ export default defineComponent({
 
       modelSync.value = value
 
-      await sleep(oneFrame)
+      await nextTick()
 
       if (contentRef.value && getTriggerRef.value && value) {
         await positionPopper()
@@ -245,7 +247,15 @@ export default defineComponent({
 
     const open = () => !modelSync.value && toggle(true)
 
-    const close = () => modelSync.value && toggle(false)
+    const close = async () => {
+      modelSync.value && toggle(false)
+
+      await sleep(convertToMilliSecond(_props.leaveDuration))
+
+      if (!modelSync.value) {
+        $store.commit(`app/removeFromDialogs`, id.value)
+      }
+    }
 
     const payload = computed<ComboBoxPayload>(() => ({
       toggle,

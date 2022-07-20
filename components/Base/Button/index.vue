@@ -17,6 +17,7 @@ export default defineComponent({
     primary: Boolean,
     disabled: Boolean,
     autofocus: Boolean,
+    plain: Boolean,
     destructive: Boolean,
     loading: Boolean,
     readonly: Boolean,
@@ -50,6 +51,7 @@ export default defineComponent({
   <PButton
     ref="rootRef"
     v-bind="$attrs"
+    :plain="plain"
     :type="readonly ? 'button' : $attrs.type || 'button'"
     :aria-readonly="readonly || undefined"
     :tabindex="`${disabled || loading || readonly ? -1 : $attrs.tabindex || 0}`"
@@ -89,6 +91,7 @@ export default defineComponent({
     <div
       v-if="loading"
       class="flex-centered absolute h-full w-full inset-0 text-[24px] fade-appear"
+      :class="{ 'text-icon-default': !primary && !destructive && !plain }"
     >
       <Spinner />
     </div>

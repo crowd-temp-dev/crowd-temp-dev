@@ -52,7 +52,7 @@ export default defineComponent({
 
           const { top, bottom } = rootEl.getBoundingClientRect()
 
-          if (top < 56 + 76 || bottom > innerHeight) {
+          if (top < 56 + 64 || bottom > innerHeight) {
             rootRef.value.scrollIntoView({
               block: 'center',
               behavior: 'smooth',

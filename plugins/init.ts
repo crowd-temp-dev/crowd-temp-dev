@@ -1,9 +1,22 @@
 import Vue from 'vue'
 import { Plugin } from '@nuxt/types'
 import { oneFrame, setClientOs, sleep } from '~/utils'
+import { AppState } from '~/store/app/state'
+import { RootState } from '~/store'
 
-const init: Plugin = function ({ app, store, $axios, $user }) {
+const init: Plugin = function ({ app, store, $axios, $user }, inject) {
   if (process.client) {
+    const appStateProxy = new Proxy(
+      {},
+      {
+        get(_, path: keyof AppState) {
+          return (store.state as RootState).app[path]
+        },
+      }
+    )
+
+    inject('appState', appStateProxy)
+
     window.history.scrollRestoration = 'auto'
 
     // add html id

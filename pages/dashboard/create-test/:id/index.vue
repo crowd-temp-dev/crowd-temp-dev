@@ -67,10 +67,9 @@ export default defineComponent({
         const nextSection = document.getElementById(section.id)
 
         if (nextSection) {
-          const { appHeader, layoutHeader, layoutPadding } = layoutSizing
+          const { layoutPadding } = layoutSizing
 
-          const scrollY =
-            nextSection.offsetTop - appHeader - layoutHeader - layoutPadding
+          const scrollY = nextSection.offsetTop - layoutPadding
 
           scrollMain(scrollY)
         }

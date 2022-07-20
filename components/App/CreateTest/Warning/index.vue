@@ -70,7 +70,7 @@ export default defineComponent({
 
 <template>
   <FadeTransition :duration="{ leave: 1, enter: 200 }">
-    <div v-if="showWarning" class="sticky top-76 z-1">
+    <div v-if="showWarning" class="sticky top-64 z-1">
       <div
         class="bg-[#202123] text-surface-default shadow-3 h-56 px-32 flex items-center justify-between fill-before before:bg-current before:opacity-0 before:animate-[pulse_250ms_2_300ms] relative"
         :style="{ '--fade-transition-duration': '150ms' }"

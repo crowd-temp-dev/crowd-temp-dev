@@ -10,8 +10,8 @@ import {
 import { createPopper } from '@popperjs/core'
 import type { Instance as PopperInstance, Placement } from '@popperjs/core'
 import FadeTransition from '../FadeTransition/index.vue'
-import { oneFrame, sleep, uid } from '~/utils'
-import type { Duration, LikeNumber } from '~/types'
+import { convertToMilliSecond, oneFrame, sleep, uid } from '~/utils'
+import type { Duration } from '~/types'
 
 export interface TooltipPayload {
   toggle: (val?: boolean) => void
@@ -29,11 +29,11 @@ export default defineComponent({
   },
   props: {
     closeDelay: {
-      type: [String, Number] as unknown as () => LikeNumber,
+      type: [String, Number] as unknown as () => Duration,
       default: 0,
     },
     openDelay: {
-      type: [String, Number] as unknown as () => LikeNumber,
+      type: [String, Number] as unknown as () => Duration,
       default: 300,
     },
     label: {
@@ -67,6 +67,14 @@ export default defineComponent({
     disabled: Boolean,
     invert: Boolean,
     triggerClass: {
+      type: String,
+      default: undefined,
+    },
+    contentClass: {
+      type: String,
+      default: undefined,
+    },
+    arrowSize: {
       type: String,
       default: undefined,
     },
@@ -178,7 +186,7 @@ export default defineComponent({
       }
     }
 
-    const delayedToggle = (callback: Function, delay: LikeNumber) => {
+    const delayedToggle = (callback: Function, delay: Duration) => {
       if (timeout.value) {
         clearTimeout(timeout.value)
       }
@@ -189,7 +197,7 @@ export default defineComponent({
         timeout.value && clearTimeout(timeout.value)
 
         timeout.value = null
-      }, Number(delay)) as unknown as NodeJS.Timeout
+      }, convertToMilliSecond(delay)) as NodeJS.Timeout
     }
 
     const open = () => delayedToggle(() => toggle(true), props.value.openDelay)
@@ -315,12 +323,19 @@ export default defineComponent({
             '--fade-leave-duration': leaveDuration,
           }"
           class="content text-sub-heading px-8 py-4 rounded pointer-events-none"
-          :class="{
-            'bg-base-on-surface text-base-surface': !invert,
-            'bg-surface-default': invert,
-          }"
+          :class="[
+            {
+              'bg-base-on-surface text-base-surface': !invert,
+              'bg-surface-default': invert,
+            },
+            contentClass,
+          ]"
         >
-          <div data-popper-arrow class="arrow" />
+          <div
+            data-popper-arrow
+            class="arrow"
+            :style="{ '--size': arrowSize || undefined }"
+          />
           <slot name="content" v-bind="payload">
             {{ label }}
           </slot>
@@ -333,7 +348,6 @@ export default defineComponent({
 <style scoped>
 .arrow,
 .arrow::before {
-  --size: 6px;
   position: absolute;
   width: var(--size);
   height: var(--size);
@@ -344,6 +358,7 @@ export default defineComponent({
 
 .arrow {
   visibility: hidden;
+  --size: 6px;
 }
 
 .arrow::before {

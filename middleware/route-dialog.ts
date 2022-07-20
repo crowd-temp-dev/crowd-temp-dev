@@ -4,14 +4,24 @@ import { validRouteDialog } from '~/utils'
 
 const redirectAuthPage: Middleware = function ({ redirect, route }) {
   // check the $route.query.dialog value
-  if (route.query.dialog) {
-    if (!validRouteDialog.includes(route.query.dialog as RouteDialog)) {
+  const dialogRoute = route.query.dialog as RouteDialog
+
+  if (dialogRoute) {
+    const removeDialogRoute = () =>
       redirect({
         query: {
           ...route.query,
           dialog: undefined,
         },
       })
+
+    if (!validRouteDialog.includes(dialogRoute)) {
+      removeDialogRoute()
+    } else if (
+      dialogRoute !== 'contact-us' &&
+      !route.path.startsWith('/dashboard')
+    ) {
+      removeDialogRoute()      
     }
   }
 }

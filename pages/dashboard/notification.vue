@@ -94,8 +94,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="mt-32 mb-96 mx-32 lg:mx-32 w-full">
-    <div class="max-w-[734px] xxl:mx-auto">
+  <div class="mt-32 mb-96 mx-auto max-w-app w-full">
+    <div class="max-w-[734px] xxl:mx-auto flex flex-col">
       <Notification
         v-for="(item, i) in list"
         :key="i"
@@ -106,6 +106,7 @@ export default defineComponent({
         :actions="item.action"
         :divide="i < list.length - 1"
         read
+        class="w-full grow"
       ></Notification>
     </div>
   </div>

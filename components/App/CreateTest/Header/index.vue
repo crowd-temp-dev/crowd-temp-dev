@@ -83,16 +83,16 @@ export default defineComponent({
 <template>
   <div>
     <div class="flex items-center">
-      <Tooltip v-slot="{ events }" label="To home page">
+      <!-- <Tooltip v-slot="{ events }" label="To home page">
         <Button
           icon="ArrowLeftMinor"
           aria-label="To home page"
           to="/dashboard"
           v-on="events"
         />
-      </Tooltip>
+      </Tooltip> -->
       <h2
-        class="ml-16 mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
+        class="mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
       >
         <Skeleton
           :loading="!testTitle"
@@ -102,6 +102,7 @@ export default defineComponent({
             v-slot="{ events }"
             label="Click to edit"
             :disabled="!enableEditing"
+            open-delay="50"
           >
             <EditableText
               fallback="New Test"
@@ -166,11 +167,11 @@ export default defineComponent({
         </Button>
       </Dropdown>
 
-      <PButtonGroup segmented>
+      <!-- <PButtonGroup segmented>
         <Button icon="ChevronLeftMinor" disabled />
 
         <Button icon="ChevronRightMinor" disabled />
-      </PButtonGroup>
+      </PButtonGroup> -->
     </div>
   </div>
 </template>

@@ -57,7 +57,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="grid grid-cols-[1fr,auto] grid-flow-col gap-x-32 max-w-app mx-auto px-32 xl:px-64 xxl:px-0 min-w-full"
+    class="grid grid-cols-[1fr,auto] grid-flow-col gap-x-32 max-w-app mx-auto min-w-full"
   >
     <!-- main content -->
     <div class="grid gap-y-32">

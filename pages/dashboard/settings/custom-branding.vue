@@ -36,7 +36,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="max-w-app mx-auto px-32 xl:px-40 xxl:px-0 pb-112">
+  <div class="max-w-app mx-auto pb-112">
     <div class="grid gap-y-32 max-w-[805px]">
       <UpgradeBanner />
 

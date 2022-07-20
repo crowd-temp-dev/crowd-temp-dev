@@ -129,7 +129,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="min-h-[calc(100%-76px)] relative">
+  <div class="min-h-[calc(100%-64px)] relative">
     <LoadingBar
       :state="progressState"
       class="!left-[auto] !top-[auto] !w-[calc(100%-var(--sidebar-width))]"
@@ -180,7 +180,7 @@ export default defineComponent({
     <FadeTransition>
       <div
         :key="$store.state.testSuite.detail.id"
-        class="isolate max-w-app mx-auto px-32 lg:px-0 min-h-[calc(100%-56px)] transition-opacity"
+        class="isolate max-w-app mx-auto min-h-[calc(100%-56px)] transition-opacity"
         :class="{
           'pointer-events-none opacity-70': createTestState.submitting,
         }"

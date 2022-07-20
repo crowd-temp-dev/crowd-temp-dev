@@ -33,7 +33,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="px-32 lg:px-64 xxl:px-0 min-w-full">
+  <div class="min-w-full">
     <div class="grid gap-y-32 max-w-[800px]">
       <PlanDetails />
 

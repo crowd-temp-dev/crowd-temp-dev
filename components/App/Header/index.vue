@@ -28,7 +28,7 @@ export default defineComponent({
 <template>
   <FadeTransition :duration="{ leave: 100 }">
     <header :key="$user.setupDone" class="Header">
-      <HeaderLogo />
+      <HeaderLogo class="z-1 relative" />
 
       <Search v-if="$user.setupDone" />
 
@@ -48,7 +48,7 @@ export default defineComponent({
 
 <style scoped lang="postcss">
 .Header {
-  @apply shadow-2 bg-surface-default px-16 h-56 w-full grid justify-between items-center row-start-1 col-start-1 col-end-3 relative z-2 grid-flow-col;
+  @apply shadow-2 bg-surface-default px-16 h-56 w-full grid justify-between items-center row-start-1 col-start-1 col-end-3 relative z-2 grid-flow-col isolate;
   grid-template-columns: calc(var(--sidebar-width) - 16px) 1fr auto;
 }
 </style>

@@ -1,5 +1,5 @@
 :root {
-  --sidebar-width: 240px;
+  --sidebar-width: 56px;
   --ease-back-out: cubic-bezier(0.18, 0.89, 0.32, 1.28);
   --ease-cubic-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }

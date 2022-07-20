@@ -12,10 +12,12 @@ import type {
   ApiResponse,
   CreateTestComponent,
   CreateTestTypes,
+  Duration,
   Feature,
   FeatureTitle,
   FiveSecondTestDurations,
   HTMLAttrs,
+  LikeNumber,
   RouteDialog,
   VueElement,
 } from '~/types'
@@ -209,7 +211,7 @@ export const pseudoFocusOnMouseEnter = (evt: MouseEvent) => {
 
 export const layoutSizing = {
   appHeader: 56,
-  layoutHeader: 76,
+  layoutHeader: 64,
   layoutPadding: 32,
   get allSizes() {
     return this.appHeader + this.layoutHeader + this.layoutPadding
@@ -729,13 +731,13 @@ export const formBody = (arg?: Record<string, any>) => {
 /**
  * @name convertToMilliSeconds
  * @description
- * Converts seconds from '1000ms' to '1000' and from '1s' to 1000
- * @param {string|number} rawDuration - Formatted duration
- * @param {number} [fallback] - Fallback if rawDuration is invalid
- * @returns {number}
+ * Converts seconds from '1000ms' to 1000 and from '1s' to 1000
+ * @param { Duration | LikeNumber } rawDuration - Formatted duration
+ * @param { number } [fallback] - Fallback if rawDuration is invalid
+ * @returns `number`
  * **/
 export function convertToMilliSecond(
-  rawDuration: string | number,
+  rawDuration: Duration | LikeNumber,
   fallback?: number
 ): number {
   const parsed = parseFloat(`${rawDuration}`)

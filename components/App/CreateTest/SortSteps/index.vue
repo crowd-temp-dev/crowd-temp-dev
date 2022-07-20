@@ -1,6 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, ref } from '@vue/composition-api'
-import SmootDrag from '@/components/Base/SmoothDrag/index.vue'
+import SmoothDrag from '@/components/Base/SmoothDrag/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import {
   scrollMain,
@@ -24,7 +24,7 @@ interface DragItem {
 
 export default defineComponent({
   name: 'AppCreateTestSortSteps',
-  components: { Button, SmootDrag, FadeTransition, Tooltip },
+  components: { Button, SmoothDrag, FadeTransition, Tooltip },
   emits: ['shuffled'],
   setup(_, { root: { $store }, emit }) {
     const dragTitles = computed({
@@ -88,7 +88,7 @@ export default defineComponent({
               'shuffled',
               dragTitles.value[
                 evt.newIndex
-              ] /** listened for in pages/create-steps/index.vue **/
+              ] /** listened for in pages/dashboard/create-test/:id/index.vue **/
             )
           })
         })
@@ -102,10 +102,9 @@ export default defineComponent({
       const main = document.querySelector('main')
 
       if (nextSection && main) {
-        const { appHeader, layoutHeader, layoutPadding } = layoutSizing
+        const { layoutPadding } = layoutSizing
 
-        const scrollY =
-          nextSection.offsetTop - appHeader - layoutHeader - layoutPadding
+        const scrollY = nextSection.offsetTop - layoutPadding
 
         const scrollTo = scrollY
 
@@ -188,7 +187,7 @@ export default defineComponent({
     <aside
       class="sticky -mt-32"
       :class="{
-        'top-64 xl:top-76': !showWarning,
+        'top-64 xl:top-64': !showWarning,
         'top-120 xl:top-132': showWarning,
       }"
     >
@@ -217,8 +216,9 @@ export default defineComponent({
                 </span>
               </div>
 
-              <SmootDrag
+              <SmoothDrag
                 v-if="i === 1 && dragTitles.length"
+                v-slot="{ drag }"
                 v-model="dragTitles"
                 group-class="grid gap-y-8 mt-10"
                 @drag-end="onDragEnd"
@@ -227,9 +227,16 @@ export default defineComponent({
                   v-for="(item, itemIndex) in dragTitles"
                   :key="`${itemIndex}`"
                   class="flex items-center justify-between h-52 w-240 rounded-[3px] bg-surface-default py-4 px-10 drag-item transition-opacity active:opacity-70 cursor-pointer"
+                  :class="{
+                    'drag-handle': dragTitles.length > 1,
+                  }"
                   @click="scrollToSection(item.id)"
                 >
-                  <Tooltip v-slot="{ events }" label="Toggle expand">
+                  <Tooltip
+                    v-slot="{ events }"
+                    :disabled="drag"
+                    label="Toggle expand"
+                  >
                     <div
                       class="w-28 h-28 mr-4 shrink-0 rounded-full"
                       :style="{
@@ -247,22 +254,17 @@ export default defineComponent({
                     {{ itemIndex + 1 }}. {{ getTestFeatureTitle(item.type) }}
                   </span>
 
-                  <span
-                    :class="{
-                      'drag-handle': dragTitles.length > 1,
-                    }"
-                    @click.stop
-                  >
+                  <span @click.stop>
                     <PIcon
                       source="DragHandleMinor"
-                      class="fill-icon text-icon-default cursor-grab active:cursor-grabbing drag-handle transition-opacity"
+                      class="fill-icon text-icon-default cursor-grab active:cursor-grabbing transition-opacity"
                       :class="{
                         'opacity-30 pointer-events-none': dragTitles.length < 2,
                       }"
                     />
                   </span>
                 </div>
-              </SmootDrag>
+              </SmoothDrag>
             </div>
           </template>
         </div>

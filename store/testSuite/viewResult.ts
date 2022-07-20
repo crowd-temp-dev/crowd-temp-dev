@@ -95,7 +95,7 @@ const mutations: MutationTree<TestSuiteViewResultState> = {
 }
 
 const actions: ActionTree<TestSuiteViewResultState, RootState> = {
-  async fetch({ commit }) {
+  async fetch({ commit, rootState }) {
     commit('setLoading', true)
 
     const { app } = this.$router
@@ -120,6 +120,7 @@ const actions: ActionTree<TestSuiteViewResultState, RootState> = {
         name: data.questions.testDetails.name,
         responses: data.responses,
         created: true,
+        userId: (rootState.user.info || {}).id,
       })
 
       app.$store.commit('testSuite/create/setEmpty', false)

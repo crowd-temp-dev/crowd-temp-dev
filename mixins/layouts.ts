@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, computed } from '@vue/composition-api'
 import { AppState } from '~/store/app/state'
-import { sleep } from '~/utils'
+import { nextFrame, sleep } from '~/utils'
 
 let called = false
 
@@ -14,13 +14,15 @@ export default defineComponent({
         id: 'app-loading',
       })
 
-      onMounted(() => {
+      onMounted(async () => {
+        await sleep(200)
+
         $store.commit('app/mountApp')
 
-        sleep(200).then(() => {
-          $fullscreenLoading.hide({
-            id: 'app-loading',
-          })
+        await nextFrame()
+
+        $fullscreenLoading.hide({
+          id: 'app-loading',
         })
       })
 

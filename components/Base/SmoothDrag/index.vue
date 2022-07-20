@@ -90,7 +90,7 @@ export default defineComponent({
       :tag="groupTag"
       :class="groupClass"
     >
-      <slot :props="{ drag: drag }" />
+      <slot v-bind="{ drag: drag }" />
     </TransitionGroup>
   </Draggable>
 </template>

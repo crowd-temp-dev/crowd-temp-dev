@@ -283,7 +283,7 @@ html.fullscreen-loading {
 }
 
 .app-page-header {
-  @apply bg-surface-default px-32 xl:px-64 h-64 xl:h-76 w-full sticky top-0 z-10 duration-[400ms] transition-[opacity,transform] transform-gpu delay-[100ms];
+  @apply bg-surface-default px-32 xl:px-64 h-64 w-full sticky top-0 z-10 duration-[400ms] transition-[opacity,transform] transform-gpu delay-[100ms];
   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.05);
 }
 

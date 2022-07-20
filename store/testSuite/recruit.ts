@@ -94,6 +94,7 @@ const actions: ActionTree<TestSuiteRecruit, RootState> = {
             responses,
             shareLink,
             created,
+            userId: (rootState.user.info || {}).id,
           })
         )
 
@@ -139,6 +140,7 @@ const actions: ActionTree<TestSuiteRecruit, RootState> = {
           removeUndefinedValues({
             published,
             shareLink,
+            userId: (rootState.user.info || {}).id,
           })
         )
       }

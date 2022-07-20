@@ -12,6 +12,7 @@ import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Form from '~/components/App/SetupProfile/Form/index.vue'
 import { RootState } from '~/store'
 import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
+import DelayMount from '~/components/Base/DelayMount/index.vue'
 // import LoadingBar from '~/components/Base/LoadingBar/index.vue'
 
 export default defineComponent({
@@ -25,6 +26,7 @@ export default defineComponent({
     FadeTransition,
     Form,
     FeedbackForm,
+    DelayMount,
   },
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
@@ -200,6 +202,8 @@ export default defineComponent({
       @update:modelValue="(val) => ($alert.active = val)"
     />
 
-    <FeedbackForm />
+    <DelayMount>
+      <FeedbackForm />
+    </DelayMount>
   </div>
 </template>

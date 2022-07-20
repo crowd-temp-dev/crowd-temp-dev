@@ -58,7 +58,9 @@ export default defineComponent({
         <NuxtChild />
       </main>
 
-      <FeedbackForm />
+      <DelayMount>
+        <FeedbackForm />
+      </DelayMount>
     </div>
   </div>
 </template>

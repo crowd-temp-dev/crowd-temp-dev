@@ -121,10 +121,6 @@ export default defineComponent({
       () => indexInDialogs.value === dialogs.value.length - 1
     )
 
-    const cleanup = () => {
-      root.$store.commit('app/removeFromDialogs', id.value)
-    }
-
     const previousActive = ref<HTMLElement | null>(null)
 
     const trapFocus = (evt: KeyboardEvent) => {
@@ -229,12 +225,13 @@ export default defineComponent({
         slots.footer?.(payload.value).length
     )
 
-    watch(
-      () => root.$route.fullPath,
-      () => {
-        closeDialog()
-      }
-    )
+    const cleanup = () => {
+      root.$store.commit('app/removeFromDialogs', id.value)
+
+      closeDialog()
+    }
+
+    watch(() => root.$route.fullPath, cleanup)
 
     watch(
       () => modelSync.value,
@@ -253,11 +250,7 @@ export default defineComponent({
       }
     })
 
-    onBeforeUnmount(() => {
-      cleanup()
-
-      closeDialog()
-    })
+    onBeforeUnmount(cleanup)
 
     return {
       enter,
@@ -343,7 +336,11 @@ export default defineComponent({
                     }
                   : {}),
               }"
-              @keydown.esc="!isAlert && closeDialog"
+              @keydown.esc="
+                () => {
+                  !isAlert && closeDialog()
+                }
+              "
               @wheel.stop
               @click.stop
             >
@@ -362,6 +359,7 @@ export default defineComponent({
                   v-slot="{ events }"
                   label="Close"
                   placement="right"
+                  open-delay="500"
                 >
                   <Button
                     plain

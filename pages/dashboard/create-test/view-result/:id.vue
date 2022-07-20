@@ -91,7 +91,7 @@ export default defineComponent({
     >
       <div
         v-if="fetchingResult"
-        class="w-full flex-centered h-[calc(100vh-56px-76px-56px)]"
+        class="w-full flex-centered h-[calc(100vh-56px-64px-56px)]"
       >
         <Spinner class="text-[36px] text-text-subdued" />
       </div>

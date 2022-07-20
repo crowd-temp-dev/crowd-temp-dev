@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import FeatureExtensionCheck from '~/components/Base/Icons/FeatureExtensionCheck.vue'
+import FeatureExtensionCheck from '~/components/Base/Icon/FeatureExtensionCheck.vue'
 
 export default defineComponent({
   name: 'LandinPageFeaturesExtension',

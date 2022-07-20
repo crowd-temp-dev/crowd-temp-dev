@@ -57,9 +57,9 @@ export default defineComponent({
         showHelperDirtied.value = true
 
         if (nv) {
-          sleep(250).then(() => {            
+          sleep(272).then(() => {
             helper.value &&
-              scrollMain(helper.value.offsetTop - layoutSizing.layoutHeader - layoutSizing.layoutPadding)
+              scrollMain(helper.value.offsetTop - layoutSizing.layoutPadding)
           })
         }
       }
@@ -108,7 +108,7 @@ export default defineComponent({
       if (newElement) {
         newElement.focus({ preventScroll: true })
 
-        scrollMain(newElement.offsetTop - layoutSizing.layoutHeader - layoutSizing.layoutPadding)
+        scrollMain(newElement.offsetTop - layoutSizing.layoutPadding)
       }
     }
 
