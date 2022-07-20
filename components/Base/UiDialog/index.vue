@@ -421,7 +421,9 @@ export default defineComponent({
 }
 
 .fade-transition-enter .content,
-.fade-transition-leave .content {
+.fade-transition-leave .content,
+.fade-transition-enter-active .content,
+.fade-transition-leave-active .content {
   will-change: transform;
 }
 
