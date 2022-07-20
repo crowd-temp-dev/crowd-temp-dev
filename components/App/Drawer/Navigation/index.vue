@@ -166,7 +166,7 @@ export default defineComponent({
         <li
           v-for="link in links"
           :key="link.title"
-          class="flex-centered relative"
+          class="flex-centered relative ml-[1.5px]"
         >
           <Transition
             v-if="'active' in link"
@@ -176,7 +176,7 @@ export default defineComponent({
             <div
               v-if="link.active"
               aria-hidden="true"
-              class="bg-action-primary-default rounded-r w-3 h-full absolute left-0 top-0"
+              class="bg-action-primary-default rounded-r w-3 h-full absolute left-[-1.5px] top-0"
             />
           </Transition>
 

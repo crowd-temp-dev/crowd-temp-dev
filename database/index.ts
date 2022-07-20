@@ -93,6 +93,8 @@ export function startDB() {
         console.log({ AuthenticationError: e })
 
         reject(e)
+
+        process.exit(1)
       })
   })
 }
