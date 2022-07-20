@@ -4,6 +4,7 @@ import TrapFocus from 'ui-trap-focus'
 import Button from '~/components/Base/Button/index.vue'
 import { sleep, oneFrame } from '~/utils'
 import SlackIcon from '~/components/Base/Icon/SlackIcon.vue'
+import { RouteDialog } from '~/types'
 
 interface Link {
   icon: string
@@ -11,6 +12,7 @@ interface Link {
   title: string
   to: string
   active?: boolean
+  hideTracker?: boolean
   badge?: `${number}`
 }
 
@@ -25,77 +27,94 @@ export default defineComponent({
   setup(_, { root }) {
     const replaceRoute = ref(false)
 
-    const linkGroup = computed<LinkGroup[]>(() => [
-      {
-        links: [
-          {
-            icon: 'HomeMajor',
-            title: 'Home',
-            active:
-              /^\/dashboard$|^(?:\/dashboard\/create-test\/?|\/notification\/?)/.test(
+    const linkGroup = computed<LinkGroup[]>(() => {
+      const routeQuery: RouteDialog = root.$route.query.dialog
+
+      return [
+        {
+          links: [
+            {
+              icon: 'HomeMajor',
+              title: 'Home',
+              active:
+                /^\/dashboard$|^(?:\/dashboard\/create-test\/?|\/notification\/?)/.test(
+                  root.$route.path
+                ),
+              to: '/dashboard',
+            },
+            {
+              icon: 'OrdersMajor',
+              title: 'Notes',
+              badge: '0',
+              to: '/dashboard/notes',
+              active: /^\/dashboard\/notes\/?/.test(root.$route.path),
+            },
+            {
+              icon: 'AppsMajor',
+              title: 'Integrations',
+              to: '/dashboard/settings/billing',
+              active: /^\/dashboard\/settings\/billing\/?/.test(
                 root.$route.path
               ),
-            to: '/dashboard',
-          },
-          {
-            icon: 'OrdersMajor',
-            title: 'Notes',
-            badge: '0',
-            to: '/dashboard/notes',
-            active: /^\/dashboard\/notes\/?/.test(root.$route.path),
-          },
-          {
-            icon: 'AppsMajor',
-            title: 'Integrations',
-            to: '/dashboard/settings/billing',
-            active: /^\/dashboard\/settings\/billing\/?/.test(root.$route.path),
-          },
-          {
-            icon: 'DeleteMajor',
-            title: 'Trash',
-            to: '/dashboard/settings/billing',
-            active: /^\/dashboard\/settings\/billing\/?/.test(root.$route.path),
-          },
-          {
-            icon: 'SettingsMajor',
-            title: 'Settings',
-            to: '/dashboard/settings',
-            active: /^\/dashboard\/settings\/?/.test(root.$route.path),
-          },
-        ],
-      },
-      {
-        title: 'Beta',
-        links: [
-          {
-            icon: 'EmailNewsletterMajor',
-            title: 'Give feedback',
-            to: '?dialog=give-feedback',
-          },
-          {
-            icon: 'BugMajor',
-            title: 'Report a bug',
-            to: '?dialog=report-bug',
-          },
-          {
-            icon: 'ConfettiMajor',
-            title: 'Request a feature',
-            to: '?dialog=request-feature',
-          },
-          {
-            icon: 'EmailMajor',
-            title: 'Contact us',
-            to: '?dialog=contact-us',
-          },
-          {
-            icon: 'SlackIcon',
-            title: 'Join our Slack',
-            to: '#',
-            customIcon: true,
-          },
-        ],
-      },
-    ])
+            },
+            {
+              icon: 'DeleteMajor',
+              title: 'Trash',
+              to: '/dashboard/settings/billing',
+              active: /^\/dashboard\/settings\/billing\/?/.test(
+                root.$route.path
+              ),
+            },
+            {
+              icon: 'SettingsMajor',
+              title: 'Settings',
+              to: '/dashboard/settings',
+              active: /^\/dashboard\/settings\/?/.test(root.$route.path),
+            },
+          ],
+        },
+        {
+          title: 'Beta',
+          links: [
+            {
+              icon: 'EmailNewsletterMajor',
+              title: 'Give feedback',
+              to: '?dialog=give-feedback',
+              active: routeQuery === 'give-feedback',
+              hideTracker: true,
+            },
+            {
+              icon: 'BugMajor',
+              title: 'Report a bug',
+              to: '?dialog=report-bug',
+              active: routeQuery === 'report-bug',
+              hideTracker: true,
+            },
+            {
+              icon: 'ConfettiMajor',
+              title: 'Request a feature',
+              to: '?dialog=request-feature',
+              active: routeQuery === 'request-feature',
+              hideTracker: true,
+            },
+            {
+              icon: 'EmailMajor',
+              title: 'Contact us',
+              to: '?dialog=contact-us',
+              active: routeQuery === 'contact-us',
+              hideTracker: true,
+            },
+            {
+              icon: 'SlackIcon',
+              title: 'Join our Slack',
+              to: '#',
+              customIcon: true,
+              hideTracker: true,
+            },
+          ],
+        },
+      ]
+    })
 
     const arrowFocus = (evt: KeyboardEvent) => {
       if (/ArrowDown|ArrowUp/.test(evt.key || evt.code)) {
@@ -169,7 +188,7 @@ export default defineComponent({
           class="flex-centered relative ml-[1.5px]"
         >
           <Transition
-            v-if="'active' in link"
+            v-if="!link.hideTracker"
             name="indicator-transition"
             mode="out-in"
           >
@@ -194,6 +213,7 @@ export default defineComponent({
                 class="link-button h-32 min-h-[32px] w-40 min-w-[40px] p-0"
                 :class="{
                   'text-action-primary-default': link.active,
+                  'bg-surface-pressed': link.active && link.hideTracker,
                 }"
                 :icon="link.customIcon ? undefined : link.icon"
                 @keyup.enter="(evt) => evt.currentTarget.click()"
