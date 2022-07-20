@@ -22,11 +22,9 @@ export default defineComponent({
 
     const dialogTitle = ref('')
 
-    const currentRouteDialog = ref<RouteDialog>(null)
+    const appDialogRoute = computed(() => root.$appState.routeDialog)
 
-    const routeDialog = computed(() => {
-      return root.$route.query.dialog as RouteDialog
-    })
+    const currentRouteDialog = ref<RouteDialog>(null)
 
     const textFields = computed<
       {
@@ -107,8 +105,8 @@ export default defineComponent({
 
     const removeDialogQuery = () => {
       if (
-        root.$route.query.dialog &&
-        root.$route.query.dialog === currentRouteDialog.value
+        appDialogRoute.value &&
+        appDialogRoute.value === currentRouteDialog.value
       ) {
         root.$router.replace({
           query: {
@@ -116,17 +114,19 @@ export default defineComponent({
             dialog: undefined,
           },
         })
+
+        root.$store.commit('app/setRouteDialog', '')
       }
     }
 
     const toggleDialogActive = async () => {
+      root.$store.commit('app/setRouteDialog', root.$route.query.dialog)
+
       await nextTick()
 
-      const routeDialogValue = routeDialog.value
+      const isActive = () => validRouteDialog.includes(appDialogRoute.value)
 
-      const isActive = validRouteDialog.includes(routeDialogValue)
-
-      if (isActive) {
+      if (isActive()) {
         if (dialogActive.value) {
           dialogActive.value = false
 
@@ -134,7 +134,7 @@ export default defineComponent({
         }
 
         const getTitle = () => {
-          switch (routeDialogValue) {
+          switch (appDialogRoute.value) {
             case 'contact-us':
               return 'Contact us'
             case 'give-feedback':
@@ -148,13 +148,17 @@ export default defineComponent({
           }
         }
 
-        currentRouteDialog.value = routeDialogValue
+        currentRouteDialog.value = appDialogRoute.value
 
         dialogTitle.value = getTitle()
 
         await nextTick()
 
-        dialogActive.value = true
+        if (isActive()) {
+          root.$store.commit('app/setRouteDialog', appDialogRoute.value)
+
+          dialogActive.value = true
+        }
       } else {
         dialogActive.value = false
       }
@@ -167,7 +171,7 @@ export default defineComponent({
     })
 
     watch(
-      () => routeDialog.value,
+      () => root.$route.query.dialog,
       () => {
         nextTick(toggleDialogActive)
       }

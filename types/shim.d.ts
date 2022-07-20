@@ -68,6 +68,7 @@ declare module 'vue/types/vue' {
     $user: User
     $cookies: NuxtCookies
     $alert: AlertDialog
+    $appState: AppState
   }
 }
 
@@ -78,6 +79,7 @@ declare module '@nuxt/types' {
     $pToast: PToast
     $cookies: NuxtCookies
     $alert: AlertDialog
+    $appState: AppState
   }
 }
 

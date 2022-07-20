@@ -231,7 +231,7 @@ export default defineComponent({
       closeDialog()
     }
 
-    watch(() => root.$route.fullPath, cleanup)
+    watch(() => root.$route.path, cleanup)
 
     watch(
       () => modelSync.value,

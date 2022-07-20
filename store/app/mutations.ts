@@ -1,6 +1,7 @@
 import { MutationTree } from 'vuex'
 import { AppState } from './state'
 import { oneFrame, setClientOs, sleep } from '~/utils'
+import { RouteDialog } from '~/types'
 
 const mutation: MutationTree<AppState> = {
   mountApp(state) {
@@ -52,6 +53,10 @@ const mutation: MutationTree<AppState> = {
     //   }
     //   return false
     // })
+  },
+
+  setRouteDialog(state, name: RouteDialog) {
+    state.routeDialog = name
   },
 
   fullscreenLoadingMessage(state, message: string) {

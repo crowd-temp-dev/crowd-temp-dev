@@ -1,8 +1,11 @@
+import { RouteDialog } from '~/types'
+
 export interface AppState {
   mounted: boolean
   globalKey: number
   dialogs: string[]
   fullscreenLoadingMessage: null | string
+  routeDialog: RouteDialog
   alertDialog: {
     id: string
     key: string
@@ -23,6 +26,7 @@ export default function state(): AppState {
     globalKey: 0,
     dialogs: [],
     fullscreenLoadingMessage: null,
+    routeDialog: null,
     alertDialog: {
       id: '',
       key: '',
