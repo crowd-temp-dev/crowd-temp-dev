@@ -231,7 +231,14 @@ export default defineComponent({
       closeDialog()
     }
 
-    watch(() => root.$route.matched, cleanup)
+    watch(
+      () => root.$route.matched,
+      () => {
+        if (modelSync.value) {
+          cleanup()
+        }
+      }
+    )
 
     watch(
       () => modelSync.value,
