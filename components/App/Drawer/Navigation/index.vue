@@ -151,7 +151,7 @@ export default defineComponent({
       <h2
         v-if="title"
         :key="title + i"
-        class="uppercase text-text-disabled text-center truncate text-[12px] leading-[16px] font-semibold mb-16 mt-72 xl:mt-96"
+        class="uppercase text-text-disabled text-center truncate text-[12px] leading-[16px] font-semibold mb-16 mt-[calc(72px-24px)] xl:mt-[calc(96px-24px)]"
       >
         {{ title }}
       </h2>
@@ -160,7 +160,7 @@ export default defineComponent({
         :key="i"
         class="grid gap-y-10"
         :class="{
-          'sticky top-24 z-1 bg-surface-default pb-24 main-section': i === 0,
+          'sticky top-0 z-1 bg-surface-default pb-24 main-section': i === 0,
         }"
       >
         <li
