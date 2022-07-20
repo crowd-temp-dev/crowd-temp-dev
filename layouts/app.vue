@@ -159,14 +159,17 @@ export default defineComponent({
 
           <template v-if="$user.setupDone">
             <Navigation />
-
             <main
               ref="main"
               class="col-start-2 row-start-2 h-full w-full max-h-full overflow-x-hidden bg-surface-neutral-disabled isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4 relative"
-              :class="{
-                'overflow-y-auto': !dialogs.length,
-                'overflow-hidden': dialogs.length,
-              }"
+              :class="
+                $appState.os === 'mac'
+                  ? {
+                      'overflow-y-auto': !dialogs.length,
+                      'overflow-hidden': dialogs.length,
+                    }
+                  : undefined
+              "
             >
               <!-- <LoadingBar
                 :state="creatingTest ? 'start' : 'finish'"

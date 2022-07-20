@@ -105,8 +105,8 @@ export default defineComponent({
 
     const removeDialogQuery = () => {
       if (
-        appDialogRoute.value &&
-        appDialogRoute.value === currentRouteDialog.value
+        root.$route.query.dialog &&
+        root.$route.query.dialog === currentRouteDialog.value
       ) {
         root.$router.replace({
           query: {
@@ -119,8 +119,12 @@ export default defineComponent({
       }
     }
 
-    const toggleDialogActive = async () => {
+    const setRouteDialogState = () => {
       root.$store.commit('app/setRouteDialog', root.$route.query.dialog)
+    }
+
+    const toggleDialogActive = async () => {
+      setRouteDialogState()
 
       await nextTick()
 
@@ -155,9 +159,11 @@ export default defineComponent({
         await nextTick()
 
         if (isActive()) {
-          root.$store.commit('app/setRouteDialog', appDialogRoute.value)
+          setRouteDialogState()
 
           dialogActive.value = true
+
+          console.log(appDialogRoute.value)
         }
       } else {
         dialogActive.value = false
@@ -170,12 +176,9 @@ export default defineComponent({
       toggleDialogActive()
     })
 
-    watch(
-      () => root.$route.query.dialog,
-      () => {
-        nextTick(toggleDialogActive)
-      }
-    )
+    watch(() => root.$route.query.dialog, toggleDialogActive, {
+      immediate: true,
+    })
 
     return {
       dialogActive,
@@ -183,6 +186,8 @@ export default defineComponent({
       textFields,
       currentRouteDialog,
       mobileDialogProps,
+      validRouteDialog,
+      appDialogRoute,
       removeDialogQuery,
     }
   },
@@ -192,7 +197,7 @@ export default defineComponent({
 <template>
   <UiDialog
     v-if="$appState.mounted"
-    :model-value="dialogActive"
+    :model-value="validRouteDialog.includes(appDialogRoute)"
     :body-class="$breakpoint.isMobile ? undefined : 'pb-0'"
     v-bind="mobileDialogProps"
     transition="slide-y"

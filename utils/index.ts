@@ -785,27 +785,27 @@ export const sortObject = (
 export const generateShareLink = (link: string) =>
   process.client ? `${location.origin}/answer-test/${link}/` : ''
 
-export const setClientOs = () => {
-  const getOS = () => {
-    const userAgent = window.navigator.userAgent
+export const getOS = () => {
+  const userAgent = window.navigator.userAgent
 
-    if (/iPhone/i.test(userAgent)) {
-      return 'ios'
-    } else if (/iPad/i.test(userAgent)) {
-      return 'ipad'
-    } else if (/Macintosh/i.test(userAgent)) {
-      return 'mac'
-    } else if (/windows/i.test(userAgent)) {
-      return 'windows'
-    } else if (/Android/.test(userAgent)) {
-      return 'android'
-    } else if (/Linux/.test(userAgent)) {
-      return 'linux'
-    }
-
-    return 'unknown'
+  if (/iPhone/i.test(userAgent)) {
+    return 'ios'
+  } else if (/iPad/i.test(userAgent)) {
+    return 'ipad'
+  } else if (/Macintosh/i.test(userAgent)) {
+    return 'mac'
+  } else if (/windows/i.test(userAgent)) {
+    return 'windows'
+  } else if (/Android/.test(userAgent)) {
+    return 'android'
+  } else if (/Linux/.test(userAgent)) {
+    return 'linux'
   }
 
+  return 'unknown'
+}
+
+export const setClientOs = () => {
   document.documentElement.dataset.os = getOS()
 }
 

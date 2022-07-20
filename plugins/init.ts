@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Plugin } from '@nuxt/types'
-import { oneFrame, setClientOs, sleep } from '~/utils'
+import { getOS, oneFrame, setClientOs, sleep } from '~/utils'
 import { AppState } from '~/store/app/state'
 import { RootState } from '~/store'
 
@@ -9,7 +9,11 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
     const appStateProxy = new Proxy(
       {},
       {
-        get(_, path: keyof AppState) {
+        get(_, path: keyof AppState | 'os') {
+          if (path === 'os') {
+            return getOS()
+          }
+
           return (store.state as RootState).app[path]
         },
       }

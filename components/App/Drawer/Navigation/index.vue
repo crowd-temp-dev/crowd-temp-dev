@@ -170,7 +170,7 @@ export default defineComponent({
       <h2
         v-if="title"
         :key="title + i"
-        class="uppercase text-text-disabled text-center truncate text-[12px] leading-[16px] font-semibold mb-16 mt-[calc(72px-24px)] xl:mt-[calc(96px-24px)]"
+        class="uppercase text-text-disabled text-center truncate text-[12px] leading-[16px] font-semibold mb-16 mt-[calc(72px-24px)] xl:mt-[calc(96px-24px)] cursor-default"
       >
         {{ title }}
       </h2>

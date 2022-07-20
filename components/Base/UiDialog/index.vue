@@ -228,11 +228,11 @@ export default defineComponent({
     const cleanup = () => {
       root.$store.commit('app/removeFromDialogs', id.value)
 
-      closeDialog()
+      // closeDialog()
     }
 
     watch(
-      () => root.$route.matched,
+      () => root.$route.path,
       () => {
         if (modelSync.value) {
           cleanup()
@@ -246,7 +246,7 @@ export default defineComponent({
         if (val) {
           root.$store.commit('app/addToDialogs', id.value)
         } else {
-          cleanup()
+          root.$store.commit('app/removeFromDialogs', id.value)
         }
       }
     )
