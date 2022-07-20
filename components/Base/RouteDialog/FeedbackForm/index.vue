@@ -195,6 +195,7 @@ export default defineComponent({
     :model-value="dialogActive"
     :body-class="$breakpoint.isMobile ? undefined : 'pb-0'"
     v-bind="mobileDialogProps"
+    transition="slide-y"
     @on-close="removeDialogQuery"
   >
     <template #header>
