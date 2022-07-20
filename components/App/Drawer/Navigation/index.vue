@@ -184,7 +184,7 @@ export default defineComponent({
             v-slot="{ events }"
             :label="link.title"
             placement="right"
-            content-class="!text-body !rounded-[6px] !py-6 !px-12 !font-medium"
+            content-class="!text-body !rounded-[6px] !py-5 !px-10 !font-medium"
             arrow-size="7px"
           >
             <span v-on="events">
