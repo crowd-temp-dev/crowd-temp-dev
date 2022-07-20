@@ -15,7 +15,7 @@ const mutation: MutationTree<AppState> = {
 
   addToDialogs(state, id: string) {
     state.dialogs = Array.from(new Set([...state.dialogs, id])).filter((id) => {
-      if (id.startsWith('dialog-')) {
+      if (/^(?:dialog-|flip-)/.test(id)) {
         return true
       }
 
@@ -37,7 +37,7 @@ const mutation: MutationTree<AppState> = {
     state.dialogs = state.dialogs
       .filter((x) => x !== id)
       .filter((id) => {
-        if (id.startsWith('dialog-')) {
+        if (/^(?:dialog-|flip-)/.test(id)) {
           return true
         }
 

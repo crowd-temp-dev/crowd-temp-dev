@@ -66,10 +66,11 @@ export default defineComponent({
             :label="
               disablePreview ? 'Enter a valid url' : 'Accept checkbox below'
             "
+            :open-delay="10"
           >
             <span v-on="{ ...events, click: open }">
               <PreviewURL
-                :disable-button="disablePreview"
+                :disable-button="disablePreview || acceptUrlShareTerms"
                 :readonly="!acceptUrlShareTerms"
                 :preview-src="state.websiteLink"
               />

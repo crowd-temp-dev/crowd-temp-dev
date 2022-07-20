@@ -80,7 +80,7 @@ export default defineComponent({
 
   data() {
     return {
-      id: uid(),
+      id: uid('flip-'),
       manualModel: false,
       overlayEntered: false,
       previousActive: null as HTMLElement,
