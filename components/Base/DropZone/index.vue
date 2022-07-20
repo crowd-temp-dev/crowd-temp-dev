@@ -402,6 +402,7 @@ export default defineComponent({
           <input
             v-if="!plain"
             type="text"
+            tabindex="-1"
             class="sr-only"
             :required="required || undefined"
             :value="getFiles.length ? 'true' : ''"
