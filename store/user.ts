@@ -16,7 +16,7 @@ import {
 import { showToasts } from '~/utils/showToast'
 import { LoginForm } from '~/server-middleware/routes/user/login'
 import { ApiResponse } from '~/types'
-import { formBody, nextFrame, sleep } from '~/utils'
+import { formBody, nextFrame, oneMinute, sleep } from '~/utils'
 import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
@@ -197,12 +197,12 @@ const actions: ActionTree<UserState, RootState> = {
     return { message, error }
   },
 
-  // only reload after 5 seconds has elapsed
+  // only reload after 30 seconds has elapsed
   async reload({ commit, dispatch, state }, progress: boolean) {
     if (
-      (performance.now() - lastReload > 5000 || !lastReload) &&
+      (performance.now() - lastReload > oneMinute / 2 || !lastReload) &&
       !state.loggingOut
-    ) {
+    ) {      
       lastReload = performance.now()
 
       const { data, error, message, status } = await ReloadUser(
