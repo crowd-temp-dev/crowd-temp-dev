@@ -111,6 +111,7 @@ export default defineComponent({
           :divide="i < list.length - 1"
           read
           class="w-full grow"
+          hide-status
         ></Notification>
       </div>
     </div>

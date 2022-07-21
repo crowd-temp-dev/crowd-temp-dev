@@ -2,7 +2,10 @@
 import { defineComponent, computed } from '@vue/composition-api'
 import { formatTime } from '~/utils'
 import Button from '~/components/Base/Button/index.vue'
-import { UserNotification, UserNotificationAction } from '~/server-middleware/types'
+import {
+  UserNotification,
+  UserNotificationAction,
+} from '~/server-middleware/types'
 
 export default defineComponent({
   name: 'BaseNotification',
@@ -30,6 +33,7 @@ export default defineComponent({
     },
     read: Boolean,
     divide: Boolean,
+    hideStatus: Boolean,
   },
 
   setup(_props) {
@@ -61,6 +65,7 @@ export default defineComponent({
     :class="{ 'border-b border-background-default': divide }"
   >
     <div
+      v-if="!hideStatus"
       class="w-4 h-full rounded-l-lg shrink-0 top-0"
       :class="{
         'bg-action-primary-disabled': read,

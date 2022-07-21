@@ -52,10 +52,11 @@ export default defineComponent({
     ref="rootRef"
     v-bind="$attrs"
     :plain="plain"
+    :inert="readonly || disabled || loading || undefined"
     :type="readonly ? 'button' : $attrs.type || 'button'"
-    :aria-readonly="readonly || undefined"
+    :aria-readonly="readonly || loading || undefined"
     :tabindex="`${disabled || loading || readonly ? -1 : $attrs.tabindex || 0}`"
-    :disabled="disabled"
+    :disabled="disabled || undefined"
     :primary="false"
     class="BaseButton"
     :class="{
