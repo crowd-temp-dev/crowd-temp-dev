@@ -3,7 +3,10 @@ import { defineComponent } from '@vue/composition-api'
 import Notification from '~/components/Base/Notification/index.vue'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import { splitPath } from '~/utils'
-import { UserNotificationAction, UserNotificationBadge } from '~/server-middleware/types'
+import {
+  UserNotificationAction,
+  UserNotificationBadge,
+} from '~/server-middleware/types'
 
 export default defineComponent({
   name: 'NotificationPage',
@@ -94,20 +97,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="mt-32 mb-96 mx-auto max-w-app w-full">
-    <div class="max-w-[734px] xxl:mx-auto flex flex-col">
-      <Notification
-        v-for="(item, i) in list"
-        :key="i"
-        :type="item.type"
-        :title="item.title"
-        :time="120000"
-        :description="item.description"
-        :actions="item.action"
-        :divide="i < list.length - 1"
-        read
-        class="w-full grow"
-      ></Notification>
+  <div class="mt-32 mb-96 mx-auto px-32 w-full">
+    <div class="max-w-app mx-auto">
+      <div class="max-w-[734px] xxl:mx-auto flex flex-col">
+        <Notification
+          v-for="(item, i) in list"
+          :key="i"
+          :type="item.type"
+          :title="item.title"
+          :time="120000"
+          :description="item.description"
+          :actions="item.action"
+          :divide="i < list.length - 1"
+          read
+          class="w-full grow"
+        ></Notification>
+      </div>
     </div>
   </div>
 </template>

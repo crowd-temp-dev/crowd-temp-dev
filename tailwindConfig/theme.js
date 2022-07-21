@@ -45,4 +45,7 @@ module.exports = {
   maxWidth: {
     app: '1080px',
   },
+  minWidth: {
+    'full-app': 'min(100%,1080px)'
+  }
 }

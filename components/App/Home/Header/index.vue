@@ -21,11 +21,10 @@ export default defineComponent({
   <FadeTransition>
     <div :key="`${homeRoute}`">
       <div class="flex items-center">
-        <Button v-if="!homeRoute" icon="ArrowLeftMinor" title="Back" to="/dashboard" />
+        <!-- <Button v-if="!homeRoute" icon="ArrowLeftMinor" title="Back" to="/dashboard" /> -->
 
         <h2
           class="font-sf-pro-display font-semibold text-[20px] leading-[32px]"
-          :class="{ 'ml-16': !homeRoute }"
         >
           {{ homeRoute ? 'Dashboard' : 'Notifications' }}
         </h2>

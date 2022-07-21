@@ -126,8 +126,10 @@ export default defineComponent({
       </div>
     </div>
 
-    <div v-if="$user.loggedIn" class="isolate mx-auto max-w-app">
-      <NuxtChild />
+    <div v-if="$user.loggedIn" class="isolate w-full px-32">
+      <div class="mx-auto max-w-app">
+        <NuxtChild />
+      </div>
     </div>
   </div>
 </template>

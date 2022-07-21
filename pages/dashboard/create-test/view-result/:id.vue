@@ -86,7 +86,7 @@ export default defineComponent({
   <FadeTransition>
     <div
       :key="`loading-${fetchingResult}`"
-      class="grid grid-cols-[1fr,auto] grid-flow-col gap-x-32 max-w-app mx-auto min-w-full h-full"
+      class="grid grid-cols-[1fr,auto] grid-flow-col gap-x-32 max-w-app mx-auto h-full"
       :class="{ 'pb-112 mt-32': !fetchingResult }"
     >
       <div

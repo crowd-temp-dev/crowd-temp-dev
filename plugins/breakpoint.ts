@@ -24,12 +24,14 @@ const breakpointState = Vue.observable({
   state: {} as BreakpointOutput,
 })
 
+const mobileRegExp = /^(?:xxs|xs|sl|sm)$/
+
 const breakpointPlugin: Plugin = function ({ store }, inject) {
   if (!installed) {
     const updateBreakpoint = (br: BreakpointOutput) => {
       breakpointState.state = {
         ...br,
-        isMobile: /^(?:xxs|xs|sl|sm)$/.test(br.is || ''),
+        isMobile: mobileRegExp.test(br.is || ''),
         isTablet: /^(?:md)$/.test(br.is || ''),
         isLaptop: /^(?:lg|xl|xxl)$/.test(br.is || ''),
       }
@@ -39,11 +41,13 @@ const breakpointPlugin: Plugin = function ({ store }, inject) {
       config: screenSizes,
       useOrientation: true,
       onChange: (evt: BreakpointOutput) => {
-        updateBreakpoint(evt)
+        const isMobile = mobileRegExp.test(evt.is || '')
 
-        if (evt.isMobile !== breakpointState.state.isMobile) {
+        if (isMobile !== breakpointState.state.isMobile) {
           store.commit('app/updateGlobalKey')
         }
+
+        updateBreakpoint(evt)
       },
     })
 

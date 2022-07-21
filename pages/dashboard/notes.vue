@@ -28,18 +28,20 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="w-full py-32 max-w-app mx-auto">
-    <div class="max-w-[800px]">
-      <SearchField
-        placeholder="Search tests"
-        class="bg-surface-default mb-16 max-w-[270px] h-36"
-        outlined
-      />
+  <div class="w-full py-32 px-32">
+    <div class="max-w-app mx-auto">
+      <div class="max-w-[800px]">
+        <SearchField
+          placeholder="Search tests"
+          class="bg-surface-default mb-16 max-w-[270px] h-36"
+          outlined
+        />
 
-      <div class="grid gap-y-32">
-        <NoteSection />
+        <div class="grid gap-y-32">
+          <NoteSection />
 
-        <NoteSection />
+          <NoteSection />
+        </div>
       </div>
     </div>
   </div>

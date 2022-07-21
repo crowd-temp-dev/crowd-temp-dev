@@ -33,9 +33,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="w-full py-32 max-w-app mx-auto">
-    <h2 class="text-heading leading-[20px] text-text-subdued mb-10">
-      Trash items will be deleted after 30 days
-    </h2>
+  <div class="w-full p-32">
+    <div class="max-w-app mx-auto">
+      <h2 class="text-heading leading-[20px] text-text-subdued mb-10">
+        Trash items will be deleted after 30 days
+      </h2>
+    </div>
   </div>
 </template>

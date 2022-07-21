@@ -180,7 +180,7 @@ export default defineComponent({
     <FadeTransition>
       <div
         :key="$store.state.testSuite.detail.id"
-        class="isolate max-w-app mx-auto min-h-[calc(100%-56px)] transition-opacity"
+        class="isolate w-full px-32 min-h-[calc(100%-56px)] transition-opacity"
         :class="{
           'pointer-events-none opacity-70': createTestState.submitting,
         }"
