@@ -2,7 +2,7 @@
 import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
-  name: 'AppSettingsHeader',
+  name: 'AppIntegrationsHeader',
   setup() {},
 })
 </script>
@@ -13,7 +13,7 @@ export default defineComponent({
       <h2
         class="mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
       >
-        Settings
+        Integrations
       </h2>
     </div>
   </div>

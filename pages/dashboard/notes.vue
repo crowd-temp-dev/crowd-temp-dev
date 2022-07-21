@@ -28,8 +28,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="xxl:mx-auto w-full py-32 max-w-app xxl:px-0">
-    <div class="max-w-[800px] mx-32 lg:mx-auto xxl:mx-0">
+  <div class="w-full py-32 max-w-app mx-auto">
+    <div class="max-w-[800px]">
       <SearchField
         placeholder="Search tests"
         class="bg-surface-default mb-16 max-w-[270px] h-36"

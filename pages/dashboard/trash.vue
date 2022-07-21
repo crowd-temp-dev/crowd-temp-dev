@@ -5,7 +5,7 @@ import { splitPath } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 
 export default defineComponent({
-  name: 'AppBillingPage',
+  name: 'AppTrashPage',
   components: {},
   layout: 'app' as Layout,
   transition: (to, from) =>
@@ -18,13 +18,24 @@ export default defineComponent({
     }),
   setup() {},
 
-  // TODO!!!
   head: {
-    title: 'Home',
+    title: 'Trash',
+    meta: [
+      {
+        name: 'description',
+        content: 'View recently deleted tests',
+        vmid: 'description',
+        hid: 'description',
+      },
+    ],
   },
 })
 </script>
 
 <template>
-  <div>Billing</div>
+  <div class="w-full py-32 max-w-app mx-auto">
+    <h2 class="text-heading leading-[20px] text-text-subdued mb-10">
+      Trash items will be deleted after 30 days
+    </h2>
+  </div>
 </template>

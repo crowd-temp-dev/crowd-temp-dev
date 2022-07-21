@@ -481,6 +481,7 @@ export default defineComponent({
                 ref: 'overlayWrapper',
                 attrs: {
                   tabindex: this.modelSync ? '1' : undefined,
+                  'data-flip-content': '',
                 },
                 staticClass: 'relative isolate outline-none',
                 style: {

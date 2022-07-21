@@ -52,18 +52,14 @@ export default defineComponent({
             {
               icon: 'AppsMajor',
               title: 'Integrations',
-              to: '/dashboard/settings/billing',
-              active: /^\/dashboard\/settings\/billing\/?/.test(
-                root.$route.path
-              ),
+              to: '/dashboard/integrations',
+              active: /^\/dashboard\/integrations\/?/.test(root.$route.path),
             },
             {
               icon: 'DeleteMajor',
               title: 'Trash',
-              to: '/dashboard/settings/billing',
-              active: /^\/dashboard\/settings\/billing\/?/.test(
-                root.$route.path
-              ),
+              to: '/dashboard/trash',
+              active: /^\/dashboard\/trash\/?/.test(root.$route.path),
             },
             {
               icon: 'SettingsMajor',

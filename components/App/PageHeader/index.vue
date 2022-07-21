@@ -2,7 +2,6 @@
 import { computed, defineComponent } from '@vue/composition-api'
 import IndexPageHeader from '@/components/App/Home/Header/index.vue'
 import CreateTestPageHeader from '@/components/App/CreateTest/Header/index.vue'
-import SettingsPageHeader from '@/components/App/Settings/Header/index.vue'
 import NotesPageHeader from '@/components/App/Notes/Header/index.vue'
 
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
@@ -13,7 +12,6 @@ export default defineComponent({
     IndexPageHeader,
     CreateTestPageHeader,
     FadeTransition,
-    SettingsPageHeader,
     NotesPageHeader,
   },
   setup(_, { root }) {
@@ -29,17 +27,38 @@ export default defineComponent({
       }
 
       if (routePath.startsWith('/dashboard/settings')) {
-        return 'SettingsPageHeader'
+        return 'SettingsPage'
       }
 
       if (routePath.startsWith('/dashboard/notes')) {
         return 'NotesPageHeader'
       }
 
+      if (routePath.startsWith('/dashboard/integrations')) {
+        return 'IntegrationsPage'
+      }
+
+      if (routePath.startsWith('/dashboard/trash')) {
+        return 'TrashPage'
+      }
+
       return 'IndexPageHeader'
     })
 
-    return { headerComponent }
+    const headerTitle = computed(() => {
+      switch (headerComponent.value) {
+        case 'IntegrationsPage':
+          return 'Integrations'
+        case 'SettingsPage':
+          return 'Settings'
+        case 'TrashPage':
+          return 'Trash'
+        default:
+          return null
+      }
+    })
+
+    return { headerComponent, headerTitle }
   },
 })
 </script>
@@ -47,7 +66,21 @@ export default defineComponent({
 <template>
   <div class="app-page-header">
     <FadeTransition :duration="{ leave: 100 }">
-      <Component :is="headerComponent" />
+      <div
+        v-if="headerTitle"
+        :key="headerTitle"
+        class="min-w-full xl:min-w-[initial]"
+      >
+        <div class="flex items-center">
+          <h2
+            class="mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
+          >
+            {{ headerTitle }}
+          </h2>
+        </div>
+      </div>
+
+      <Component :is="headerComponent" v-else />
     </FadeTransition>
   </div>
 </template>

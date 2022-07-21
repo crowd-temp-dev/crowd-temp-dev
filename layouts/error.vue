@@ -5,11 +5,12 @@ import Button from '~/components/Base/Button/index.vue'
 import layouts from '~/mixins/layouts'
 import { AnswerTestState } from '~/store/answer-test'
 import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
+import Header from '~/components/LandingPage/Header/index.vue'
 
 export default defineComponent({
   name: 'DefaultLayout',
 
-  components: { Button, FeedbackForm },
+  components: { Button, FeedbackForm, Header },
   mixins: [layouts],
 
   props: {
@@ -23,7 +24,7 @@ export default defineComponent({
     },
   },
 
-  setup(_, { root }) {
+  setup(_props, { root }) {
     const homePage = computed(() => {
       if (root.$route.path.startsWith('/answer-test')) {
         return `/answer-test/${
@@ -34,7 +35,16 @@ export default defineComponent({
       return '/'
     })
 
-    return { homePage }
+    const errorMessage = computed(() => {
+      switch (_props.error.statusCode) {
+        case 404:
+          return 'Oops! Page not found'
+        default:
+          return _props.error.message
+      }
+    })
+
+    return { homePage, errorMessage }
   },
 
   head() {
@@ -44,7 +54,7 @@ export default defineComponent({
         {
           hid: 'description',
           name: 'descrition',
-          content: this.error.message,
+          content: this.errorMessage,
         },
       ],
     }
@@ -53,23 +63,47 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    class="bg-surface-default font-sf-pro-display grid justify-center pt-100 text-center"
-    :class="{ 'hide-ui': !mounted }"
-  >
-    <h1 class="sr-only"></h1>
+  <div class="bg-surface-default" :class="{ 'hide-ui': !mounted }">
+    <Header />
 
-    <h2
-      class="text-action-critical-default font-bold text-display-x-large-sm md:text-display-x-large mb-16"
-    >
-      {{ error.statusCode }}
-    </h2>
+    <div class="grid justify-items-center pt-[7%] text-center w-full">
+      <h1 class="sr-only">An error occured!</h1>
 
-    <h3 class="text-text-subdued mb-32 text-display-medium-sm md:text-medium">
-      {{ error.message }}
-    </h3>
+      <template v-if="error.statusCode !== 404">
+        <h2
+          class="text-action-critical-default font-bold text-display-x-large-sm md:text-display-x-large mb-16"
+        >
+          {{ error.statusCode }}
+        </h2>
 
-    <Button :to="homePage" primary size="large"> Back to homepage </Button>
+        <h3
+          class="text-text-subdued mb-32 text-display-medium-sm md:text-medium"
+        >
+          {{ errorMessage }}
+        </h3>
+      </template>
+
+      <template v-else>
+        <h2
+          class="font-sf-pro-display text-display-medium-sm mb-[1rem] lg:text-display-medium"
+        >
+          {{ errorMessage }}
+        </h2>
+
+        <Img
+          src="/static/png/illustration/404.png"
+          alt="404 vector image"
+          class="w-[min(90%,370px)] h-246 mb-[1rem]"
+        />
+
+        <h3 class="mb-20 max-w-[90%] text-center lg:max-w-[435px] text-heading">
+          Looks like page either doesn't exist or was removed. We suggest you go
+          back to the hompage
+        </h3>
+      </template>
+
+      <Button :to="homePage" primary size="large" class="w-full max-w-[558px]"> Go to homepage </Button>
+    </div>
 
     <DelayMount>
       <FeedbackForm />
