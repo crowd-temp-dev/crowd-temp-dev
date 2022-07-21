@@ -208,7 +208,7 @@ export default defineComponent({
                 plain-action
                 class="link-button h-32 min-h-[32px] w-40 min-w-[40px] p-0"
                 :class="{
-                  'text-action-primary-default': link.active,
+                  'text-action-primary-default fill-icon': link.active,
                   'bg-surface-pressed': link.active && link.hideTracker,
                 }"
                 :icon="link.customIcon ? undefined : link.icon"
