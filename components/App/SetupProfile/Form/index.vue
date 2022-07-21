@@ -79,6 +79,7 @@ export default defineComponent({
         :label="item"
         name="useCase"
         :value="item"
+        :autofocus="i === 0"
         required
       />
     </RadioGroup>

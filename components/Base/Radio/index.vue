@@ -67,6 +67,7 @@ export default defineComponent({
 <template>
   <Id v-slot="idProps">
     <label
+      ref="root"
       :for="id || idProps.id"
       class="relative flex items-center cursor-pointer group"
     >

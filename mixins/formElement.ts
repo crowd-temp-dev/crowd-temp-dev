@@ -7,6 +7,7 @@ import {
   ref,
   watch,
 } from '@vue/composition-api'
+import { isHTML } from '~/components/Base/Intersection/utils'
 import { sleep } from '~/utils'
 
 export default defineComponent({
@@ -55,7 +56,7 @@ export default defineComponent({
       const vnode = root.value as unknown as ComponentInstance
 
       if (vnode) {
-        const rootEl = vnode.$el as HTMLInputElement
+        const rootEl = (isHTML(vnode) ? vnode : vnode.$el) as HTMLElement
 
         if (rootEl) {
           const input =
@@ -95,7 +96,7 @@ export default defineComponent({
     const autofocus = async () => {
       await sleep()
 
-      if (props.value.autofocus) {        
+      if (props.value.autofocus) {
         const input = getInput()
 
         if (input) {
