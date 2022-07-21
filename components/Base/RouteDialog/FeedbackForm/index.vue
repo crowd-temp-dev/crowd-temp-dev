@@ -210,7 +210,7 @@ export default defineComponent({
     <FormLayout
       v-slot="{ idAndError }"
       :name="`route-form-${dialogTitle}`"
-      class="min-w-full lg:min-w-[558px] isolate"
+      class="min-w-full md:min-w-[558px] isolate"
     >
       <div class="grid gap-y-20 px-8 -mb-8 isolate">
         <template v-if="currentRouteDialog !== 'report-bug'">
