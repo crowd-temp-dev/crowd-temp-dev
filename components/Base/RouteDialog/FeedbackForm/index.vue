@@ -189,6 +189,16 @@ export default defineComponent({
       removeDialogQuery,
     }
   },
+
+  head() {
+    if (!this.dialogActive) {
+      return null
+    }
+
+    return {
+      title: this.dialogTitle,
+    }
+  },
 })
 </script>
 

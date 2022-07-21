@@ -6,10 +6,11 @@ import { splitPath } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Intersection from '~/components/Base/Intersection/index.vue'
+import Tooltip from '~/components/Base/Tooltip/index.vue'
 
 export default defineComponent({
   name: 'AppTrashPage',
-  components: { ListItem, FadeTransition, Intersection },
+  components: { ListItem, FadeTransition, Intersection, Tooltip },
   layout: 'app' as Layout,
   transition: (to, from) =>
     dynamicPageTransition({
@@ -119,23 +120,31 @@ export default defineComponent({
           :class="{ 'after:!opacity-100': !headerIntersecting }"
         >
           <div class="flex items-center justify-between">
-            <div class="rounded-l bg-surface-default p-8 pr-16">
-              <Id v-slot="{ id }">
-                <Checkbox
-                  :id="id"
-                  :indeterminate="!allSelected"
-                  :checked="allSelected"
-                  @on-change="toggleSelectAll"
-                >
-                  <label
-                    :for="id"
-                    class="font-semibold text-interactive-default cursor-pointer"
+            <Tooltip
+              v-slot="{ events }"
+              :disabled="!allSelected"
+              :label="`${selected.length} items`"
+              placement="right"
+              open-delay="100"
+            >
+              <div class="rounded-l bg-surface-default p-8 pr-16" v-on="events">
+                <Id v-slot="{ id }">
+                  <Checkbox
+                    :id="id"
+                    :indeterminate="!allSelected"
+                    :checked="allSelected"
+                    @on-change="toggleSelectAll"
                   >
-                    {{ selected.length }} selected
-                  </label>
-                </Checkbox>
-              </Id>
-            </div>
+                    <label
+                      :for="id"
+                      class="font-semibold text-interactive-default cursor-pointer"
+                    >
+                      {{ allSelected ? 'All' : selected.length }} selected
+                    </label>
+                  </Checkbox>
+                </Id>
+              </div>
+            </Tooltip>
 
             <div class="flex space-x-8 items-center">
               <Button
