@@ -10,6 +10,7 @@ export default defineComponent({
       required: true,
     },
     checked: Boolean,
+    selectMode: Boolean,
   },
   emits: ['on-change'],
 
@@ -30,7 +31,7 @@ export default defineComponent({
 
 <template>
   <li
-    class="bg-surface-default border border-divider rounded-lg p-20 flex items-center"
+    class="bg-surface-default border border-divider rounded-lg p-20 flex items-center relative"
   >
     <span class="mr-18">
       <Checkbox
@@ -63,11 +64,19 @@ export default defineComponent({
 
     <div class="mr-12 shrink-0">
       <div class="flex space-x-2 items-center">
-        <Button> Recover </Button>
+        <Button :disabled="selectMode"> Recover </Button>
 
-        <Button> Delete permanently </Button>
+        <Button :disabled="selectMode"> Delete permanently </Button>
       </div>
     </div>
+
+    <label
+      v-if="selectMode"
+      :for="id"
+      class="pseudo !pointer-events-auto cursor-pointer"
+    >
+      <span class="sr-only"> Select </span>
+    </label>
   </li>
 </template>
 

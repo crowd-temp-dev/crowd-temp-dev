@@ -158,6 +158,7 @@ export default defineComponent({
           :id="item"
           :key="i"
           :checked="selected.includes(item)"
+          :select-mode="!!selected.length"
           @on-change="onItemCheck"
         />
       </ul>
