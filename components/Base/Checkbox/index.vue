@@ -38,16 +38,17 @@ export default defineComponent({
     },
     checked: Boolean,
   },
+  emits: ['on-change'],
   setup(_props, { emit }) {
     const manual = ref(_props.checked)
 
     const modelSync = computed({
       get() {
         if (typeof _props.modelValue === 'boolean') {
-          return _props.modelValue
+          return _props.modelValue || _props.checked
         }
 
-        return manual.value
+        return manual.value || _props.checked
       },
       set(val: boolean) {
         if (typeof val === 'boolean') {
@@ -56,6 +57,8 @@ export default defineComponent({
           }
 
           manual.value = val
+
+          emit('on-change')
         }
       },
     })

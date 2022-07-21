@@ -97,9 +97,26 @@
 .page-transition-slide-down-enter-active,
 .page-transition-slide-up-enter-active {
   @apply md:duration-[250ms] duration-[1ms];
-  will-change: transform, opacity;
   transition-timing-function: ease;
   transition-property: opacity, transform;
+}
+
+.page-transition-slide-left-enter-active,
+.page-transition-slide-right-enter-active,
+.page-transition-fade-enter-active,
+.page-transition-slide-down-enter-active,
+.page-transition-slide-up-enter-active,
+.page-transition-slide-left-enter,
+.page-transition-slide-right-enter,
+.page-transition-fade-enter,
+.page-transition-slide-down-enter,
+.page-transition-slide-up-enter,
+.page-transition-slide-left-leave,
+.page-transition-slide-right-leave,
+.page-transition-fade-leave,
+.page-transition-slide-down-leave,
+.page-transition-slide-up-leave{
+  @apply md:will-change-[transform,opacity] transform-gpu;
 }
 
 .page-transition-fade-enter {
@@ -123,7 +140,7 @@
 }
 
 .slide-y-transition-enter {
-  @apply opacity-0 will-change-[opacity];
+  @apply opacity-0 will-change-[opacity,transform];
   transform: translate3d(0, var(--y-enter, 20px), 0);
 }
 
@@ -133,7 +150,7 @@
 }
 
 .slide-y-transition-leave {
-  @apply will-change-[opacity];
+  @apply will-change-[opacity,transform];
 }
 
 .slide-y-transition-leave-to {

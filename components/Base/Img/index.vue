@@ -92,7 +92,7 @@ export default defineComponent({
 
       <div
         v-if="!error"
-        class="animate-pulse w-full h-full rounded-[inherit] bg-surface-highlight-default/20"
+        class="animate-pulse w-full h-full rounded-[inherit] bg-decorative-surface-five/30"
       />
 
       <Id v-else v-slot="{ id }">

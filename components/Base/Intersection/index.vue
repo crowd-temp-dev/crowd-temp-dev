@@ -27,6 +27,10 @@ export default defineComponent({
       type: [Number, String],
       default: undefined,
     },
+    root: {
+      type: String,
+      default: undefined,
+    },
   },
   emits: ['once-intersected', 'update:entry'],
 
@@ -65,7 +69,8 @@ export default defineComponent({
       }
 
       //  bail if this.observer is truthy, or props.disabled or not mounted; or this.$el isn't valid HTMLElement
-      const elem = instance.vnode.context.$el as unknown as HTMLElement
+      const elem = (instance.vnode.elm ||
+        instance.vnode.context.$el) as unknown as HTMLElement
 
       if (observer.value || !isMounted.value || !isHTML(elem)) {
         return
@@ -91,7 +96,8 @@ export default defineComponent({
               1,
             ]
           : initialOptions.threshold,
-      }
+        root: _props.root ? document.querySelector(_props.root) : null,
+      } as IntersectionObserverInit
 
       await nextTick()
 
