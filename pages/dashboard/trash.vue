@@ -127,23 +127,28 @@ export default defineComponent({
               placement="right"
               open-delay="100"
             >
-              <div class="rounded-l bg-surface-default p-8 pr-16" v-on="events">
-                <Id v-slot="{ id }">
+              <Id v-slot="{ id }">
+                <label
+                  :for="id"
+                  class="rounded-l bg-surface-default p-8 pr-16 block cursor-pointer"
+                  v-on="events"
+                >
                   <Checkbox
                     :id="id"
+                    :key="allSelected"
                     :indeterminate="!allSelected"
                     :checked="allSelected"
+                    class="cursor-pointer"
                     @on-change="toggleSelectAll"
                   >
-                    <label
-                      :for="id"
+                    <span
                       class="font-semibold text-interactive-default cursor-pointer"
                     >
                       {{ allSelected ? 'All' : selected.length }} selected
-                    </label>
+                    </span>
                   </Checkbox>
-                </Id>
-              </div>
+                </label>
+              </Id>
             </Tooltip>
 
             <div class="flex space-x-8 items-center">
@@ -161,7 +166,15 @@ export default defineComponent({
         </div>
       </FadeTransition>
 
-      <ul class="mt-10 grid gap-y-10">
+      <TransitionGroup
+        tag="ul"
+        enter-class="opacity-0"
+        move-class="transition-[transform,opacity]"
+        enter-active-class="transition-[transform,opacity]"
+        leave-active-class="transition-[transform,opacity]"
+        leave-to-class="opacity-0"
+        class="mt-10 grid gap-y-10"
+      >
         <ListItem
           v-for="(item, i) in trashItems"
           :id="item"
@@ -170,7 +183,7 @@ export default defineComponent({
           :select-mode="!!selected.length"
           @on-change="onItemCheck"
         />
-      </ul>
+      </TransitionGroup>
     </div>
   </div>
 </template>
