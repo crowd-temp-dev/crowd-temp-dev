@@ -68,7 +68,7 @@ export default defineComponent({
       <RadioGroup
         :id="id"
         class="w-full shadow-divide-bottom"
-        content-class="flex space-x-32 px-20"
+        content-class="flex space-x-28 px-20"
         disable-vertical-tabing
         no-loop
         @on-change="changeTab"
@@ -80,16 +80,23 @@ export default defineComponent({
           name="viewResultTabSwitcher"
           :value="tab.name"
           icon-class="sr-only"
-          class="h-52 fill-before before:!top-auto before:!bottom-0 before:!rounded-t before:!h-3 before:bg-action-primary-default before:transition-[opacity,transform] relative overflow-hidden focus-within:before:bg-action-primary-depressed active:opacity-80 transition-opacity"
+          class="h-52 fill-before before:!top-auto before:!bottom-0 before:!rounded-t before:!left-4 before:!w-[calc(100%-8px)] before:!h-3 before:bg-action-primary-default before:transition-[opacity,transform] relative overflow-hidden active:opacity-80 transition-opacity group"
           :class="{
             'before:translate-y-[100%] before:opacity-0': !tab.active,
             'before:delay-150': tab.active,
             'opacity-40 pointer-events-none': tab.disabled,
+            'cursor-default': tab.active,
           }"
           :disabled="tab.disabled"
         >
           <template #label>
-            <strong :class="{ 'text-text-subdued': !tab.active }">
+            <strong
+              class="relative block fill-before before:transition-opacity before:opacity-0 rounded before:bg-black/5 px-4 before:-z-1 group-focus-within:before:!opacity-100 group-hover:before:opacity-50"
+              :class="{
+                'text-text-subdued':
+                  !tab.active,
+              }"
+            >
               {{ tab.title }}
             </strong>
           </template>
