@@ -27,6 +27,7 @@ export default defineComponent({
       type: String as () => 'low' | 'high' | 'auto',
       default: 'high',
     },
+    hideReloadIcon: Boolean,
   },
   emits: ['load:success', 'load:error', 'load', 'error'],
   setup(_props, { emit }) {
@@ -109,6 +110,7 @@ export default defineComponent({
             class="absolute inset-0 z-1 hidden group-hover:flex justify-center items-center"
           >
             <Tooltip
+              v-if="!hideReloadIcon"
               v-slot="{ events }"
               label="Reload"
               title=""

@@ -77,7 +77,7 @@ export default defineComponent({
           v-for="(tab, i) in tabs"
           :key="i"
           :checked="tab.active"
-          name="view-results-tab-switcher"
+          name="viewResultTabSwitcher"
           :value="tab.name"
           icon-class="sr-only"
           class="h-52 fill-before before:!top-auto before:!bottom-0 before:!rounded-t before:!h-3 before:bg-action-primary-default before:transition-[opacity,transform] relative overflow-hidden focus-within:before:bg-action-primary-depressed active:opacity-80 transition-opacity"

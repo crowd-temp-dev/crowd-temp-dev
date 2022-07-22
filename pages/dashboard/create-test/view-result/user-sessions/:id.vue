@@ -91,8 +91,14 @@ export default defineComponent({
           class: 'flex',
         },
         {
-          text: '🇧🇴',
-          wrapperClass: 'text-center',
+          component: 'Img',
+          attrs: {
+            alt: '** Flag',
+            src: `http://purecatamphetamine.github.io/country-flag-icons/3x2/${'NG'.toUpperCase()}.svg`,
+            hideReloadIcon: true,
+          },
+          class: 'h-16 w-16 shrink-0',
+          wrapperClass: 'flex-centered',
         },
         {
           text: '100%',
