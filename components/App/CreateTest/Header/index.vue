@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api'
+import { defineComponent, computed, ref, watch } from '@vue/composition-api'
+import CommentDialog from './CommentDialog/index.vue'
 import Button from '~/components/Base/Button/index.vue'
 import EditableText from '~/components/Base/EditableText/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
@@ -8,6 +9,8 @@ import { TestSuiteState } from '~/store/testSuite'
 import { RootState } from '~/store'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
 import Dropdown, { DropdownOption } from '~/components/Base/Dropdown/index.vue'
+import FadeTransition from '~/components/Base/FadeTransition/index.vue'
+import { sleep, uid } from '~/utils'
 
 export default defineComponent({
   name: 'AppCreateTestHeader',
@@ -18,8 +21,14 @@ export default defineComponent({
     Skeleton,
     DialogButton,
     Dropdown,
+    FadeTransition,
+    CommentDialog,
   },
   setup(_, { root }) {
+    const showCommentDialog = ref(false)
+
+    const moreActionsId = ref(uid())
+
     const testState = computed(
       () => root.$store.state.testSuite as TestSuiteState
     )
@@ -59,7 +68,11 @@ export default defineComponent({
         },
         {
           title: 'View preview comments',
-          onClick: () => {},
+          onClick: async () => {
+            await sleep()
+
+            showCommentDialog.value = true
+          },
         },
         {
           title: 'Duplicate',
@@ -68,6 +81,13 @@ export default defineComponent({
       ]
     })
 
+    watch(
+      () => root.$route.path,
+      () => {
+        showCommentDialog.value = false
+      }
+    )
+
     return {
       testTitle,
       testPublished,
@@ -75,6 +95,8 @@ export default defineComponent({
       testState,
       emptyTestForm,
       moreActions,
+      showCommentDialog,
+      moreActionsId,
     }
   },
 })
@@ -83,14 +105,6 @@ export default defineComponent({
 <template>
   <div>
     <div class="flex items-center">
-      <!-- <Tooltip v-slot="{ events }" label="To home page">
-        <Button
-          icon="ArrowLeftMinor"
-          aria-label="To home page"
-          to="/dashboard"
-          v-on="events"
-        />
-      </Tooltip> -->
       <h2
         class="mr-8 font-sf-pro-display font-semibold text-[20px] leading-[32px]"
       >
@@ -103,6 +117,7 @@ export default defineComponent({
             label="Click to edit"
             :disabled="!enableEditing"
             open-delay="50"
+            :class="{ 'cursor-default': !enableEditing }"
           >
             <EditableText
               fallback="New Test"
@@ -143,36 +158,45 @@ export default defineComponent({
       </Skeleton>
     </div>
 
-    <div class="flex items-center">
-      <DialogButton plain-action>
-        <span> Use template </span>
-
-        <template #dialog-header>
-          <div>Templates</div>
-        </template>
-
-        <template #dialog>
-          <div>Template will show here...</div>
-        </template>
-      </DialogButton>
-
-      <Dropdown
-        v-slot="{ events, active }"
-        :option="moreActions"
-        placement="bottom-start"
-        :offset="[-4, 4]"
+    <FadeTransition>
+      <div
+        v-if="$route.name === 'dashboard-create-test-:id'"
+        class="flex items-center"
       >
-        <Button plain-action :disclosure="active ? 'up' : 'down'" v-on="events">
-          More action
-        </Button>
-      </Dropdown>
+        <DialogButton plain-action>
+          <span> Use template </span>
 
-      <!-- <PButtonGroup segmented>
-        <Button icon="ChevronLeftMinor" disabled />
+          <template #dialog-header>
+            <div>Templates</div>
+          </template>
 
-        <Button icon="ChevronRightMinor" disabled />
-      </PButtonGroup> -->
-    </div>
+          <template #dialog>
+            <div>Template will show here...</div>
+          </template>
+        </DialogButton>
+
+        <Dropdown
+          v-slot="{ events, active }"
+          :option="moreActions"
+          placement="bottom-start"
+          :offset="[-4, 4]"
+        >
+          <Button
+            :id="moreActionsId"
+            plain-action
+            :disclosure="active ? 'up' : 'down'"
+            v-on="events"
+          >
+            More actions
+          </Button>
+        </Dropdown>
+
+        <CommentDialog
+          v-model="showCommentDialog"
+          :leave-focus="`#${moreActionsId}`"
+        />
+      </div>
+    </FadeTransition>
   </div>
 </template>
 

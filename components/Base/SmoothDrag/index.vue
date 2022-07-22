@@ -88,7 +88,7 @@ export default defineComponent({
       type="transition"
       :name="!drag ? 'flip-list' : null"
       :tag="groupTag"
-      :class="groupClass"
+      :class="[groupClass, { dragging: drag }]"
     >
       <slot v-bind="{ drag: drag }" />
     </TransitionGroup>

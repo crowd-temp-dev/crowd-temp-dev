@@ -25,8 +25,6 @@ const mutations: MutationTree<WelcomeScreenState> = {
       buttonText: string
     }
   ) {
-    console.log(state)
-
     const {
       message = state.message,
       buttonText = state.buttonText,

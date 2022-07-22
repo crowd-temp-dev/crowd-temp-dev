@@ -240,7 +240,13 @@ export default defineComponent({
             ? 'show'
             : 'goto'
 
-        modelSync.value.conditionals.action = firstAction
+        await nextTick()
+
+        if (modelSync.value.conditionals) {
+          modelSync.value.conditionals.action = firstAction
+        } else {
+          nextTick(() => console.log('modelSync.value', modelSync.value))
+        }
       }
     }
 
@@ -306,7 +312,11 @@ export default defineComponent({
           />
 
           <div class="flex items-center space-x-26">
-            <Tooltip v-slot="{ events }" :label="`Duplicate ${questionTitle}`">
+            <Tooltip
+              :key="questionId"
+              v-slot="{ events }"
+              :label="`Duplicate ${questionTitle}`"
+            >
               <span class="cursor-pointer" v-on="events">
                 <PIcon
                   source="DuplicateMinor"

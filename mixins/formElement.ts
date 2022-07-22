@@ -90,6 +90,18 @@ export default defineComponent({
         } else {
           !props.value.pattern && input.removeAttribute('pattern')
         }
+
+        if (props.value.min && input instanceof HTMLInputElement) {
+          input.min = props.value.min
+        } else {
+          !props.value.min && input.removeAttribute('min')
+        }
+
+        if (props.value.max && input instanceof HTMLInputElement) {
+          input.max = props.value.max
+        } else {
+          !props.value.max && input.removeAttribute('max')
+        }
       }
     }
 

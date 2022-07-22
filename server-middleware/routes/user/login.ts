@@ -74,12 +74,36 @@ export default function (router: Router) {
               })
             } else throwIncorrectCredentials()
           } else {
-            throw new Error('{403} Confirm your account first!')
+            throw new Error(
+              `{403} Confirm your account first! &${JSON.stringify({
+                id: user.id,
+                email: user.email,
+                name: `${user.firstName} ${user.lastName}`.trim(),
+              })}&`
+            )
           }
         } else throwIncorrectCredentials()
       })
     } catch (err) {
-      sendFormattedError(err, res)
+      const dataJSON = err.message.match(/\s&.+&$/g)
+
+      let output: Record<string, any>
+
+      if (dataJSON) {
+        output = {
+          data: JSON.parse(dataJSON[0].replace(/\s&|&$/g, '')),
+          title: 'confirm',
+        }
+      }
+
+      sendFormattedError(
+        {
+          ...err,
+          message: err.message.replace(/\s&.+&$/, ''),
+        },
+        res,
+        output
+      )
     }
   })
 }

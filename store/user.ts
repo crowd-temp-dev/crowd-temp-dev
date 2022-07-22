@@ -112,7 +112,7 @@ const actions: ActionTree<UserState, RootState> = {
 
     commit('setLoading')
 
-    const { $axios, $pToast, $store } = this.$router.app
+    const { $axios, $pToast, $store, $router } = this.$router.app
 
     const { data, message, error } = (await Login($axios, {
       password: payload.password,
@@ -140,7 +140,15 @@ const actions: ActionTree<UserState, RootState> = {
       !($store.state as RootState).testSuite.create.empty &&
         $store.commit('testSuite/create/reset', false)
     } else {
-      showToasts($pToast, message)
+      if (error?.data) {
+        if (error.title === 'confirm') {
+          commit('setPublic', error.data)
+
+          await sleep()
+
+          $router.push('/auth/confirm-email')
+        }
+      }
 
       commit('setLoading', false)
     }
@@ -202,7 +210,7 @@ const actions: ActionTree<UserState, RootState> = {
     if (
       (performance.now() - lastReload > oneMinute / 2 || !lastReload) &&
       !state.loggingOut
-    ) {      
+    ) {
       lastReload = performance.now()
 
       const { data, error, message, status } = await ReloadUser(

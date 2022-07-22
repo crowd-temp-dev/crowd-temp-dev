@@ -7,9 +7,12 @@ import { generateShareLink, splitPath } from '~/utils'
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import copyText from '~/utils/copyText'
 import { RootState } from '~/store'
+import TextField from '~/components/Base/TextField/index.vue'
+import MaxParticipants from '~/components/App/CreateTestRecruit/MaxParticipants/index.vue'
 
 interface Feature {
   title: string
+  value?: string
   locked?: boolean
   active?: boolean
   loading?: boolean
@@ -18,13 +21,19 @@ interface Feature {
 
 export default defineComponent({
   name: 'AppCreateTestRecruitPage',
-  components: { LabelSwitch, Button, FadeTransition },
+  components: {
+    LabelSwitch,
+    Button,
+    FadeTransition,
+    TextField,
+    MaxParticipants,
+  },
 
   transition: (to, from) => {
     const splitFrom = splitPath(from?.path || '')
 
-    if (splitFrom[0] === 'create-test') {
-      if (splitFrom[1] === 'view-result') {
+    if (splitFrom[1] === 'create-test') {
+      if (splitFrom[2] === 'view-result') {
         return 'page-transition-slide-right'
       }
       return 'page-transition-slide-left'
@@ -71,15 +80,6 @@ export default defineComponent({
     ])
 
     const features = ref<Feature[]>([
-      {
-        title: 'Unlimited invites',
-        loading: false,
-        toggle: async (val) => {
-          await updateFeatureSwitch(0, {
-            unlimitedInvites: val,
-          })
-        },
-      },
       {
         title: 'Stop accepting responses',
         loading: false,
@@ -223,6 +223,10 @@ export default defineComponent({
           class="mx-auto grid space-y-8 mb-24"
           :style="{ '--fade-leave-duration': '1ms' }"
         >
+          <li>
+            <MaxParticipants :test-published="testPublished" />
+          </li>
+
           <template v-for="(feature, i) in features">
             <li v-if="testPublished ? true : i !== 1" :key="feature.title">
               <LabelSwitch

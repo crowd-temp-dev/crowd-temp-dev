@@ -11,7 +11,7 @@ export default defineComponent({
   layout: 'app' as Layout,
   transition(_, from) {
     if (from) {
-      if (from.path.startsWith('/settings/')) {
+      if (from.path.replace(/^\/dashboard/,'').startsWith('/settings/')) {
         if (/^\/settings\/(?:profile|team-members)\/?/.test(from.path)) {
           return 'page-transition-slide-left'
         }

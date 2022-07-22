@@ -19,7 +19,7 @@ export default defineComponent({
   transition: (to, from) => {
     const splitFrom = splitPath(from?.path || '')
 
-    if (splitFrom[0] === 'create-test') {
+    if (splitFrom[1] === 'create-test') {
       return 'page-transition-slide-right'
     }
 

@@ -115,7 +115,7 @@
 .page-transition-slide-right-leave,
 .page-transition-fade-leave,
 .page-transition-slide-down-leave,
-.page-transition-slide-up-leave{
+.page-transition-slide-up-leave {
   @apply md:will-change-[transform,opacity] transform-gpu;
 }
 
@@ -282,6 +282,10 @@
   @apply cursor-grab active:cursor-grabbing;
 }
 
+.dragging .drag-handle {
+  @apply cursor-grabbing;
+}
+
 .flex-centered {
   display: flex;
   justify-content: center;
@@ -388,4 +392,5 @@ html.fullscreen-loading {
 .ghost-class {
   opacity: 0;
   visibility: hidden;
+  transition-duration: 0s !important;
 }

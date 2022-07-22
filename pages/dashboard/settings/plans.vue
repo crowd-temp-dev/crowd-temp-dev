@@ -9,7 +9,7 @@ export default defineComponent({
   layout: 'app' as Layout,
   transition(_, from) {
     if (from) {
-      if (from.path.startsWith('/settings/')) {
+      if (from.path.replace(/^\/dashboard/,'').startsWith('/settings/')) {
         if (
           /^\/settings\/(?:profile|team-members|custom-branding)\/?/.test(
             from.path

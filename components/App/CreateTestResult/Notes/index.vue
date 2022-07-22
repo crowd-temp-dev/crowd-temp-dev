@@ -1,10 +1,12 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import Button from '~/components/Base/Button/index.vue'
+import DialogButton from '~/components/Base/DialogButton/index.vue'
+import EditableText from '~/components/Base/EditableText/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestResultsNotes',
-  components: { Button },
+  components: { Button, DialogButton, EditableText },
   setup() {
     const modal = ref(false)
 
@@ -34,21 +36,26 @@ export default defineComponent({
         </li>
       </ul>
 
-      <p v-else class="text-text-subdued flex items-center space-x-4">
-        <PIcon source="AlertMinor" class="shrink-0 fill-icon-default" />
-        <strong class="grow"> No note yet </strong>
+      <p v-else class="text-text-subdued flex items-center space-x-4 mb-10">
+        No notes yet. Add notes by clicking on note icon on responses or button
+        below.
       </p>
 
-      <!-- <DialogButton
+      <DialogButton
         icon="CirclePlusMinor"
         full-width
         class="bg-surface-default"
         :dialog-content-class="['min-w-[618px]']"
+        :dialog-attrs="{
+          transition: 'slide-y',
+        }"
       >
         Add new note
 
         <template #dialog-header>
-          <EditableText fallback="Note: Q1 | Participant 1" />
+          <Tooltip v-slot="{ events }" label="Click to edit" open-delay="100" class="w-fit">
+            <EditableText fallback="Note: Q1 | Participant 1" v-on="events" />
+          </Tooltip>
         </template>
 
         <template #dialog>
@@ -56,13 +63,14 @@ export default defineComponent({
             label="Your message or instructions"
             multiline
             :min-height="72"
+            autofocus
           />
         </template>
 
         <template #dialog-footer="{ close }">
           <Button primary @click="close"> Save </Button>
         </template>
-      </DialogButton> -->
+      </DialogButton>
     </aside>
   </div>
 </template>

@@ -20,7 +20,7 @@ export default defineComponent({
   transition(_, from) {
     if (from) {
       // always use backward transition if routing from /settings/*
-      if (from.path.startsWith('/settings/')) {
+      if (from.path.replace(/^\/dashboard/,'').startsWith('/settings/')) {
         return 'page-transition-slide-right'
       }
     }

@@ -112,7 +112,7 @@ export default function (router: Router) {
                 sendSuccess(res, {
                   data: {
                     id: user.id,
-                    name: `${user.firstName} ${user.lastName}`,
+                    name: `${user.firstName} ${user.lastName}`.trim(),
                     email: user.email,
                   },
                   // message: {

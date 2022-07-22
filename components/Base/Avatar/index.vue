@@ -56,7 +56,7 @@ export default defineComponent({
     </p>
 
     <span v-else class="flex-centered w-full h-full">
-      <PIcon source="CustomersMinor" />
+      <PIcon source="CustomersMinor" class="fill-icon-default" />
     </span>
   </div>
 </template>

@@ -243,7 +243,7 @@ export default defineComponent({
     watch(
       () => modelSync.value,
       (val) => {
-        if (val) {          
+        if (val) {
           root.$store.commit('app/addToDialogs', id.value)
         } else {
           root.$store.commit('app/removeFromDialogs', id.value)
@@ -352,7 +352,7 @@ export default defineComponent({
               @click.stop
             >
               <!-- content header -->
-              <div v-if="showHeader" class="header">
+              <header v-if="showHeader" class="header">
                 <p
                   class="flex-grow text-display-small-sm md:text-display-small font-sf-pro-display"
                 >
@@ -377,7 +377,7 @@ export default defineComponent({
                     v-on="events"
                   />
                 </Tooltip>
-              </div>
+              </header>
 
               <!-- content body -->
               <div
@@ -395,9 +395,9 @@ export default defineComponent({
               </div>
 
               <!-- content footer -->
-              <div v-if="canShowFooter" class="footer">
+              <footer v-if="canShowFooter" class="footer">
                 <slot name="footer" v-bind="payload" />
-              </div>
+              </footer>
             </div>
           </Transition>
 
