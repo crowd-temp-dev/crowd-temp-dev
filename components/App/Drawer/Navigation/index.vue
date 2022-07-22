@@ -201,6 +201,7 @@ export default defineComponent({
             placement="right"
             content-class="!text-body !rounded-[6px] !py-5 !px-10 !font-medium"
             arrow-size="7px"
+            open-delay="400"
           >
             <span v-on="events">
               <Button
