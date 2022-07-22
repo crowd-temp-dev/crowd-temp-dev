@@ -6,6 +6,7 @@ export interface AppState {
   dialogs: string[]
   fullscreenLoadingMessage: null | string
   routeDialog: RouteDialog
+  allowMobileView: boolean
   alertDialog: {
     id: string
     key: string
@@ -35,5 +36,6 @@ export default function state(): AppState {
       subtitle: '',
       actions: [],
     },
+    allowMobileView: false,
   }
 }

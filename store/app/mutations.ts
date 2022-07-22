@@ -4,6 +4,10 @@ import { oneFrame, setClientOs, sleep } from '~/utils'
 import { RouteDialog } from '~/types'
 
 const mutation: MutationTree<AppState> = {
+  setAllowMobileView(state, val: boolean) {
+    state.allowMobileView = val
+  },
+
   mountApp(state) {
     state.mounted = true
 

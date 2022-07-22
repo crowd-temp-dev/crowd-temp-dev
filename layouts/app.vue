@@ -147,7 +147,7 @@ export default defineComponent({
   >
     <Transition mode="out-in" v-bind="transitionClasses">
       <!-- Layout for clients signed in -->
-      <SmallDevice v-if="$breakpoint.isMobile" />
+      <SmallDevice v-if="$breakpoint.isMobile && !$appState.allowMobileView" />
 
       <FadeTransition v-else :duration="{ leave: 100 }">
         <div

@@ -46,7 +46,13 @@ export default defineComponent({
       <div
         class="grid grid-rows-2 sm:grid-rows-1 gap-20 justify-items-center items-center"
       >
-        <Button primary size="large"> Switch to desktop view </Button>
+        <Button
+          primary
+          size="large"
+          @click="$store.commit('app/setAllowMobileView', true)"
+        >
+          Switch to desktop view
+        </Button>
 
         <Button size="large" to="/"> Back to homepage </Button>
       </div>
