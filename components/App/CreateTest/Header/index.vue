@@ -143,7 +143,7 @@ export default defineComponent({
             v-if="
               ($route.name === 'dashboard-create-test-:id' && !emptyTestForm) ||
               $route.name === 'dashboard-create-test-recruit-:id' ||
-              $route.name === 'dashboard-create-test-view-result-:id'
+              $route.name.startsWith('dashboard-create-test-view-result-')
             "
             class="origin-left transition-[opacity,transform]"
             :class="[

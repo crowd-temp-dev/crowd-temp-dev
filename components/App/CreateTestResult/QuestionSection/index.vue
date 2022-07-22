@@ -24,7 +24,13 @@ export default defineComponent({
       <div class="flex space-x-20 items-center">
         <slot name="header-action" />
 
-        <PreviewQuestion :title="title" />
+        <div>
+          <PreviewQuestion :title="title" />
+
+          <Button class="ml-12">
+            Collapse
+          </Button>
+        </div>
       </div>
     </div>
 
