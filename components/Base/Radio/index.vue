@@ -36,6 +36,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    iconClass: {
+      type: String,
+      default: undefined,
+    },
   },
   setup(_props, { emit }) {
     const manual = ref(_props.checked)
@@ -71,24 +75,30 @@ export default defineComponent({
       :for="id || idProps.id"
       class="relative flex items-center cursor-pointer group"
     >
-      <span
-        class="relative rounded-full w-18 h-18 border inline-flex fill-before before:!w-10 before:!h-10 before:!inset-[auto] before:bg-action-primary-default items-center justify-center before:scale-0 before:transition-transform before:transform-gpu lg:transition-all bg-surface-default group-focus-within:border-action-primary-pressed group-focus-within:border-2"
-        :class="{
-          'border-interactive-default !border-2 before:scale-100': modelSync,
-          'border-border-default': !modelSync,
-        }"
-      >
-        <input
-          :id="id || idProps.id"
-          type="radio"
-          :checked="modelSync"
-          data-pseudo-input
-          :value="value"
-          :name="name"
-          :required="required"
-          class="sr-only peer position-center absolute"
-          @change="modelSync = $event.target.checked"
-        />
+      <span :class="iconClass" class="flex-centered">
+        <span
+          class="relative rounded-full w-18 h-18 border inline-flex fill-before before:!w-10 before:!h-10 before:!inset-[auto] before:bg-action-primary-default items-center justify-center before:scale-0 before:transition-transform before:transform-gpu lg:transition-all bg-surface-default group-focus-within:border-action-primary-pressed group-focus-within:border-2"
+          :class="[
+            {
+              'border-interactive-default !border-2 before:scale-100':
+                modelSync,
+              'border-border-default': !modelSync,
+            },
+          ]"
+        >
+          <input
+            :id="id || idProps.id"
+            type="radio"
+            :disabled="disabled || undefined"
+            :checked="modelSync"
+            data-pseudo-input
+            :value="value"
+            :name="name"
+            :required="required"
+            class="sr-only peer position-center absolute"
+            @change="modelSync = $event.target.checked"
+          />
+        </span>
       </span>
 
       <slot name="label">

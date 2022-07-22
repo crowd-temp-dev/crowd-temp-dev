@@ -21,6 +21,10 @@ export default defineComponent({
     destructive: Boolean,
     loading: Boolean,
     readonly: Boolean,
+    label: {
+      type: String,
+      default: undefined,
+    },
   },
 
   setup(_props) {
@@ -80,13 +84,17 @@ export default defineComponent({
     @mouseover.native="(e) => $emit('mouseover', e)"
   >
     <span
-      v-if="$slots.default && $slots.default.length"
+      v-if="($slots.default && $slots.default.length) || label"
       class="transition-opacity"
       :class="{
         'opacity-0 cursor-default': loading,
       }"
     >
-      <slot />
+      <slot>
+        <template v-if="label">
+          {{ label }}
+        </template>
+      </slot>
     </span>
 
     <div

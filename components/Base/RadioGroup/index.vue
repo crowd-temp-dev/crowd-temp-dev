@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, watch } from '@vue/composition-api'
 import TrapFocus from 'ui-trap-focus'
 import { sleep } from '~/utils'
 
@@ -19,8 +19,12 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    disableVerticalTabing: Boolean,
+    disableHorizontalTabing: Boolean,
+    noLoop: Boolean,
   },
-  setup(_props) {
+  emits: ['on-change'],
+  setup(_props, { emit }) {
     const root = ref<HTMLElement | null>(null)
 
     const value = ref()
@@ -62,28 +66,62 @@ export default defineComponent({
 
           clearDebounce()
         }
-      }, 64)
+      }, 32)
     }
 
     const onArrowKeysPress = (evt: KeyboardEvent) => {
-      if (/^(?:arrow)(?:up|right|down|left)$/i.test(evt.key)) {
+      let keyRegExpArray = ['up', 'down', 'right', 'left']
+
+      if (_props.disableHorizontalTabing) {
+        keyRegExpArray = keyRegExpArray.filter((x) => !/left|right/.test(x))
+      }
+
+      if (_props.disableVerticalTabing) {
+        keyRegExpArray = keyRegExpArray.filter((x) => !/up|down/.test(x))
+      }
+
+      if (
+        new RegExp(`^(?:arrow)(?:${keyRegExpArray.join('|')})$`, 'i').test(
+          evt.key
+        )
+      ) {
         evt.preventDefault()
 
         new TrapFocus({
-          forward: () => /(?:down|right)$/i.test(evt.key),
-          backward: () => /(?:up|left)$/i.test(evt.key),
-          loop: true,
+          forward: () => {
+            if (_props.disableHorizontalTabing) {
+              return /(?:down)$/i.test(evt.key)
+            }
+            if (_props.disableVerticalTabing) {
+              return /(?:right)$/i.test(evt.key)
+            }
+
+            return /(?:down|right)$/i.test(evt.key)
+          },
+          backward: () => {
+            if (_props.disableHorizontalTabing) {
+              return /(?:up)$/i.test(evt.key)
+            }
+            if (_props.disableVerticalTabing) {
+              return /(?:left)$/i.test(evt.key)
+            }
+            return /(?:up|left)$/i.test(evt.key)
+          },
+          loop: !_props.noLoop,
           children: 'input',
         })
           .init(evt)
-          .then(async (el) => {
+          .then(async (_el) => {
+            const el = _el as HTMLInputElement
             if (el) {
-              clearInputs(el as HTMLInputElement)
+              clearInputs(el)
 
               await sleep()
 
               el.click()
               ;(el as HTMLInputElement).checked = true
+
+              value.value = el.value || el.name
             }
           })
       }
@@ -101,7 +139,7 @@ export default defineComponent({
         if (label) {
           const input = label.querySelector('input') as HTMLInputElement | null
 
-          if (input) {
+          if (input && !input.disabled) {
             value.value = input.value || input.name
 
             clearInputs(input)
@@ -121,6 +159,13 @@ export default defineComponent({
         }
       }
     }
+
+    watch(
+      () => value.value,
+      (nv) => {
+        emit('on-change', nv)
+      }
+    )
 
     return {
       root,

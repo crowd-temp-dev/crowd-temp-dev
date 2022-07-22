@@ -2,19 +2,12 @@
 import { computed, defineComponent } from '@vue/composition-api'
 import Notes from '@/components/App/CreateTestResult/Notes/index.vue'
 import Summary from '@/components/App/CreateTestResult/Summary/index.vue'
-import DesignSurvey from '@/components/App/CreateTestResult/DesignSurvey/index.vue'
-import SimpleSurvey from '@/components/App/CreateTestResult/SimpleSurvey/index.vue'
-import FiveSecondTest from '@/components/App/CreateTestResult/FiveSecondTest/index.vue'
-import WebsiteEvaluation from '@/components/App/CreateTestResult/WebsiteEvaluation/index.vue'
-import PrototypeEvaluation from '@/components/App/CreateTestResult/PrototypeEvaluation/index.vue'
-import PreferenceTest from '@/components/App/CreateTestResult/PreferenceTest/index.vue'
-import CardSorting from '@/components/App/CreateTestResult/CardSorting/index.vue'
-
 import { dynamicPageTransition } from '~/utils/pageTransition'
 import { splitPath } from '~/utils'
 import Spinner from '~/components/Base/Spinner/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { RootState } from '~/store'
+import TabSwitcher from '~/components/App/CreateTestResult/TabSwitcher/index.vue'
 
 export default defineComponent({
   name: 'AppCreateTestRecruitPage',
@@ -23,13 +16,7 @@ export default defineComponent({
     Summary,
     Spinner,
     FadeTransition,
-    DesignSurvey,
-    SimpleSurvey,
-    FiveSecondTest,
-    WebsiteEvaluation,
-    PrototypeEvaluation,
-    PreferenceTest,
-    CardSorting,
+    TabSwitcher,
   },
 
   transition: (to, from) => {
@@ -54,30 +41,17 @@ export default defineComponent({
       return result.value.loading && root.$route.params.id !== result.value.id
     })
 
-    const resultAnswers = computed(() => {
-      // get all question-\d from result.questions
-
-      if (fetchingResult.value) {
-        return []
-      }
-
-      return Object.entries(result.value.questions)
-        .filter(([key]) => /^question-\d+$/.test(key))
-        .map(([key, value]) => {
-          return {
-            index: Number(key.replace(/^question-/, '')),
-            type: value.type,
-          }
-        })
-    })
-
     root.$store
       .dispatch('testSuite/detail/setId', root.$route.params.id)
       .then(() => {
         root.$store.dispatch('testSuite/viewResult/fetch')
       })
 
-    return { result, fetchingResult, resultAnswers }
+    return { result, fetchingResult }
+  },
+
+  head: {
+    title: 'View results',
   },
 })
 </script>
@@ -97,19 +71,18 @@ export default defineComponent({
       </div>
 
       <template v-else>
-        <div class="min-w-[min(100%,800px)] grid gap-y-32">
+        <div class="min-w-[min(100%,800px)] grid">
           <Summary
             :participants="result.answers.length"
             :responses="result.responses"
             :share-link="result.testDetails.shareLink"
           />
 
-          <Component
-            :is="answer.type"
-            v-for="answer in resultAnswers"
-            :key="answer.index"
-            :numbering="answer.index"
-          />
+          <TabSwitcher />
+
+          <div class="pt-16">
+            <NuxtChild />
+          </div>
         </div>
 
         <Notes />

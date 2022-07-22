@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="rounded-lg bg-surface-default p-20 shadow-2 w-full">
+  <section class="rounded-lg bg-surface-default p-20 shadow-2 w-full mb-32">
     <!-- header -->
     <div class="mb-10 grid grid-flow-col grid-cols-4 items-center">
       <template v-for="(item, i) in headerStats">

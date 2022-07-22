@@ -2,7 +2,7 @@
   <div>
     <div class="grid items-center">
       <h2
-        class="font-sf-pro-display font-semibold text-[20px] leading-[32px]"
+        class="font-sf-pro-display font-semibold text-[20px] leading-[24px]"
       >
         Notes
       </h2>

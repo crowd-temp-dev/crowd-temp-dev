@@ -45,7 +45,7 @@ export default defineComponent({
 
       const recruitRouteName = 'dashboard-create-test-recruit-:id'
 
-      const viewResultRouteName = 'dashboard-create-test-view-result-:id'
+      const viewResultRouteName = 'dashboard-create-test-view-result-'
 
       const testCreated = testState.detail.created
 
@@ -74,7 +74,7 @@ export default defineComponent({
         {
           title: 'View Results',
           icon: 'NoteMajor',
-          active: routeName === viewResultRouteName,
+          active: routeName.startsWith(viewResultRouteName),
           done: testPublished,
           disabled: [createTestRouteName, recruitRouteName].includes(routeName),
           to: `/dashboard/create-test/view-result/${testId}`,

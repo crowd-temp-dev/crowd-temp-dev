@@ -76,7 +76,7 @@ export default defineComponent({
     leave-active-class="will-change-[transform,opacity] transition-[transform,opacity] transfrom-gpu"
     leave-to-class="opacity-0 -translate-x-10 will-change-[transform,opacity]"
     class="isolate"
-    @keydown="hideReplyOnEsc"
+    @keydown.native="hideReplyOnEsc"
   >
     <li
       v-for="(message, i) in messages"
@@ -92,7 +92,8 @@ export default defineComponent({
         :name="message.user.name"
         :initials="message.user.initials"
         size="small"
-        class="shrink-0 z-1 relative"
+        class="shrink-0 z-1 relative transition-transform"
+        :class="{ 'scale-[0.9]': i > 0 }"
       />
 
       <div class="mt-4 w-full">
@@ -118,6 +119,7 @@ export default defineComponent({
           v-else-if="replying === message.id"
           class="mt-40 -ml-42 w-[calc(100%+32px)]"
           autofocus
+          scroll-into-view
           @on-comment="(evt) => onComment(i, evt)"
         />
       </div>

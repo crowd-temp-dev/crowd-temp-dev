@@ -298,13 +298,13 @@ html.fullscreen-loading {
   height: 100%;
 }
 
-.page-transition-slide-left-enter .app-page-header:not(.no-transition),
+/* .page-transition-slide-left-enter .app-page-header:not(.no-transition),
 .page-transition-slide-right-enter .app-page-header:not(.no-transition) {
   @apply opacity-0;
-}
+} */
 
 .app-page-header {
-  @apply bg-surface-default px-32 xl:px-64 h-64 w-full sticky top-0 z-10 duration-[400ms] transition-[opacity,transform] transform-gpu delay-[100ms];
+  @apply bg-surface-default px-32 xl:px-64 h-64 w-full sticky top-0 z-10;
   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.05);
 }
 

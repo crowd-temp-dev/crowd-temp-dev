@@ -169,6 +169,10 @@ export default defineComponent({
       })
     })
   },
+
+  head: {
+    title: 'Recruit',
+  },
 })
 </script>
 

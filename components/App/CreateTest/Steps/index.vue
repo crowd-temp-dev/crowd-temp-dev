@@ -125,19 +125,29 @@ export default defineComponent({
 <template>
   <div id="create-test-form-wrapper" class="grid gap-y-20">
     <TestDetails />
-    
+
     <WelcomeScreen />
 
     <template v-if="questions.length">
-      <Component
-        :is="type"
-        v-for="({ type, id }, i) in questions"
-        v-bind="{
-          rootNumber: i + 1,
-          id,
-        }"
-        :key="id"
-      />
+      <TransitionGroup
+        tag="div"
+        enter-class="!opacity-0"
+        move-class="transition-opacity"
+        enter-active-class="transition-opacity delay-[50ms]"
+        leave-active-class="transition-opacity delay-[50ms]"
+        leave-to-class="!opacity-0"
+        class="grid gap-y-20"
+      >
+        <Component
+          :is="type"
+          v-for="({ type, id }, i) in questions"
+          v-bind="{
+            rootNumber: i + 1,
+            id,
+          }"
+          :key="id"
+        />
+      </TransitionGroup>
     </template>
 
     <div v-else class="mb-16 fade-appear">

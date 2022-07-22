@@ -104,8 +104,9 @@ export default defineComponent({
   <div class="w-full p-32 pb-96">
     <div class="max-w-app mx-auto isolate">
       <Intersection
-        :config="{ rootMargin: '-56px 0px 0px 0px' }"
+        :config="{ rootMargin: '-62px 0px 0px 0px' }"
         root="main"
+        :disabled="!selected.length"
         @update:entry="onHeaderIntersection"
       >
         <h2 class="text-heading leading-[20px] text-text-subdued">

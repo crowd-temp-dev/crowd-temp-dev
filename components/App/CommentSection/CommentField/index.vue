@@ -1,24 +1,42 @@
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, onMounted } from '@vue/composition-api'
+import { scrollMain, sleep } from '~/utils'
 
 export default defineComponent({
   name: 'AppCreateTestHeaderCommentDialog',
   components: {},
   props: {
     autofocus: Boolean,
+    scrollIntoView: Boolean,
   },
-  emits: ['on-comment'],
-  setup() {
+  emits: ['on-comment', 'on-mounted'],
+  setup(_props, { emit }) {
+    const root = ref<HTMLElement>()
+
     const commentValue = ref('')
 
-    return { commentValue }
+    onMounted(async () => {
+      await sleep()
+
+      emit('on-mounted')
+
+      if (_props.scrollIntoView && root.value) {
+        const { bottom, top } = root.value.getBoundingClientRect()
+
+        if (bottom > innerHeight - 116) {
+          scrollMain(top)
+        }
+      }
+    })
+
+    return { commentValue, root }
   },
 })
 </script>
 
 <template>
   <Id v-slot="{ id }">
-    <label :for="id" class="block">
+    <label ref="root" :for="id" class="block">
       <TextField
         :id="id"
         v-model="commentValue"

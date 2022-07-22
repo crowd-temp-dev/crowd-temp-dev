@@ -50,7 +50,7 @@ export default defineComponent({
 
     <p
       v-else-if="initials"
-      class="text-decorative-text-one bg-decorative-surface-one uppercase h-full w-full rounded-[inherit] flex-centered font-medium"
+      class="text-decorative-text-one bg-decorative-surface-one uppercase h-full w-full rounded-[inherit] flex-centered font-medium cursor-default"
     >
       {{ initials }}
     </p>

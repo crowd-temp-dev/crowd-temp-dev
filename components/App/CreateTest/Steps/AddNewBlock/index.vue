@@ -1,5 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  ref,
+  watch,
+} from '@vue/composition-api'
 import TrapFocus from 'ui-trap-focus'
 import Button from '@/components/Base/Button/index.vue'
 import {
@@ -97,6 +103,8 @@ export default defineComponent({
         index: _props.sectionIndex,
       })
 
+      await nextTick()
+
       showHelper.value = false
 
       await sleep(150)
@@ -139,7 +147,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <Transition name="fade-transition" mode="out-in">
+  <FadeTransition :duration="{ leave: showHelper ? 150 : 1 }">
     <div
       v-if="showHelper"
       :id="id"
@@ -215,7 +223,7 @@ export default defineComponent({
         </div>
       </FadeTransition>
     </div>
-  </Transition>
+  </FadeTransition>
 </template>
 
 <style scoped>

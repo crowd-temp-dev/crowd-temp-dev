@@ -47,6 +47,17 @@ export default defineComponent({
 
     const props = computed(() => _props)
 
+    const triggerReconnect = computed(() => {
+      const { config, once, root, thresholds } = _props
+
+      return {
+        config,
+        once,
+        root,
+        thresholds,
+      }
+    })
+
     const instance = getCurrentInstance()
 
     const disconnect = () => {
@@ -106,6 +117,14 @@ export default defineComponent({
       observer.value?.observe(elem)
     }
 
+    const reconnect = async () => {
+      disconnect()
+
+      await nextTick()
+
+      await connect()
+    }
+
     const intersectionCallback = async (
       entries: IntersectionObserverEntry[]
     ) => {
@@ -157,7 +176,14 @@ export default defineComponent({
       return entry.value
     })
 
-    watch(() => props.value.disabled, disconnect)
+    watch(
+      () => props.value.disabled,
+      (nv) => {
+        nv ? disconnect() : connect()
+      }
+    )
+
+    watch(() => triggerReconnect.value, reconnect)
 
     onMounted(onMount)
 
