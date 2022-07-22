@@ -3,6 +3,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 import CommentField from '../CommentField/index.vue'
 import Avatar from '~/components/Base/Avatar/index.vue'
 import { uid } from '~/utils'
+import eventKey from '~/utils/eventKey'
 
 export default defineComponent({
   name: 'AppCreateTestHeaderCommentDialog',
@@ -49,13 +50,25 @@ export default defineComponent({
       replying.value = null
     }
 
-    return { messages, replying, onReply, onComment }
+    const hideReplyOnEsc = (evt: KeyboardEvent) => {
+      if (!replying.value) {
+        return
+      }
+
+      if (eventKey(evt) === 'esc') {
+        evt.stopPropagation()
+
+        replying.value = null
+      }
+    }
+
+    return { messages, replying, onReply, onComment, hideReplyOnEsc }
   },
 })
 </script>
 
 <template>
-  <ol class="isolate">
+  <ol class="isolate" @keydown="hideReplyOnEsc">
     <li
       v-for="(message, i) in messages"
       :key="i"
@@ -65,7 +78,6 @@ export default defineComponent({
         'before:invisible':
           i === messages.length - 1 && replying !== message.id,
       }"
-      @keydown.esc.stop="replying = null"
     >
       <Avatar
         :name="message.user.name"
