@@ -178,39 +178,39 @@ const actions: ActionTree<TestSuiteCreateState, RootState> = {
 
       await sleep(performance.now() - submitTime >= 1000 ? 0 : 500)
 
+      await app.$nextTick()
+
+      if (!error) {
+        if (duplicate) {
+          await this.$router.replace({
+            params: {
+              id: detail.id,
+            },
+          })
+        } else {
+          await this.$router.push(`/dashboard/create-test/recruit/${detail.id}`)
+        }
+
+        await dispatch('resetForm')
+
+        showToasts(
+          app.$pToast,
+          duplicate
+            ? [
+                {
+                  content: 'Test duplicated!',
+                  type: 'success',
+                },
+              ]
+            : message
+        )
+      } else {
+        showToasts(app.$pToast, message)
+      }
+
       commit('setSubmitError', !!error)
 
       commit('setSubmitting', false)
-
-      app.$nextTick(() => {
-        if (!error) {
-          if (duplicate) {
-            this.$router.replace({
-              params: {
-                id: detail.id,
-              },
-            })
-          } else {
-            this.$router.push(`/dashboard/create-test/recruit/${detail.id}`)
-          }
-
-          dispatch('resetForm')
-
-          showToasts(
-            app.$pToast,
-            duplicate
-              ? [
-                  {
-                    content: 'Test duplicated!',
-                    type: 'success',
-                  },
-                ]
-              : message
-          )
-        } else {
-          showToasts(app.$pToast, message)
-        }
-      })
 
       return { data, error, message }
     } else {
