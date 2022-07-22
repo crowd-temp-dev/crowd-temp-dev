@@ -100,12 +100,14 @@ export default defineComponent({
         </div>
       </div>
 
-      <div class="flex items-center">
+      <div class="flex items-center flex-wrap xl:flex-nowrap justify-end">
         <TestTypes v-model="testType" />
 
         <Button class="xl:mr-6 mb-6 xl:mb-0"> Filter results </Button>
 
-        <ShareResult />
+        <div class="w-full xl:w-[initial] flex justify-end">
+          <ShareResult />
+        </div>
       </div>
     </div>
   </section>
