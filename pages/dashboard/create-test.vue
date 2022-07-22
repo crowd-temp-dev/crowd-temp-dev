@@ -77,7 +77,7 @@ export default defineComponent({
           active: routeName.startsWith(viewResultRouteName),
           done: testPublished,
           disabled: [createTestRouteName, recruitRouteName].includes(routeName),
-          to: `/dashboard/create-test/view-result/${testId}`,
+          to: `/dashboard/create-test/view-result/responses/${testId}`,
         },
       ] as Step[]
     })

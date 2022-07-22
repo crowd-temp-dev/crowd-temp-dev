@@ -75,7 +75,7 @@ const actions: ActionTree<AnswerTestState, RootState> = {
               : val.progress === 'Draft: Recruit'
               ? 'recruit'
               : 'view-result'
-          }/${val.id}`,
+          }/responses/${val.id}`,
           toggleFavourite: async () =>
             await dispatch('toggleFavourite', val.id),
         }))

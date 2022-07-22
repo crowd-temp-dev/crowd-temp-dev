@@ -274,7 +274,7 @@ export default defineComponent({
           <Button
             v-if="testPublished"
             primary
-            :to="`/dashboard/create-test/view-result/${testId}`"
+            :to="`/dashboard/create-test/view-result/responses/${testId}`"
           >
             View Results
           </Button>
