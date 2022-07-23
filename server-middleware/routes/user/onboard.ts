@@ -65,7 +65,7 @@ export default function (router: Router) {
               req.body as OnboardForm
 
             if (user.onboarded) {
-              throw new Error('{403} Already onboarded!')
+              throw new Error('{405} Already onboarded!')
             }
 
             const survey = await UserOnboard.create(
@@ -81,7 +81,7 @@ export default function (router: Router) {
             )
 
             if (!survey) {
-              throw new Error('{409} Error completing setup!')
+              throw new Error('{409} Error onboarding!')
             } else {
               await user.update({
                 onboarded: true,

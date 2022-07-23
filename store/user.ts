@@ -344,7 +344,10 @@ const actions: ActionTree<UserState, RootState> = {
       message: 'Onboarding...',
     })
 
-    const { data, error, message } = await SetupAccount(app.$axios, payload)
+    const { data, error, message, status } = await SetupAccount(
+      app.$axios,
+      payload
+    )
 
     if (error) {
       showToasts(app.$pToast, message)
@@ -354,13 +357,15 @@ const actions: ActionTree<UserState, RootState> = {
       await app.$nextTick()
 
       await sleep()
-
-      await app.$router.replace('/dashboard')
-
-      app.$fullscreenLoading.hide({
-        id: onboardingLoadingId,
-      })
     }
+
+    if (data || status === 405) {
+      await app.$router.replace('/dashboard')
+    }
+
+    app.$fullscreenLoading.hide({
+      id: onboardingLoadingId,
+    })
   },
 }
 
