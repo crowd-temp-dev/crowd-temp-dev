@@ -1,5 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  ref,
+  watch,
+  nextTick,
+} from '@vue/composition-api'
 import Header from '~/components/App/Header/index.vue'
 import Navigation from '~/components/App/Drawer/Navigation/index.vue'
 import PageHeader from '~/components/App/PageHeader/index.vue'
@@ -12,6 +18,7 @@ import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { RootState } from '~/store'
 import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 import DelayMount from '~/components/Base/DelayMount/index.vue'
+import { sleep } from '~/utils'
 // import LoadingBar from '~/components/Base/LoadingBar/index.vue'
 
 export default defineComponent({
@@ -29,7 +36,7 @@ export default defineComponent({
   mixins: [layouts],
   middleware: isLoggedInMiddleware,
   setup(_, { root }) {
-    const main = ref(null)
+    const main = ref<HTMLElement>(null)
 
     const dialogs = computed(
       () => root.$store.getters['app/nonTooltips'] as string[]
@@ -72,18 +79,26 @@ export default defineComponent({
     // scroll main element to top
     watch(
       () => root.$route.fullPath,
-      () => {
-        if (main.value) {
-          const timeout = setTimeout(
-            () => {
-              const el = main.value as unknown as HTMLElement
-              el.scrollTo(0, 0)
+      async (nv, ov) => {
+        await nextTick()
 
-              clearTimeout(timeout)
-            },
+        if (main.value) {
+          const afterPageTransition = async (extra: number = 0) => {
             // Dont change this without changing the .page-transition-*-leave-active duration in /assets/css/utilities.css
-            100
-          )
+            await sleep(100 + extra)
+          }
+
+          const viewResultRegExp = /project\/view-result/
+
+          if (viewResultRegExp.test(ov) && viewResultRegExp.test(nv)) {
+            return
+          }
+
+          await afterPageTransition()
+
+          const el = main.value
+
+          el.scrollTo(0, 0)
         }
       }
     )

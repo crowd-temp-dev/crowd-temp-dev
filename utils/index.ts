@@ -653,9 +653,7 @@ export const confirmDeleteAccountRegExp = `^${confirmDeleteAccount}$`
 
 export const pingAddNewTestBtn = async () => {
   if (process.client) {
-    const addNewTestRoot = document.getElementById(
-      'add-new-test'
-    ) as VueElement
+    const addNewTestRoot = document.getElementById('add-new-test') as VueElement
 
     if (addNewTestRoot) {
       addNewTestRoot.scrollIntoView({

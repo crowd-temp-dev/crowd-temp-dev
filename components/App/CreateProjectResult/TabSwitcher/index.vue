@@ -2,6 +2,7 @@
 import { computed, defineComponent } from '@vue/composition-api'
 import { splitPath } from '~/utils'
 import Radio from '~/components/Base/Radio/index.vue'
+import { viewResultTabSwitcher } from '~/utils/elementIds'
 
 type TabPath = 'user-sessions' | 'responses' | 'analytics' | 'comments'
 
@@ -53,7 +54,7 @@ export default defineComponent({
       root.$router.push(`/dashboard/project/view-result/${tab}/${testId}/`)
     }
 
-    return { tabs, changeTab }
+    return { tabs, changeTab, viewResultTabSwitcher }
   },
 
   fetch() {},
@@ -62,6 +63,7 @@ export default defineComponent({
 
 <template>
   <div
+    :id="viewResultTabSwitcher"
     class="sticky top-63 bg-surface-neutral-disabled z-1 w-[calc(100%+8px)] ml-[-4px] px-2"
   >
     <Id v-slot="{ id }">
@@ -93,8 +95,7 @@ export default defineComponent({
             <strong
               class="relative block fill-before before:transition-opacity before:opacity-0 rounded before:bg-black/5 px-4 before:-z-1 group-focus-within:before:!opacity-100 group-hover:before:opacity-50"
               :class="{
-                'text-text-subdued':
-                  !tab.active,
+                'text-text-subdued': !tab.active,
               }"
             >
               {{ tab.title }}
