@@ -15,7 +15,7 @@ import {
 } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 import { LoginForm } from '~/server-middleware/routes/user/login'
-import { formBody, nextFrame, oneMinute, sleep } from '~/utils'
+import { formBody, nextFrame, oneMinute, sleep, uid } from '~/utils'
 import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
@@ -102,6 +102,8 @@ const mutations: MutationTree<UserState> = {
 
 // debounce reload
 let lastReload = 0
+
+const onboardingLoadingId = uid()
 
 const actions: ActionTree<UserState, RootState> = {
   async login({ commit, state }, payload: LoginPayload) {
@@ -337,6 +339,11 @@ const actions: ActionTree<UserState, RootState> = {
 
     const { app } = this.$router
 
+    app.$fullscreenLoading.show({
+      id: onboardingLoadingId,
+      message: 'Onboarding...',
+    })
+
     const { data, error, message } = await SetupAccount(app.$axios, payload)
 
     if (error) {
@@ -348,7 +355,11 @@ const actions: ActionTree<UserState, RootState> = {
 
       await sleep()
 
-      app.$router.replace('/dashboard')
+      await app.$router.replace('/dashboard')
+
+      app.$fullscreenLoading.hide({
+        id: onboardingLoadingId,
+      })
     }
   },
 }
