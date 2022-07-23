@@ -4,7 +4,7 @@ import Dropdown from '../../../../Base/Dropdown/index.vue'
 import type { DropdownOption } from '~/components/Base/Dropdown/index.vue'
 
 export default defineComponent({
-  name: 'AppProjectResultSummaryTestTypes',
+  name: 'AppProjectResultSummaryProjectTypes',
   components: { Dropdown },
   model: {
     prop: 'modelValue',
@@ -26,7 +26,7 @@ export default defineComponent({
       },
     })
     const options = computed<DropdownOption[]>(() => {
-      return ['All test types', 'Simple survey'].map((x, i) => ({
+      return ['All project types', 'Simple survey'].map((x, i) => ({
         title: x,
         onClick: () => {
           modelSync.value = i

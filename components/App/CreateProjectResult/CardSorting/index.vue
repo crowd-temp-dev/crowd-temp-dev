@@ -3,13 +3,13 @@ import { defineComponent, computed } from '@vue/composition-api'
 import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
 import Item from './Item/index.vue'
-import viewResultTestType from '~/mixins/view-result-test-type'
+import viewResultProjectType from '~/mixins/view-result-project-type'
 import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppProjectResultCardSorting',
   components: { Question, QuestionSection, Item },
-  mixins: [viewResultTestType],
+  mixins: [viewResultProjectType],
   setup(_props, { root }) {
     const props = computed(() => _props as Record<string, any>)
 

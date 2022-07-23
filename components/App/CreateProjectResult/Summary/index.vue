@@ -1,6 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
-import TestTypes from './TestTypes/index.vue'
+import ProjectTypes from './ProjectTypes/index.vue'
 import ShareResult from './ShareResult/index.vue'
 import Button from '@/components/Base/Button/index.vue'
 import CopyText from '~/components/Base/CopyText/index.vue'
@@ -8,7 +8,7 @@ import { generateShareLink } from '~/utils'
 
 export default defineComponent({
   name: 'AppProjectResultSummary',
-  components: { Button, CopyText, TestTypes, ShareResult },
+  components: { Button, CopyText, ProjectTypes, ShareResult },
   props: {
     participants: {
       type: Number,
@@ -26,7 +26,7 @@ export default defineComponent({
   setup(_props) {
     const getShareLink = computed(() => generateShareLink(_props.shareLink))
 
-    const testType = ref(0)
+    const projectType = ref(0)
 
     const headerStats = computed(() => {
       return [
@@ -49,7 +49,7 @@ export default defineComponent({
       ]
     })
 
-    return { getShareLink, headerStats, testType }
+    return { getShareLink, headerStats, projectType }
   },
 })
 </script>
@@ -101,7 +101,7 @@ export default defineComponent({
       </div>
 
       <div class="flex items-center flex-wrap xl:flex-nowrap justify-end">
-        <TestTypes v-model="testType" />
+        <ProjectTypes v-model="projectType" />
 
         <Button class="xl:mr-6 mb-6 xl:mb-0"> Filter results </Button>
 

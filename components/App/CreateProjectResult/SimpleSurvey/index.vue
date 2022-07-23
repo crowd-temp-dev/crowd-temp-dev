@@ -2,12 +2,12 @@
 import { defineComponent } from '@vue/composition-api'
 import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
-import viewResultTestType from '~/mixins/view-result-test-type'
+import viewResultProjectType from '~/mixins/view-result-project-type'
 
 export default defineComponent({
   name: 'AppProjectResultSimpleSurvey',
   components: { Question, QuestionSection },
-  mixins: [viewResultTestType],
+  mixins: [viewResultProjectType],
 })
 </script>
 

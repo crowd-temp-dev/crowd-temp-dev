@@ -3,14 +3,14 @@ import { computed, defineComponent } from '@vue/composition-api'
 import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
 import PreviewURL from '../../CreateProject/PreviewURL/index.vue'
-import viewResultTestType from '~/mixins/view-result-test-type'
+import viewResultProjectType from '~/mixins/view-result-project-type'
 import { routeQuery } from '~/server-middleware/utils'
 import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppProjectResultPrototypeEvaluation',
   components: { Question, QuestionSection, PreviewURL },
-  mixins: [viewResultTestType],
+  mixins: [viewResultProjectType],
   setup(_props, { root }) {
     const props = computed(() => _props as Record<string, any>)
 

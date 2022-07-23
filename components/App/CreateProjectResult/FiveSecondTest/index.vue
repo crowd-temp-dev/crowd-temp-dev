@@ -2,14 +2,14 @@
 import { computed, defineComponent } from '@vue/composition-api'
 import QuestionSection from '../QuestionSection/index.vue'
 import Question from '../Question/index.vue'
-import viewResultTestType from '~/mixins/view-result-test-type'
+import viewResultProjectType from '~/mixins/view-result-project-type'
 import DialogButton from '~/components/Base/DialogButton/index.vue'
 import { RootState } from '~/store'
 
 export default defineComponent({
   name: 'AppProjectResultFiveSecondTest',
   components: { Question, QuestionSection, DialogButton },
-  mixins: [viewResultTestType],
+  mixins: [viewResultProjectType],
   setup(_props, { root }) {
     const props = computed(() => _props as Record<string, any>)
 
