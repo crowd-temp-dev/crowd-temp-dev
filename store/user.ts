@@ -367,6 +367,8 @@ const actions: ActionTree<UserState, RootState> = {
         } as User)
 
         await nextTick()
+
+        app.$user.reload()
       }
 
       await app.$router.replace('/dashboard')
