@@ -74,7 +74,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
+  <div class="grid gap-y-16">
     <Component
       :is="answer.type"
       v-for="answer in resultAnswers"

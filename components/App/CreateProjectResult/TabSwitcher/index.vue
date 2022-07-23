@@ -62,13 +62,13 @@ export default defineComponent({
 
 <template>
   <div
-    class="sticky top-64 bg-surface-neutral-disabled z-1 w-[calc(100%+8px)] ml-[-4px] px-2"
+    class="sticky top-63 bg-surface-neutral-disabled z-1 w-[calc(100%+8px)] ml-[-4px] px-2"
   >
     <Id v-slot="{ id }">
       <RadioGroup
         :id="id"
         class="w-full shadow-divide-bottom"
-        content-class="flex space-x-28 px-20"
+        content-class="flex space-x-28 px-0 -ml-2"
         disable-vertical-tabing
         no-loop
         @on-change="changeTab"
