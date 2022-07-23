@@ -8,7 +8,7 @@ import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
-import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
+import { OnboardForm } from '~/server-middleware/routes/user/onboard'
 
 // PascalCased function names!
 export const Signup: ServiceHandler<SignUpForm, User> = async (
@@ -156,7 +156,7 @@ export const ResendVerificationEmail: ServiceHandler<
   )
 }
 
-export const SetupAccount: ServiceHandler<SetupAccountForm, User> = async (
+export const SetupAccount: ServiceHandler<OnboardForm, User> = async (
   axios,
   payload
 ) => {

@@ -10,9 +10,9 @@ import { Uuidv4 } from '../../utils/model'
 import { userCompanySize, userReferrer, userWorkRole } from '../../../utils'
 
 // eslint-disable-next-line no-use-before-define
-export class UserSurvey extends Model<
-  InferAttributes<UserSurvey>,
-  InferCreationAttributes<UserSurvey>
+export class UserOnboard extends Model<
+  InferAttributes<UserOnboard>,
+  InferCreationAttributes<UserOnboard>
 > {
   declare id: CreationOptional<string>
   declare useCase: string
@@ -22,8 +22,8 @@ export class UserSurvey extends Model<
   declare referrer: string
 }
 
-export default function initUserSurvey(dbInstance: Sequelize) {
-  UserSurvey.init(
+export default function initUserOnboard(dbInstance: Sequelize) {
+  UserOnboard.init(
     {
       id: {
         ...Uuidv4,
@@ -84,5 +84,5 @@ export default function initUserSurvey(dbInstance: Sequelize) {
     }
   )
 
-  return UserSurvey
+  return UserOnboard
 }

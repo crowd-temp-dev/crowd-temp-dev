@@ -33,7 +33,7 @@ export class User extends Model<
   declare provider?: UserProvider
   declare loginCount?: number
   declare avatar: CreationOptional<string>
-  declare setupDone: CreationOptional<boolean>
+  declare onboarded: CreationOptional<boolean>
   declare deleteTestWarn: CreationOptional<boolean>
 }
 
@@ -148,7 +148,7 @@ export default function initUser(dbInstance: Sequelize) {
         allowNull: true,
       },
 
-      setupDone: {
+      onboarded: {
         type: DataTypes.BOOLEAN(),
         allowNull: false,
         defaultValue: false,

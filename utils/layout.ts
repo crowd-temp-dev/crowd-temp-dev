@@ -1,7 +1,7 @@
 import { Middleware } from '@nuxt/types'
 
 // for app layout, if client is not logged in on pages that uses the app layout will be sent back to login
-export const isLoggedInMiddleware: Middleware = function ({
+export const isLoggedInMiddleware: Middleware = async function ({
   redirect,
   $user,
   route,
@@ -9,16 +9,20 @@ export const isLoggedInMiddleware: Middleware = function ({
   if (!$user.loggedIn && route.path !== '/auth/login') {
     redirect('/auth/login')
   } else {
-    $user.reload()
+    await $user.reload()
 
-    if (!$user.setupDone && route.path !== '/dashboard') {
+    if (!$user.onboarded && route.path !== '/onboard') {
+      redirect('/onboard')
+    }
+
+    if ($user.onboarded && route.path === '/onboard') {
       redirect('/dashboard')
     }
   }
 }
 
 // for landing page layout, if client is logged in on pages that uses the landing-page layout will be sent back to home
-export const notLoggedInMiddleware: Middleware = function ({
+export const notLoggedInMiddleware: Middleware = async function ({
   redirect,
   $user,
   route,
@@ -31,13 +35,13 @@ export const notLoggedInMiddleware: Middleware = function ({
   if ($user.loggedIn && !/^\/$|^\/auth\/account-confirmed$/.test(route.path)) {
     redirect('/dashboard')
 
-    $user.reload()
+    await $user.reload()
   }
 
   if (
     $user.loggedIn &&
     route.path === '/auth/account-confirmed' &&
-    $user.setupDone
+    $user.onboarded
   ) {
     redirect('/dashboard')
   }

@@ -18,7 +18,7 @@ import { TemporaryEmail } from './User/TemporaryEmail'
 import { File } from './File/File'
 import { TestAnswer } from './AnswerTest/Answers'
 import { OnboardingVideo } from './OnboardingVideo'
-import { UserSurvey } from './User/UserSurvey'
+import { UserOnboard } from './User/UserOnboarding'
 
 type Table = ModelStatic<Model>
 
@@ -68,8 +68,8 @@ export default function () {
       onDelete: 'CASCADE',
     })
 
-    // user has 1 usersurvey
-    User.hasOne(UserSurvey, {
+    // user has 1 onboard
+    User.hasOne(UserOnboard, {
       foreignKey: 'id',
       onDelete: 'CASCADE',
     })

@@ -3,7 +3,7 @@ import { defineComponent } from '@vue/composition-api'
 import RadioGroup from '~/components/Base/RadioGroup/index.vue'
 import { OnSubmit } from '~/types'
 import { userWorkRole, userCompanySize, userReferrer } from '~/utils'
-import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
+import { OnboardForm } from '~/server-middleware/routes/user/onboard'
 import {
   disableFormFields,
   enableFormFields,
@@ -34,7 +34,7 @@ export default defineComponent({
       value: val,
     }))
 
-    const onSubmit: OnSubmit<SetupAccountForm> = async ({
+    const onSubmit: OnSubmit<OnboardForm> = async ({
       formValues,
       toggleLoading,
       formFields,
@@ -43,7 +43,7 @@ export default defineComponent({
 
       disableFormFields(formFields)
 
-      await $user.setupAccount(formValues)
+      await $user.onboard(formValues)
 
       toggleLoading(false)
 

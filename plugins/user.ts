@@ -3,7 +3,7 @@ import { User } from '~/types'
 import { LoginPayload } from '~/store/user'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
-import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
+import { OnboardForm } from '~/server-middleware/routes/user/onboard'
 
 const userPlugin: Plugin = function ({ store }, inject) {
   const userProxy = new Proxy({} as User, {
@@ -50,9 +50,9 @@ const userPlugin: Plugin = function ({ store }, inject) {
           await store.dispatch('user/updateAvatar', payload)
       }
 
-      if (path === 'setupAccount') {
-        return async (payload: SetupAccountForm) =>
-          await store.dispatch('user/setupAccount', payload)
+      if (path === 'onboard') {
+        return async (payload: OnboardForm) =>
+          await store.dispatch('user/onboard', payload)
       }
 
       if (path === 'id' && store.state.user.id) {

@@ -15,13 +15,12 @@ import {
 } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 import { LoginForm } from '~/server-middleware/routes/user/login'
-import { ApiResponse } from '~/types'
 import { formBody, nextFrame, oneMinute, sleep } from '~/utils'
 import { UserData } from '~/server-middleware/types'
 import { User } from '~/database/models/User/User'
 import { DeleteAccountForm } from '~/server-middleware/routes/user/delete-account'
 import { ChangePasswordForm } from '~/server-middleware/routes/user/change-password'
-import { SetupAccountForm } from '~/server-middleware/routes/user/setup-account'
+import { OnboardForm } from '~/server-middleware/routes/user/onboard'
 
 export interface UserInfo {
   id: string | null
@@ -32,7 +31,7 @@ export interface UserInfo {
   provider: User['provider'] | null
   showDashboardGuide?: boolean
   loginCount: number
-  setupDone: boolean
+  onboarded: boolean
   deleteTestWarn: boolean
 }
 
@@ -114,10 +113,10 @@ const actions: ActionTree<UserState, RootState> = {
 
     const { $axios, $pToast, $store, $router } = this.$router.app
 
-    const { data, message, error } = (await Login($axios, {
+    const { data, message, error } = await Login($axios, {
       password: payload.password,
       email: payload.email,
-    } as LoginForm)) as ApiResponse<User>
+    })
 
     if (data) {
       commit('update', data)
@@ -127,7 +126,7 @@ const actions: ActionTree<UserState, RootState> = {
 
       nextTick(() => {
         // send to home page
-        this.$router.replace('/dashboard')
+        this.$router.replace(data.onboarded ? '/dashboard' : '/onboard')
 
         nextTick(() => {
           requestAnimationFrame(() => {
@@ -331,8 +330,8 @@ const actions: ActionTree<UserState, RootState> = {
     return { data, error, message }
   },
 
-  async setupAccount({ commit, state }, payload: SetupAccountForm) {
-    if (state.info?.setupDone) {
+  async onboard({ commit, state }, payload: OnboardForm) {
+    if (state.info?.onboarded) {
       return
     }
 
@@ -344,6 +343,12 @@ const actions: ActionTree<UserState, RootState> = {
       showToasts(app.$pToast, message)
     } else if (data) {
       commit('update', data)
+
+      await app.$nextTick()
+
+      await sleep()
+
+      app.$router.replace('/dashboard')
     }
   },
 }

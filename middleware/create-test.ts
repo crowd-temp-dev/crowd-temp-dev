@@ -2,7 +2,7 @@ import { Middleware } from '@nuxt/types'
 import { validate } from 'uuid'
 
 const redirectAuthPage: Middleware = function ({ route, $user, error }) {
-  if (!$user.setupDone) {
+  if (!$user.onboarded) {
     return
   }
   //   if client is on /create-test/:id check that :id is a valid uuid

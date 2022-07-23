@@ -1,7 +1,7 @@
 import { Middleware } from '@nuxt/types'
 
 const redirectSettingsPage: Middleware = function ({ redirect, route, $user }) {
-  if (!$user.setupDone) {
+  if (!$user.onboarded) {
     return
   }
 

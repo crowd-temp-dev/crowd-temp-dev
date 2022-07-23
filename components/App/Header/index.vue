@@ -27,18 +27,18 @@ export default defineComponent({
 
 <template>
   <FadeTransition :duration="{ leave: 100 }">
-    <header :key="$user.setupDone" class="Header">
+    <header :key="$user.onboarded" class="Header">
       <HeaderLogo class="z-1 relative" />
 
-      <Search v-if="$user.setupDone" />
+      <Search v-if="$user.onboarded" />
 
       <div
         class="fill-icon-default flex space-x-10 shrink-0 items-center"
-        :class="{ 'justify-end': !$user.setupDone }"
+        :class="{ 'justify-end': !$user.onboarded }"
       >
-        <Notification v-if="$user.setupDone" />
+        <Notification v-if="$user.onboarded" />
 
-        <HelpButton v-if="$user.setupDone" />
+        <HelpButton v-if="$user.onboarded" />
 
         <ProfileButton />
       </div>

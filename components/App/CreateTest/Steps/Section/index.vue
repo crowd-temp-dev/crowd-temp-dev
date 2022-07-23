@@ -200,6 +200,7 @@ export default defineComponent({
                             role="menuitem"
                             class="pseudo-focus"
                             size="slim"
+                            plain-action
                             v-on="events"
                             @click="close"
                           >

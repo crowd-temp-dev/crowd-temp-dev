@@ -9,7 +9,6 @@ import layouts from '~/mixins/layouts'
 import { VueElement } from '~/types'
 import AlertDialog from '~/components/Base/AlertDialog/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
-import Form from '~/components/App/SetupProfile/Form/index.vue'
 import { RootState } from '~/store'
 import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 import DelayMount from '~/components/Base/DelayMount/index.vue'
@@ -24,7 +23,6 @@ export default defineComponent({
     PageHeader,
     AlertDialog,
     FadeTransition,
-    Form,
     FeedbackForm,
     DelayMount,
   },
@@ -151,13 +149,13 @@ export default defineComponent({
 
       <FadeTransition v-else :duration="{ leave: 100 }">
         <div
-          :key="$user.setupDone"
+          :key="$user.onboarded"
           role="document"
           class="bg-surface-default grid grid-rows-[56px,1fr] grid-cols-[auto,1fr] min-h-screen min-w-screen h-screen w-screen overflow-hidden max-h-screen"
         >
           <Header />
 
-          <template v-if="$user.setupDone">
+          <template v-if="$user.onboarded">
             <Navigation />
             <main
               ref="main"
@@ -182,17 +180,7 @@ export default defineComponent({
             </main>
           </template>
 
-          <main
-            v-else
-            ref="main"
-            class="h-full max-h-full grid justify-items-center pt-[5%] pb-120 w-screen overflow-x-hidden isolate overscroll-contain windows-os-self:lock-html-scroll:pr-4"
-            :class="{
-              'overflow-y-auto': !dialogs.length,
-              'overflow-hidden': dialogs.length,
-            }"
-          >
-            <Form />
-          </main>
+          <NuxtChild v-else />
         </div>
       </FadeTransition>
     </Transition>

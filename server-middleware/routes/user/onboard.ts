@@ -4,10 +4,10 @@ import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { User } from '../../../database/models/User/User'
 import { authenticate } from '../../utils/middleware'
-import { UserSurvey } from '../../../database/models/User/UserSurvey'
+import { UserOnboard } from '../../../database/models/User/UserOnboarding'
 import { setAuthCookies } from '../../utils/cookies'
 
-export interface SetupAccountForm {
+export interface OnboardForm {
   useCase: string
   role: string
   companyName?: string
@@ -24,7 +24,7 @@ const formValidation: RequestHandler = (req, res, next) => {
     companyName: Joi.string().min(0),
     companySize: Joi.string().min(0),
     referrer: Joi.string().required(),
-  } as Record<keyof SetupAccountForm, any>)
+  } as Record<keyof OnboardForm, any>)
 
   const validate = schema.validate(body)
 
@@ -62,9 +62,13 @@ export default function (router: Router) {
 
           if (user) {
             const { useCase, role, companyName, companySize, referrer } =
-              req.body as SetupAccountForm
+              req.body as OnboardForm
 
-            const survey = await UserSurvey.create(
+            if (user.onboarded) {
+              throw new Error('{403} Already onboarded!')
+            }
+
+            const survey = await UserOnboard.create(
               {
                 id: user.id,
                 useCase,
@@ -80,7 +84,7 @@ export default function (router: Router) {
               throw new Error('{409} Error completing setup!')
             } else {
               await user.update({
-                setupDone: true,
+                onboarded: true,
               })
 
               await user.save({ transaction })

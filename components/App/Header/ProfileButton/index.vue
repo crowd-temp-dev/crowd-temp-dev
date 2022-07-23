@@ -27,7 +27,7 @@ export default defineComponent({
         },
       }
 
-      if (!$user.setupDone) {
+      if (!$user.onboarded) {
         return [logout]
       }
 
@@ -64,7 +64,7 @@ export default defineComponent({
   <Dropdown v-slot="dropdown" :option="dropdownList">
     <Tooltip
       v-slot="tooltip"
-      :label="$user.setupDone ? 'Profile' : 'Logout'"
+      :label="$user.onboarded ? 'Profile' : 'Logout'"
       :disabled="dropdown.active"
       open-delay="500"
     >
