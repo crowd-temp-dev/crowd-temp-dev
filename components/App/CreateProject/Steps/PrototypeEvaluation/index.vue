@@ -3,7 +3,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 import Section from '../Section/index.vue'
 import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import project from '~/mixins/project'
-import { PrototypeEvaluation } from '~/database/models/Projects/PrototypeEvaluation'
+import { PrototypeEvaluation } from '~/database/models/Project/PrototypeEvaluation'
 
 export default defineComponent({
   name: 'AppProjectStepsPrototypeEvaluation',
