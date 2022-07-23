@@ -42,6 +42,14 @@ export default defineComponent({
       required: true,
     },
     hasTask: Boolean,
+    previousFollowUpQuestionLength: {
+      type: Number,
+      default: 0,
+    },
+    totalFollowUpQuestionsLength: {
+      type: Number,
+      default: 0,
+    },
   },
   setup(_props, { emit }) {
     const id = ref(uid())
@@ -53,10 +61,10 @@ export default defineComponent({
 
     if (props.value.hasTask) {
       verticalDivide =
-        'fill-before before:!w-1 before:!left-10 before:bg-border-disabled relative'
+        'fill-before before:!w-1 before:!left-12 before:bg-border-disabled relative'
 
       horizontalDivide =
-        'fill-after after:!h-1 after:!w-20 after:!left-10 after:bg-border-disabled'
+        'fill-after after:!h-1 after:!w-20 after:!left-12 after:bg-border-disabled'
     }
 
     const modelSync = computed({
@@ -147,63 +155,56 @@ export default defineComponent({
 
 <template>
   <div>
-    <template v-if="hasTask">
-      <h3 class="font-semibold text-heading mb-20">Tasks</h3>
+    <PHorizontalDivider
+      v-if="!hasTask"
+      class="w-[88%] mb-20"
+      :class="{ 'mt-20': !hideTitle }"
+    />
 
-      <div>
-        <TextField
-          placeholder="What task would you like people to complete on this prototype?"
-          :label="`Task ${1}`"
-          required
-        />
-      </div>
-    </template>
+    <DynamicTag
+      v-if="!hideTitle"
+      :tag="hasTask ? 'h4' : 'h3'"
+      class="text-[16px] leading-[20px] pb-20"
+      :class="{
+        'font-semibold': !hasTask,
+        [`font-medium pl-42 pt-20 ${verticalDivide}`]: hasTask,
+      }"
+    >
+      {{ title }}
+    </DynamicTag>
 
-    <div>
-      <PHorizontalDivider
-        v-if="!hasTask"
-        class="w-[88%] mb-20"
-        :class="{ 'mt-20': !hideTitle }"
-      />
-
-      <DynamicTag
-        v-if="!hideTitle"
-        :tag="hasTask ? 'h4' : 'h3'"
-        class="text-[16px] leading-[20px] pb-20"
-        :class="{
-          'font-semibold': !hasTask,
-          [`font-medium pl-42 pt-20 ${verticalDivide}`]: hasTask,
-        }"
+    <template v-if="modelSync.length">
+      <SmoothDrag
+        v-slot="{ drag }"
+        v-model="modelSync"
+        group-tag="ol"
+        :group-class="`grid${hasTask ? '' : ' gap-y-42'}`"
+        :disabled="modelSync.length < 2"
       >
-        {{ title }}
-      </DynamicTag>
-
-      <template v-if="modelSync.length">
-        <SmoothDrag
-          v-slot="{ drag }"
-          v-model="modelSync"
-          group-tag="ol"
-          :group-class="`grid${hasTask ? '' : ' gap-y-42'}`"
-          :disabled="modelSync.length < 2"
-        >
-          <Question
-            v-for="(question, i) in modelSync"
-            :id="`${id}-${i}`"
-            :key="question.id"
-            v-model="modelSync[i]"
-            :question-id="questionId"
-            :data-id="question.id"
-            :question-title="`Question ${rootNumber}${getAlphabets(i)}`"
-            :appear="questionAdded"
-            :disable-drag="modelSync.length < 2"
-            :disable-delete="modelSync.length <= Number(minLength)"
-            :min-length="minLength"
-            :id-and-error="idAndError"
-            :class="{
-              [`pl-42${i ? ' pt-42' : ''}${
-                drag
-                  ? ''
-                  : ` ${verticalDivide} ${horizontalDivide}${
+        <Question
+          v-for="(question, i) in modelSync"
+          :id="`${id}-${i}`"
+          :key="question.id"
+          v-model="modelSync[i]"
+          :question-index="i"
+          :question-length="modelSync.length"
+          :question-id="questionId"
+          :data-id="question.id"
+          :question-title="`Question ${rootNumber}${getAlphabets(
+            i + previousFollowUpQuestionLength
+          )}`"
+          :appear="questionAdded"
+          :disable-drag="modelSync.length < 2"
+          :disable-delete="modelSync.length <= Number(minLength)"
+          :min-length="minLength"
+          :id-and-error="idAndError"
+          :class="[
+            hasTask
+              ? [
+                  'pl-42',
+                  {
+                    'pt-42': !!i,
+                    [`${verticalDivide} ${horizontalDivide}${
                       i >= modelSync.length - 1
                         ? modelSync.length === 1
                           ? ' before:!h-42 after:!top-42'
@@ -211,51 +212,61 @@ export default defineComponent({
                         : i === 0
                         ? ' after:!top-42'
                         : ' after:!top-84'
-                    }`
-              }`]: hasTask,
-            }"
-            @on-delete="removeQuestion(i)"
-            @on-duplicate="duplicate(i)"
-            @dragstart="
-              (evt) => {
-                evt.target.classList.add('before:invisible', 'after:invisible')
-              }
+                    }`]: !drag,
+                  },
+                ]
+              : '',
+          ]"
+          @on-delete="removeQuestion(i)"
+          @on-duplicate="duplicate(i)"
+          @dragstart="
+            (evt) => {
+              evt.target.classList.add('before:invisible', 'after:invisible')
+            }
+          "
+        />
+      </SmoothDrag>
+
+      <PHorizontalDivider v-if="!hasTask" class="mt-32" />
+    </template>
+
+    <p
+      v-else
+      class="ml-30 text-border-critical-default font-semibold grid grid-flow-col items-center justify-start"
+    >
+      <PIcon source="AlertMinor" class="fill-icon mr-8" />
+      No follow up question
+    </p>
+
+    <div
+      class="flex justify-end mt-20"
+      :class="{
+        'mt-20': !hasTask,
+        'mt-24': hasTask,
+      }"
+    >
+      <Tooltip
+        v-slot="{ events }"
+        label="Max questions added!"
+        open-delay="16"
+        :disabled="
+          !(modelSync.length >= 26 || totalFollowUpQuestionsLength >= 26)
+        "
+      >
+        <span v-on="events">
+          <Button
+            :primary="!hasTask"
+            :disabled="
+              modelSync.length >= 26 || totalFollowUpQuestionsLength >= 26
             "
-          />
-        </SmoothDrag>
-
-        <PHorizontalDivider v-if="!hasTask" class="mt-32" />
-      </template>
-
-      <p
-        v-else
-        class="ml-30 text-border-critical-default font-semibold grid grid-flow-col items-center justify-start"
-      >
-        <PIcon source="AlertMinor" class="fill-icon mr-8" />
-        No follow up question
-      </p>
-
-      <div
-        class="flex justify-end mt-20"
-        :class="{
-          'mt-20': !hasTask,
-          'mt-24': hasTask,
-        }"
-      >
-        <Button
-          :primary="!hasTask"
-          :disabled="modelSync.length >= 50"
-          @click="addQuestion"
-        >
-          Add new question
-        </Button>
-      </div>
-
-      <PHorizontalDivider v-if="hasTask" class="mt-32" />
+            @click="addQuestion"
+          >
+            Add new question
+          </Button>
+        </span>
+      </Tooltip>
     </div>
 
-    <div v-if="hasTask" class="mt-20 flex justify-end">
-      <Button primary> Add new task </Button>
-    </div>
+    <PHorizontalDivider v-if="hasTask" class="mt-32" />
   </div>
 </template>

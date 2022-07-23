@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import Section from '../Section/index.vue'
-import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import PreviewURL from '../../PreviewURL/index.vue'
+import Tasks from '../Tasks/index.vue'
 import project from '~/mixins/project'
 import { urlRegExpString } from '~/utils'
 
@@ -10,9 +10,9 @@ export default defineComponent({
   name: 'AppProjectStepsWebsiteEvaluation',
   components: {
     Section,
-    FollowUpQuestion,
     PreviewURL,
-  },
+    Tasks
+},
   mixins: [project],
   setup() {
     const acceptUrlShareTerms = ref(false)
@@ -108,19 +108,18 @@ export default defineComponent({
         label="Click check box to confirm you have permission from the website company to use this website URL in a test"
       />
 
-      <TextField
+      <!-- <TextField
         v-model="state.task"
         label="Task (Optional)"
         help-text="What task would you like people to complete on this prototype"
-      />
+      /> -->
     </div>
 
-    <FollowUpQuestion
-      v-model="state.followUpQuestions"
+    <Tasks
+      v-model="state.tasks"
       :question-id="state.id"
       :root-number="rootNumber"
       :id-and-error="fieldIdAndError"
-      has-task
     />
   </Section>
 </template>

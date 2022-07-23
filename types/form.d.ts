@@ -1,6 +1,7 @@
-import { ProjectComponent, FiveSecondTestDurations } from '.'
+import { FiveSecondTestDurations } from '.'
 import { QuestionModelValue } from '~/components/App/CreateProject/Steps/FollowUpQuestion/Question/type'
 import { DesignSurveyFileType, DesignSurveyFrameType } from '~/database/type'
+import { TestSuiteCreateSectionItem } from '~/store/projectSuite/create/section'
 
 type Question<T> = Record<`${number}`, T>
 
@@ -79,36 +80,4 @@ export interface ProjectForm {
   }>
 }
 
-export interface ProjectFormQuestion {
-  type: ProjectComponent
-  id: string
-  followUpQuestions?: QuestionModelValue[]
-
-  task?: string
-  file?: File[]
-
-  // for cards
-  cards?: string[]
-  categories?: string[]
-
-  // for design survey
-  fileType?: DesignSurveyFileType
-  frameType?: DesignSurveyFrameType
-
-  // for 5ST
-  duration?: `${number}`
-
-  // for website evaluation
-  websiteLink: string
-
-  // for prototype evaluation
-  prototypeLink: string
-  prototypeProvider: string
-
-  // for custom message
-  title?: string
-  message?: string
-
-  // for preference test
-  files?: File[][]
-}
+export type ProjectFormQuestion = TestSuiteCreateSectionItem

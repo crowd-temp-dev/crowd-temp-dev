@@ -19,10 +19,11 @@ export interface SelectOption {
 export interface QuestionModelValue {
   id: string
   title: string
+  taskId?: string
   conditionalLogic: boolean
   required: boolean
   type: SelectValue
-  
+
   conditionals: {
     action: 'goto' | 'show'
     question: string

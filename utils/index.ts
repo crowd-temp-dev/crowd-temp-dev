@@ -446,21 +446,38 @@ export const fiveSecondTestDurations: FiveSecondTestDurations[] = [
 ]
 
 /**
- * @name newTestConstructor
+ * @name newProjectConstructor
  * @description
- * Returns a new test with dynamic properties according to the type of test to create
+ * Returns a new project with dynamic properties according to the type of project to create
  * @param {ProjectComponent} type
  * **/
-export const newTestConstructor = (type: ProjectComponent) => {
+export const newProjectConstructor = (type: ProjectComponent) => {
   const addPaths = (
     condition: boolean,
     paths: Record<string, any>
   ): Record<string, any> => (condition ? paths : {})
 
+  const hasTasks = /PrototypeEvaluation|WebsiteEvaluation/.test(type)
+
+  const noFollowUps = hasTasks || type === 'CustomMessage'
+
   return {
     type,
     id: uuidv4(),
-    followUpQuestions: type !== 'CustomMessage' ? [freshQuestion()] : undefined,
+
+    ...addPaths(!noFollowUps, {
+      followUpQuestions: [freshQuestion()],
+    }),
+
+    ...addPaths(hasTasks, {
+      tasks: [
+        {
+          id: uuidv4(),
+          title: '',
+          followUpQuestions: [freshQuestion()],
+        },
+      ],
+    }),
 
     ...addPaths(type === 'CardSorting', {
       categories: ['', ''],
@@ -480,12 +497,10 @@ export const newTestConstructor = (type: ProjectComponent) => {
     }),
 
     ...addPaths(type === 'WebsiteEvaluation', {
-      task: '',
       websiteLink: '',
     }),
 
     ...addPaths(type === 'PrototypeEvaluation', {
-      task: '',
       prototypeLink: '',
       prototypeProvider: 'figma',
     }),

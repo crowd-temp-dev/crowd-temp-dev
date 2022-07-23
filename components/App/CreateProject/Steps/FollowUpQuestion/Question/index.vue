@@ -13,7 +13,6 @@ import Choices from './Choices/index.vue'
 import Select from '~/components/Base/Select/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import Tooltip from '~/components/Base/Tooltip/index.vue'
-import { TestSuiteState } from '~/store/projectSuite'
 
 const selectOptions = [
   { label: 'Short text', value: 'short-text' },
@@ -66,9 +65,17 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    questionIndex: {
+      type: Number,
+      required: true,
+    },
+    questionLength: {
+      type: Number,
+      required: true,
+    },
   },
   emits: ['on-delete', 'on-duplicate'],
-  setup(_props, { emit, root: { $store } }) {
+  setup(_props, { emit }) {
     const modelSync = computed({
       get() {
         return _props.modelValue as QuestionModelValue
@@ -88,33 +95,12 @@ export default defineComponent({
       () => modelSync.value.type === 'linear-scale'
     )
 
-    const question = computed(() => {
-      return (
-        $store.state.projectSuite as TestSuiteState
-      ).create.section.items.find((x) => x.id === _props.questionId)
-    })
-
-    const followUpQuestionIndex = computed(() => {
-      const getQuestion = question.value
-
-      if (getQuestion) {
-        return getQuestion.followUpQuestions.findIndex(
-          (x) => x.id === modelSync.value.id
-        )
-      }
-
-      return null
-    })
-
     const gotoConditionalLogic = computed(() => {
-      return (
-        followUpQuestionIndex.value + 2 <
-        question.value.followUpQuestions.length
-      )
+      return _props.questionIndex + 2 < _props.questionLength
     })
 
     const showConditionalLogic = computed(() => {
-      return followUpQuestionIndex.value
+      return _props.questionIndex
     })
 
     const conditionalLogicActions = computed(() => {
@@ -133,19 +119,11 @@ export default defineComponent({
     })
 
     const disableConditionalLogic = computed(() => {
-      const question = (
-        $store.state.projectSuite as TestSuiteState
-      ).create.section.items.find((x) => x.id === _props.questionId)
+      const isFirst = !_props.questionIndex
 
-      if (question) {
-        const isFirst = !followUpQuestionIndex.value
+      const questionsLength = _props.questionLength
 
-        const questionsLength = question.followUpQuestions?.length || 0
-
-        return questionsLength < 2 || (isFirst && questionsLength < 3)
-      }
-
-      return true
+      return questionsLength < 2 || (isFirst && questionsLength < 3)
     })
 
     // add choices when type changes

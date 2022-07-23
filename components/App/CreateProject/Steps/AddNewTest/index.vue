@@ -11,7 +11,7 @@ import Button from '@/components/Base/Button/index.vue'
 import {
   features,
   layoutSizing,
-  newTestConstructor,
+  newProjectConstructor,
   scrollMain,
   sleep,
 } from '~/utils'
@@ -93,10 +93,10 @@ export default defineComponent({
       }
     }
 
-    const project = async (feature: FeatureContent) => {
+    const createProject = async (feature: FeatureContent) => {
       const { projectComponent } = feature
 
-      const newTest = newTestConstructor(projectComponent)
+      const newTest = newProjectConstructor(projectComponent)
 
       store.commit('projectSuite/create/section/add', {
         data: newTest,
@@ -138,7 +138,7 @@ export default defineComponent({
       showWarningBanner,
       testSubmitting,
       arrowFocus,
-      project,
+      createProject,
       togglePingBtn,
       focusOnFeatures,
     }
@@ -173,7 +173,7 @@ export default defineComponent({
             v-autofocus="index === 0"
             type="button"
             class="flex p-10 outline-none focus:ring-2 ring-action-primary-default ring-offset-2 rounded select-none isolate fill-before before:bg-current before:-z-1 before:opacity-0 before:transition-opacity hover:before:opacity-5 active:before:opacity-10 relative text-left focus:before:opacity-5 before:!transition-none transition-transform active:scale-[0.9975] transform-gpu"
-            @click="project({ ...feature })"
+            @click="createProject({ ...feature })"
             @mouseenter="focusOnFeatures"
           >
             <div

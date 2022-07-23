@@ -1,12 +1,22 @@
 // eslint-disable-next-line import/named
 import { MutationTree } from 'vuex'
+import { QuestionModelValue } from '~/components/App/CreateProject/Steps/FollowUpQuestion/Question/type'
 import { ProjectComponent, FiveSecondTestDurations } from '~/types'
-import { ProjectFormQuestion } from '~/types/form'
+
+export type FollowUpQuestions = QuestionModelValue[]
 
 export interface TestSuiteCreateSectionItem {
   type: ProjectComponent
   id: string
-  followUpQuestions?: ProjectFormQuestion['followUpQuestions']
+  followUpQuestions?: FollowUpQuestions
+
+  tasks?: [
+    {
+      id: string
+      title: string
+      followUpQuestions?: FollowUpQuestions
+    }
+  ]
 
   cards?: string[]
   categories?: string[]

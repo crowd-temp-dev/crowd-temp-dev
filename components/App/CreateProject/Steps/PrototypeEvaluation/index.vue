@@ -108,7 +108,7 @@ export default defineComponent({
     />
 
     <FollowUpQuestion
-      v-model="state.followUpQuestions"
+      v-model="state.tasks"
       :question-id="state.id"
       :root-number="rootNumber"
       :id-and-error="fieldIdAndError"
