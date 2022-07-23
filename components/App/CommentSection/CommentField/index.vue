@@ -3,7 +3,7 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api'
 import { scrollMain, sleep } from '~/utils'
 
 export default defineComponent({
-  name: 'AppCreateTestHeaderCommentDialog',
+  name: 'AppProjectHeaderCommentDialog',
   components: {},
   props: {
     autofocus: Boolean,

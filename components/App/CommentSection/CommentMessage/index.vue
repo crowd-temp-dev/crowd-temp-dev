@@ -6,7 +6,7 @@ import { uid } from '~/utils'
 import eventKey from '~/utils/eventKey'
 
 export default defineComponent({
-  name: 'AppCreateTestHeaderCommentDialog',
+  name: 'AppProjectHeaderCommentDialog',
   components: {
     CommentField,
     Avatar,

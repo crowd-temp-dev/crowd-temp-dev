@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { authenticate } from '../../utils/middleware'
-import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
+import { TestDetail } from '../../../database/models/Project/TestDetail'
 import { uuidv4 } from '../../utils/validation'
 import { User } from '../../../database/models/User/User'
 

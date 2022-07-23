@@ -80,50 +80,54 @@ export default defineComponent({
         keyRegExpArray = keyRegExpArray.filter((x) => !/up|down/.test(x))
       }
 
-      if (
-        new RegExp(`^(?:arrow)(?:${keyRegExpArray.join('|')})$`, 'i').test(
-          evt.key
-        )
-      ) {
-        evt.preventDefault()
+      if (/^arrow/i.test(evt.key)) {
+        if (
+          new RegExp(`^(?:arrow)(?:${keyRegExpArray.join('|')})$`, 'i').test(
+            evt.key
+          )
+        ) {
+          evt.preventDefault()
 
-        new TrapFocus({
-          forward: () => {
-            if (_props.disableHorizontalTabing) {
-              return /(?:down)$/i.test(evt.key)
-            }
-            if (_props.disableVerticalTabing) {
-              return /(?:right)$/i.test(evt.key)
-            }
+          new TrapFocus({
+            forward: () => {
+              if (_props.disableHorizontalTabing) {
+                return /(?:down)$/i.test(evt.key)
+              }
+              if (_props.disableVerticalTabing) {
+                return /(?:right)$/i.test(evt.key)
+              }
 
-            return /(?:down|right)$/i.test(evt.key)
-          },
-          backward: () => {
-            if (_props.disableHorizontalTabing) {
-              return /(?:up)$/i.test(evt.key)
-            }
-            if (_props.disableVerticalTabing) {
-              return /(?:left)$/i.test(evt.key)
-            }
-            return /(?:up|left)$/i.test(evt.key)
-          },
-          loop: !_props.noLoop,
-          children: 'input',
-        })
-          .init(evt)
-          .then(async (_el) => {
-            const el = _el as HTMLInputElement
-            if (el) {
-              clearInputs(el)
-
-              await sleep()
-
-              el.click()
-              ;(el as HTMLInputElement).checked = true
-
-              value.value = el.value || el.name
-            }
+              return /(?:down|right)$/i.test(evt.key)
+            },
+            backward: () => {
+              if (_props.disableHorizontalTabing) {
+                return /(?:up)$/i.test(evt.key)
+              }
+              if (_props.disableVerticalTabing) {
+                return /(?:left)$/i.test(evt.key)
+              }
+              return /(?:up|left)$/i.test(evt.key)
+            },
+            loop: !_props.noLoop,
+            children: 'input',
           })
+            .init(evt)
+            .then(async (_el) => {
+              const el = _el as HTMLInputElement
+              if (el) {
+                clearInputs(el)
+
+                await sleep()
+
+                el.click()
+                ;(el as HTMLInputElement).checked = true
+
+                value.value = el.value || el.name
+              }
+            })
+        } else {
+          evt.preventDefault()          
+        }
       }
     }
 

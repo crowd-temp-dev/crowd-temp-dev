@@ -40,7 +40,7 @@ export default defineComponent({
         case 404:
           return 'Oops! Page not found'
         default:
-          return _props.error.message
+          return _props.error.message || 'Oops! An error occured!'
       }
     })
 
@@ -102,7 +102,9 @@ export default defineComponent({
         </h3>
       </template>
 
-      <Button :to="homePage" primary size="large" class="w-full max-w-[558px]"> Go to homepage </Button>
+      <Button :to="homePage" primary size="large" class="w-full max-w-[558px]">
+        Go to homepage
+      </Button>
     </div>
 
     <DelayMount>

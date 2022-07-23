@@ -74,7 +74,7 @@ export type FeatureTitle =
   | 'Preference test'
   | 'Custom message'
 
-export type CreateTestTypes =
+export type ProjectTypes =
   | 'DesignSurvey'
   | 'PreferenceTest'
   | 'FiveSecondTest'
@@ -85,15 +85,15 @@ export type CreateTestTypes =
   | 'CardSorting'
   | 'CustomMessage'
 
-export type CreateTestComponent =
+export type ProjectComponent =
   | 'TestDetails'
   | 'WelcomeScreen'
-  | CreateTestTypes
+  | ProjectTypes
 
 export interface FeatureContent {
   color: string
   subtitle: string
-  createTestComponent: CreateTestComponent
+  projectComponent: ProjectComponent
 }
 
 export type Feature = {

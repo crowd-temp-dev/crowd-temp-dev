@@ -4,7 +4,7 @@ import { RootState } from '.'
 import { GetAllTestsResItem } from '~/server-middleware/routes/test-cRUD/getAllTests'
 import { DeleteTest, GetAllTests } from '~/services/listTest'
 import { showToasts } from '~/utils/showToast'
-import { UpdateTestDetail } from '~/services/createTest'
+import { UpdateTestDetail } from '~/services/project'
 import { DeleteTestForm } from '~/server-middleware/routes/test-cRUD/deleteTest'
 
 export interface ListTestItem extends GetAllTestsResItem {
@@ -69,7 +69,7 @@ const actions: ActionTree<AnswerTestState, RootState> = {
           loadingRename: false,
           loadingDelete: false,
           shareLink: `${location.origin}/answer-test/${val.shareLink}/`,
-          to: `/dashboard/create-test/${
+          to: `/dashboard/project/${
             val.progress === 'Draft: Create'
               ? ''
               : val.progress === 'Draft: Recruit'

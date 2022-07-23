@@ -16,7 +16,7 @@ export default defineComponent({
   layout: 'app' as Layout,
   // transition(_, from) {
   //   if (from) {
-  //     return ['index', 'create-test', 'notes', 'billing'].includes(
+  //     return ['index', 'project', 'notes', 'billing'].includes(
   //       from.name || ''
   //     )
   //       ? 'page-transition-slide-down'

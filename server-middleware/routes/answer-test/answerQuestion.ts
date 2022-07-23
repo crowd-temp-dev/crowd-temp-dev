@@ -8,7 +8,7 @@ import { verifyAnsUser } from '../../utils/middleware'
 import { getAlphabetIndex, sortObject } from '../../../utils'
 import { getCurrentTestIndex } from '../../utils/answerTest'
 import getFullTestFromSession from './utils'
-import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
+import { QuestionModelValue } from '~/components/App/CreateProject/Steps/FollowUpQuestion/Question/type'
 
 export interface GetUserRes {
   sendTo?: string

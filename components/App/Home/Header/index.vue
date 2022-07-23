@@ -39,8 +39,8 @@ export default defineComponent({
           </div>
         </Button>
 
-        <Button :to="`/dashboard/create-test/${testId}`" primary>
-          Create new test
+        <Button :to="`/dashboard/project/${testId}`" primary>
+          Create new project
         </Button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { getFullTest } from '~/database/models/CreateTests/utils'
+import { getFullTest } from '~/database/models/Project/utils'
 
 // Returns current test type, and test index. Eg .../SimpleSurvey/1a
 export const getCurrentTestIndex = (

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from '@vue/composition-api'
-import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
+import { QuestionModelValue } from '~/components/App/CreateProject/Steps/FollowUpQuestion/Question/type'
 import { AnswerTestState } from '~/store/answer-test'
 import { OnSubmit } from '~/types'
 import { getAlphabetIndex } from '~/utils'

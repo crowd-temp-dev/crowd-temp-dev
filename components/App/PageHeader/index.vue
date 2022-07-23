@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
 import IndexPageHeader from '@/components/App/Home/Header/index.vue'
-import CreateTestPageHeader from '@/components/App/CreateTest/Header/index.vue'
+import ProjectPageHeader from '@/components/App/CreateProject/Header/index.vue'
 import NotesPageHeader from '@/components/App/Notes/Header/index.vue'
 
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
@@ -10,7 +10,7 @@ export default defineComponent({
   name: 'AppPageHeader',
   components: {
     IndexPageHeader,
-    CreateTestPageHeader,
+    ProjectPageHeader,
     FadeTransition,
     NotesPageHeader,
   },
@@ -22,8 +22,8 @@ export default defineComponent({
         return 'IndexPageHeader'
       }
 
-      if (routePath.startsWith('/dashboard/create-test')) {
-        return 'CreateTestPageHeader'
+      if (routePath.startsWith('/dashboard/project')) {
+        return 'ProjectPageHeader'
       }
 
       if (routePath.startsWith('/dashboard/settings')) {

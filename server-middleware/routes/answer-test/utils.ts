@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Transaction } from 'sequelize/types'
-import { getFullTest } from '../../../database/models/CreateTests/utils'
+import { getFullTest } from '../../../database/models/Project/utils'
 
 export default async function getFullTestFromSession(arg: {
   res: Response

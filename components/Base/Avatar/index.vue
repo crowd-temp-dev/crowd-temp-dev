@@ -50,12 +50,12 @@ export default defineComponent({
 
     <p
       v-else-if="initials"
-      class="text-decorative-text-one bg-decorative-surface-one uppercase h-full w-full rounded-[inherit] flex-centered font-medium cursor-default"
+      class="text-decorative-text-one bg-decorative-surface-one uppercase h-full w-full rounded-[inherit] flex-centered font-medium pointer-events-none"
     >
       {{ initials }}
     </p>
 
-    <span v-else class="flex-centered w-full h-full">
+    <span v-else class="flex-centered w-full h-full pointer-events-none">
       <PIcon source="CustomersMinor" class="fill-icon-default" />
     </span>
   </div>

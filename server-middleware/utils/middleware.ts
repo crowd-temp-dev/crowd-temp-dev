@@ -1,10 +1,10 @@
 import { RequestHandler } from 'express'
 import { User } from '../../database/models/User/User'
-import { TestDetail } from '../../database/models/CreateTests/TestDetail'
+import { TestDetail } from '../../database/models/Project/TestDetail'
 import DB from '../../database'
 import { AnswerTestUser } from '../../database/models/AnswerTest/User'
 import { oneDay } from '../../utils'
-import { getFullTest } from '../../database/models/CreateTests/utils'
+import { getFullTest } from '../../database/models/Project/utils'
 import { setAuthCookies } from './cookies'
 import { sendError, sendFormattedError, sendSuccess } from './sendRes'
 

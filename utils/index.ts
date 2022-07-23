@@ -10,8 +10,8 @@ import {
 import type {
   ApiAction,
   ApiResponse,
-  CreateTestComponent,
-  CreateTestTypes,
+  ProjectComponent,
+  ProjectTypes,
   Duration,
   Feature,
   FeatureTitle,
@@ -21,7 +21,7 @@ import type {
   RouteDialog,
   VueElement,
 } from '~/types'
-import { CreateTestFormQuestion } from '~/types/form'
+import { ProjectFormQuestion } from '~/types/form'
 
 export const htmlAttrs: HTMLAttrs = {
   lang: 'en-us',
@@ -33,48 +33,48 @@ export const features: Feature = {
     color: '#D2A0E3',
     subtitle:
       'Ask participants the questions that matter to you without worry.',
-    createTestComponent: 'SimpleSurvey',
+    projectComponent: 'SimpleSurvey',
   },
   'Card sorting': {
     color: '#7DACF2',
     subtitle:
       'Card sorting helps you plan and evaluate the information architecture of your website.',
-    createTestComponent: 'CardSorting',
+    projectComponent: 'CardSorting',
   },
   'Design survey': {
     color: '#91E0D6',
     subtitle:
       'Ask the questions that matter to you with option to see a media file while answering.',
-    createTestComponent: 'DesignSurvey',
+    projectComponent: 'DesignSurvey',
   },
   'Five second test': {
     color: '#FFC96B',
     subtitle:
       'Participants are shown an image for a short time before answering questions.',
-    createTestComponent: 'FiveSecondTest',
+    projectComponent: 'FiveSecondTest',
   },
   'Website evaluation': {
     color: '#D2A0E3',
     subtitle:
       'Have a live site? Get useful feedback on ease of use, opportunities for improvements etc.',
-    createTestComponent: 'WebsiteEvaluation',
+    projectComponent: 'WebsiteEvaluation',
   },
   'Prototype evaluation': {
     color: '#FFC4B0',
     subtitle:
       'Test your product before writing a single line of code using prototypes.',
-    createTestComponent: 'PrototypeEvaluation',
+    projectComponent: 'PrototypeEvaluation',
   },
   'Preference test': {
     color: '#FDC9D0',
     subtitle: 'Quickly validate different versions of your idea with users. ',
-    createTestComponent: 'PreferenceTest',
+    projectComponent: 'PreferenceTest',
   },
   'Custom message': {
     color: '#C3C8C7',
     subtitle:
       'Want to add special instructions before a test type? Add it here.',
-    createTestComponent: 'CustomMessage',
+    projectComponent: 'CustomMessage',
   },
 }
 
@@ -82,7 +82,7 @@ export const features: Feature = {
  * @description
  * Returns feature object using a feature type
  * **/
-export const getFeature = (feature: CreateTestTypes) => {
+export const getFeature = (feature: ProjectTypes) => {
   const formatPath = feature
     .replace(/[A-Z]/g, (x) => ` ${x}`.toLowerCase())
     .replace(/^ [a-z]/, (x) => x[1].toUpperCase())
@@ -402,10 +402,10 @@ export const freshQuestion = () =>
     title: '',
     required: false,
     type: 'short-text',
-  } as unknown as CreateTestFormQuestion)
+  } as unknown as ProjectFormQuestion)
 
 export const getTestFeatureTitle = (
-  value: CreateTestComponent
+  value: ProjectComponent
 ): FeatureTitle | 'Invalid test' => {
   switch (value) {
     case 'SimpleSurvey':
@@ -449,9 +449,9 @@ export const fiveSecondTestDurations: FiveSecondTestDurations[] = [
  * @name newTestConstructor
  * @description
  * Returns a new test with dynamic properties according to the type of test to create
- * @param {CreateTestComponent} type
+ * @param {ProjectComponent} type
  * **/
-export const newTestConstructor = (type: CreateTestComponent) => {
+export const newTestConstructor = (type: ProjectComponent) => {
   const addPaths = (
     condition: boolean,
     paths: Record<string, any>
@@ -498,7 +498,7 @@ export const newTestConstructor = (type: CreateTestComponent) => {
     ...addPaths(type === 'PreferenceTest', {
       files: [[], [], [], []],
     }),
-  } as unknown as CreateTestFormQuestion
+  } as unknown as ProjectFormQuestion
 }
 
 /***
@@ -651,24 +651,24 @@ export const confirmDeleteAccount = 'delete my account'
 
 export const confirmDeleteAccountRegExp = `^${confirmDeleteAccount}$`
 
-export const pingAddNewBlockBtn = async () => {
+export const pingAddNewTestBtn = async () => {
   if (process.client) {
-    const addNewBlockRoot = document.getElementById(
-      'add-new-block'
+    const addNewTestRoot = document.getElementById(
+      'add-new-test'
     ) as VueElement
 
-    if (addNewBlockRoot) {
-      addNewBlockRoot.scrollIntoView({
+    if (addNewTestRoot) {
+      addNewTestRoot.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
       })
 
-      addNewBlockRoot.querySelector('button')?.focus({ preventScroll: true })
+      addNewTestRoot.querySelector('button')?.focus({ preventScroll: true })
 
-      if (typeof addNewBlockRoot.__vue__.togglePingBtn === 'function') {
+      if (typeof addNewTestRoot.__vue__.togglePingBtn === 'function') {
         await sleep(600)
 
-        addNewBlockRoot.__vue__.togglePingBtn?.()
+        addNewTestRoot.__vue__.togglePingBtn?.()
       }
     }
   }
@@ -852,7 +852,7 @@ export const capitalize = (string: string) => {
   return string.replace(/^[a-zA-Z]/, (x) => x.toUpperCase())
 }
 
-export const createTestWarningDuplicateId = uid()
+export const projectWarningDuplicateId = uid()
 
 export const debounce = (cb: () => void, delay: number) => {
   let debounceTimer: NodeJS.Timeout

@@ -137,9 +137,9 @@ const actions: ActionTree<UserState, RootState> = {
         })
       })
 
-      // clear createTest form
-      !($store.state as RootState).testSuite.create.empty &&
-        $store.commit('testSuite/create/reset', false)
+      // clear project form
+      !($store.state as RootState).projectSuite.create.empty &&
+        $store.commit('projectSuite/create/reset', false)
     } else {
       if (error?.data) {
         if (error.title === 'confirm') {

@@ -7,11 +7,11 @@ import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
 import { verifyAnsUser } from '../../utils/middleware'
 import { getCurrentTestIndex } from '../../utils/answerTest'
 import getFullTestFromSession from './utils'
-import { CreateTestForm } from '~/types/form'
+import { ProjectForm } from '~/types/form'
 
 export interface GetUserRes {
   sendTo?: string
-  fullTest?: CreateTestForm | null
+  fullTest?: ProjectForm | null
   username?: string
 }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import { CreateTestComponent, Layout } from '~/types'
+import { ProjectComponent, Layout } from '~/types'
 
 export default defineComponent({
   name: 'AnswerTestDonePage',
@@ -12,7 +12,7 @@ export default defineComponent({
 
   setup(_, { root }) {
     const template = computed(() => {
-      return root.$route.params.qType as CreateTestComponent
+      return root.$route.params.qType as ProjectComponent
     })
 
     return { template }

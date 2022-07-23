@@ -3,10 +3,10 @@ import Joi from 'joi'
 import { sendError, sendFormattedError, sendSuccess } from '../../utils/sendRes'
 import DB from '../../../database'
 import { authenticate } from '../../utils/middleware'
-import { TestDetail } from '../../../database/models/CreateTests/TestDetail'
+import { TestDetail } from '../../../database/models/Project/TestDetail'
 import { removeUndefinedValues } from '../../../utils'
 import { TestAnswer } from '../../../database/models/AnswerTest/Answers'
-import { CreateTestProgress } from '~/server-middleware/types'
+import { ProjectProgress } from '~/server-middleware/types'
 
 export interface GetAllTestsForm {
   favourite?: boolean
@@ -21,7 +21,7 @@ export interface GetAllTestsResItem {
   favourite: boolean
   id: string
   name: string
-  progress: CreateTestProgress
+  progress: ProjectProgress
   published: boolean
   shareLink: string
   responses: number

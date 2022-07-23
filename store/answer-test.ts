@@ -2,7 +2,7 @@
 import { MutationTree, ActionTree, GetterTree } from 'vuex'
 import { RootState } from '.'
 import { showToasts } from '~/utils/showToast'
-import { CreateTestFormQuestion } from '~/types/form'
+import { ProjectFormQuestion } from '~/types/form'
 import {
   AnswerQuestion,
   BeginTest,
@@ -29,7 +29,7 @@ export interface AnswerTestForm {
     message: string
   }
 
-  [key: `question-${number}`]: CreateTestFormQuestion
+  [key: `question-${number}`]: ProjectFormQuestion
 
   empty?: boolean
   error?: boolean

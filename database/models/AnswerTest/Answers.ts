@@ -9,11 +9,11 @@ import {
   Sequelize,
 } from 'sequelize'
 import { Uuidv4 } from '../../utils/model'
-import { CreateTestTypes } from '~/types'
-import { SelectValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
+import { ProjectTypes } from '~/types'
+import { SelectValue } from '~/components/App/CreateProject/Steps/FollowUpQuestion/Question/type'
 
 export interface Answer {
-  type: CreateTestTypes
+  type: ProjectTypes
   preference?: {
     file: string
     index: number

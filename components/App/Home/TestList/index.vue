@@ -204,8 +204,8 @@ export default defineComponent({
           You can create a new product or import your product inventory.
         </h5>
 
-        <Button primary :to="`/dashboard/create-test/${testId}`">
-          Create new test
+        <Button primary :to="`/dashboard/project/${testId}`">
+          Create new project
         </Button>
       </div>
 

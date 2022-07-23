@@ -11,7 +11,7 @@ export default defineComponent({
   },
   setup(_props, { root }) {
     const followUpQuestions = computed(() => {
-      return (root.$store.state as RootState).testSuite.viewResult.questions[
+      return (root.$store.state as RootState).projectSuite.viewResult.questions[
         `question-${_props.numbering}`
       ].followUpQuestions
     })

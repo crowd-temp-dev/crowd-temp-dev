@@ -37,7 +37,7 @@ export default defineComponent({
               icon: 'HomeMajor',
               title: 'Home',
               active:
-                /^\/dashboard$|^(?:\/dashboard\/(?:create-test|notification)\/?)/.test(
+                /^\/dashboard$|^(?:\/dashboard\/(?:project|notification)\/?)/.test(
                   root.$route.path
                 ),
               to: '/dashboard',

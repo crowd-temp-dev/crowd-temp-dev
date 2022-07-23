@@ -1,8 +1,8 @@
 import { NuxtCookies } from 'cookie-universal-nuxt'
-import { CreateTestFormQuestion } from './form'
+import { ProjectFormQuestion } from './form'
 import { BreakpointOutput, FullscreenLoading, User } from '.'
 import { AppState } from '~/store/app/state'
-import { TestSuiteCreateSectionState } from '~/store/testSuite/create/section'
+import { TestSuiteCreateSectionState } from '~/store/projectSuite/create/section'
 
 interface ToastArg {
   message: string
@@ -35,7 +35,7 @@ interface PToast {
   warning: ShowToast
 }
 
-type CreateTestFormMap = Record<
+type ProjectFormMap = Record<
   `question-${number}`,
   TestSuiteCreateSectionState['items'][0]
 >
@@ -54,9 +54,9 @@ interface AlertDialog extends GetAlertDialog {
   close: () => void
 }
 
-export interface CreateTestForm extends CreateTestFormMap {
+export interface ProjectForm extends ProjectFormMap {
   questionsLength: number
-  questions: CreateTestFormQuestion[]
+  questions: ProjectFormQuestion[]
   warn: boolean
 }
 

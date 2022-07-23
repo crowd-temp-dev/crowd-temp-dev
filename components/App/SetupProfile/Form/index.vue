@@ -56,64 +56,66 @@ export default defineComponent({
 </script>
 
 <template>
-  <FormLayout
-    v-slot="{ fieldIdAndError, loading }"
-    class="max-w-[558px] w-full"
-    name="setup-profile"
-    @on-submit="onSubmit"
-  >
-    <p class="font-sf-pro-display text-display-small">
-      Hi {{ $user.firstName }}, tell us a bit about yourself
-    </p>
-
-    <p>What will you use crowd for?</p>
-
-    <RadioGroup
-      v-bind="fieldIdAndError('useCases')"
-      required
-      content-class="grid grid-flow-col justify-start gap-32"
+  <div class="w-full px-[2rem] md:px-0">
+    <FormLayout
+      v-slot="{ fieldIdAndError, loading }"
+      class="max-w-[558px] mx-auto"
+      name="setup-profile"
+      @on-submit="onSubmit"
     >
-      <Radio
-        v-for="(item, i) in useCases"
-        :key="i"
-        :label="item"
-        name="useCase"
-        :value="item"
-        :autofocus="i === 0"
+      <p class="font-sf-pro-display text-display-small">
+        Hi {{ $user.firstName }}, tell us a bit about yourself
+      </p>
+
+      <p>What will you use crowd for?</p>
+
+      <RadioGroup
+        v-bind="fieldIdAndError('useCases')"
         required
+        content-class="grid grid-flow-col justify-start gap-32"
+      >
+        <Radio
+          v-for="(item, i) in useCases"
+          :key="i"
+          :label="item"
+          name="useCase"
+          :value="item"
+          :autofocus="i === 0"
+          required
+        />
+      </RadioGroup>
+
+      <Select
+        label="What role best describes you?"
+        :options="roles"
+        required
+        placeholder="Select options"
+        v-bind="fieldIdAndError('role')"
       />
-    </RadioGroup>
 
-    <Select
-      label="What role best describes you?"
-      :options="roles"
-      required
-      placeholder="Select options"
-      v-bind="fieldIdAndError('role')"
-    />
+      <TextField
+        label="What's your company name? (optional)"
+        v-bind="fieldIdAndError('companyName')"
+      />
 
-    <TextField
-      label="What's your company name? (optional)"
-      v-bind="fieldIdAndError('companyName')"
-    />
+      <Select
+        label="What's your company size?  (optional)"
+        placeholder="Select options"
+        :options="companySize"
+        v-bind="fieldIdAndError('companySize')"
+      />
 
-    <Select
-      label="What's your company size?  (optional)"
-      placeholder="Select options"
-      :options="companySize"
-      v-bind="fieldIdAndError('companySize')"
-    />
+      <Select
+        label="Where did you hear about crowd?"
+        placeholder="Select options"
+        :options="referrers"
+        required
+        v-bind="fieldIdAndError('referrer')"
+      />
 
-    <Select
-      label="Where did you hear about crowd?"
-      placeholder="Select options"
-      :options="referrers"
-      required
-      v-bind="fieldIdAndError('referrer')"
-    />
-
-    <Button primary full-width type="submit" size="large" :loading="loading">
-      Set up and continue
-    </Button>
-  </FormLayout>
+      <Button primary full-width type="submit" size="large" :loading="loading">
+        Set up and continue
+      </Button>
+    </FormLayout>
+  </div>
 </template>

@@ -33,7 +33,7 @@ export interface UserData {
   notification: UserNotification[]
 }
 
-export type CreateTestProgress =
+export type ProjectProgress =
   | 'Draft: Create'
   | 'Draft: Recruit'
   | 'Collecting response'

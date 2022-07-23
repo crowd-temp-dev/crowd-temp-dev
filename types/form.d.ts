@@ -1,10 +1,10 @@
-import { CreateTestComponent, FiveSecondTestDurations } from '.'
-import { QuestionModelValue } from '~/components/App/CreateTest/Steps/FollowUpQuestion/Question/type'
+import { ProjectComponent, FiveSecondTestDurations } from '.'
+import { QuestionModelValue } from '~/components/App/CreateProject/Steps/FollowUpQuestion/Question/type'
 import { DesignSurveyFileType, DesignSurveyFrameType } from '~/database/type'
 
 type Question<T> = Record<`${number}`, T>
 
-export interface CreateTestForm {
+export interface ProjectForm {
   id?: string
 
   TestDetails: {
@@ -79,8 +79,8 @@ export interface CreateTestForm {
   }>
 }
 
-export interface CreateTestFormQuestion {
-  type: CreateTestComponent
+export interface ProjectFormQuestion {
+  type: ProjectComponent
   id: string
   followUpQuestions?: QuestionModelValue[]
 

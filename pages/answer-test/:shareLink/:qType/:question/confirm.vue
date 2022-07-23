@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from '@vue/composition-api'
-import { Layout, CreateTestComponent } from '~/types'
+import { Layout, ProjectComponent } from '~/types'
 import Button from '~/components/Base/Button/index.vue'
 import TwoToneBg from '~/components/AnswerTest/TwoToneBg/index.vue'
 import answerTest from '~/mixins/answerTest'
@@ -42,7 +42,7 @@ const details = {
       "For this section you'd be shown you'd be asked explore the figma prototype that will be shown to you and answer the follow-up questions.",
   },
 } as Record<
-  CreateTestComponent,
+  ProjectComponent,
   {
     title: string
     subtitle: string
@@ -60,7 +60,7 @@ export default defineComponent({
     const confirming = ref(false)
 
     const confirmDetails = computed(() => {
-      return details[root.$route.params.qType as CreateTestComponent]
+      return details[root.$route.params.qType as ProjectComponent]
     })
 
     const confirm = () => {

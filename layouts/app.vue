@@ -64,8 +64,8 @@ export default defineComponent({
 
     const creatingTest = computed(() => {
       return (
-        (root.$store.state as RootState).testSuite.create.submitting &&
-        root.$route.name === 'dashboard-create-test-:id'
+        (root.$store.state as RootState).projectSuite.create.submitting &&
+        root.$route.name === 'dashboard-project-:id'
       )
     })
 
