@@ -365,6 +365,8 @@ const actions: ActionTree<UserState, RootState> = {
           ...state.info,
           onboarded: true,
         } as User)
+
+        await nextTick()
       }
 
       await app.$router.replace('/dashboard')
