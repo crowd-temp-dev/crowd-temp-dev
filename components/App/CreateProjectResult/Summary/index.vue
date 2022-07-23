@@ -77,7 +77,7 @@ export default defineComponent({
 
     <div class="flex items-center justify-between">
       <div class="grow">
-        <p class="text-body-sm">Share with your test link</p>
+        <p class="text-body-sm">Share with your project link</p>
 
         <div class="flex items-center space-x-12 mt-10 w-full">
           <TextField

@@ -194,7 +194,7 @@ export default defineComponent({
       </h3>
 
       <h4 class="text-center mt-8" :class="{ 'mb-20': !testPublished }">
-        Get a unique test link and share to your audience
+        Get a unique project link and share to your audience
       </h4>
 
       <FadeTransition>
