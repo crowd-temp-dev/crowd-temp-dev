@@ -90,7 +90,7 @@ export default defineComponent({
 
           const viewResultRegExp = /project\/view-result/
 
-          if (viewResultRegExp.test(ov) && viewResultRegExp.test(nv)) {
+          if (viewResultRegExp.test(ov) && viewResultRegExp.test(nv)) {            
             return
           }
 

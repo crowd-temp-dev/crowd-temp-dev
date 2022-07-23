@@ -424,6 +424,7 @@ export default defineComponent({
               <input
                 :id="getId"
                 ref="textInputRef"
+                :tabindex="$appState.strictTouchDevice"
                 :placeholder="placeholder"
                 :value="modelSync"
                 :required="required || undefined"

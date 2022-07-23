@@ -9,9 +9,28 @@ const init: Plugin = function ({ app, store, $axios, $user }, inject) {
     const appStateProxy = new Proxy(
       {},
       {
-        get(_, path: keyof AppState | 'os') {
+        get(_, path: keyof AppState | 'os' | 'touchdevice' | 'strictTouch') {
           if (path === 'os') {
             return getOS()
+          }
+
+          if (path === 'touchdevice' || path === 'strictTouch') {
+            const touchdevice = !!(
+              'ontouchstart' in window ||
+              navigator.maxTouchPoints > 0 ||
+              // @ts-expect-error
+              navigator.msMaxTouchPoints > 0
+            )
+
+            if (path === 'touchdevice') {
+              return touchdevice
+            }
+
+            const noHoverAndPointer = window.matchMedia(
+              '(hover: none) and (pointer: coarse)'
+            )
+
+            return touchdevice && noHoverAndPointer.matches
           }
 
           return (store.state as RootState).app[path]
