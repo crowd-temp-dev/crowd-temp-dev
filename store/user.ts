@@ -360,6 +360,13 @@ const actions: ActionTree<UserState, RootState> = {
     }
 
     if (data || status === 405) {
+      if (!data) {
+        commit('update', {
+          ...state.info,
+          onboarded: true,
+        } as User)
+      }
+
       await app.$router.replace('/dashboard')
     }
 
