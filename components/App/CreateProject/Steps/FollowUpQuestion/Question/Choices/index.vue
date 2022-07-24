@@ -125,14 +125,14 @@ export default defineComponent({
           type="text"
           required
           :error="
-            !!modelSync.options[i] &&
+            !!modelSync.options[i].trim() &&
             modelSync.options.indexOf(modelSync.options[i]) !== i
               ? 'Cannot have duplicate choices!'
               : idAndError(`${id}-${i}`).error
           "
           :validate="
             (val) => {
-              if (val) {
+              if (val.trim()) {
                 if (modelSync.options.indexOf(val) !== i) {
                   return 'Cannot have duplicate choices!'
                 }
