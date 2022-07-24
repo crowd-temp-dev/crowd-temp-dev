@@ -568,7 +568,13 @@ export default defineComponent({
               class="absolute inset-0 -z-1"
               :class="backdropClass"
               @click="close"
-              @touchdown="close"
+              v-on="
+                $appState.strictTouch || $appState.touchDevice
+                  ? {
+                      touchstart: close,
+                    }
+                  : undefined
+              "
             />
           </FadeTransition>
 
