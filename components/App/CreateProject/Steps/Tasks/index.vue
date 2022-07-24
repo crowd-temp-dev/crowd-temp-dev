@@ -183,6 +183,11 @@ export default defineComponent({
               <PIcon
                 source="DuplicateMinor"
                 class="fill-icon-default cursor-pointer"
+                :class="{
+                  'pointer-events-none opacity-60':
+                    modelSync.length > 9 ||
+                    getPreviousFollowUpQuestionLength() > 25,
+                }"
                 @click="duplicateTask(i)"
               />
             </span>
@@ -196,7 +201,7 @@ export default defineComponent({
               <PIcon
                 source="DeleteMajor"
                 class="fill-icon-default cursor-pointer"
-                :class="{ 'pointer-events-none': disableDrag }"
+                :class="{ 'pointer-events-none opacity-60': disableDrag }"
                 @click="deleteTask(i)"
               />
             </span>

@@ -101,11 +101,11 @@ export default defineComponent({
       </p>
     </div>
 
-    <TextField
+    <!-- <TextField
       v-model="state.task"
       label="Task (Optional)"
       help-text="What task would you like people to complete on this prototype"
-    />
+    /> -->
 
     <Tasks
       v-model="state.tasks"
