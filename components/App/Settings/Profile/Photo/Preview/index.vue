@@ -195,7 +195,7 @@ export default defineComponent({
                       plain
                       accept="image/*"
                       class="sr-only"
-                      max-size="2mb"
+                      max-size="4mb"
                       min-size="100kb"
                       @on-change="fileUploaded"
                     />

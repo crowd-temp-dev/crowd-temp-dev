@@ -110,7 +110,22 @@ export default defineComponent({
         const maxSize = convertToByte(_props.maxSize)
         for (const file of Array.from(inputFiles)) {
           if (file.size >= minSize && file.size <= maxSize) {
-            files.push(file)
+            if (
+              !new RegExp(
+                _props.accept.replace(/\*/g, '[a-z]+').replace(/,/g, '|')
+              ).test(file.type)
+            ) {
+              root.$pToast.open({
+                error: true,
+                message: `Accepts only ${_props.accept
+                  .replace(/,/g, ' or ')
+                  .replace(/\/\*/g, '')
+                  .trim()}`,
+                duration: 4000,
+              })
+            } else {
+              files.push(file)
+            }
           } else {
             const small = file.size < minSize
 
