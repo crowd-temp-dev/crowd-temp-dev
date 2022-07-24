@@ -94,7 +94,7 @@ export default defineComponent({
       default: '',
     },
   },
-  setup(_props, { emit }) {
+  setup(_props, { emit, root }) {
     const triggerRefSelector = ref(uid())
 
     const getId = computed(() => _props.id || uid('select-'))
@@ -290,6 +290,10 @@ export default defineComponent({
     }
 
     const focusOnInput = () => {
+      if (root.$breakpoint.isMobile) {
+        return
+      }
+
       requestAnimationFrame(() => {
         const input = document.getElementById(getId.value)
 
