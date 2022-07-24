@@ -191,10 +191,14 @@ export default defineComponent({
       :options="questionOptions"
       class="flex-grow shrink-0"
       content-class="min-w-[110px]"
-      :disabled="!modelSync.question || !questionOptions.length"
+      :disabled="!modelSync.question || questionOptions.length < 2"
       required
       :placeholder="
-        !questionOptions.length ? 'No option found' : 'Enter a value'
+        !questionOptions.length
+          ? 'No option found'
+          : questionOptions.length < 2
+          ? 'Add another option'
+          : 'Choose a value'
       "
     />
 
