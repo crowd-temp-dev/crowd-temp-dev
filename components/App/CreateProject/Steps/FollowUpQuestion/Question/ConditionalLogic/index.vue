@@ -152,6 +152,10 @@ export default defineComponent({
           }
         })
         .filter((x) => !!x.value)
+        .filter(
+          (val, index, arr) =>
+            arr.findIndex((x) => x.label === val.label) === index
+        )
     })
 
     return { modelSync, actionName, questions, questionOptions }

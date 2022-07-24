@@ -119,11 +119,28 @@ export default defineComponent({
         </span>
 
         <TextField
+          :id="idAndError(`${id}-${i}`)"
           v-model="modelSync.options[i]"
           class="mr-12 ml-14 flex-grow shrink-0"
           type="text"
           required
-          v-bind="idAndError(`${id}-${i}`)"
+          :error="
+            !!modelSync.options[i] &&
+            modelSync.options.indexOf(modelSync.options[i]) !== i
+              ? 'Cannot have duplicate choices!'
+              : idAndError(`${id}-${i}`).error
+          "
+          :validate="
+            (val) => {
+              if (val) {
+                if (modelSync.options.indexOf(val) !== i) {
+                  return 'Cannot have duplicate choices!'
+                }
+                return true
+              }
+              return true
+            }
+          "
         />
 
         <PIcon
