@@ -4,12 +4,13 @@ import FollowUpQuestion from '../FollowUpQuestion/index.vue'
 import { freshQuestion, sleep, uid, uuidv4 } from '~/utils'
 import { LikeNumber } from '~/types'
 import { TestSuiteCreateSectionItem } from '~/store/projectSuite/create/section'
+import SmoothDrag from '~/components/Base/SmoothDrag/index.vue'
 
 type Task = TestSuiteCreateSectionItem['tasks'][0]
 
 export default defineComponent({
   name: 'AppCreateTestStepsTasks',
-  components: { FollowUpQuestion },
+  components: { FollowUpQuestion, SmoothDrag },
   model: {
     prop: 'modelValue',
     event: 'update:modelValue',
@@ -60,6 +61,10 @@ export default defineComponent({
       },
     })
 
+    const disableDrag = computed(() => {
+      return modelSync.value.length < 2
+    })
+
     const getPreviousFollowUpQuestionLength = (limit: number = undefined) => {
       return modelSync.value
         .slice(0, limit)
@@ -97,65 +102,165 @@ export default defineComponent({
       })
     }
 
+    const duplicateTask = async (index: number) => {
+      modelSync.value = [
+        ...modelSync.value.slice(0, index),
+        {
+          ...modelSync.value[index],
+          followUpQuestions: modelSync.value[index].followUpQuestions.map(
+            (x) => ({
+              ...x,
+              id: uuidv4(),
+            })
+          ),
+          id: uuidv4(),
+        },
+        ...modelSync.value.slice(index),
+      ]
+
+      await sleep()
+
+      taskAdded.value = true
+
+      requestAnimationFrame(() => {
+        const newInput = document.querySelector(
+          `#${id.value}-${index + 1}-task`
+        ) as HTMLInputElement
+
+        if (newInput) {
+          newInput.focus()
+
+          newInput.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
+        }
+      })
+    }
+
+    const deleteTask = (index: number) => {
+      modelSync.value = modelSync.value.filter((_, i) => i !== index)
+    }
+
     return {
       verticalDivide,
       horizontalDivide,
       id,
       modelSync,
+      disableDrag,
       getPreviousFollowUpQuestionLength,
       addNewTask,
+      deleteTask,
+      duplicateTask,
     }
   },
 })
 </script>
 
 <template>
-  <div>
-    <div v-for="(task, i) in modelSync" :id="task.id" :key="i">
-      <h3 class="font-semibold text-heading mb-20">Tasks</h3>
+  <SmoothDrag
+    v-model="modelSync"
+    group-tag="ol"
+    group-class="grid"
+    :disabled="disableDrag"
+  >
+    <li v-for="(task, i) in modelSync" :id="task.id" :key="i">
+      <div class="flex items-center justify-between mb-20">
+        <h3 class="font-semibold">Task {{ i + 1 }}</h3>
 
-      <div>
-        <TextField
-          v-model="task.title"
-          placeholder="What task would you like people to complete on this prototype?"
-          :label="`Task ${i + 1}`"
-          required
-          v-bind="idAndError(`${id}-${i}-task`)"
-        />
+        <div class="flex space-x-28">
+          <Tooltip
+            v-slot="{ events }"
+            :label="
+              modelSync.length > 9
+                ? 'Max task is 9'
+                : getPreviousFollowUpQuestionLength() > 25
+                ? 'Max questions is 26'
+                : 'Duplicate task'
+            "
+          >
+            <span v-on="events">
+              <PIcon
+                source="DuplicateMinor"
+                class="fill-icon-default cursor-pointer"
+                @click="duplicateTask(i)"
+              />
+            </span>
+          </Tooltip>
+
+          <Tooltip
+            v-slot="{ events }"
+            :label="disableDrag ? 'Min task is 1' : 'Delete task'"
+          >
+            <span v-on="events">
+              <PIcon
+                source="DeleteMajor"
+                class="fill-icon-default cursor-pointer"
+                :class="{ 'pointer-events-none': disableDrag }"
+                @click="deleteTask(i)"
+              />
+            </span>
+          </Tooltip>
+        </div>
       </div>
 
-      <FollowUpQuestion
-        v-model="task.followUpQuestions"
-        :question-id="questionId"
-        :root-number="rootNumber"
-        :id-and-error="idAndError"
-        :previous-follow-up-question-length="
-          i === 0 ? 0 : getPreviousFollowUpQuestionLength(i)
-        "
-        :total-follow-up-questions-length="getPreviousFollowUpQuestionLength()"
-        has-task
-      />
-
-      <div v-if="i === modelSync.length - 1" class="mt-20 flex justify-end">
-        <Tooltip
-          v-slot="{ events }"
-          label="Max tasks added!"
-          open-delay="16"
-          :disabled="!(modelSync.length > 9)"
+      <div class="flex space-x-16">
+        <span
+          class="cursor-grab active:cursor-grabbing transition-opacity inline-block shrink-0"
+          :class="{ 'pointer-events-none opacity-20': disableDrag }"
         >
-          <span v-on="events">
-            <Button
-              primary
-              :disabled="modelSync.length > 9"
-              @click="addNewTask"
-            >
-              Add new task
-            </Button>
-          </span>
-        </Tooltip>
-      </div>
+          <PIcon
+            source="DragHandleMinor"
+            class="shrink-0 fill-icon-default w-16 h-16 drag-handle"
+          />
+        </span>
 
-      <div v-else class="mb-20"></div>
-    </div>
-  </div>
+        <div class="grow">
+          <div>
+            <TextField
+              v-model="task.title"
+              placeholder="What task would you like people to complete on this prototype?"
+              required
+              v-bind="idAndError(`${id}-${i}-task`)"
+            />
+          </div>
+
+          <FollowUpQuestion
+            v-model="task.followUpQuestions"
+            :question-id="questionId"
+            :root-number="rootNumber"
+            :id-and-error="idAndError"
+            :previous-follow-up-question-length="
+              i === 0 ? 0 : getPreviousFollowUpQuestionLength(i)
+            "
+            :total-follow-up-questions-length="
+              getPreviousFollowUpQuestionLength()
+            "
+            has-task
+          />
+
+          <div v-if="i === modelSync.length - 1" class="mt-20 flex justify-end">
+            <Tooltip
+              v-slot="{ events }"
+              label="Max tasks added!"
+              open-delay="16"
+              :disabled="!(modelSync.length > 9)"
+            >
+              <span v-on="events">
+                <Button
+                  primary
+                  :disabled="modelSync.length > 9"
+                  @click="addNewTask"
+                >
+                  Add new task
+                </Button>
+              </span>
+            </Tooltip>
+          </div>
+
+          <div v-else class="mb-20"></div>
+        </div>
+      </div>
+    </li>
+  </SmoothDrag>
 </template>

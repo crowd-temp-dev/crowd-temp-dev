@@ -1,13 +1,13 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
 import Section from '../Section/index.vue'
-import FollowUpQuestion from '../FollowUpQuestion/index.vue'
+import Tasks from '../Tasks/index.vue'
 import project from '~/mixins/project'
 import { PrototypeEvaluation } from '~/database/models/Project/PrototypeEvaluation'
 
 export default defineComponent({
   name: 'AppProjectStepsPrototypeEvaluation',
-  components: { Section, FollowUpQuestion },
+  components: { Section, Tasks },
   mixins: [project],
   setup() {
     const selectedFileType = ref('')
@@ -107,12 +107,11 @@ export default defineComponent({
       help-text="What task would you like people to complete on this prototype"
     />
 
-    <FollowUpQuestion
+    <Tasks
       v-model="state.tasks"
       :question-id="state.id"
       :root-number="rootNumber"
       :id-and-error="fieldIdAndError"
-      has-task
     />
   </Section>
 </template>
