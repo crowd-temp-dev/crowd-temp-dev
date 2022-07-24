@@ -302,7 +302,9 @@ export default defineComponent({
                 class="h-full absolute inset-0 max-h-full py-24 pointer-events-none"
               >
                 <input
+                  v-if="false"
                   :id="id || idProps.id"
+                  tabindex="-1"
                   class="sr-only"
                   v-bind="inputAttrs.attrs"
                   v-on="inputAttrs.events"
