@@ -2,7 +2,7 @@
 import { computed, defineComponent } from '@vue/composition-api'
 import { QuestionModelValue } from '../type'
 import Id from '~/components/Base/Id/index.vue'
-import { getAlphabets } from '~/utils'
+import { getAlphabetIndex, getAlphabets } from '~/utils'
 import { TestSuiteState } from '~/store/projectSuite'
 
 interface ActionOption {
@@ -47,27 +47,40 @@ export default defineComponent({
 
     const actionName = computed(() => modelSync.value.action)
 
+    const state = computed(() => {
+      return ($store.state.projectSuite as TestSuiteState).create.section.items
+    })
+
+    const question = computed(() =>
+      state.value.find((x) => x.id === _props.questionId)
+    )
+
+    const questionIndex = computed(() => {
+      return state.value.indexOf(question.value)
+    })
+
+    const followUpQuestions = computed(() => {
+      return question.value.tasks
+        ? question.value.tasks[questionIndex.value].followUpQuestions
+        : question.value.followUpQuestions
+    })
+
     const questions = computed(() => {
-      const state = ($store.state.projectSuite as TestSuiteState).create.section
-        .items
-
-      const question = state.find((x) => x.id === _props.questionId)
-
-      if (!question) {
+      if (!question.value) {
         return []
       }
 
-      const questionIndex = state.indexOf(question) + 1
+      const qIndex = questionIndex.value + 1
 
-      if (!questionIndex) {
+      if (!qIndex) {
         return []
       }
 
-      const followUpQuestionIndex = question?.followUpQuestions?.findIndex(
+      const followUpQuestionIndex = followUpQuestions.value?.findIndex(
         (x) => x.id === _props.followUpQuestionId
       )
 
-      return question?.followUpQuestions
+      return followUpQuestions.value
         ?.map((_, index) => {
           if (modelSync.value.action === 'goto') {
             if (index <= followUpQuestionIndex + 1) {
@@ -80,14 +93,68 @@ export default defineComponent({
           const alphabet = getAlphabets(index)
 
           return {
-            label: `Question ${questionIndex}${alphabet}`,
-            value: `${questionIndex}${alphabet}`,
+            label: `Question ${qIndex}${alphabet}`,
+            value: `${qIndex}${alphabet}`,
           }
         })
         .filter(Boolean)
     })
 
-    return { modelSync, actionName, questions }
+    const questionOptions = computed(() => {
+      if (!modelSync.value.question) {
+        return null
+      }
+
+      const qAlphabetIndex = getAlphabetIndex(
+        modelSync.value.question.split('')[1]
+      )
+
+      const currentQuestion = followUpQuestions.value[qAlphabetIndex]
+
+      if (!currentQuestion) {
+        return null
+      }
+
+      if (/short-text|long-text/.test(currentQuestion.type)) {
+        return null
+      }
+
+      if (currentQuestion.type === 'linear-scale') {
+        const linearScale = currentQuestion.linearScale
+
+        if (!linearScale) {
+          return []
+        }
+
+        const startValue = Number(linearScale.start.value)
+        const endValue = Number(linearScale.end.value)
+
+        return Array.from(
+          {
+            length: endValue + 1 - startValue,
+          },
+          (_, i) => `${i + startValue}`
+        ).map((value) => ({
+          value,
+          label: value,
+        }))
+      }
+
+      if (!currentQuestion.choices) {
+        return []
+      }
+
+      return currentQuestion.choices.options
+        .map((choice) => {
+          return {
+            value: choice,
+            label: choice,
+          }
+        })
+        .filter((x) => !!x.value)
+    })
+
+    return { modelSync, actionName, questions, questionOptions }
   },
 })
 </script>
@@ -117,14 +184,18 @@ export default defineComponent({
     />
 
     <Select
-      v-if="actionName === 'goto'"
+      v-if="questionOptions"
       v-model="modelSync.questionAnswer"
       label="If answer is"
       bold-label
-      :options="[{ label: 'Value', value: 'value' }]"
+      :options="questionOptions"
       class="flex-grow shrink-0"
       content-class="min-w-[110px]"
+      :disabled="!modelSync.question || !questionOptions.length"
       required
+      :placeholder="
+        !questionOptions.length ? 'No option found' : 'Enter a value'
+      "
     />
 
     <Id v-else v-slot="{ id }">
@@ -142,6 +213,8 @@ export default defineComponent({
           :options="[{ label: 'value', value: 'Value' }]"
           class="flex-grow shrink-0"
           required
+          :disabled="!modelSync.question"
+          placeholder="Enter a value"
         />
       </div>
     </Id>

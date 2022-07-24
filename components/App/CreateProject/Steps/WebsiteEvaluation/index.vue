@@ -11,8 +11,8 @@ export default defineComponent({
   components: {
     Section,
     PreviewURL,
-    Tasks
-},
+    Tasks,
+  },
   mixins: [project],
   setup() {
     const acceptUrlShareTerms = ref(false)
@@ -117,6 +117,7 @@ export default defineComponent({
 
     <Tasks
       v-model="state.tasks"
+      task-placeholder="Missing placeholder"
       :question-id="state.id"
       :root-number="rootNumber"
       :id-and-error="fieldIdAndError"

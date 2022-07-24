@@ -41,6 +41,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    taskPlaceholder: {
+      type: String,
+      required: true,
+    },
   },
   setup(_props, { emit }) {
     const id = ref(uid())
@@ -65,6 +69,14 @@ export default defineComponent({
       return modelSync.value.length < 2
     })
 
+    const disableDuplicate = computed(() => {
+      return (
+        modelSync.value.length > 9 || getPreviousFollowUpQuestionLength() > 25
+      )
+    })
+
+    const maxTasks = computed(() => modelSync.value.length > 9)
+
     const getPreviousFollowUpQuestionLength = (limit: number = undefined) => {
       return modelSync.value
         .slice(0, limit)
@@ -73,6 +85,10 @@ export default defineComponent({
     }
 
     const addNewTask = async () => {
+      if (maxTasks.value) {
+        return
+      }
+
       modelSync.value = [
         ...modelSync.value,
         {
@@ -103,6 +119,10 @@ export default defineComponent({
     }
 
     const duplicateTask = async (index: number) => {
+      if (disableDuplicate.value) {
+        return
+      }
+
       modelSync.value = [
         ...modelSync.value.slice(0, index),
         {
@@ -137,8 +157,12 @@ export default defineComponent({
         }
       })
     }
-// TODO: ADD CHECK FOR DISABLED
+
     const deleteTask = (index: number) => {
+      if (disableDrag.value) {
+        return
+      }
+
       modelSync.value = modelSync.value.filter((_, i) => i !== index)
     }
 
@@ -148,6 +172,8 @@ export default defineComponent({
       id,
       modelSync,
       disableDrag,
+      disableDuplicate,
+      maxTasks,
       getPreviousFollowUpQuestionLength,
       addNewTask,
       deleteTask,
@@ -184,9 +210,7 @@ export default defineComponent({
                 source="DuplicateMinor"
                 class="fill-icon-default cursor-pointer"
                 :class="{
-                  'pointer-events-none opacity-60':
-                    modelSync.length > 9 ||
-                    getPreviousFollowUpQuestionLength() > 25,
+                  'pointer-events-none opacity-60': disableDuplicate,
                 }"
                 @click="duplicateTask(i)"
               />
@@ -221,14 +245,12 @@ export default defineComponent({
         </span>
 
         <div class="grow">
-          <div>
-            <TextField
-              v-model="task.title"
-              placeholder="What task would you like people to complete on this prototype?"
-              required
-              v-bind="idAndError(`${id}-${i}-task`)"
-            />
-          </div>
+          <TextField
+            v-model="task.title"
+            :placeholder="taskPlaceholder"
+            required
+            v-bind="idAndError(`${id}-${i}-task`)"
+          />
 
           <FollowUpQuestion
             v-model="task.followUpQuestions"
@@ -249,14 +271,10 @@ export default defineComponent({
               v-slot="{ events }"
               label="Max tasks added!"
               open-delay="16"
-              :disabled="!(modelSync.length > 9)"
+              :disabled="!maxTasks"
             >
               <span v-on="events">
-                <Button
-                  primary
-                  :disabled="modelSync.length > 9"
-                  @click="addNewTask"
-                >
+                <Button primary :disabled="maxTasks" @click="addNewTask">
                   Add new task
                 </Button>
               </span>

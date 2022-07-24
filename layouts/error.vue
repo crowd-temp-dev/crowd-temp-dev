@@ -63,7 +63,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="bg-surface-default" :class="{ 'hide-ui': !mounted }">
+  <div class="bg-surface-default px-16 lg:px-0" :class="{ 'hide-ui': !mounted }">
     <Header />
 
     <div class="grid justify-items-center pt-[7%] text-center w-full">

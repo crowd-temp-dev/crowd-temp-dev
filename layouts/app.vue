@@ -12,13 +12,13 @@ import PageHeader from '~/components/App/PageHeader/index.vue'
 import SmallDevice from '~/components/App/SmallDevice/index.vue'
 import { isLoggedInMiddleware } from '~/utils/layout'
 import layouts from '~/mixins/layouts'
-import { VueElement } from '~/types'
+import { RouteDialog, VueElement } from '~/types'
 import AlertDialog from '~/components/Base/AlertDialog/index.vue'
 import FadeTransition from '~/components/Base/FadeTransition/index.vue'
 import { RootState } from '~/store'
 import FeedbackForm from '~/components/Base/RouteDialog/FeedbackForm/index.vue'
 import DelayMount from '~/components/Base/DelayMount/index.vue'
-import { sleep } from '~/utils'
+import { sleep, validRouteDialog } from '~/utils'
 // import LoadingBar from '~/components/Base/LoadingBar/index.vue'
 
 export default defineComponent({
@@ -80,6 +80,34 @@ export default defineComponent({
     watch(
       () => root.$route.fullPath,
       async (nv, ov) => {
+        const getRouteDialog = (path: string) => {
+          const match = path.match(/\??dialog=.+/g)
+
+          if (match) {
+            const queries = match[0].split('&')
+
+            if (queries) {
+              const dialogQueries = queries.filter((x) => /^\??dialog/.test(x))
+
+              if (dialogQueries) {
+                const dialogQueryValue = (dialogQueries[0].split('=') || [])[1]
+
+                if (dialogQueryValue) {
+                  return dialogQueryValue as RouteDialog
+                }
+              }
+            }
+          }
+          return '' as RouteDialog
+        }
+
+        if (
+          validRouteDialog.includes(getRouteDialog(nv)) ||
+          validRouteDialog.includes(getRouteDialog(ov))
+        ) {
+          return
+        }
+
         await nextTick()
 
         if (main.value) {
@@ -90,7 +118,7 @@ export default defineComponent({
 
           const viewResultRegExp = /project\/view-result/
 
-          if (viewResultRegExp.test(ov) && viewResultRegExp.test(nv)) {            
+          if (viewResultRegExp.test(ov) && viewResultRegExp.test(nv)) {
             return
           }
 

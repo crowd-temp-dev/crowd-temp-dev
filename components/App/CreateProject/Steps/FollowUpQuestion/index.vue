@@ -76,9 +76,20 @@ export default defineComponent({
       },
     })
 
+    const maxQuestions = computed(() => {
+      return (
+        modelSync.value.length >= 26 ||
+        _props.totalFollowUpQuestionsLength >= 26
+      )
+    })
+
     const questionAdded = ref(false)
 
     const addQuestion = async () => {
+      if (maxQuestions.value) {
+        return
+      }
+
       modelSync.value = [
         ...modelSync.value,
         freshQuestion() as unknown as QuestionModelValue,
@@ -105,6 +116,10 @@ export default defineComponent({
     }
 
     const duplicate = async (index: number) => {
+      if (maxQuestions.value) {
+        return
+      }
+
       modelSync.value = [
         ...modelSync.value.slice(0, index),
         {
@@ -135,6 +150,10 @@ export default defineComponent({
     }
 
     const removeQuestion = (index: number) => {
+      if (modelSync.value.length <= Number(_props.minLength)) {
+        return
+      }
+
       modelSync.value = modelSync.value.filter((_, i) => i !== index)
     }
 
@@ -144,6 +163,7 @@ export default defineComponent({
       id,
       modelSync,
       questionAdded,
+      maxQuestions,
       getAlphabets,
       addQuestion,
       removeQuestion,
@@ -196,6 +216,7 @@ export default defineComponent({
           :appear="questionAdded"
           :disable-drag="modelSync.length < 2"
           :disable-delete="modelSync.length <= Number(minLength)"
+          :disable-duplicate="maxQuestions"
           :min-length="minLength"
           :id-and-error="idAndError"
           :class="[
@@ -249,16 +270,12 @@ export default defineComponent({
         v-slot="{ events }"
         label="Max questions added!"
         open-delay="16"
-        :disabled="
-          !(modelSync.length >= 26 || totalFollowUpQuestionsLength >= 26)
-        "
+        :disabled="!maxQuestions"
       >
         <span v-on="events">
           <Button
             :primary="!hasTask"
-            :disabled="
-              modelSync.length >= 26 || totalFollowUpQuestionsLength >= 26
-            "
+            :disabled="maxQuestions"
             @click="addQuestion"
           >
             Add new question

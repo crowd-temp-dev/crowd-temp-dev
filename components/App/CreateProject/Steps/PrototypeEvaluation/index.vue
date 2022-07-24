@@ -109,6 +109,7 @@ export default defineComponent({
 
     <Tasks
       v-model="state.tasks"
+      task-placeholder="What task would you like people to complete on this prototype?"
       :question-id="state.id"
       :root-number="rootNumber"
       :id-and-error="fieldIdAndError"

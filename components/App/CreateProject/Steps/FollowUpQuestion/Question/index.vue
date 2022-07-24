@@ -73,6 +73,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    disableDuplicate: Boolean,
   },
   emits: ['on-delete', 'on-duplicate'],
   setup(_props, { emit }) {
@@ -293,13 +294,21 @@ export default defineComponent({
             <Tooltip
               :key="questionId"
               v-slot="{ events }"
-              :label="`Duplicate ${questionTitle}`"
+              :label="
+                disableDuplicate
+                  ? 'Cannot duplicate'
+                  : `Duplicate ${questionTitle}`
+              "
+              :disabled="disableDuplicate"
             >
               <span class="cursor-pointer" v-on="events">
                 <PIcon
                   source="DuplicateMinor"
                   class="fill-icon-default w-16 h-16"
-                  @click="$emit('on-duplicate')"
+                  :class="{
+                    'opacity-50 pointer-events-none': disableDuplicate,
+                  }"
+                  @click="() => !disableDuplicate && $emit('on-duplicate')"
                 />
               </span>
             </Tooltip>
@@ -339,6 +348,8 @@ export default defineComponent({
         :follow-up-question-id="modelSync.id"
         :question-id="questionId"
         :action-options="conditionalLogicActions"
+        :question-length="questionLength"
+        :question-index="questionIndex"
       />
     </FadeTransition>
 
