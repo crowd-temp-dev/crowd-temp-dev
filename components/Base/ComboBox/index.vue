@@ -564,10 +564,11 @@ export default defineComponent({
         >
           <FadeTransition :duration="backdropClass ? undefined : 0">
             <div
-              v-if="blockClick"
+              v-if="blockClick || $breakpoint.isMobile || $appState.strictTouch"
               class="absolute inset-0 -z-1"
               :class="backdropClass"
               @click="close"
+              @touchdown="close"
             />
           </FadeTransition>
 
