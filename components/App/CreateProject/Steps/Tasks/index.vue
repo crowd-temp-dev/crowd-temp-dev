@@ -137,7 +137,7 @@ export default defineComponent({
         }
       })
     }
-
+// TODO: ADD CHECK FOR DISABLED
     const deleteTask = (index: number) => {
       modelSync.value = modelSync.value.filter((_, i) => i !== index)
     }

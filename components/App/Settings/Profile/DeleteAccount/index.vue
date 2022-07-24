@@ -15,6 +15,10 @@ import {
 import { SendDeleteEmailConfirmation } from '~/services/user'
 import { showToasts } from '~/utils/showToast'
 
+interface DeleteAccountFormValues extends DeleteAccountForm {
+  accountPassword: string
+}
+
 export default defineComponent({
   name: 'AppSettingsProfileDeleteAccount',
   components: { Section, Button, DialogButton, PasswordField, FadeTransition },
@@ -51,7 +55,7 @@ export default defineComponent({
       sendingConfirmation.value = false
     }
 
-    const confirmOrDeleteAccount: OnSubmit<DeleteAccountForm> = async ({
+    const confirmOrDeleteAccount: OnSubmit<DeleteAccountFormValues> = async ({
       formValues,
       formFields,
     }) => {
@@ -62,10 +66,16 @@ export default defineComponent({
 
         disableFormFields(formFields)
 
-        await $user.delete(formValues)
+        const { accountPassword, token, confirm } = formValues
+
+        await $user.delete({
+          token,
+          confirm,
+          password: accountPassword,
+        })
 
         if ($user.provider === 'email') {
-          formFields.password.value = ''
+          formFields.accountPassword.value = ''
         } else {
           formFields.token.value = ''
         }
@@ -148,7 +158,7 @@ export default defineComponent({
                 autofocus
                 required
                 label="Password*"
-                v-bind="fieldIdAndError('password')"
+                v-bind="fieldIdAndError('accountPassword')"
               />
 
               <div v-else-if="confirmed">
